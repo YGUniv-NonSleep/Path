@@ -1,0 +1,1 @@
+2022/02/18 18:31:19 [error] 20920#14748: *1 CreateFile() "C:\Users\bon300-19\Desktop\Path\nginx-1.18.0/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/"
