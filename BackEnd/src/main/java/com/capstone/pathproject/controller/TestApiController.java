@@ -23,4 +23,5 @@ public class TestApiController {
 		// value 있는 그대로만 보내고 싶은데 어떻게하는지 모르겠네요 ㅠ
         return Id.values()+ " 아이디 잘 받음";
     }
+    
 }
