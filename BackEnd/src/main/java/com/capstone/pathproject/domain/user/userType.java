@@ -1,4 +1,4 @@
-package com.capstone.pathproject.domain;
+package com.capstone.pathproject.domain.user;
 
 
 public enum userType {

@@ -1,12 +1,11 @@
-package com.capstone.pathproject.domain;
+package com.capstone.pathproject.domain.user;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -24,7 +23,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type")
-    private userType Type;
+    private userType type;
 
     @Column(name = "user_login_id")
     private String loginId;
@@ -51,13 +50,11 @@ public class User {
     @Column(name = "user_gender")
     private userGender gender;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "user_birth")
-    private Date birthday;
+    private LocalDate birthday;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "user_signup_date")
-    private Date signUpDay;
+    private LocalDate signupDay;
 
     @Column(name = "user_account")
     private String account;
@@ -65,5 +62,24 @@ public class User {
     @Column(name = "user_score")
     private int score;
 
-
+    //== 생성 메서드 ==//
+    public static User createUser(userType type, String loginId, String password, String mail, String name,
+                                  String phone, String addr, String addrDetail, userGender gender, String birthday,
+                                  String account) {
+        User user = new User();
+        user.type = type;
+        user.loginId = loginId;
+        user.password = password;
+        user.mail = mail;
+        user.name = name;
+        user.phone = phone;
+        user.addr = addr;
+        user.addrDetail = addrDetail;
+        user.gender = gender;
+        user.birthday = LocalDate.parse(birthday);
+        user.signupDay = LocalDate.now();
+        user.account = account;
+        user.score = 100;
+        return user;
+    }
 }
