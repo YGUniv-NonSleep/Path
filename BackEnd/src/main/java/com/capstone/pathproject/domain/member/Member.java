@@ -1,4 +1,4 @@
-package com.capstone.pathproject.domain.user;
+package com.capstone.pathproject.domain.member;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_type")
-    private userType type;
+    private memberType type;
 
     @Column(name = "member_login_id")
     private String loginId;
@@ -48,7 +48,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_gender")
-    private userGender gender;
+    private memberGender gender;
 
     @Column(name = "member_birth")
     private LocalDate birthday;
@@ -63,8 +63,8 @@ public class Member {
     private int score;
 
     //== 생성 메서드 ==//
-    public static Member createUser(userType type, String loginId, String password, String mail, String name,
-                                    String phone, String addr, String addrDetail, userGender gender, String birthday,
+    public static Member createUser(memberType type, String loginId, String password, String mail, String name,
+                                    String phone, String addr, String addrDetail, memberGender gender, String birthday,
                                     String account) {
         Member member = new Member();
         member.type = type;
