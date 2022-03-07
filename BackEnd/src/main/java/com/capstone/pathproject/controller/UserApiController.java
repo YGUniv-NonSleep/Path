@@ -1,6 +1,6 @@
 package com.capstone.pathproject.controller;
 
-import com.capstone.pathproject.domain.user.User;
+import com.capstone.pathproject.domain.user.Member;
 import com.capstone.pathproject.domain.user.userGender;
 import com.capstone.pathproject.domain.user.userType;
 import com.capstone.pathproject.service.UserService;
@@ -28,8 +28,8 @@ public class UserApiController {
                          @RequestParam("gender") userGender gender,
                          @RequestParam("birthday") String birthday,
                          @RequestParam("account") String account) {
-        User user = User.createUser(type, loginId, password, mail, name, phone, addr, addrDetail, gender, birthday, account);
-        userService.signup(user);
+        Member member = Member.createUser(type, loginId, password, mail, name, phone, addr, addrDetail, gender, birthday, account);
+        userService.signup(member);
         System.out.println("회원가입 완료");
         return "회원가입 완료";
     }

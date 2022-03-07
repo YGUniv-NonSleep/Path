@@ -1,6 +1,6 @@
 package com.capstone.pathproject.service;
 
-import com.capstone.pathproject.domain.user.User;
+import com.capstone.pathproject.domain.user.Member;
 import com.capstone.pathproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,15 +17,15 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long signup(User user) {
-        validateDuplicateUser(user);
-        userRepository.save(user);
-        return user.getId();
+    public Long signup(Member member) {
+        validateDuplicateUser(member);
+        userRepository.save(member);
+        return member.getId();
     }
 
-    private void validateDuplicateUser(User user) {
-        List<User> findUsers = userRepository.findByLoginId(user.getLoginId());
-        if (!findUsers.isEmpty()) {
+    private void validateDuplicateUser(Member member) {
+        List<Member> findMembers = userRepository.findByLoginId(member.getLoginId());
+        if (!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
