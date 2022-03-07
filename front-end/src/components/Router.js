@@ -9,7 +9,7 @@ import Home from "../routes/Home"
     return (
         <BrowserRouter>
             <Routes>
-                {/* 속성을 component 대신에 element ddd*/}
+                {/* 속성을 component 대신에 element */}
                 <Route path="/" element={<Home />} />
             </Routes>
         </BrowserRouter>
