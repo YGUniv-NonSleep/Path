@@ -16,7 +16,7 @@ public class UserApiController {
 
     private final UserService userService;
 
-    @PostMapping("/member/signup")
+    @PostMapping("/signup")
     public String signup(@RequestParam("type")userType type,
                          @RequestParam("loginId") String loginId,
                          @RequestParam("password") String password,
