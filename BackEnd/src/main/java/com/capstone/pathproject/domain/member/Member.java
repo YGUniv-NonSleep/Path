@@ -43,7 +43,7 @@ public class Member {
     @Column(name = "member_addr")
     private String addr;
 
-    @Column(name = "member_addr_detail")
+    @Column(name = "MEMBER_ADDR_DETAIL")
     private String addrDetail;
 
     @Enumerated(EnumType.STRING)
