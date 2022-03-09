@@ -18,12 +18,12 @@ public class MemberService {
 
     @Transactional
     public Long signup(Member member) {
-        validateDuplicateUser(member);
+        validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
     }
 
-    private void validateDuplicateUser(Member member) {
+    private void validateDuplicateMember(Member member) {
         List<Member> findMembers = memberRepository.findByLoginId(member.getLoginId());
         if (!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
