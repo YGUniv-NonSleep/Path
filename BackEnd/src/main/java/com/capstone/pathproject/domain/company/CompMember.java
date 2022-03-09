@@ -21,8 +21,8 @@ public class CompMember {
     @JoinColumn(name = "MEMBER_ID")
     private Member memberId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "COMP_ID")
-//    private Member ;
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_ID")
+    private Company company;
 
 }

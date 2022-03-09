@@ -2,12 +2,17 @@ package com.capstone.pathproject.domain.company;
 
 
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.domain.member.memberGender;
+import com.capstone.pathproject.domain.member.memberType;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
+@Getter
 @SequenceGenerator(
         name = "COMPANY_SEQ_GENERATOR",
         sequenceName = "COMPANY_SEQ",
@@ -15,27 +20,27 @@ import java.util.Date;
 )
 public class Company {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMP_MEMBER_SEQ_GENERATOR")
-    @Column(name = "COMP_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMPANY_SEQ_GENERATOR")
+    @Column(name = "COMPANY_ID")
     private Long id;
 
-    @Column(name = "COMP_NAME")
+    @Column(name = "COMPANY_NAME")
     private String name;
 
-    @Column(name = "COMP_REG_NUM")
-    private String regNum;
+    @Column(name = "COMPANY_CRN")
+    private String companyNumber;
 
-    @Column(name = "COMP_OPEN_DATE")
-    private Date openDate;
+    @Column(name = "COMPANY_OPEN_DATE")
+    private LocalDate openDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "COMP_CREATE")
+    @Column(name = "COMPANY_CREATE")
     private CompCategory category;
 
-    @Column(name = "COMP_MAIL")
+    @Column(name = "COMPANY_MAIL")
     private String mail;
 
-    @Column(name = "COMP_PHONE")
+    @Column(name = "COMPANY_PHONE")
     private String phone;
 
     @ManyToOne
@@ -44,7 +49,16 @@ public class Company {
 
     public Company(){}
 
-    public Company(String name){
+    @Builder(builderMethodName = "createCompany")
+    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, Member memberId) {
+        this.id = id;
+        this.companyNumber = companyNumber;
+        this.openDate = openDate;
+        this.category = category;
+        this.name = name;
+        this.mail = mail;
+        this.phone = phone;
+        this.memberId = memberId;
 
     }
 
