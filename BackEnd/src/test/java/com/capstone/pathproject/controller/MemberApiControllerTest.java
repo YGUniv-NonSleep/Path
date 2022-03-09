@@ -20,15 +20,14 @@ class MemberApiControllerTest {
     @Test
     void signupTest() throws Exception {
         //given
-        Member member = MemberDTO.createMemberDTO()
+        MemberDTO memberDTO = MemberDTO.createMemberDTO()
                 .loginId("테스트아이디1")
                 .birthday("2000-02-22")
-                .build().toEntity();
+                .build();
         //when
-        Long signup = memberService.signup(member);
+        Long signup = memberService.signup(memberDTO);
         //then
         System.out.println("회원가입 완료 " + signup);
         System.out.println("========================");
-        System.out.println(member.toString());
     }
 }

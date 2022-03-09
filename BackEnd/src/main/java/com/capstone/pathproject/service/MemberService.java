@@ -1,6 +1,7 @@
 package com.capstone.pathproject.service;
 
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.dto.MemberDTO;
 import com.capstone.pathproject.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long signup(Member member) {
+    public Long signup(MemberDTO memberDTO) {
+        Member member = memberDTO.toEntity();
         validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
