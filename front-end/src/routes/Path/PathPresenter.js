@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 
 function PathPresenter() {
     return (
-        <div>
-            assss
+        <div className="App">
+            <h2>path</h2>
         </div>
     )
 }
