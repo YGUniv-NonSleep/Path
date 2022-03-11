@@ -11,6 +11,9 @@ function PathContainer() {
         try {
             let mapInfo = await Maps();
             setLoading(true);
+
+            console.log(mapInfo().center)
+            
         } catch(error) {
             console.log("load error");
         }
@@ -23,7 +26,8 @@ function PathContainer() {
     return (
         <PathPresenter 
             loading = {loading}
-        />
+        >
+            </PathPresenter>
     )
 }
 
