@@ -7,17 +7,23 @@ function PathContainer() {
     const [map, setMap] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    
-    useEffect(() => {
-        console.log("1차")
-        Maps()    
-        console.log("2차")
+    async function mapLoad() {
+        try {
+            let mapInfo = await Maps();
+            setLoading(true);
+        } catch(error) {
+            console.log("load error");
+        }
+    }
+
+    useEffect(() => {    
+        mapLoad()
     }, []);
 
     return (
-        <PathPresenter>
-        <div id="map" style="width:600px;height:400px;"></div>
-        </PathPresenter>
+        <PathPresenter 
+            loading = {loading}
+        />
     )
 }
 
