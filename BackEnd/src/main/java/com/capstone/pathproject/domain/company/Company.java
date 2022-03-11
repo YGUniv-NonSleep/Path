@@ -2,14 +2,12 @@ package com.capstone.pathproject.domain.company;
 
 
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.domain.member.memberGender;
-import com.capstone.pathproject.domain.member.memberType;
+
 import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -61,5 +59,6 @@ public class Company {
         this.memberId = memberId;
 
     }
+
 
 }
