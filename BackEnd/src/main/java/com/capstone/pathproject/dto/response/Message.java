@@ -1,20 +1,18 @@
 package com.capstone.pathproject.dto.response;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Message {
-    private StatusEnum status;
+public class Message<T> {
+    private StatusEnum header;
     private String message;
-    private Object data;
+    private T body;
 
-
-    public Message(StatusEnum status, String message, Object data) {
-        this.status = status;
+    @Builder(builderMethodName = "createMessage")
+    public Message(StatusEnum header, String message, T body) {
+        this.header = header;
         this.message = message;
-        this.data = data;
+        this.body = body;
     }
 }

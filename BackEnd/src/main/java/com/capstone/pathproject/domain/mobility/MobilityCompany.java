@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -22,9 +20,6 @@ public class MobilityCompany {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBILITY_COMPANY_SEQ_GENERATOR")
     @Column(name = "MOBILITY_CO_ID")
     private Long id;
-
-    @OneToMany(mappedBy = "mobilityCompany")
-    private List<Mobility> mobilities = new ArrayList<Mobility>();
 
     @Column(name = "MOBILITY_CO_NAME")
     private String name;

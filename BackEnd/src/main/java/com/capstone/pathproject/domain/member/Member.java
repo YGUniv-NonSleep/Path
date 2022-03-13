@@ -1,13 +1,9 @@
 package com.capstone.pathproject.domain.member;
 
-import com.capstone.pathproject.domain.mobility.MobilityPayment;
-import com.capstone.pathproject.domain.mobility.MobilityReservation;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -23,12 +19,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
     @Column(name = "MEMBER_ID")
     private Long id;
-
-    @OneToMany(mappedBy = "member")
-    private List<MobilityReservation> mobilityReservations = new ArrayList<MobilityReservation>();
-
-    @OneToMany(mappedBy = "member")
-    private List<MobilityPayment> mobilityPayments = new ArrayList<MobilityPayment>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "MEMBER_TYPE")

@@ -6,9 +6,6 @@ import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,21 +20,25 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public ResponseEntity signup(MemberDTO memberDTO) {
-        HttpHeaders headers = new HttpHeaders();
+    public Message<MemberDTO> signup(MemberDTO memberDTO) {
         String isEmptyMemberDTOResult = isEmptyMemberDTO(memberDTO);
         if (!isEmptyMemberDTOResult.equals("notEmpty")) {
-            Message message = new Message(StatusEnum.BAD_REQUEST, isEmptyMemberDTOResult, memberDTO);
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+            return Message.<MemberDTO>createMessage()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message(isEmptyMemberDTOResult)
+                    .body(memberDTO).build();
         }
-        Member member = memberDTO.toEntity();
-        if (isValidateDuplicateMember(member)) {
-            Message message = new Message(StatusEnum.BAD_REQUEST, "회원이 존재함", member);
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        if (isValidateDuplicateMember(memberDTO)) {
+            return Message.<MemberDTO>createMessage()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("회원이 존재함")
+                    .body(memberDTO).build();
         } else {
-            memberRepository.save(member);
-            Message message = new Message(StatusEnum.OK, "회원 가입 성공", member);
-            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+            memberRepository.save(memberDTO.toEntity());
+            return Message.<MemberDTO>createMessage()
+                    .header(StatusEnum.OK)
+                    .message("회원 가입 성공")
+                    .body(memberDTO).build();
         }
     }
 
@@ -54,8 +55,8 @@ public class MemberService {
         return "notEmpty";
     }
 
-    private boolean isValidateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findByLoginId(member.getLoginId());
+    private boolean isValidateDuplicateMember(MemberDTO memberDTO) {
+        List<Member> findMembers = memberRepository.findByLoginId(memberDTO.getLoginId());
         return !findMembers.isEmpty();
     }
 }
