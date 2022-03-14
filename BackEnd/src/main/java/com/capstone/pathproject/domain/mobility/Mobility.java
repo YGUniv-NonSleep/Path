@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -25,12 +23,6 @@ public class Mobility {
     @ManyToOne
     @JoinColumn(name = "MOBILITY_CO_ID")
     private MobilityCompany mobilityCompany;
-
-    @OneToMany(mappedBy = "mobility")
-    private List<MobilityPayment> mobilityPayments = new ArrayList<MobilityPayment>();
-
-    @OneToMany(mappedBy = "mobility")
-    private List<MobilityReservation> mobilityReservations = new ArrayList<MobilityReservation>();
 
     @Column(name = "MOBILITY_BATTERY")
     private int battery;

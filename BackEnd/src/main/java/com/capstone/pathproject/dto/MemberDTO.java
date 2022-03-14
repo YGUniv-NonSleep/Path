@@ -7,6 +7,7 @@ import com.capstone.pathproject.domain.member.memberType;
 import lombok.*;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDTO {
     private memberType type;

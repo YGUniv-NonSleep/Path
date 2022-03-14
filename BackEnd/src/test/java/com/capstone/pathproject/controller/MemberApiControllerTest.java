@@ -4,6 +4,7 @@ import com.capstone.pathproject.domain.member.memberGender;
 import com.capstone.pathproject.domain.member.memberType;
 import com.capstone.pathproject.dto.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,18 @@ class MemberApiControllerTest {
     void signup_빈객체_테스트() throws Exception {
         //given
         MemberDTO memberDTO = MemberDTO.createMemberDTO().build();
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatus status = HttpStatus.OK;
         //when
-        ResponseEntity<Message> response = memberService.signup(memberDTO);
+        Message<MemberDTO> message = memberService.signup(memberDTO);
+        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
+        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
+        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
         //then
+        ResponseEntity<Message<MemberDTO>> response = new ResponseEntity<>(message, headers, status);
         System.out.println(response.getStatusCode());
         System.out.println(response.getBody().getMessage());
-        System.out.println(response.getBody().getData().toString());
+        System.out.println(response.getBody().getBody().toString());
     }
 
     @Test
@@ -48,11 +55,17 @@ class MemberApiControllerTest {
                 .gender(memberGender.MALE)
                 .birthday("2000-01-01")
                 .build();
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatus status = HttpStatus.OK;
         //when
-        ResponseEntity<Message> response = memberService.signup(memberDTO);
+        Message<MemberDTO> message = memberService.signup(memberDTO);
+        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
+        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
+        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
         //then
+        ResponseEntity<Message<MemberDTO>> response = new ResponseEntity<>(message, headers, status);
         System.out.println(response.getStatusCode());
         System.out.println(response.getBody().getMessage());
-        System.out.println(response.getBody().getData().toString());
+        System.out.println(response.getBody().getBody().toString());
     }
 }
