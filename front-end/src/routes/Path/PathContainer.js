@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
 import axios from "axios";
-import Maps from "../../MapApi";
+import MapApi from "../../MapApi";
 
 function PathContainer() {
     const [map, setMap] = useState(null);
@@ -9,7 +9,7 @@ function PathContainer() {
 
     async function mapLoad() {
         try {
-            let mapInfo = await Maps();
+            let mapInfo = await MapApi();
             setLoading(true);
 
             console.log(mapInfo().center)

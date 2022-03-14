@@ -1,11 +1,5 @@
 function MapApi() {
 
-    const script = document.createElement('script');
-    script.type = "text/javascript";
-    script.src = "%REACT_APP_JS_API_URL%";
-    script.async = true;
-    document.body.appendChild(script);
-
     const mapContainer = document.getElementById('map') // 지도 표시 div 탐색
     console.log(mapContainer)
     // https://devtalk.kakao.com/t/api-currentstyle-null/35781/4
@@ -52,8 +46,7 @@ function MapApi() {
         // 영역정보를 문자열로 얻어옵니다. ((남,서), (북,동)) 형식입니다
         let boundsStr = bounds.toString();
         
-        return () => {
-            document.body.removeChild(script);
+        return {
             center, level, mapTypeId, bounds, swLatLng, neLatLng, boundsStr
         }
     }
