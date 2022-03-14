@@ -40,7 +40,7 @@ public class Post {
     private String content;
 
     @Column(name = "POST_VIEW")
-    private String view;
+    private int view;
 
     @Column(name = "POST_WRITE_DATE")
     private String writeDate;
