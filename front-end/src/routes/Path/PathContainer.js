@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
 import axios from "axios";
-import Maps from "../../Components/Maps";
+import Maps from "../../MapApi";
 
 function PathContainer() {
     const [map, setMap] = useState(null);

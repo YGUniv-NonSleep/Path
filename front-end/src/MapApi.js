@@ -1,14 +1,10 @@
-import { useRef } from "react";
+function MapApi() {
 
-function Maps() {
-
-    // const mapDiv = document.createElement('div');
-    // mapDiv.id = "map";
-    // mapDiv.async = true;
-    // mapDiv.style.width = "800px";
-    // mapDiv.style.height = "600px";
-
-    // document.body.appendChild(mapDiv);
+    const script = document.createElement('script');
+    script.type = "text/javascript";
+    script.src = "%REACT_APP_JS_API_URL%";
+    script.async = true;
+    document.body.appendChild(script);
 
     const mapContainer = document.getElementById('map') // 지도 표시 div 탐색
     console.log(mapContainer)
@@ -56,11 +52,12 @@ function Maps() {
         // 영역정보를 문자열로 얻어옵니다. ((남,서), (북,동)) 형식입니다
         let boundsStr = bounds.toString();
         
-        return {
+        return () => {
+            document.body.removeChild(script);
             center, level, mapTypeId, bounds, swLatLng, neLatLng, boundsStr
         }
     }
     
 }
 
-export default Maps;
+export default MapApi;

@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
+import styled from "styled-components";
+import Map from "../../Components/Map"
+
 
 function PathPresenter(props) {
     return (
         <div className="Path">
-            {
-                props.loading ? <p>맵 나왔다</p>
-                : <h2>로드 중...</h2>
-                }
-                <div id="map" >asd</div>
+            { props.loading ? <p>맵 나왔다</p> : <h2>로드 중...</h2> }
+            <Map></Map>
         </div>
     )
 }
