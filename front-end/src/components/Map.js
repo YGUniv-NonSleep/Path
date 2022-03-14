@@ -10,3 +10,5 @@ function Map() {
         <StyledMap id="map"></StyledMap>
     )
 }
+
+export default Map;
