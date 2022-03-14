@@ -19,30 +19,30 @@ import java.time.LocalDate;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMPANY_SEQ_GENERATOR")
-    @Column(name = "COMPANY_ID")
+    @Column(name = "COM_ID")
     private Long id;
 
-    @Column(name = "COMPANY_NAME")
+    @Column(name = "COM_NAME")
     private String name;
 
-    @Column(name = "COMPANY_CRN")
+    @Column(name = "COM_CRN")
     private String companyNumber;
 
-    @Column(name = "COMPANY_OPEN_DATE")
+    @Column(name = "COM_OPEN_DATE")
     private LocalDate openDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "COMPANY_CREATE")
+    @Column(name = "COM_CREATE")
     private CompCategory category;
 
-    @Column(name = "COMPANY_MAIL")
+    @Column(name = "COM_MAIL")
     private String mail;
 
-    @Column(name = "COMPANY_PHONE")
+    @Column(name = "COM_PHONE")
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "MEM_ID")
     private Member memberId;
 
     public Company(){}
