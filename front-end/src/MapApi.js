@@ -50,7 +50,6 @@ function MapApi() {
             center, level, mapTypeId, bounds, swLatLng, neLatLng, boundsStr
         }
     }
-    
 }
 
 export default MapApi;

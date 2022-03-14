@@ -19,7 +19,7 @@ function PathContainer() {
         }
     }
 
-    useEffect(() => {    
+    useEffect(() => {
         mapLoad()
     }, []);
 
