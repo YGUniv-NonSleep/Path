@@ -4,6 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 function signUp() {
+    
     const su = () => axios.post("/api/signup", {
         type: "USER",
         loginId: "asd",
@@ -15,9 +16,14 @@ function signUp() {
         addrDetail: "상세주소",
         gender: "MALE",
         birthday: "1999-09-09",
-        account: "String"
+        account: "String",
+    }, {
+        headers: {
+            "Contents-Type": "application/json", 
+            'Accept': '*/*'
+        }
     }).then((response) => {
-        console.log(response)
+        console.log(response.data)
     }).catch((error) => {
         console.log(error)
     });
