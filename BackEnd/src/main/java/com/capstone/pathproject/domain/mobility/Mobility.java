@@ -17,27 +17,27 @@ public class Mobility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBILITY_SEQ_GENERATOR")
-    @Column(name = "MOBILITY_ID")
+    @Column(name = "MOBIL_ID")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "MOBILITY_CO_ID")
+    @JoinColumn(name = "MOBIL_CO_ID")
     private MobilityCompany mobilityCompany;
 
-    @Column(name = "MOBILITY_BATTERY")
+    @Column(name = "MOBIL_BATTERY")
     private int battery;
 
-    @Column(name = "MOBILITY_LONG")
+    @Column(name = "MOBIL_LONG")
     private String longitude;
 
-    @Column(name = "MOBILITY_LAT")
+    @Column(name = "MOBIL_LAT")
     private String latitude;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "MOBILITY_STATE")
+    @Column(name = "MOBIL_STATE")
     private MobilityState state;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "MOBILITY_TYPE")
+    @Column(name = "MOBIL_TYPE")
     private MobilityType type;
 }

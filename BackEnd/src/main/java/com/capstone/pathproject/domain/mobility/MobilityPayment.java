@@ -19,29 +19,29 @@ public class MobilityPayment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBILITY_PAYMENT_SEQ_GENERATOR")
-    @Column(name = "MOBILITY_PAYMENT_ID")
+    @Column(name = "MOBIL_PAY_ID")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "MOBILITY_ID")
+    @JoinColumn(name = "MOBIL_ID")
     private Mobility mobility;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "MEM_ID")
     private Member member;
 
-    @Column(name = "MOBILITY_PAYMENT_PRICE")
+    @Column(name = "MOBIL_PAY_PRICE")
     private int price;
 
-    @Column(name = "MOBILITY_PAYMENT_USING_TIME")
+    @Column(name = "MOBIL_PAY_USING_TIME")
     private LocalDateTime usingTime;
 
-    @Column(name = "MOBILITY_PAYMENT_START_TIME")
+    @Column(name = "MOBIL_PAY_START_TIME")
     private LocalDateTime startTime;
 
-    @Column(name = "MOBILITY_PAYMENT_END_TIME")
+    @Column(name = "MOBIL_PAY_END_TIME")
     private LocalDateTime endTime;
 
-    @Column(name = "MOBILITY_PAYMENT_TOSS_KEY")
+    @Column(name = "MOBIL_PAY_TOSS_KEY")
     private String paymentKey;
 }

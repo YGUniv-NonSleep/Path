@@ -17,48 +17,48 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
-    @Column(name = "MEMBER_ID")
+    @Column(name = "MEM_ID")
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "MEMBER_TYPE")
+    @Column(name = "MEM_TYPE")
     private memberType type;
 
-    @Column(name = "MEMBER_LOGIN_ID")
+    @Column(name = "MEM_LOGIN_ID")
     private String loginId;
 
-    @Column(name = "MEMBER_PW")
+    @Column(name = "MEM_PW")
     private String password;
 
-    @Column(name = "MEMBER_MAIL")
+    @Column(name = "MEM_MAIL")
     private String mail;
 
-    @Column(name = "MEMBER_NAME")
+    @Column(name = "MEM_NAME")
     private String name;
 
-    @Column(name = "MEMBER_PHONE")
+    @Column(name = "MEM_PHONE")
     private String phone;
 
-    @Column(name = "MEMBER_ADDR")
+    @Column(name = "MEM_ADDR")
     private String addr;
 
-    @Column(name = "MEMBER_ADDR_DETAIL")
+    @Column(name = "MEM_ADDR_DETAIL")
     private String addrDetail;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "MEMBER_GENDER")
+    @Column(name = "MEM_GENDER")
     private memberGender gender;
 
-    @Column(name = "MEMBER_BIRTH")
+    @Column(name = "MEM_BIRTH")
     private LocalDate birthday;
 
-    @Column(name = "MEMBER_SIGNUP_DATE")
+    @Column(name = "MEM_SIGNUP_DATE")
     private LocalDate signupDay;
 
-    @Column(name = "MEMBER_ACCOUNT")
+    @Column(name = "MEM_ACCOUNT")
     private String account;
 
-    @Column(name = "MEMBER_SCORE")
+    @Column(name = "MEM_SCORE")
     private int score;
 
     @Builder(builderMethodName = "createMember")
