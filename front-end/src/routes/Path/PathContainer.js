@@ -15,7 +15,7 @@ function PathContainer() {
             console.log(mapInfo().center)
             
         } catch(error) {
-            console.log("load error");
+            console.log(error);
         }
     }
 
