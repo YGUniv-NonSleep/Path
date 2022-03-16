@@ -32,7 +32,7 @@ public class Company {
     private LocalDate openDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "COM_CREATE")
+    @Column(name = "COM_CATEGORY")
     private CompCategory category;
 
     @Column(name = "COM_MAIL")
@@ -43,12 +43,12 @@ public class Company {
 
     @ManyToOne
     @JoinColumn(name = "MEM_ID")
-    private Member memberId;
+    private Member member;
 
     public Company(){}
 
     @Builder(builderMethodName = "createCompany")
-    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, Member memberId) {
+    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, Member member) {
         this.id = id;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
@@ -56,7 +56,7 @@ public class Company {
         this.name = name;
         this.mail = mail;
         this.phone = phone;
-        this.memberId = memberId;
+        this.member = member;
 
     }
 
