@@ -16,26 +16,26 @@ import java.time.LocalDate;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PRODUCT_SEQ_GENERATOR")
-    @Column(name = "PROD_ID")
+    @Column(name = "PRO_ID")
     private Long id;
 
-    @Column(name = "PROD_PRICE")
+    @Column(name = "PRO_PRICE")
     private int Price;
 
-    @Column(name = "PROD_EXPOSURE")
+    @Column(name = "PRO_EXPOSURE")
     private Boolean exposure;
 
-    @Column(name ="PROD_DISCOUNT_RATE")
+    @Column(name ="PRO_DISCOUNT_RATE")
     private int discount;
 
-    @Column(name = "PROD_CREATED")
+    @Column(name = "PRO_CREATED")
     private LocalDate created;
 
-    @Column(name = "PROD_STOCK")
+    @Column(name = "PRO_STOCK")
     private int stock;
 
     @ManyToOne
-    @JoinColumn(name = "COMPANY_ID")
+    @JoinColumn(name = "COM_ID")
     private Company companyId;
 
     @ManyToOne

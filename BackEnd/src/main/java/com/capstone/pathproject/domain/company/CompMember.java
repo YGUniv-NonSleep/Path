@@ -14,15 +14,15 @@ import javax.persistence.*;
 public class CompMember {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMP_MEMBER_SEQ_GENERATOR")
-    @Column(name = "COMP_MEMBER_ID")
+    @Column(name = "COM_MEMBER_ID")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "MEM_ID")
     private Member memberId;
 
     @ManyToOne
-    @JoinColumn(name = "COMPANY_ID")
+    @JoinColumn(name = "COM_ID")
     private Company company;
 
 }
