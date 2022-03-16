@@ -1,14 +1,16 @@
 import styled from "styled-components";
 
 const Footerdiv = styled.div`
-    width: 100%;
-    height: 100px;
+    background-color: #F1F1F1;
+    width: 1080px;
+    margin: 10px;
+    padding: 0px;
 `;
 
-function Footer({text}) {
+function Footer() {
     return (
         <Footerdiv>
-            {text}
+            footer
         </Footerdiv>
     )
 }

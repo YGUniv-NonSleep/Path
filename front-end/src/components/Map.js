@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 const StyledMap = styled.div`
-    width: 600px;
-    height:400px;
+    display: block;
+    width: 1000px;
+    height: 600px;
 `;
 
 function Map() {
