@@ -14,6 +14,12 @@ import SignUp from "../Routes/Member/signUp";
 
 import Sidebar from "./Sidebar";
 
+// https://kyung-a.tistory.com/36
+// https://roylee0704.github.io/react-flexbox-grid/
+// https://rsuitejs.com/
+// https://www.w3schools.com/css/css_website_layout.asp
+// https://tech.devsisters.com/posts/react-extend-theme/
+
  function Router() {
     return (
         <BrowserRouter>

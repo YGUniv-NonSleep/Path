@@ -73,18 +73,18 @@ const Header = ({ location: { pathname } }) => {
             홈
           </ScLink>
         </Li>
-        <Li current={pathname.includes("/movie") && true}>
-          <ScLink to="/movie" current={pathname.includes("/movie") && true}>
+        <Li current={pathname.includes("/member") && true}>
+          <ScLink to="/member" current={pathname.includes("/member") && true}>
             영화
           </ScLink>
         </Li>
-        <Li current={pathname.includes("/tv") && true}>
-          <ScLink to="/tv" current={pathname.includes("/tv") && true}>
+        <Li current={pathname.includes("/oder") && true}>
+          <ScLink to="/oder" current={pathname.includes("/oder") && true}>
             TV
           </ScLink>
         </Li>
-        <Li current={pathname.includes("/search") && true}>
-          <ScLink to="/search" current={pathname.includes("/search") && true}>
+        <Li current={pathname.includes("/mobility") && true}>
+          <ScLink to="/mobility" current={pathname.includes("/mobility") && true}>
             검색
           </ScLink>
         </Li>
