@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Map from "../../Components/Map";
+import Map from "../../components/Map";
 
 function PathPresenter(props) {
   

@@ -3,14 +3,14 @@ import {
     Routes, // v5에서 v6되면서 Switch에서 이름이 Routes로 변경됨.
     Route,
  } from "react-router-dom";
-import Path from "../Routes/Path"
-import Member from "../Routes/Member"
-import Oder from "../Routes/Oder"
-import Mobility from "../Routes/Mobility";
-import Community from "../Routes/Community";
-import CarPool from "../Routes/CarPool";
-import Login from "../Routes/Member/login";
-import SignUp from "../Routes/Member/signUp";
+import Path from "../routes/Path"
+import Member from "../routes/Member"
+import Oder from "../routes/Oder"
+import Mobility from "../routes/Mobility";
+import Community from "../routes/Community";
+import CarPool from "../routes/CarPool";
+import Login from "../routes/Member/login";
+import SignUp from "../routes/Member/signUp";
 
 import Sidebar from "./Sidebar";
 

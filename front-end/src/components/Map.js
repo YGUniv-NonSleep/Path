@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledMap = styled.div`
-    maxWidth: 100vh;
+    width: 100%;
     height: 100vh;
 `;
 
