@@ -36,11 +36,11 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "COM_ID")
-    private Company companyId;
+    private Company company;
 
     @ManyToOne
     @JoinColumn(name = "BASIC_ID")
-    private ProdBasic basicId;
+    private ProdBasic basic;
 
 }
 
