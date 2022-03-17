@@ -12,13 +12,12 @@ import CarPool from "../Routes/CarPool";
 import Login from "../Routes/Member/login";
 import SignUp from "../Routes/Member/signUp";
 
-import TopNav from "./TopNav"
-import Footer from "./Footer"
+import Sidebar from "./Sidebar";
 
  function Router() {
     return (
         <BrowserRouter>
-            <TopNav></TopNav>
+            <Sidebar></Sidebar>
             <Routes>
                 {/* 속성을 component 대신에 element */}
                 <Route path="/" element={<Path />} />
@@ -40,7 +39,6 @@ import Footer from "./Footer"
             <Routes>
                 <Route path="/carpool" element={<CarPool />} />
             </Routes>
-            <Footer></Footer>
         </BrowserRouter>
     )
  }
