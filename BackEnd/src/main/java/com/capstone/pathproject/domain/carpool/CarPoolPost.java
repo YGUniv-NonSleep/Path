@@ -11,15 +11,25 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@SequenceGenerator(
+        name = "CARPOST_SEQ_GENERATOR",
+        sequenceName = "CARPOST_SEQ",
+        initialValue = 1,allocationSize = 1
+)
 public class CarPoolPost {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "OPTION_SEQUENCE_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARPOST_SEQ_GENERATOR")
     @Column(name="CPOST_ID")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name="MEM_ID")
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "CAR_ID")
+    private Vehicle vehicle;
+
 
     @Column(name = "CPOST_TITLE")
     private String title;
@@ -58,10 +68,11 @@ public class CarPoolPost {
 
 
     @Builder(builderMethodName = "createContent")
-    public CarPoolPost(Long id, Member member, String title, String content, LocalDate start, LocalDate end, Integer recruit, Long startLongitude, Long startLatitude,
+    public CarPoolPost(Long id, Member member, Vehicle vehicle,String title, String content, LocalDate start, LocalDate end, Integer recruit, Long startLongitude, Long startLatitude,
                        Long arrLongitude, Long arrLatitude, LocalDateTime startTime, String picture) {
         this.id = id;
         this.member = member;
+        this.vehicle = vehicle;
         this.title = title;
         this.content = content;
         this.start = start;
