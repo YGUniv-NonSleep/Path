@@ -1,7 +1,7 @@
 function MapApi() {
 
     const mapContainer = document.getElementById('map') // 지도 표시 div 탐색
-    console.log(mapContainer)
+    //console.log(mapContainer)
     // https://devtalk.kakao.com/t/api-currentstyle-null/35781/4
 
     let mapOption = {
@@ -9,7 +9,7 @@ function MapApi() {
         level: 3, // 지도 확대 레벨
         mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도 맵타입
     };
-        
+    
     let map = new kakao.maps.Map(mapContainer, mapOption);
     
     // 지도 타입 변경 컨트롤을 생성한다
@@ -50,7 +50,6 @@ function MapApi() {
             center, level, mapTypeId, bounds, swLatLng, neLatLng, boundsStr
         }
     }
-    
 }
 
 export default MapApi;
