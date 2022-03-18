@@ -21,7 +21,7 @@ public class CompanyService {
 
     public Message<CompanyDTO> createCompany(CompanyDTO companyDTO){
         //Optional<Member> member = memberRepository.findById(companyDTO.getMemberId());
-        System.out.println(companyDTO.toString());
+        //System.out.println(companyDTO.toString());
         companyRepository.save(companyDTO.toEntity());
         return Message.<CompanyDTO>createMessage()
                 .header(StatusEnum.OK)
@@ -45,7 +45,6 @@ public class CompanyService {
                 .body(companyDTO)
                 .build();
     }
-
 
     public Message<CompanyDTO> companyDetail(Long userId) {
         Optional<Company> cRs =  companyRepository.findById(userId);

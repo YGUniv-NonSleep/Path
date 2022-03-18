@@ -1,6 +1,7 @@
 package com.capstone.pathproject.domain.company;
 
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -33,4 +34,15 @@ public class ProdBasic {
     @Column(name = "BASIC_CATEGORI")
     private String categori;
 
+    public ProdBasic(){}
+
+    @Builder(builderMethodName = "createProdBasic")
+    public ProdBasic(Long id, String name, String image, String detail, String brand, String categori){
+        this.id=id;
+        this.name = name;
+        this.image = image;
+        this.detail = detail;
+        this.brand = brand;
+        this.categori = categori;
+    }
 }
