@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
 import axios from "axios";
 import MapApi from "../../MapApi";
+import TopNav from "../../Components/TopNav"
 
 function PathContainer() {
     const [map, setMap] = useState(null);
@@ -26,7 +27,8 @@ function PathContainer() {
     return (
         <PathPresenter 
             loading = {loading}
-        >
+        > 
+        <TopNav></TopNav>
             </PathPresenter>
     )
 }

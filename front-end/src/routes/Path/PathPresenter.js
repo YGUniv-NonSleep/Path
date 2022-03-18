@@ -12,6 +12,7 @@ function PathPresenter(props) {
       <Map />
     </div>
   );
+
 }
 
 PathPresenter.propTypes = {
