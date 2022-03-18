@@ -10,9 +10,9 @@ function PathContainer() {
     async function mapLoad() {
         try {
             let mapInfo = await MapApi();
+            console.log(mapInfo.getInfo())
+            console.log(mapInfo.getLatLng())
             setLoading(true);
-
-            console.log(mapInfo().center)
             
         } catch(error) {
             console.log(error);
