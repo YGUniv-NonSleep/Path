@@ -3,9 +3,11 @@ package com.capstone.pathproject.domain.company;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
+@ToString
 @Entity
 @SequenceGenerator(
         name = "PROD_BASIC_SEQ_GENERATOR",

@@ -26,7 +26,8 @@ public class CompanyService {
         return Message.<CompanyDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("Create Success")
-                .body(companyDTO).build();
+                .body(companyDTO)
+                .build();
     }
 
     public Message deleteCompany(Long comId){
@@ -46,8 +47,8 @@ public class CompanyService {
                 .build();
     }
 
-    public Message<CompanyDTO> companyDetail(Long userId) {
-        Optional<Company> cRs =  companyRepository.findById(userId);
+    public Message<CompanyDTO> companyDetail(Long companyId) {
+        Optional<Company> cRs =  companyRepository.findById(companyId);
         Company rs = cRs.get();
 
         CompanyDTO companyDto = CompanyDTO.createCompanyDTD()
