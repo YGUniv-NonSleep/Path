@@ -2,6 +2,7 @@ package com.capstone.pathproject.dto;
 
 import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.company.ProdBasic;
+import com.capstone.pathproject.domain.company.Product;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,10 +18,10 @@ public class ProductDTO {
     private LocalDate created;
     private int stock;
     private Company company;
-    private ProdBasic basic;
+    private ProdBasic prodbasic;
 
     @Builder(builderMethodName = "createProductDTO")
-    public ProductDTO(long id, int price, Boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic basic){
+    public ProductDTO(long id, int price, Boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodbasic){
     this.id = id;
     this.price = price;
     this.exposure = exposure;
@@ -28,8 +29,21 @@ public class ProductDTO {
     this.created = created;
     this.stock = stock;
     this.company = company;
-    this.basic = basic;
+    this.prodbasic = prodbasic;
 
+    }
+
+    public Product toEntity(){
+        return Product.createProduct()
+                .id(id)
+                .created(created)
+                .discount(discount)
+                .exposure(exposure)
+                .price(price)
+                .stock(stock)
+                .prodBasic(prodbasic)
+                .company(company)
+                .build();
     }
 
 

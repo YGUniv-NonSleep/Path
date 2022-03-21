@@ -1,0 +1,11 @@
+{ "type" : "ADMIN",
+  "loginId" : "12345",
+  "password" : "asdf",
+  "mail" : "asdf@naver.com",
+  "name" : "asdf",
+  "phone" : "asdf",
+  "addr" : "asdf",
+  "addrDetail" : "asdf",
+  "gender" : "MALE",
+  "birthday" : "1999-11-11",
+  "account" : "asdf" }
