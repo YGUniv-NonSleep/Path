@@ -3,20 +3,26 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import axios from "axios";
 
+const SignupContainer = styled.div`
+    
+`;
+
 function signUp() {
     
-    axios.post("/api/signup", {
-        type: "USER",
-        loginId: "asd",
-        password: "asd",
-        mail: "asd@asd.com",
-        name: "asd",
-        phone: "01012341234",
-        addr: "주소",
-        addrDetail: "상세주소",
-        gender: "MALE",
-        birthday: "1999-09-09",
-        account: "String",
+
+    const su = () => axios.post("/api/company/create", {
+        
+        
+        
+        companyNumber: 1112233334, // 사업자등록번호
+        openDate: "2022-11-11", 
+        category: "CONVENIENCESTORE",
+        name: "김가나",
+        mail: "asd@naver.com",
+        phone: "01012344321",
+        member: {
+            id: "asda"
+        }
     }, {
         headers: {
             "Contents-Type": "application/json", 
@@ -30,8 +36,10 @@ function signUp() {
 
     return (
         <div className="signup">
-            <h2>회원가입</h2>
-            <button>signup</button>
+            <signupContainer>
+                <h2>회원가입</h2>
+                <button onClick={su}>signup</button>
+            </signupContainer>
         </div>
     )
 }
