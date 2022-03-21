@@ -1,5 +1,4 @@
 function MapApi() {
-
     const mapContainer = document.getElementById('map') // 지도 표시 div 탐색
     //console.log(mapContainer)
     // https://devtalk.kakao.com/t/api-currentstyle-null/35781/4
