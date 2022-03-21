@@ -13,7 +13,6 @@ const NavContainer = styled.nav`
   flex-direction: column;
   position: fixed;
   
-  
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(3px);
   z-index: 100;
@@ -145,8 +144,8 @@ const Nav = () => {
         </Li>
       </Ul>
       <Ul>
-        <Li $current={currLocation === "/member" && true}>
-          <ScLink to="/member" $current={currLocation === "/member" && true}>
+        <Li $current={currLocation === "/login" && true}>
+          <ScLink to="/login" $current={currLocation === "/login" && true}>
             <Button>회원</Button>
           </ScLink>
         </Li>

@@ -11,7 +11,6 @@ function PathContainer() {
         try {
             let mapInfo = await MapApi();
             console.log(mapInfo.getInfo())
-            console.log(mapInfo.getLatLng())
             setLoading(true);
             
         } catch(error) {
@@ -19,8 +18,22 @@ function PathContainer() {
         }
     }
 
+    function mapClickEvent() {
+        try {
+            let mapInfo = MapApi();
+            console.log(mapInfo.getLatLng())
+
+        } catch(error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         mapLoad()
+    }, []);
+
+    useEffect(() => {
+        mapClickEvent()
     }, []);
 
     return (
