@@ -18,9 +18,9 @@ function PathContainer() {
         }
     }
 
-    function mapClickEvent() {
+    async function mapClickEvent() {
         try {
-            let mapInfo = MapApi();
+            let mapInfo = await MapApi();
             console.log(mapInfo.getLatLng())
 
         } catch(error) {

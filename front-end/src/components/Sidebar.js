@@ -5,7 +5,6 @@ import pathLogo from "../assets/path_logo.svg";
 
 // https://blog.logrocket.com/react-router-v6-future-reach-router/
 // https://velog.io/@wiostz98kr/TIL50-l-React-Router-match.params-location.search
-
 // http://www.tcpschool.com/css/css3_transform_2Dtransform
 
 const NavContainer = styled.nav`
@@ -64,7 +63,6 @@ const Button = styled.button`
   padding: 1.5em 4em;
   position: relative;
   text-transform: uppercase;
-
   ::before;
   ::after {
     -webkit-transition: all 0.3s;
@@ -87,7 +85,6 @@ const Button = styled.button`
   &:hover:after {
     width: 100%;
   }
-
 `;
 
 const ScLink = styled(NavLink)`
