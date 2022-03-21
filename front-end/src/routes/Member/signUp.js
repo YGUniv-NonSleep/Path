@@ -5,7 +5,7 @@ import axios from "axios";
 
 function signUp() {
     
-    const su = () => axios.post("/api/signup", {
+    axios.post("/api/signup", {
         type: "USER",
         loginId: "asd",
         password: "asd",
@@ -31,7 +31,7 @@ function signUp() {
     return (
         <div className="signup">
             <h2>회원가입</h2>
-            <button onClick={su}>signup</button>
+            <button>signup</button>
         </div>
     )
 }

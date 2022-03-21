@@ -1,7 +1,8 @@
 package com.capstone.pathproject.controller;
 
-import com.capstone.pathproject.domain.company.ProdBasic;
+import com.capstone.pathproject.domain.company.Product;
 import com.capstone.pathproject.dto.ProdBasicDTO;
+import com.capstone.pathproject.dto.ProductDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.service.ProductService;
@@ -66,7 +67,7 @@ public class ProductApiController {
     @GetMapping("/basic/{basicId}")
     public ResponseEntity<Message<ProdBasicDTO>> basicDetail(@PathVariable("basicId") Long basicId){
 
-        Message<ProdBasicDTO> message = productService.updateBasicDetail(basicId);
+        Message<ProdBasicDTO> message = productService.basicDetail(basicId);
 
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.OK;
@@ -77,6 +78,31 @@ public class ProductApiController {
 
         return new ResponseEntity<>(message, headers, status);
     }
+
+
+    @PostMapping("/createProduct")
+    public ResponseEntity<Message<ProductDTO>> createProduct(){
+        //Message message = productService.
+
+        return null;
+    }
+
+    @DeleteMapping("/deleteProduct")
+    public ResponseEntity<Message> deleteProduct(){
+        return null;
+    }
+
+    @PatchMapping("/updateProduct")
+    public ResponseEntity<Message<ProductDTO>> updateProduct(){
+        return null;
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<Message<Product>> productDetail(@PathVariable("productId") long productId){
+        return null;
+    }
+
+
 
 
 

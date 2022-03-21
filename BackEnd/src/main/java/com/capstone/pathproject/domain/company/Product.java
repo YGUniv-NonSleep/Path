@@ -1,6 +1,7 @@
 package com.capstone.pathproject.domain.company;
 
 import com.capstone.pathproject.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ public class Product {
     private Long id;
 
     @Column(name = "PRO_PRICE")
-    private int Price;
+    private int price;
 
     @Column(name = "PRO_EXPOSURE")
     private Boolean exposure;
@@ -40,7 +41,24 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "BASIC_ID")
-    private ProdBasic basic;
+    private ProdBasic prodbasic;
+
+    public Product(){}
+
+
+    @Builder(builderMethodName = "createProduct")
+    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodBasic){
+        this.id = id;
+        this.price = price;
+        this.exposure = exposure;
+        this.discount = discount;
+        this.created = created;
+        this.stock = stock;
+        this.company = company;
+        this.prodbasic = prodBasic;
+
+
+    }
 
 }
 
