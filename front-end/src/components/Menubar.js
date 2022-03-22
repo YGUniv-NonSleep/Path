@@ -115,46 +115,46 @@ const Nav = () => {
 
   return (
     <NavContainer>
-      <Ul>
-        <Image>
-          <ScLink to="/"></ScLink>
-        </Image>
-      </Ul>
-      <Ul>
-        <Li $current={currLocation === "/" && true}>
-          <ScLink to="/" $current={currLocation === "/" && true}>
-            원클릭 패쓰
-          </ScLink>
-        </Li>
-        <Li $current={currLocation === "/oder" && true}>
-          <ScLink to="/oder" $current={currLocation === "/oder" && true}>
-            원클릭 오더
-          </ScLink>
-        </Li>
-        <Li $current={currLocation === "/mobility" && true}>
-          <ScLink to="/mobility" $current={currLocation === "/mobility" && true}>
-            이동수단
-          </ScLink>
-        </Li>
-        <Li $current={currLocation === "/carPool" && true}>
-          <ScLink to="/carPool" $current={currLocation === "/carPool" && true}>
-            카풀
-          </ScLink>
-        </Li>
-        <Li $current={currLocation === "/community" && true}>
-          <ScLink to="/community" $current={currLocation === "/community" && true}>
-            고객센터
-          </ScLink>
-        </Li>
-      </Ul>
-      <Ul1>
-        <Li $current={currLocation === "/member" && true}>
-          <ScLink to="/member" $current={currLocation === "/member" && true}>
-            <Button>회원</Button>
-          </ScLink>
-        </Li>
-      </Ul1>
-    </NavContainer>
+        <Ul>
+          <Image>
+            <ScLink to="/"></ScLink>
+          </Image>
+        </Ul>
+        <Ul>
+          <Li $current={currLocation === "/" && true}>
+            <ScLink to="/" $current={currLocation === "/" && true}>
+              원클릭 패쓰
+            </ScLink>
+          </Li>
+          <Li $current={currLocation === "/oder" && true}>
+            <ScLink to="/oder" $current={currLocation === "/oder" && true}>
+              원클릭 오더
+            </ScLink>
+          </Li>
+          <Li $current={currLocation === "/mobility" && true}>
+            <ScLink to="/mobility" $current={currLocation === "/mobility" && true}>
+              이동수단
+            </ScLink>
+          </Li>
+          <Li $current={currLocation === "/carPool" && true}>
+            <ScLink to="/carPool" $current={currLocation === "/carPool" && true}>
+              카풀
+            </ScLink>
+          </Li>
+          <Li $current={currLocation === "/community" && true}>
+            <ScLink to="/community" $current={currLocation === "/community" && true}>
+              고객센터
+            </ScLink>
+          </Li>
+        </Ul>
+        <Ul1>
+          <Li $current={currLocation === "/login" && true}>
+            <ScLink to="/login" $current={currLocation === "/login" && true}>
+              <Button>회원</Button>
+            </ScLink>
+          </Li>
+        </Ul1>
+      </NavContainer>
   );
 };
 
