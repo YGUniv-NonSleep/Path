@@ -32,9 +32,9 @@ import Sidebar from "./Sidebar";
                 <Route path="/" element={<Path />} />
             </Routes>
             <Routes>
-                <Route path="/member" element={<Member />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
+                <Route path="/member" element={<Member />} />
             </Routes>
             <Routes>
                 <Route path="/oder" element={<Oder />} />
