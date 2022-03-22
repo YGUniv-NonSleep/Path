@@ -1,8 +1,8 @@
 package com.capstone.pathproject.controller;
 
+import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.domain.member.memberGender;
-import com.capstone.pathproject.domain.member.memberType;
-import com.capstone.pathproject.dto.MemberDTO;
+import com.capstone.pathproject.dto.member.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.service.MemberService;
@@ -13,8 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -45,7 +43,6 @@ class MemberApiControllerTest {
     void signup_필수값_객체_테스트() throws Exception {
         //given
         MemberDTO memberDTO = MemberDTO.createMemberDTO()
-                .type(memberType.USER)
                 .loginId("로그인아이디")
                 .password("패스워드")
                 .mail("member@naver.com")

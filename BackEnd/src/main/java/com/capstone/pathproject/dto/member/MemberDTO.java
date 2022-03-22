@@ -1,16 +1,16 @@
-package com.capstone.pathproject.dto;
+package com.capstone.pathproject.dto.member;
 
 
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.domain.member.memberGender;
-import com.capstone.pathproject.domain.member.memberType;
 import lombok.*;
 
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDTO {
-    private memberType type;
+    private Role role;
     private String loginId;
     private String password;
     private String mail;
@@ -23,10 +23,9 @@ public class MemberDTO {
     private String account;
 
     @Builder(builderMethodName = "createMemberDTO")
-    public MemberDTO(memberType type, String loginId, String password, String mail, String name,
-                     String phone, String addr, String addrDetail, memberGender gender, String birthday,
-                     String account) {
-        this.type = type;
+    public MemberDTO(String loginId, String password, String mail, String name,
+                     String phone, String addr, String addrDetail, memberGender gender, String birthday) {
+        this.role = Role.ROLE_USER;
         this.loginId = loginId;
         this.password = password;
         this.mail = mail;
@@ -36,12 +35,11 @@ public class MemberDTO {
         this.addrDetail = addrDetail;
         this.gender = gender;
         this.birthday = birthday;
-        this.account = account;
     }
 
     public Member toEntity() {
         return Member.createMember()
-                .type(type)
+                .role(role)
                 .loginId(loginId)
                 .password(password)
                 .mail(mail)
@@ -54,4 +52,12 @@ public class MemberDTO {
                 .account(account)
                 .build();
     }
+
+    public void encodePassword(String encodePassword) {
+        this.password = encodePassword;
+    }
+
+    public void addAccount(String account) { this.account = account; }
+
+    public void updateMemberRole(Role role) { this.role = role; }
 }
