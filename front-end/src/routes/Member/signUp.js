@@ -14,8 +14,7 @@ function signUp() {
     const generalUser = () => axios.post(
         process.env.REACT_APP_SPRING_API+"/api/signup", {
             
-        type: "USER",
-        loginId: "dasdsadsasdasadd",
+        loginId: "dasdsadsasdaaa",
         password: "asd",
         mail: "asd@asd.com",
         name: "asd",
@@ -24,7 +23,6 @@ function signUp() {
         addrDetail: "상세주소",
         gender: "MALE",
         birthday: "1999-09-09",
-        account: "String",
     }).then((response) => {
         console.log(response.data)
         //console.log(response.data)

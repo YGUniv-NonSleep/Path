@@ -21,8 +21,8 @@ public class Member {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "MEM_TYPE")
-    private memberType type;
+    @Column(name = "MEM_ROLE")
+    private Role role;
 
     @Column(name = "MEM_LOGIN_ID")
     private String loginId;
@@ -62,10 +62,10 @@ public class Member {
     private int score;
 
     @Builder(builderMethodName = "createMember")
-    public Member(memberType type, String loginId, String password, String mail, String name,
+    public Member(Role role, String loginId, String password, String mail, String name,
                   String phone, String addr, String addrDetail, memberGender gender, String birthday,
                   String account) {
-        this.type = type;
+        this.role = role;
         this.loginId = loginId;
         this.password = password;
         this.mail = mail;
