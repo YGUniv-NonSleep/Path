@@ -22,7 +22,7 @@ const SideNav = styled.nav`
   height: 100%;
 `;
 
-const Top = styled.ul`
+const Ul = styled.ul`
   position: fixed;
   top: 10px;
   left: 110px;
@@ -30,60 +30,60 @@ const Top = styled.ul`
   grid-template-columns: 50px 50px 50px 50px 50px 50px 50px;
 `;
 
-const Top2 = styled.li`
+const Li = styled.li`
   text-align: center;
 `;
 
-const Side = () => {
+const Sidebar = () => {
 
   return (
       <SideNav>
-        <Top>
-          <Top2>
+        <Ul>
+          <Li>
             <IconButton color="primary">
               <JoinFull />
             </IconButton>
             <Typography variant="subtitle2">통합</Typography>
-          </Top2>
-          <Top2>
+          </Li>
+          <Li>
             <IconButton color="primary">
               <DirectionsBus />
             </IconButton>
             <Typography variant="subtitle2">버스</Typography>
-          </Top2>
-          <Top2>
+          </Li>
+          <Li>
             <IconButton color="primary">
               <DirectionsSubway />
             </IconButton>
             <Typography variant="subtitle2">지하철</Typography>
-          </Top2>
-          <Top2>
+          </Li>
+          <Li>
             <IconButton color="primary">
               <ElectricScooter />
             </IconButton>
             <Typography variant="subtitle2">킥보드</Typography>
-          </Top2>
-          <Top2>
+          </Li>
+          <Li>
             <IconButton color="primary">
               <PedalBike />
             </IconButton>
             <Typography variant="subtitle2">자전거</Typography>
-          </Top2>
-          <Top2>
+          </Li>
+          <Li>
             <IconButton color="primary">
               <DirectionsWalk />
             </IconButton>
             <Typography variant="subtitle2">도보</Typography>
-          </Top2>
-          <Top2>
+          </Li>
+          <Li>
             <IconButton color="primary">
               <DirectionsCarFilled />
             </IconButton>
             <Typography variant="subtitle2">자동차</Typography>
-          </Top2>
-        </Top>
+          </Li>
+        </Ul>
       </SideNav>
   );
 };
 
-export default Side;
+export default Sidebar;

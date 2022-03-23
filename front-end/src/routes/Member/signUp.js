@@ -39,7 +39,7 @@ function signUp() {
 
     const companyRegist = () => axios.post(
         process.env.REACT_APP_SPRING_API+"/api/company/create", {
-        // REACT_APP_SPRING_API=http://localhost:8080
+        
         name: "김가나",
         companyNumber: "1112233334", // 사업자등록번호
         openDate: "2021-11-11", 

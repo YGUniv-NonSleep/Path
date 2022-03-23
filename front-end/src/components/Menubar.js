@@ -29,7 +29,7 @@ const Ul = styled.ul`
   
 `;
 
-const Ul1 = styled.ul`
+const BtnUl = styled.ul`
   display: flex-inline;
   align-items: center;
   width: 100%;
@@ -105,7 +105,7 @@ const ScLink = styled(NavLink)`
   }
 `;
 
-const Nav = () => {
+const Menubar = () => {
   const location = useLocation();
   const [currLocation, setCurrLocation] = useState(null);
 
@@ -147,15 +147,15 @@ const Nav = () => {
             </ScLink>
           </Li>
         </Ul>
-        <Ul1>
+        <BtnUl>
           <Li $current={currLocation === "/login" && true}>
             <ScLink to="/login" $current={currLocation === "/login" && true}>
               <Button>회원</Button>
             </ScLink>
           </Li>
-        </Ul1>
+        </BtnUl>
       </NavContainer>
   );
 };
 
-export default Nav;
+export default Menubar;
