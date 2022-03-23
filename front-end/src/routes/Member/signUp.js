@@ -6,7 +6,7 @@ import axios from "axios";
 const SignupContainer = styled.div`
     width: 800px;
     height: 300px;
-    padding-left: 150px;
+    padding-left: 550px;
 `;
 
 function signUp() {
