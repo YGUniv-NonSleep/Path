@@ -12,6 +12,7 @@ import CarPool from "../routes/CarPool";
 import Login from "../routes/Member/login";
 import SignUp from "../routes/Member/signUp";
 
+import Menubar from "./Menubar";
 import Sidebar from "./Sidebar";
 
 // https://kyung-a.tistory.com/36
@@ -23,7 +24,9 @@ import Sidebar from "./Sidebar";
  function Router() {
     return (
         <BrowserRouter>
+            <Menubar></Menubar>
             <Sidebar></Sidebar>
+            
             <Routes>
                 {/* 속성을 component 대신에 element */}
                 <Route path="/" element={<Path />} />
