@@ -1,4 +1,4 @@
-package com.capstone.pathproject.controller;
+package com.capstone.pathproject.controller.excpetion;
 
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;

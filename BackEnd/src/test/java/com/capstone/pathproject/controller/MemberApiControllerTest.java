@@ -1,68 +1,90 @@
 package com.capstone.pathproject.controller;
 
-import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.domain.member.memberGender;
 import com.capstone.pathproject.dto.member.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
-import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.service.MemberService;
+import com.capstone.pathproject.service.member.MemberService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+
+@AutoConfigureMockMvc
 @SpringBootTest
 @Transactional
 class MemberApiControllerTest {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
-    void signup_빈객체_테스트() throws Exception {
+    void signup_null값_경로테스트() throws Exception {
         //given
         MemberDTO memberDTO = MemberDTO.createMemberDTO().build();
-        HttpHeaders headers = new HttpHeaders();
-        HttpStatus status = HttpStatus.OK;
+        String content = objectMapper.writeValueAsString(memberDTO);
         //when
-        Message<MemberDTO> message = memberService.signup(memberDTO);
-        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
-        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
-        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
-        //then
-        ResponseEntity<Message<MemberDTO>> response = new ResponseEntity<>(message, headers, status);
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody().getMessage());
-        System.out.println(response.getBody().getBody().toString());
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
     }
 
     @Test
-    void signup_필수값_객체_테스트() throws Exception {
+    void signup_필수값_경로테스트() throws Exception {
         //given
-        MemberDTO memberDTO = MemberDTO.createMemberDTO()
+        MemberDTO memberDTO = setAllMemberDTO();
+        String content = objectMapper.writeValueAsString(memberDTO);
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void signup_정상작동() throws Exception {
+        //given
+        MemberDTO memberDTO = setAllMemberDTO();
+        //when
+        Message<MemberDTO> message = memberService.signup(memberDTO);
+        HttpStatus status = message.getHttpStatus();
+        //then
+        ResponseEntity<Message<MemberDTO>> response = new ResponseEntity<>(message, status);
+        System.out.println("header : " + response.getBody().getHeader().toString());
+        System.out.println("message : " + response.getBody().getMessage());
+        System.out.println("body : " + response.getBody().getBody().toString());
+    }
+
+    private MemberDTO setAllMemberDTO() {
+        return MemberDTO.createMemberDTO()
                 .loginId("로그인아이디")
                 .password("패스워드")
                 .mail("member@naver.com")
                 .name("이름")
                 .phone("010-1234-5678")
                 .addr("대구시 동구 산격동")
+                .addrDetail("1111")
                 .gender(memberGender.MALE)
                 .birthday("2000-01-01")
                 .build();
-        HttpHeaders headers = new HttpHeaders();
-        HttpStatus status = HttpStatus.OK;
-        //when
-        Message<MemberDTO> message = memberService.signup(memberDTO);
-        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
-        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
-        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
-        //then
-        ResponseEntity<Message<MemberDTO>> response = new ResponseEntity<>(message, headers, status);
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody().getMessage());
-        System.out.println(response.getBody().getBody().toString());
     }
 }

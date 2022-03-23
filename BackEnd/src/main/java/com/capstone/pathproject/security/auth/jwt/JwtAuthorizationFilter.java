@@ -3,7 +3,7 @@ package com.capstone.pathproject.security.auth.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.repository.MemberRepository;
+import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

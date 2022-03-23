@@ -11,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDTO {
 
@@ -78,11 +77,32 @@ public class MemberDTO {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return "MemberDTO{" + "\n" +
+                "          role=" + role + "\n" +
+                "          loginId='" + loginId + '\'' + "\n" +
+                "          password='" + password + '\'' + "\n" +
+                "          mail='" + mail + '\'' + "\n" +
+                "          name='" + name + '\'' + "\n" +
+                "          phone='" + phone + '\'' + "\n" +
+                "          addr='" + addr + '\'' + "\n" +
+                "          addrDetail='" + addrDetail + '\'' + "\n" +
+                "          gender=" + gender + "\n" +
+                "          birthday='" + birthday + '\'' + "\n" +
+                "          account='" + account + '\'' + "\n" +
+                '}';
+    }
+
     public void encodePassword(String encodePassword) {
         this.password = encodePassword;
     }
 
-    public void addAccount(String account) { this.account = account; }
+    public void addAccount(String account) {
+        this.account = account;
+    }
 
-    public void updateMemberRole(Role role) { this.role = role; }
+    public void updateMemberRole(Role role) {
+        this.role = role;
+    }
 }

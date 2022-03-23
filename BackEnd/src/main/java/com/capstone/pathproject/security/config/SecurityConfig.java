@@ -1,6 +1,6 @@
 package com.capstone.pathproject.security.config;
 
-import com.capstone.pathproject.repository.MemberRepository;
+import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.security.auth.jwt.JwtAuthenticationFilter;
 import com.capstone.pathproject.security.auth.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.capstone.pathproject.security.auth;
 
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.repository.MemberRepository;
+import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
