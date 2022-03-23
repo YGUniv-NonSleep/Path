@@ -6,20 +6,45 @@ import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.domain.member.memberGender;
 import lombok.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDTO {
+
     private Role role;
+
+    @NotBlank(message = "로그인 아이디가 입력되지 않았습니다")
     private String loginId;
+
+    @NotBlank(message = "비밀번호가 입력되지 않았습니다")
     private String password;
+
+    @NotBlank(message = "이메일이 입력되지 않았습니다")
+    @Email(message = "이메일 형식이 아닙니다!!!")
     private String mail;
+
+    @NotBlank(message = "이름이 입력되지 않았습니다")
     private String name;
+
+    @NotBlank(message = "전화번호가 입력되지 않았습니다")
     private String phone;
+
+    @NotBlank(message = "주소가 입력되지 않았습니다")
     private String addr;
+
+    @NotBlank(message = "상세주소가 입력되지 않았습니다")
     private String addrDetail;
+
+    @NotNull(message = "성별이 입력되지 않았습니다")
     private memberGender gender;
+
+    @NotBlank(message = "생년월일이 입력되지 않았습니다")
     private String birthday;
+
     private String account;
 
     @Builder(builderMethodName = "createMemberDTO")

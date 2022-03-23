@@ -1,4 +1,4 @@
-package com.capstone.pathproject.controller;
+package com.capstone.pathproject.controller.member;
 
 import com.capstone.pathproject.dto.member.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
@@ -11,7 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,14 +26,10 @@ public class MemberApiController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Message<MemberDTO>> signup(@RequestBody MemberDTO memberDTO) {
-        System.out.println(memberDTO);
+    public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO) {
         Message<MemberDTO> message = memberService.signup(memberDTO);
-        HttpStatus status = HttpStatus.OK;
-        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
-        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
-        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
-        return new ResponseEntity<>(message, new HttpHeaders(), status);
+        HttpStatus status = message.getHttpStatus();
+        return new ResponseEntity<>(message, status);
     }
 
     // user, manager, admin 권한만 접근 가능
@@ -39,6 +40,7 @@ public class MemberApiController {
         System.out.println("authentication = " + principalDetails.getUsername());
         return "user";
     }
+
     // manager, admin 권한만 접근 가능
     @GetMapping("/business")
     public String manager() {

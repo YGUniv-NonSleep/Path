@@ -3,6 +3,7 @@ package com.capstone.pathproject.security.auth;
 
 import com.capstone.pathproject.domain.member.Member;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Data
+@Getter
 public class PrincipalDetails implements UserDetails {
 
     private Member member;
