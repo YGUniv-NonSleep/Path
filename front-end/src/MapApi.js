@@ -57,7 +57,7 @@ function MapApi() {
         
     function getLatLng(mouseEvent) {
         // 클릭한 위도, 경도 정보를 가져옵니다 
-        var latlng = mouseEvent.latLng;
+        let latlng = mouseEvent.latLng;
         console.log(latlng)
         // 위도: latlng.getLat()
         // 경도: latlng.getLng()

@@ -2,17 +2,16 @@ import axios from "axios";
 
 const odsayApi = axios.create({
     baseURL: `https://api.odsay.com/v1/api/searchPubTransPathT`,
-    params: {
-      apiKey: process.env.REACT_APP_ODSAY_API
-    },
   });
 
-  export const PathApi = {
-       getDirection: (data) => { // console.log(data)
-        odsayApi.get(`?lang=0&SX=${data.sx}&SY=${data.sy}&EX=${data.ex}&EY=${data.ey}`)
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error))
-       }
-  };
+const key = process.env.REACT_APP_ODSAY_API;
 
+ export const PathApi = {
+       getDirection: async (data) => {  // console.log(data)
+         const response = await odsayApi.get(`?lang=0&SX=${data.startPoint.la}&SY=${data.startPoint.ma}&EX=${data.arrivalPoint.la}&EY=${data.arrivalPoint.ma}&apiKey=${key}`)
+         //console.log(response)
+         return response.data.result
+       }
+ };
+ 
  export default odsayApi;

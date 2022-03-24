@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
-import axios from "axios";
 import MapApi from "../../MapApi";
 import { PathApi } from "../../OdsayApi";
 
 function PathContainer() {
-    const [map, setMap] = useState(null);
+    //const [map, setMap] = useState(null);
     const [loading, setLoading] = useState(false);
 
     async function mapLoad() {
         try {
             let mapInfo = await MapApi();
-            console.log(mapInfo.getInfo())
-            let od = await PathApi.getDirection({
-                sx: 126.9027279, sy: 37.5349277,
-                ex: 126.9145430, ey: 37.5499421
-            });
-            console.log(od)
+            //console.log(mapInfo.getInfo())
+
             setLoading(true);
             
         } catch(error) {
@@ -24,23 +19,48 @@ function PathContainer() {
         }
     }
 
-    async function mapClickEvent() {
+    async function wayFind() {
         try {
-            let mapInfo = await MapApi();
-            console.log(mapInfo.getLatLng())
+            const startPoint = {
+                la: 126.9027279, ma: 37.5349277,
+            }
+            const arrivalPoint = {
+                la: 126.9145430, ma: 37.5499421
+            }
+    
+            let path = await PathApi.getDirection({
+                startPoint, arrivalPoint
+            }).catch((error) => console.log(error));
 
-        } catch(error) {
+            console.log(path)
+            //return path
+            
+
+        } catch (error) {
             console.log(error)
         }
     }
+
+    // async function mapClickEvent() {
+    //     try {
+    //         let mapInfo = await MapApi().getLatLng();
+
+    //     } catch(error) {
+    //         console.log(error)
+    //     }
+    // }
 
     useEffect(() => {
         mapLoad()
     }, []);
 
     useEffect(() => {
-        mapClickEvent()
-    }, []);
+        wayFind()
+    }, [])
+
+    // useEffect(() => {
+    //     mapClickEvent()
+    // }, []);
 
     return (
         <PathPresenter 
