@@ -3,10 +3,13 @@ package com.capstone.pathproject.domain.company;
 import com.capstone.pathproject.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
+@ToString
 @Entity
 @Getter
 @SequenceGenerator(
@@ -43,11 +46,14 @@ public class Product {
     @JoinColumn(name = "BASIC_ID")
     private ProdBasic prodbasic;
 
+    @OneToMany
+    @JoinColumn(name = "PRO_ID")
+    private List<Option> optionList;
+
     public Product(){}
 
-
     @Builder(builderMethodName = "createProduct")
-    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodBasic){
+    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodBasic, List<Option> optionList){
         this.id = id;
         this.price = price;
         this.exposure = exposure;
@@ -56,7 +62,7 @@ public class Product {
         this.stock = stock;
         this.company = company;
         this.prodbasic = prodBasic;
-
+        this.optionList = optionList;
 
     }
 

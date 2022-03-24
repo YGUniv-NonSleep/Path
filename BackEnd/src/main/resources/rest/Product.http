@@ -1,0 +1,46 @@
+GET http://localhost:8080/api/product/1
+Accept: application/json
+
+###
+POST http://localhost:8080/api/product/createProduct
+Content-Type: application/json
+
+{
+  "price": 123214,
+  "exposure": true,
+  "discount": 123,
+  "created": "2011-11-11",
+  "stock": 1,
+  "company": {
+    "id": 1
+  },
+  "prodbasic": {
+    "id": 1
+  }
+}
+###
+GET http://localhost:8080/api/product/7
+
+###
+PATCH http://localhost:8080/api/product/updateProduct
+Content-Type: application/json
+
+{
+  "id": 1,
+  "price": 2222,
+  "exposure": true,
+  "discount": 123,
+  "created": "2011-11-11",
+  "stock": 1,
+  "company": {
+    "id": 4
+  },
+  "prodbasic": {
+    "id": 1
+  }
+}
+
+
+###
+DELETE http://localhost:8080/api/product/deleteProduct/4
+

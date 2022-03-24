@@ -1,11 +1,13 @@
 package com.capstone.pathproject.dto;
 
 import com.capstone.pathproject.domain.company.Company;
+import com.capstone.pathproject.domain.company.Option;
 import com.capstone.pathproject.domain.company.ProdBasic;
 import com.capstone.pathproject.domain.company.Product;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @ToString
 @Getter
@@ -19,9 +21,10 @@ public class ProductDTO {
     private int stock;
     private Company company;
     private ProdBasic prodbasic;
+    private List<Option> optionList;
 
     @Builder(builderMethodName = "createProductDTO")
-    public ProductDTO(long id, int price, Boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodbasic){
+    public ProductDTO(long id, int price, Boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodbasic, List<Option> optionList){
     this.id = id;
     this.price = price;
     this.exposure = exposure;
@@ -30,6 +33,7 @@ public class ProductDTO {
     this.stock = stock;
     this.company = company;
     this.prodbasic = prodbasic;
+    this.optionList = optionList;
 
     }
 
@@ -43,6 +47,7 @@ public class ProductDTO {
                 .stock(stock)
                 .prodBasic(prodbasic)
                 .company(company)
+                .optionList(optionList)
                 .build();
     }
 
