@@ -1,6 +1,10 @@
 package com.capstone.pathproject.controller;
 
+import com.capstone.pathproject.domain.company.DetailOption;
+import com.capstone.pathproject.domain.company.Option;
 import com.capstone.pathproject.domain.company.Product;
+import com.capstone.pathproject.dto.DetailOptionDTO;
+import com.capstone.pathproject.dto.OptionDTO;
 import com.capstone.pathproject.dto.ProdBasicDTO;
 import com.capstone.pathproject.dto.ProductDTO;
 import com.capstone.pathproject.dto.response.Message;
@@ -81,26 +85,119 @@ public class ProductApiController {
 
 
     @PostMapping("/createProduct")
-    public ResponseEntity<Message<ProductDTO>> createProduct(){
-        //Message message = productService.
+    public ResponseEntity<Message<ProductDTO>> createProduct(@RequestBody ProductDTO productDTO){
+        Message<ProductDTO> message = productService.createProduct(productDTO);
 
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatus status = HttpStatus.OK;
+
+        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
+        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
+        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return new ResponseEntity<>(message, headers, status);
     }
 
-    @DeleteMapping("/deleteProduct")
-    public ResponseEntity<Message> deleteProduct(){
-        return null;
+    @DeleteMapping("/deleteProduct/{prodId}")
+    public ResponseEntity<Message> deleteProduct(@PathVariable("prodId")Long prodId){
+        Message message = productService.deleteProduct(prodId);
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatus status = HttpStatus.OK;
+
+        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
+        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
+        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return new ResponseEntity<>(message, headers, status);
     }
 
     @PatchMapping("/updateProduct")
-    public ResponseEntity<Message<ProductDTO>> updateProduct(){
+    public ResponseEntity<Message<ProductDTO>> updateProduct(@RequestBody ProductDTO productDTO){
+        Message<ProductDTO> message = productService.updateProduct(productDTO);
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatus status = HttpStatus.OK;
+
+        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
+        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
+        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return new ResponseEntity<>(message, headers, status);
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<Message<ProductDTO>> productDetail(@PathVariable("productId") long prodId){
+        System.out.println(prodId + "ASDASDAFSASF");
+        Message<ProductDTO> message = productService.productDetail(prodId);
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatus status = HttpStatus.OK;
+
+        if (message.getHeader() == StatusEnum.BAD_REQUEST) status = HttpStatus.BAD_REQUEST;
+        else if (message.getHeader() == StatusEnum.NOT_FOUND) status = HttpStatus.NOT_FOUND;
+        else if (message.getHeader() == StatusEnum.INTERNAL_SEVER_ERROR) status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        return new ResponseEntity<>(message, headers, status);
+    }
+
+    @PostMapping("/createOption")
+    public ResponseEntity<Message<OptionDTO>> createOption(@RequestBody OptionDTO optionDTO){
+        Message message = productService.createOption(optionDTO);
+
+        System.out.println(message);
         return null;
     }
 
-    @GetMapping("/product/{productId}")
-    public ResponseEntity<Message<Product>> productDetail(@PathVariable("productId") long productId){
+    @DeleteMapping("/deleteOption/{optionId}")
+    public ResponseEntity<Message> deleteOption(@PathVariable("optionId") Long optionId){
+        Message message = productService.deleteOption(optionId);
+
+        System.out.println(message);
         return null;
     }
+
+    @PatchMapping("/updateOption")
+    public ResponseEntity<Message<OptionDTO>>  updateOption(@RequestBody OptionDTO optionDTO){
+        Message message = productService.updateOption(optionDTO);
+
+        System.out.println(message);
+        return null;
+    }
+
+    @GetMapping("/option/{optionId}")
+    public ResponseEntity<Message<OptionDTO>> optionDetail(@PathVariable("optionId") Long optionId){
+        Message message = productService.selectOption(optionId);
+
+        System.out.println(message);
+        return null;
+
+    }
+
+    @PostMapping("/createDetailOption")
+    public ResponseEntity<Message<DetailOptionDTO>> createDetailOption(@RequestBody DetailOptionDTO detailOptionDTO){
+        Message message = productService.createDetailOption(detailOptionDTO);
+
+        System.out.println(message);
+        return null;
+    }
+
+    @DeleteMapping("/deleteDetailOption")
+    public ResponseEntity<Message<DetailOptionDTO>> deleteDetailOption(@PathVariable("DetailOptionId")Long detailOptionId){
+        Message message = productService.deleteDetailOption(detailOptionId);
+        System.out.println(message);
+        return null;
+    }
+
+    @PatchMapping("/updateDetailOption")
+    public ResponseEntity<Message<DetailOptionDTO>> updatDetailOption(@RequestBody DetailOptionDTO detailOptionDTO){
+        Message message = productService.updateDetailOption(detailOptionDTO);
+        System.out.println(message);
+        return null;
+    }
+
+
+
 
 
 

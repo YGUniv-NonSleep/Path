@@ -1,0 +1,17 @@
+POST http://localhost:8080/api/product/createOption
+Content-Type: application/json
+
+{
+  "name": "sad",
+  "proId": 1
+}
+
+###
+POST http://localhost:8080/api/product/createDetailOption
+Content-Type: application/json
+
+{
+  "name": "String",
+  "price": 4000,
+  "optionId": 2
+}
