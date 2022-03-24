@@ -15,10 +15,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -46,12 +51,48 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         System.out.println("successfulAuthentication 실행 : 인증 완료");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        String jwtToken = JWT.create()
-                .withSubject(principalDetails.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
-                .withClaim("id", principalDetails.getMember().getLoginId())
-                .withClaim("name", principalDetails.getMember().getName())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+        String jwtToken = createJwtToken(principalDetails);
+        String refreshToken = URLEncoder.encode(createRefreshToken(principalDetails), "utf-8");
+        Cookie refreshCookie = new Cookie(JwtProperties.REFRESH_HEADER_STRING, URLEncoder.encode((JwtProperties.TOKEN_PREFIX + refreshToken), "utf-8"));
+        System.out.println("refreshCookie = " + refreshCookie);
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        response.addCookie(refreshCookie);
+    }
+
+    protected String createJwtToken(PrincipalDetails principalDetails) {
+        return JWT.create()
+                .withSubject(principalDetails.getUsername())
+                .withHeader(createHeader("ACCESS_TOKEN"))
+                .withClaim("payload", createClaims(principalDetails))
+                .withExpiresAt(createExpireDate(JwtProperties.EXPIRATION_TIME))
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+    }
+
+    protected String createRefreshToken(PrincipalDetails principalDetails) {
+        return JWT.create()
+                .withSubject(principalDetails.getUsername())
+                .withHeader(createHeader("REFRESH_TOKEN"))
+                .withClaim("payload", createClaims(principalDetails))
+                .withExpiresAt(createExpireDate(JwtProperties.REFRESH_EXPIRATION_TIME))
+                .sign(Algorithm.HMAC512(JwtProperties.REFRESH));
+    }
+
+    private Map<String, Object> createHeader(String type) {
+        Map<String, Object> header = new HashMap<>();
+        header.put("typ", type);
+        header.put("alg", "HS512");
+        header.put("regDate", System.currentTimeMillis());
+        return header;
+    }
+
+    private Map<String, Object> createClaims(PrincipalDetails principalDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", principalDetails.getMember().getLoginId());
+        claims.put("name", principalDetails.getMember().getName());
+        return claims;
+    }
+
+    private Date createExpireDate(long expireDateTimeMillis) {
+        return new Date(System.currentTimeMillis() + expireDateTimeMillis);
     }
 }
