@@ -11,6 +11,7 @@ function PathContainer() {
         try {
             let mapInfo = await MapApi();
             //console.log(mapInfo.getInfo())
+            // MapApi 기능들 전부 함수화 시키기 호출할 때마다 필요 없는 것도 많이 호출 함.
 
             setLoading(true);
             
@@ -21,19 +22,34 @@ function PathContainer() {
 
     async function wayFind() {
         try {
-            const startPoint = {
-                la: 126.9027279, ma: 37.5349277,
-            }
-            const arrivalPoint = {
-                la: 126.9145430, ma: 37.5499421
-            }
+            const startPoint = { la: 126.926493082645, ma: 37.6134436427887 }
+            const arrivalPoint = { la: 127.126936754911, ma: 37.5004198786564 }
     
-            let path = await PathApi.getDirection({
+            let pathWay = await PathApi.getDirection({
                 startPoint, arrivalPoint
             }).catch((error) => console.log(error));
+            
+            // pathWay 다양한 경로는 바로 아래에서..
+            // const a = pathWay.path.map(mo => { return mo })
+            // console.log(a)
 
-            console.log(path)
-            //return path
+            const BaseX = Math.floor(startPoint.la);
+            const BaseY = Math.floor(startPoint.ma);
+            const mo = pathWay.path.map(mo => { return mo.info.mapObj });
+            const mapObj = `${BaseX}:${BaseY}@${mo[0]}`
+
+            let graphicData = await PathApi.getGraphicRoute(
+                mapObj
+            ).catch((error) => console.log(error));
+
+            console.log("여기까진?")
+            
+            const sp = await MapApi().drawKakaoMarker(startPoint.la, startPoint.ma)
+            console.log("1")
+            const ap = await MapApi().drawKakaoMarker(arrivalPoint.la, arrivalPoint.ma)
+            console.log("2")
+            const dkpl = MapApi().drawKakaoPolyLine(graphicData)
+            console.log("3")
             
 
         } catch (error) {
