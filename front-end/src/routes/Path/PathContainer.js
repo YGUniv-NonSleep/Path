@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
 import MapApi from "../../MapApi";
-import { PathApi } from "../../OdsayApi";
 
 function PathContainer() {
     const [map, settingMap] = useState(null);
@@ -110,7 +109,8 @@ function PathContainer() {
     return (
         <PathPresenter 
             loading = {loading}
-        >
+        > 
+        <TopNav></TopNav>
             </PathPresenter>
     )
 }
