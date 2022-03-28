@@ -13,7 +13,6 @@ import Login from "../routes/Member/login";
 import SignUp from "../routes/Member/signUp";
 
 import Menubar from "./Menubar";
-import Sidebar from "./Sidebar";
 
 // https://kyung-a.tistory.com/36
 // https://roylee0704.github.io/react-flexbox-grid/
@@ -25,7 +24,6 @@ import Sidebar from "./Sidebar";
     return (
         <BrowserRouter>
             <Menubar></Menubar>
-            <Sidebar></Sidebar>
             
             <Routes>
                 {/* 속성을 component 대신에 element */}

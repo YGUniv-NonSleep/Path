@@ -2,8 +2,6 @@ function MapApi() {
 
     function createMap() {
         const mapContainer = document.getElementById('map') // 지도 표시 div 탐색
-        console.log(mapContainer)
-        // https://devtalk.kakao.com/t/api-currentstyle-null/35781/4
 
         let mapOption = {
             center: new kakao.maps.LatLng(37.6134436427887, 126.926493082645), // 지도의 중심좌표
@@ -31,18 +29,20 @@ function MapApi() {
     }
     
     
-    function getInfo() {
+    function getInfo(mapData) {
+        console.log(mapData)
+
         // 지도의 현재 중심좌표를 얻어옵니다 
-        let center = map.getCenter(); 
+        let center = mapData.getCenter();
         
         // 지도의 현재 레벨을 얻어옵니다
-        let level = map.getLevel();
+        let level = mapData.getLevel();
         
         // 지도타입을 얻어옵니다
-        let mapTypeId = map.getMapTypeId(); 
+        let mapTypeId = mapData.getMapTypeId(); 
         
         // 지도의 현재 영역을 얻어옵니다 
-        let bounds = map.getBounds();
+        let bounds = mapData.getBounds();
         
         // 영역의 남서쪽 좌표를 얻어옵니다 
         let swLatLng = bounds.getSouthWest(); 
@@ -76,20 +76,36 @@ function MapApi() {
     
     // 지도위 마커 표시해주는 함수
     function drawKakaoMarker(x,y) {
-        console.log(x, y)  
+        console.log(x, y)
         let marker = new kakao.maps.Marker({ // 마커 생성
             position: new kakao.maps.LatLng(y,x), // 마커 표시 위치
             clickable: true // 마커 클릭 이벤트 설정 여부
         });
-        console.log(marker)
+        
         // 마커가 지도 위에 표시되도록 설정합니다
         //marker.setMap(map);
         return marker
     }
 
     function drawKakaoPolyLine(data) {
-        console.log("dkpl")
-        console.log(data)
+        let lineArray;
+
+        // console.log(data)
+        // console.log(data.result.lane.length)
+        // console.log(data.result.lane[0].section.length)
+        //console.log(data.result.lane[0].section[0].graphPos[0])
+
+        for(var i = 0 ; i < data.result.lane.length; i++) {
+            for(var j=0 ; j <data.result.lane[i].section.length; j++) {
+                lineArray = null;
+				lineArray = new Array();
+                for(var k=0 ; k < data.result.lane[i].section[j].graphPos.length; k++) {
+                    lineArray.push(new kakao.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
+                }
+            }
+        }
+
+        //  return lineArray
     }
 
     // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
