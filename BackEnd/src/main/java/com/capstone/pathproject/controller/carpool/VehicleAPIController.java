@@ -1,11 +1,9 @@
-package com.capstone.pathproject.controller;
+package com.capstone.pathproject.controller.carpool;
 
 
-import com.capstone.pathproject.domain.carpool.Vehicle;
 import com.capstone.pathproject.dto.VehicleDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.repository.VehicleRepository;
 import com.capstone.pathproject.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class VehicleAPIController {
     private final VehicleService vehicleService;
 
-    @PostMapping("/save")
+    @PostMapping("/create")
     public ResponseEntity<Message<VehicleDTO>> create(@RequestBody VehicleDTO vehicleDTO){
         Message<VehicleDTO> message = vehicleService.create(vehicleDTO);
         HttpHeaders headers = new HttpHeaders();
