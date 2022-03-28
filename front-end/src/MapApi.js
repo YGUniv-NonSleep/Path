@@ -1,27 +1,35 @@
 function MapApi() {
-    const mapContainer = document.getElementById('map') // 지도 표시 div 탐색
-    //console.log(mapContainer)
-    // https://devtalk.kakao.com/t/api-currentstyle-null/35781/4
 
-    let mapOption = {
-        center: new kakao.maps.LatLng(37.6134436427887, 126.926493082645), // 지도의 중심좌표
-        level: 3, // 지도 확대 레벨
-        mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도 맵타입
-    };
+    function createMap() {
+        const mapContainer = document.getElementById('map') // 지도 표시 div 탐색
+        console.log(mapContainer)
+        // https://devtalk.kakao.com/t/api-currentstyle-null/35781/4
+
+        let mapOption = {
+            center: new kakao.maps.LatLng(37.6134436427887, 126.926493082645), // 지도의 중심좌표
+            level: 3, // 지도 확대 레벨
+            mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도 맵타입
+        };
+        
+        let map = new kakao.maps.Map(mapContainer, mapOption);
+
+        return map;
+    }
+
+    function setController(map) {
+        // 지도 타입 변경 컨트롤을 생성한다
+        const mapTypeControl = new kakao.maps.MapTypeControl();
+        // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);	
+
+        // 지도에 확대 축소 컨트롤을 생성한다
+        const zoomControl = new kakao.maps.ZoomControl();
+        // 지도의 우측에 확대 축소 컨트롤을 추가한다
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+        
+        return map;
+    }
     
-    let map = new kakao.maps.Map(mapContainer, mapOption);
-    
-    // 지도 타입 변경 컨트롤을 생성한다
-	const mapTypeControl = new kakao.maps.MapTypeControl();
-
-    // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
-	map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);	
-
-	// 지도에 확대 축소 컨트롤을 생성한다
-	const zoomControl = new kakao.maps.ZoomControl();
-
-	// 지도의 우측에 확대 축소 컨트롤을 추가한다
-	map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
     
     function getInfo() {
         // 지도의 현재 중심좌표를 얻어옵니다 
@@ -53,17 +61,17 @@ function MapApi() {
     // 지도에 클릭 이벤트를 등록합니다
     // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
     
-    kakao.maps.event.addListener(map, 'click', getLatLng)
+    // kakao.maps.event.addListener(map, 'click', getLatLng)
         
-    function getLatLng(mouseEvent) {
-        // 클릭한 위도, 경도 정보를 가져옵니다 
-        let latlng = mouseEvent.latLng;
-        console.log(latlng)
-        // 위도: latlng.getLat()
-        // 경도: latlng.getLng()
+    // function getLatLng(mouseEvent) {
+    //     // 클릭한 위도, 경도 정보를 가져옵니다 
+    //     let latlng = mouseEvent.latLng;
+    //     console.log(latlng)
+    //     // 위도: latlng.getLat()
+    //     // 경도: latlng.getLng()
 
-        return latlng
-    }
+    //     return latlng
+    // }
 
     
     // 지도위 마커 표시해주는 함수
@@ -96,17 +104,18 @@ function MapApi() {
 
 
     // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-    var iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-        iwRemoveable = true; // removeable 속성을 true 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+    // var iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+    //     iwRemoveable = true; // removeable 속성을 true 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
     // 인포윈도우를 생성합니다
-    var infowindow = new kakao.maps.InfoWindow({
-        content : iwContent,
-        removable : iwRemoveable
-    });
+    // var infowindow = new kakao.maps.InfoWindow({
+    //     content : iwContent,
+    //     removable : iwRemoveable
+    // });
+
 
     return {
-        getInfo, getLatLng, drawKakaoMarker, drawKakaoPolyLine
+        createMap, setController, getInfo, drawKakaoMarker, drawKakaoPolyLine, //getLatLng,
     }
 }
 

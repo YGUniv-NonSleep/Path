@@ -9,7 +9,10 @@ function PathContainer() {
 
     async function mapLoad() {
         try {
-            let mapInfo = await MapApi();
+            let createMap = await MapApi().createMap();
+            let setController = await MapApi().setController(createMap);
+
+            //let mapInfo = await MapApi();
             //console.log(mapInfo.getInfo())
             // MapApi 기능들 전부 함수화 시키기 호출할 때마다 필요 없는 것도 많이 호출 함.
 
