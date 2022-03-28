@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
 import MapApi from "../../MapApi";
+import { PathApi } from "../../OdsayApi"
 
 function PathContainer() {
     const [map, settingMap] = useState(null);
@@ -46,28 +47,28 @@ function PathContainer() {
             console.log("여기까진?")
             
             const sp = await MapApi().drawKakaoMarker(startPoint.la, startPoint.ma)
-            console.log(sp.setMap(map))
-            sp.getMap(map)
-
-            //settingMap(sp.setMap(map))
-            //sp.settingMap(map)
-            console.log("1")
+            sp.setMap(map)
 
             const ap = await MapApi().drawKakaoMarker(arrivalPoint.la, arrivalPoint.ma)
-            //ap.setMap(map)
-            console.log("2")
+            ap.setMap(map)
             
-            // const dkpl = await MapApi().drawKakaoPolyLine(graphicData)
-            // console.log(dkpl)
+            const dkpl = await MapApi().drawKakaoPolyLine({graphicData, map})
+            dkpl.setMap(map)
+
+            //dkpl.setMap(map)
+            
+
             console.log("3")
 
             console.log(graphicData.result.boundary)
             if(graphicData.result.boundary) {
                 console.log("boundary ar")
+                let boundary = new kakao.maps.LatLngBounds(
+                    new kakao.maps.LatLng(graphicData.result.boundary.top, graphicData.result.boundary.left),
+                    new kakao.maps.LatLng(graphicData.result.boundary.bottom, graphicData.result.boundary.right)
+                    );
+                map.panToBounds(boundary);
             }
-
-            //settingMap(map)
-            //setWay(pathWay)
             
 
         } catch (error) {
@@ -99,7 +100,7 @@ function PathContainer() {
     // 길 찾기 Hook
     useEffect(() => {
         wayFind()
-    }, [way])
+    }, [map])
 
     useEffect(() => {
         getMapInfo(map)

@@ -90,22 +90,32 @@ function MapApi() {
     function drawKakaoPolyLine(data) {
         let lineArray;
 
+        let polyline = new kakao.maps.Polyline({
+            map: data.map,
+            path: lineArray,
+            strokeWeight: 2,
+            strokeColor: '#FF00FF',
+            strokeOpacity: 0.8,
+            strokeStyle: 'dashed'
+        });
+
         // console.log(data)
         // console.log(data.result.lane.length)
         // console.log(data.result.lane[0].section.length)
         //console.log(data.result.lane[0].section[0].graphPos[0])
 
-        for(var i = 0 ; i < data.result.lane.length; i++) {
-            for(var j=0 ; j <data.result.lane[i].section.length; j++) {
+        for(var i = 0 ; i < data.graphicData.result.lane.length; i++) {
+            for(var j=0 ; j <data.graphicData.result.lane[i].section.length; j++) {
                 lineArray = null;
 				lineArray = new Array();
-                for(var k=0 ; k < data.result.lane[i].section[j].graphPos.length; k++) {
-                    lineArray.push(new kakao.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
+                for(var k=0 ; k < data.graphicData.result.lane[i].section[j].graphPos.length; k++) {
+                    lineArray.push(new kakao.maps.LatLng(data.graphicData.result.lane[i].section[j].graphPos[k].y, data.graphicData.result.lane[i].section[j].graphPos[k].x));
                 }
             }
         }
+        polyline.setPath(lineArray)
 
-        //  return lineArray
+        return polyline
     }
 
     // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
