@@ -22,7 +22,6 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final PrincipalDetailsService principalDetailsService;
     private final MemberRepository memberRepository;
     private final RedisTemplate redisTemplate;
     private final JwtTokenUtil jwtTokenUtil;
@@ -43,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), redisTemplate, jwtTokenUtil, cookieUtil))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository, redisTemplate, principalDetailsService, jwtTokenUtil, cookieUtil))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository, redisTemplate, jwtTokenUtil, cookieUtil))
                 .authorizeRequests()
                 .antMatchers("/api/user/**").hasAnyRole("ADMIN", "BUSINESS", "USER")
                 .antMatchers("/api/business/**").hasAnyRole("ADMIN", "BUSINESS")

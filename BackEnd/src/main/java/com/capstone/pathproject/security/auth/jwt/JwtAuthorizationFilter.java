@@ -29,18 +29,16 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private final PrincipalDetailsService principalDetailsService;
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final JwtTokenUtil jwtTokenUtil;
     private final CookieUtil cookieUtil;
     private static final String[] whiteList = {"/", "/login", "/logout", "/api/signup"};
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository, RedisTemplate redisTemplate, PrincipalDetailsService principalDetailsService, JwtTokenUtil jwtTokenUtil, CookieUtil cookieUtil) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository, RedisTemplate redisTemplate, JwtTokenUtil jwtTokenUtil, CookieUtil cookieUtil) {
         super(authenticationManager);
         this.memberRepository = memberRepository;
         this.redisTemplate = redisTemplate;
-        this.principalDetailsService = principalDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.cookieUtil = cookieUtil;
     }
@@ -99,7 +97,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             if (isValidateCookie(refreshTokenCookie)) {
                 String refreshToken = cookieUtil.exchangeToken(refreshTokenCookie).replace(JwtProperties.TOKEN_PREFIX, "");
                 if (jwtTokenUtil.isRefreshTokenExpireReissueTime(refreshToken)) {
-                    reissueRefreshToken(request, response, principalDetails);
+                    if (isTokenEqualsRedisValue(request, token)) {
+                        reissueRefreshToken(request, response, principalDetails);
+                    }
                 }
             }
             // 스프링 시큐리티 세션에 저장
@@ -116,6 +116,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private void reissueToken(HttpServletRequest request, HttpServletResponse response, String token) {
+        // Redis에 키값이 들어있고, 동일한 Ip인가?
+        if (!isTokenEqualsRedisValue(request, token)) return;
         // RefreshToken 재발급 시작
         log.info("토큰 재발급 로직 실행 : reissueToken");
         // RefreshToken의 Claims(payload)부분 꺼내기
@@ -132,9 +134,30 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         log.info("토큰 재발급 완료 : AccessToken, RefreshToken [{}]", request.getRequestURI());
     }
 
+    private boolean isTokenEqualsRedisValue(HttpServletRequest request, String token) {
+        String browserIp = (String) redisTemplate.opsForValue().get(token);
+        if (browserIp.isEmpty()) return false;
+        boolean checkIp = ClientUtil.getIp(request).equals(browserIp);
+        String result;
+        if (checkIp) {
+            result = "RefreshToken의 browserIp가 동일 [{}]";
+            deleteRedisKey(token);
+        } else {
+            result = "RefreshToken의 browserIp가 동일하지 않음 [{}]";
+            deleteRedisKey(token);
+        }
+        log.error(result, request.getRequestURI());
+        return checkIp;
+    }
+
+    private void deleteRedisKey(String token) {
+        redisTemplate.expire(token, 0, TimeUnit.SECONDS);
+    }
+
     private void reissueAccessToken(HttpServletRequest request, HttpServletResponse response, PrincipalDetails principalDetails) {
         String accessToken = jwtTokenUtil.createJwtToken(principalDetails);
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
+        log.info("AccessToken 발급 및 Header 추가 : reissueAccessToken()");
     }
 
     private void reissueRefreshToken(HttpServletRequest request, HttpServletResponse response, PrincipalDetails principalDetails) {
@@ -143,6 +166,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         saveRedis(refreshToken, browserIp, JwtProperties.REFRESH_EXPIRATION_TIME);
         Cookie refreshCookie = cookieUtil.createCookie(JwtProperties.REFRESH_HEADER_STRING, refreshToken);
         response.addCookie(refreshCookie);
+        log.info("RefreshToken 발급 및 Cookie 추가 : reissueRefreshToken()");
     }
 
     private void saveRedis(String key, String value, int expire) {
