@@ -4,7 +4,7 @@ import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.controller.repository.MemberRepository;
+import com.capstone.pathproject.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

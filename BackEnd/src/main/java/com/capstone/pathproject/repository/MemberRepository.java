@@ -1,4 +1,4 @@
-package com.capstone.pathproject.controller.repository;
+package com.capstone.pathproject.repository;
 
 import com.capstone.pathproject.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
