@@ -1,8 +1,10 @@
 package com.capstone.pathproject.domain.company;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @SequenceGenerator(
@@ -20,8 +22,20 @@ public class Option {
     @Column(name = "OPTION_NAME")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "PROD_ID")
-    private Product prodId;
+    @OneToMany
+    @JoinColumn(name = "OPTION_ID")
+    private List<DetailOption> detailOptionList;
 
+    @Column(name = "PRO_ID")
+    private Long proId;
+
+    @Builder(builderMethodName = "createOption")
+    public Option(Long id, String name, List<DetailOption> detailOptionList, Long proId){
+        this.id = id;
+        this.name = name;
+        this.detailOptionList = detailOptionList;
+        this.proId = proId;
+    }
+
+    public Option() {}
 }

@@ -5,7 +5,7 @@ import com.capstone.pathproject.dto.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.CompanyRepository;
-import com.capstone.pathproject.repository.MemberRepository;
+import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +21,13 @@ public class CompanyService {
 
     public Message<CompanyDTO> createCompany(CompanyDTO companyDTO){
         //Optional<Member> member = memberRepository.findById(companyDTO.getMemberId());
-        System.out.println(companyDTO.toString());
+        //System.out.println(companyDTO.toString());
         companyRepository.save(companyDTO.toEntity());
         return Message.<CompanyDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("Create Success")
-                .body(companyDTO).build();
+                .body(companyDTO)
+                .build();
     }
 
     public Message deleteCompany(Long comId){
@@ -46,9 +47,8 @@ public class CompanyService {
                 .build();
     }
 
-
-    public Message<CompanyDTO> companyDetail(Long userId) {
-        Optional<Company> cRs =  companyRepository.findById(userId);
+    public Message<CompanyDTO> companyDetail(Long companyId) {
+        Optional<Company> cRs =  companyRepository.findById(companyId);
         Company rs = cRs.get();
 
         CompanyDTO companyDto = CompanyDTO.createCompanyDTD()

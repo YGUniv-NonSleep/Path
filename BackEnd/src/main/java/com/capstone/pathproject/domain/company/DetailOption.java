@@ -1,5 +1,6 @@
 package com.capstone.pathproject.domain.company;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Getter
 public class DetailOption {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DETAIL_OPTION_SEQUENCE_GENERATOR")
     @Column(name = "DETAIL_OPTION_ID")
     private Long id;
 
@@ -22,8 +24,17 @@ public class DetailOption {
     @Column(name = "DETAIL_OPTION_PRICE")
     private int price;
 
-    @ManyToOne
-    @JoinColumn(name = "OPTION_ID")
-    private Option optionId;
+    @Column(name="OPTION_ID")
+    private Long optionId;
+
+    @Builder(builderMethodName = "createDetailOption")
+    public DetailOption(Long id, String name, int price,Long optionId ){
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.optionId = optionId;
+    }
+
+    public DetailOption(){}
 
 }
