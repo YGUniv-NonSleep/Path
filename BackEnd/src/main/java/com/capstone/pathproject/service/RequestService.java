@@ -1,8 +1,8 @@
 package com.capstone.pathproject.service;
 
 
-import com.capstone.pathproject.controller.repository.CarPoolPostRepository;
-import com.capstone.pathproject.controller.repository.MemberRepository;
+import com.capstone.pathproject.repository.CarPoolPostRepository;
+import com.capstone.pathproject.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

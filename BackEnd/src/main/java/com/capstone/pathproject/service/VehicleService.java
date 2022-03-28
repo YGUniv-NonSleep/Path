@@ -4,7 +4,7 @@ import com.capstone.pathproject.domain.carpool.Vehicle;
 import com.capstone.pathproject.dto.VehicleDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.controller.repository.VehicleRepository;
+import com.capstone.pathproject.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
