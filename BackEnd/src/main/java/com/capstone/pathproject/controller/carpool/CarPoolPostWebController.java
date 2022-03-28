@@ -1,9 +1,8 @@
-package com.capstone.pathproject.controller;
+package com.capstone.pathproject.controller.carpool;
 
 
 import com.capstone.pathproject.dto.CarPoolPostDTO;
 import com.capstone.pathproject.dto.response.Message;
-import com.capstone.pathproject.repository.CarPoolPostRepository;
 import com.capstone.pathproject.service.CarPoolPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
