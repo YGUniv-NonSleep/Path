@@ -109,8 +109,7 @@ function PathContainer() {
     return (
         <PathPresenter 
             loading = {loading}
-        > 
-        <TopNav></TopNav>
+        >
             </PathPresenter>
     )
 }
