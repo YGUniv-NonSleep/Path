@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.PatternMatchUtils;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -88,11 +89,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 return;
             }
             // AccessToken 유효성 검사 성공
-            // AccessToken 만료시간 재설정
-            Claims claimsFormToken = jwtTokenUtil.getClaimsFormToken(TokenType.ACCESS_TOKEN, token);
-            claimsFormToken.setExpiration(jwtTokenUtil.createExpireDate(JwtProperties.EXPIRATION_TIME));
             // AccessToken 재발급
-            Authentication authentication = getAuthentication(claimsFormToken.getId());
+            Claims claimsFormToken = jwtTokenUtil.getClaimsFormToken(TokenType.ACCESS_TOKEN, token);
+            Authentication authentication = getAuthentication(claimsFormToken.getSubject());
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             reissueAccessToken(request, response, principalDetails);
             // RefreshToken 만료시간 확인 후 재발급
@@ -111,6 +110,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             log.error("ServletException : doFilterInternal()", e);
         } catch (IOException e) {
             log.error("IOException : doFilterInternal()", e);
+        } catch (NullPointerException e) {
+            log.error("NullPointerException : doFilterInternal()", e);
         }
     }
 
@@ -159,8 +160,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         Optional<Member> memberEntity = memberRepository.findByLoginId(loginId);
         if (memberEntity.isPresent()) {
             PrincipalDetails principalDetails = new PrincipalDetails(memberEntity.get());
+            log.info("DB 사용자 존재 : getAuthentication()");
             return new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
         }
+        log.warn("DB 사용자 존재하지 않음 : getAuthentication");
         return null;
     }
 

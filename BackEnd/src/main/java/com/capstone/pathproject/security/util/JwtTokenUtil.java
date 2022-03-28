@@ -67,15 +67,15 @@ public class JwtTokenUtil {
             return true;
         } catch (ExpiredJwtException exception) {
             log.error("토큰 유효 기간 만료 : {}", exception.getClaims().getExpiration());
-            log.error("토큰 유효성 검사 실패 : false");
+            log.error("토큰 유효성 검사 실패 : false", exception);
             return false;
         } catch (JwtException exception) {
             log.error("토큰 예외 발생 : {}", exception.getMessage());
-            log.error("토큰 유효성 검사 실패 : false");
+            log.error("토큰 유효성 검사 실패 : false", exception);
             return false;
         } catch (NullPointerException exception) {
             log.error("토큰 NullPointer 발생 : {}", exception.getMessage());
-            log.error("토큰 유효성 검사 실패 : false");
+            log.error("토큰 유효성 검사 실패 : false", exception);
             return false;
         }
     }
