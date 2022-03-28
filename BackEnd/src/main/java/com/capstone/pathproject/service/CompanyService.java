@@ -4,8 +4,8 @@ import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.dto.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.repository.CompanyRepository;
-import com.capstone.pathproject.repository.MemberRepository;
+import com.capstone.pathproject.controller.repository.CompanyRepository;
+import com.capstone.pathproject.controller.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.capstone.pathproject.repository;
+package com.capstone.pathproject.controller.repository;
 
 import com.capstone.pathproject.domain.carpool.CarPoolPost;
 import com.capstone.pathproject.dto.CarPoolPostDTO;
