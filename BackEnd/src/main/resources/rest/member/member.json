@@ -1,0 +1,11 @@
+{
+  "loginId": "user8",
+  "password": "1234",
+  "mail": "asdf@naver.com",
+  "name": "이름",
+  "phone": "01022221234",
+  "addr": "주소",
+  "addrDetail": "상세주소",
+  "gender": "MALE",
+  "birthday": "2000-01-01"
+}
