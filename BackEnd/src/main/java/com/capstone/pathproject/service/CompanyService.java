@@ -1,7 +1,7 @@
 package com.capstone.pathproject.service;
 
 import com.capstone.pathproject.domain.company.Company;
-import com.capstone.pathproject.dto.CompanyDTO;
+import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.CompanyRepository;

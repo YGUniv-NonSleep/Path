@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.Map;
 
 import com.capstone.pathproject.domain.company.Option;
-import com.capstone.pathproject.dto.OptionDTO;
-import com.capstone.pathproject.repository.OptionRepository;
+import com.capstone.pathproject.dto.product.OptionDTO;
+import com.capstone.pathproject.repository.product.OptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

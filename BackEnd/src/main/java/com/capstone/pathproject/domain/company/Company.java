@@ -3,7 +3,7 @@ package com.capstone.pathproject.domain.company;
 
 import com.capstone.pathproject.domain.member.Member;
 
-import com.capstone.pathproject.dto.CompanyDTO;
+import com.capstone.pathproject.dto.company.CompanyDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

@@ -1,4 +1,4 @@
-package com.capstone.pathproject.dto;
+package com.capstone.pathproject.dto.product;
 
 import com.capstone.pathproject.domain.company.DetailOption;
 import com.capstone.pathproject.domain.company.Option;
