@@ -6,6 +6,8 @@ import com.capstone.pathproject.dto.PostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.PostRepository;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
+import com.capstone.pathproject.security.auth.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
+
 
     @Transactional
     public Page<Post> getPostList(Pageable pageable) {
@@ -65,6 +68,7 @@ public class PostService {
 
     @Transactional
     public Message<PostDTO> update(PostDTO postDTO, String fileName) {
+
         Optional<Post> result = postRepository.findById(postDTO.getId());
         if (result.isPresent()) {
             PostDTO updateResult = PostDTO.checkPostDTO()
