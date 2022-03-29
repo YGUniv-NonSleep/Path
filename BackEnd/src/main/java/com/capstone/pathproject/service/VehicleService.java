@@ -1,7 +1,6 @@
 package com.capstone.pathproject.service;
 
 import com.capstone.pathproject.domain.carpool.Vehicle;
-import com.capstone.pathproject.dto.CarPoolPostDTO;
 import com.capstone.pathproject.dto.VehicleDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;

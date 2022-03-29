@@ -1,4 +1,4 @@
-package com.capstone.pathproject.controller;
+package com.capstone.pathproject.controller.carpool;
 
 import com.capstone.pathproject.dto.CarPoolPostDTO;
 import com.capstone.pathproject.dto.response.Message;
