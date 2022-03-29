@@ -15,7 +15,7 @@ import IconButton from '@mui/material/IconButton';
 const SideNav = styled.nav`
   position: fixed;
   left: 95px;
-  z-index:100;
+  z-index:5;
   background-color: white;
   box-shadow: 3px 3px 3px gray;
   width: 390px;
@@ -34,8 +34,20 @@ const Li = styled.li`
   text-align: center;
 `;
 
-const Sidebar = () => {
+const BarContainer = styled.div`
+  z-index: 10
+  width: 390px;
+  height: 90%;
+  margin-top: 90px;
+`;
 
+const Btn = styled.button`
+  z-index: 10;
+  margin-left: 130px;
+`;
+
+const Sidebar = () => {
+  
   return (
       <SideNav>
         <Ul>
@@ -82,6 +94,9 @@ const Sidebar = () => {
             <Typography variant="subtitle2">자동차</Typography>
           </Li>
         </Ul>
+        <BarContainer>
+          <Btn>임시 길찾기 버튼</Btn>
+        </BarContainer>
       </SideNav>
   );
 };
