@@ -1,4 +1,4 @@
-POST http://localhost:8080/api/signup
+POST https://localhost:8080/api/signup
 Content-Type: application/json
 
 < member.json
