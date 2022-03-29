@@ -30,7 +30,7 @@ function MapApi() {
     
     
     function getInfo(mapData) {
-        console.log(mapData)
+        //console.log(mapData)
 
         // 지도의 현재 중심좌표를 얻어옵니다 
         let center = mapData.getCenter();
@@ -76,7 +76,7 @@ function MapApi() {
     
     // 지도위 마커 표시해주는 함수
     function drawKakaoMarker(x,y) {
-        console.log(x, y)
+        // console.log(x, y)
         let marker = new kakao.maps.Marker({ // 마커 생성
             position: new kakao.maps.LatLng(y,x), // 마커 표시 위치
             clickable: true // 마커 클릭 이벤트 설정 여부
@@ -88,24 +88,38 @@ function MapApi() {
     }
 
     function drawKakaoPolyLine(data) {
-        let lineArray;
+        let lineArray = null;
+        lineArray = new Array();
 
         // console.log(data)
-        // console.log(data.result.lane.length)
+        // console.log(data.result)
         // console.log(data.result.lane[0].section.length)
-        //console.log(data.result.lane[0].section[0].graphPos[0])
+        // console.log(data.result.lane[0].section[0].graphPos[0])
 
         for(var i = 0 ; i < data.result.lane.length; i++) {
             for(var j=0 ; j <data.result.lane[i].section.length; j++) {
-                lineArray = null;
-				lineArray = new Array();
+
                 for(var k=0 ; k < data.result.lane[i].section[j].graphPos.length; k++) {
+                    console.log(data.result.lane[i].section[j].graphPos.length)
                     lineArray.push(new kakao.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
                 }
             }
         }
 
-        //  return lineArray
+        let polyline = new kakao.maps.Polyline({
+            //map: data.map,
+            //path: [],
+            strokeWeight: 5,
+            strokeColor: '#FF00FF',
+            strokeOpacity: 0.8,
+            strokeStyle: 'dashed'
+        });
+        
+        console.log(lineArray)
+        polyline.setPath(lineArray)
+        polyline.setZIndex(3);
+
+        return polyline
     }
 
     // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
