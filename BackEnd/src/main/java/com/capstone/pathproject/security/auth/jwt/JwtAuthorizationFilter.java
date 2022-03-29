@@ -3,13 +3,13 @@ package com.capstone.pathproject.security.auth.jwt;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
-import com.capstone.pathproject.security.auth.PrincipalDetailsService;
 import com.capstone.pathproject.security.util.ClientUtil;
 import com.capstone.pathproject.security.util.CookieUtil;
 import com.capstone.pathproject.security.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +23,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -105,6 +106,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             // 스프링 시큐리티 세션에 저장
             setAuthentication(authentication);
             log.info("JwtAuthorizationFilter 실행 종료 [{}]", requestURI);
+            cookieUtil.addSameSite(response, "None");
             chain.doFilter(request, response);
         } catch (ServletException e) {
             log.error("ServletException : doFilterInternal()", e);

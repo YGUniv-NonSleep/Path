@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import javax.servlet.FilterChain;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -82,6 +83,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("AccessToken 생성 [{}]", requestURI);
         // 7. AccessToken은 헤더로 , RefreshToken은 쿠키에 넣어서 로그인요청한 클라이언트에 응답
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        cookieUtil.addSameSite(response, "None");
         log.info("Response Header 추가 : AccessToken [{}]", requestURI);
         log.info("Response 완료 [{}]", requestURI);
         // ==클라이언트== //
