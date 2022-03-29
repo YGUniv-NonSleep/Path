@@ -18,9 +18,9 @@ export const PathApi = {
   getGraphicRoute: async (mapObj) => {
     // 찾은 경로 그림 그릴 준비하는 친구
     const response = await odsayApi.get(
-        `/loadLane?lang=0&mapObject=${mapObj}&apiKey=${key}`
+        `/loadLane?lang=0&mapObject=0:0@${mapObj}&apiKey=${key}`
       ).catch((error) => console.log(error));
-    console.log(response);
+    //console.log(response);
     return response.data;
   },
 };
