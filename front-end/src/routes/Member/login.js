@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -35,16 +36,50 @@ function Copyright(props) {
 const theme = createTheme();
 
 function login() {
+
+  const accessToken = null;
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const jsonData = {
+      username : data.get("username"),
+      password : data.get("password")
+    };
+    console.log(jsonData);
+    axios.post(
+      process.env.REACT_APP_SPRING_API+"/login", jsonData
+      ).then((res) => {
+        console.log('로그인 연결 성공');
+        onLoginSuccess(res);
+      }).catch((err) => {
+        console.log(err);
+        console.log('로그인 실패');
+      });
   };
 
+  const onLoginSuccess = (res) => {
+    console.log(res);
+    console.log(res.headers);
+    console.log(res.headers.authorization);
+    const { accessToken } = res.headers.authorization;
+    // API 요청마다 헤더에 accessToken 포함하여 보내도록 설정
+    axios.defaults.headers.common['authorization'] = accessToken;
+    console.log('로그인 성공');
+  }
+
+  const testSubmit = (event) => {
+    event.preventDefault();
+    axios.get(
+      process.env.REACT_APP_SPRING_API+"/api/user"
+    ).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -73,9 +108,9 @@ function login() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
+              id="username"
+              label="Username Address"
+              name="username"
               autoFocus
             />
             <TextField
@@ -94,6 +129,9 @@ function login() {
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
+            </Button>
+            <Button onClick={testSubmit}>
+              테스트 버튼
             </Button>
             <Grid container>
               <Grid item xs>
