@@ -23,11 +23,11 @@ public class MobilityReservation {
     @Column(name = "MOBIL_RESER_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MOBIL_ID")
     private Mobility mobility;
 
