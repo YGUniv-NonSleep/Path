@@ -3,7 +3,7 @@ package com.capstone.pathproject.domain.company;
 
 import com.capstone.pathproject.domain.member.Member;
 
-import com.capstone.pathproject.dto.CompanyDTO;
+import com.capstone.pathproject.dto.company.CompanyDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -72,10 +72,21 @@ public class Company {
     }
 
     public CompanyDTO toDTO(){
-        return CompanyDTO.createDTOByCompany()
-                .c(this)
+        return CompanyDTO.createCompanyDTD()
+                .id(this.id)
+                .companyNumber(this.companyNumber)
+                .category(this.category)
+                .latitude(this.latitude)
+                .longitude(this.longitude)
+                .mail(this.mail)
+                .member(this.member)
+                .name(this.name)
+                .openDate(this.openDate)
+                .phone(this.phone)
                 .build();
     }
+
+
 
 
 }

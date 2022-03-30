@@ -3,19 +3,21 @@ package com.capstone.pathproject.service;
 import com.capstone.pathproject.domain.company.Option;
 import com.capstone.pathproject.domain.company.ProdBasic;
 import com.capstone.pathproject.domain.company.Product;
-import com.capstone.pathproject.dto.DetailOptionDTO;
-import com.capstone.pathproject.dto.OptionDTO;
-import com.capstone.pathproject.dto.ProdBasicDTO;
-import com.capstone.pathproject.dto.ProductDTO;
+import com.capstone.pathproject.dto.company.CompanyDTO;
+import com.capstone.pathproject.dto.product.DetailOptionDTO;
+import com.capstone.pathproject.dto.product.OptionDTO;
+import com.capstone.pathproject.dto.product.ProdBasicDTO;
+import com.capstone.pathproject.dto.product.ProductDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.repository.DetailOptionRepository;
-import com.capstone.pathproject.repository.OptionRepository;
-import com.capstone.pathproject.repository.ProdBasicRepository;
-import com.capstone.pathproject.repository.ProductRepository;
+import com.capstone.pathproject.repository.product.DetailOptionRepository;
+import com.capstone.pathproject.repository.product.OptionRepository;
+import com.capstone.pathproject.repository.product.ProdBasicRepository;
+import com.capstone.pathproject.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -137,16 +139,18 @@ public class ProductService {
                 .build();
     }
 
-//    public Message<List<ProductDTO>> productListByCompany(CompanyDTO companyDTO){
-//        List<Product> rs = productRepository.findByCompany(companyDTO.toEntity());
-//
-//
+    public Message<List<ProductDTO>> productListByCompany(CompanyDTO companyDTO){
+        List<Product> rs = productRepository.findByCompany(companyDTO.toEntity());
+
+        System.out.println(rs);
+
+        return null;
 //        return Message.<List<ProductDTO>>createMessage()
 //                .header(StatusEnum.OK)
 //                .message("Product find Success")
 //                .body()
 //                .build();
-//    }
+    }
 
     //public Message<Product> productListBy
 

@@ -1,4 +1,4 @@
-package com.capstone.pathproject.dto;
+package com.capstone.pathproject.dto.company;
 
 import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.company.Company;

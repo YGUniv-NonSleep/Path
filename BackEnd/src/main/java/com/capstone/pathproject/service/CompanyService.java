@@ -1,7 +1,7 @@
 package com.capstone.pathproject.service;
 
 import com.capstone.pathproject.domain.company.Company;
-import com.capstone.pathproject.dto.CompanyDTO;
+import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.CompanyRepository;
@@ -48,38 +48,15 @@ public class CompanyService {
     }
 
     public Message<CompanyDTO> companyDetail(Long companyId) {
-        Optional<Company> cRs =  companyRepository.findById(companyId);
-        Company rs = cRs.get();
+        Optional<Company> findCompany =  companyRepository.findById(companyId);
+        Company result = findCompany.get();
 
-        CompanyDTO companyDto = CompanyDTO.createCompanyDTD()
-                .id(rs.getId())
-                .name(rs.getName())
-                .companyNumber(rs.getCompanyNumber())
-                .openDate(rs.getOpenDate())
-                .category(rs.getCategory())
-                .mail(rs.getMail())
-                .phone(rs.getPhone())
-                .longitude(rs.getLongitude())
-                .latitude(rs.getLatitude())
-                .member(rs.getMember())
-                .build();
-
-        //        CompanyDTO cd = rs.get().toDTO();
-//        CompanyDTO cdd = CompanyDTO.createDTOByCompany()
-//                .c(rs.get())
-//                .build();
-
-//        System.out.println(rs.get().toString());
-//        System.out.println(cd.toString());
-//        System.out.println(cdd.toString());
-
-        //System.out.println(d.toString());
-        //System.out.println(rs.get().getId());
+        CompanyDTO companyDTO = result.toDTO();
 
         return Message.<CompanyDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("find Success")
-                .body(companyDto)
+                .body(companyDTO)
                 .build();
     }
 }
