@@ -108,7 +108,7 @@ function PathContainer() {
 
     // 길 찾기 Hook
     useEffect(() => {
-        wayFind()
+        //wayFind()
     }, [map])
 
     useEffect(() => {
