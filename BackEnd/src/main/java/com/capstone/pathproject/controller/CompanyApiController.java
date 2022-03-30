@@ -25,9 +25,9 @@ public class CompanyApiController {
         return null;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Message<CompanyDTO>> companyDetail(@PathVariable("userId") Long userId){
-        Message<CompanyDTO> message = companyService.companyDetail(userId);
+    @GetMapping("/{comId}")
+    public ResponseEntity<Message<CompanyDTO>> companyDetail(@PathVariable("comId") Long comId){
+        Message<CompanyDTO> message = companyService.companyDetail(comId);
         HttpStatus status = message.getHttpStatus();
         return new ResponseEntity<>(message, status);
     }

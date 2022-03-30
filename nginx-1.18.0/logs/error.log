@@ -1,0 +1,7 @@
+2022/03/08 15:34:22 [emerg] 5112#22836: CreateDirectory() "C:\Users\bon300-19\Desktop\Path\nginx-1.18.0/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2022/03/29 21:15:57 [error] 29160#21432: *1 rewrite or internal redirection cycle while internally redirecting to "/index.html", client: 10.30.3.253, server: localhost, request: "GET / HTTP/1.1", host: "10.30.3.59"
+2022/03/29 21:15:58 [error] 29160#21432: *2 rewrite or internal redirection cycle while internally redirecting to "/index.html", client: 10.30.3.253, server: localhost, request: "GET / HTTP/1.1", host: "10.30.3.59"
+2022/03/29 21:15:59 [error] 29160#21432: *3 rewrite or internal redirection cycle while internally redirecting to "/index.html", client: 10.30.3.253, server: localhost, request: "GET / HTTP/1.1", host: "10.30.3.59"
+2022/03/30 09:16:57 [error] 29160#21432: *4 rewrite or internal redirection cycle while internally redirecting to "/index.html", client: 10.30.3.253, server: localhost, request: "GET / HTTP/1.1", host: "10.30.3.59"
+2022/03/30 09:16:57 [error] 29160#21432: *5 rewrite or internal redirection cycle while internally redirecting to "/index.html", client: 10.30.3.253, server: localhost, request: "GET / HTTP/1.1", host: "10.30.3.59"
+2022/03/30 09:16:58 [error] 29160#21432: *6 rewrite or internal redirection cycle while internally redirecting to "/index.html", client: 10.30.3.253, server: localhost, request: "GET / HTTP/1.1", host: "10.30.3.59"

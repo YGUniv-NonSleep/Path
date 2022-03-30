@@ -72,10 +72,21 @@ public class Company {
     }
 
     public CompanyDTO toDTO(){
-        return CompanyDTO.createDTOByCompany()
-                .c(this)
+        return CompanyDTO.createCompanyDTD()
+                .id(this.id)
+                .companyNumber(this.companyNumber)
+                .category(this.category)
+                .latitude(this.latitude)
+                .longitude(this.longitude)
+                .mail(this.mail)
+                .member(this.member)
+                .name(this.name)
+                .openDate(this.openDate)
+                .phone(this.phone)
                 .build();
     }
+
+
 
 
 }
