@@ -13,6 +13,11 @@ import CarPool from "../routes/CarPool";
 import Login from "../routes/Member/login";
 import SignUp from "../routes/Member/signUp";
 
+import Company from "../routes/Member/Company";
+import CompStore from "../routes/Member/Company";
+import CompCreate from "../routes/Member/Company";
+import CompManage from "../routes/Member/Company";
+
 import Menubar from "./Menubar";
 
 // https://kyung-a.tistory.com/36
@@ -34,6 +39,17 @@ import Menubar from "./Menubar";
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/member" element={<Member />} />
+            </Routes>
+            <Routes>
+                <Route path="/company" element={<Company />} />
+                <Route path="/company/store" element={<CompStore />} />
+                <Route path="/company/create" element={<CompCreate />} />
+                {/* <Route path="/company/store/comId" element={<CompStore />} /> pathvariable */}
+                <Route path="/company/manage" element={<CompManage />} />
+                <Route path="/company/manage/items" element={<CompManage />} />
+                <Route path="/company/manage/item-edit" element={<CompManage />} />
+                <Route path="/company/manage/info-edit" element={<CompManage />} />
+                <Route path="/company/manage/resign" element={<CompManage />} />
             </Routes>
             <Routes>
                 <Route path="/oder" element={<Oder />} />
