@@ -26,69 +26,53 @@ public class ProductApiController {
     @PostMapping("/createBasic")
     public ResponseEntity<Message<ProdBasicDTO>> createBasic(@RequestBody ProdBasicDTO prodBasicDTO){
         Message<ProdBasicDTO> message = productService.createBasic(prodBasicDTO);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteBasic")
     public ResponseEntity<Message> deleteBasic(@RequestParam("basicId") Long basicId){
         Message message = productService.deleteBasic(basicId);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PatchMapping("/updateBasic")
     public ResponseEntity<Message<ProdBasicDTO>> updateBasic(@RequestBody ProdBasicDTO prodBasicDTO){
 
         Message message = productService.updateBasic(prodBasicDTO);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping("/basic/{basicId}")
     public ResponseEntity<Message<ProdBasicDTO>> basicDetail(@PathVariable("basicId") Long basicId){
 
         Message<ProdBasicDTO> message = productService.basicDetail(basicId);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 
     @PostMapping("/createProduct")
     public ResponseEntity<Message<ProductDTO>> createProduct(@RequestBody ProductDTO productDTO){
         Message<ProductDTO> message = productService.createProduct(productDTO);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteProduct/{prodId}")
     public ResponseEntity<Message> deleteProduct(@PathVariable("prodId")Long prodId){
         Message message = productService.deleteProduct(prodId);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PatchMapping("/updateProduct")
     public ResponseEntity<Message<ProductDTO>> updateProduct(@RequestBody ProductDTO productDTO){
         Message<ProductDTO> message = productService.updateProduct(productDTO);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<Message<ProductDTO>> productDetail(@PathVariable("productId") long prodId){
         System.out.println(prodId + "ASDASDAFSASF");
         Message<ProductDTO> message = productService.productDetail(prodId);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping("/company")
@@ -101,51 +85,39 @@ public class ProductApiController {
     @PostMapping("/createOption")
     public ResponseEntity<Message<OptionDTO>> createOption(@RequestBody OptionDTO optionDTO){
         Message message = productService.createOption(optionDTO);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteOption/{optionId}")
     public ResponseEntity<Message> deleteOption(@PathVariable("optionId") Long optionId){
         Message message = productService.deleteOption(optionId);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PatchMapping("/updateOption")
     public ResponseEntity<Message<OptionDTO>>  updateOption(@RequestBody OptionDTO optionDTO){
         Message message = productService.updateOption(optionDTO);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping("/option/{optionId}")
     public ResponseEntity<Message<OptionDTO>> optionDetail(@PathVariable("optionId") Long optionId){
         Message message = productService.selectOption(optionId);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
 
     }
 
     @PostMapping("/createDetailOption")
     public ResponseEntity<Message<DetailOptionDTO>> createDetailOption(@RequestBody DetailOptionDTO detailOptionDTO){
         Message message = productService.createDetailOption(detailOptionDTO);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteDetailOption")
     public ResponseEntity<Message<DetailOptionDTO>> deleteDetailOption(@PathVariable("DetailOptionId")Long detailOptionId){
         Message message = productService.deleteDetailOption(detailOptionId);
         System.out.println(message);
-
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PatchMapping("/updateDetailOption")
