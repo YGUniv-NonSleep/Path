@@ -1,0 +1,11 @@
+{
+  "companyNumber":"123123",
+  "openDate":"2022-12-12",
+  "category":"MART",
+  "name":"String",
+  "mail":"String",
+  "phone":"String",
+  "member":{
+    "id":1
+  }
+}
