@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*")
+import javax.validation.Valid;
+
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/company")
@@ -18,10 +20,12 @@ public class CompanyApiController {
 
     private final CompanyService companyService;
 
-    @GetMapping("/")
-    public ResponseEntity<Message<CompanyDTO>> myCompany(){
+    @GetMapping("/myCompany")
+    public  ResponseEntity<Message<CompanyDTO>> myCompany(){
         //로그인 기능 추가 후 작성
-        //Message<CompanyDTO> message = companyService.myCompany();
+        Message<CompanyDTO> message = companyService.companyDetailByMember(1L);
+
+
         return null;
     }
 
@@ -32,8 +36,7 @@ public class CompanyApiController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Message<CompanyDTO>> createCom(@RequestBody CompanyDTO companyDTO){
-        System.out.println(companyDTO.toString());
+    public ResponseEntity createCom(@Valid @RequestBody CompanyDTO companyDTO){
         Message<CompanyDTO> message = companyService.createCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
@@ -49,6 +52,7 @@ public class CompanyApiController {
         Message<CompanyDTO> message = companyService.updateCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
 
 
 
