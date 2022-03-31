@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -13,11 +13,14 @@ const CompSubCon = styled.div`
 
 function Company(props) {
     return (
-        <CompCon>
-            <CompSubCon>
-            { props.loading ? <p>업체 화면 나왔다</p> : <h2>로드 중...</h2> }
-            </CompSubCon>
-        </CompCon>
+        <>
+            <CompCon>
+                <CompSubCon>
+                { props.loading ? <p>업체 화면 나왔다</p> : <h2>로드 중...</h2> }
+                </CompSubCon>
+            </CompCon>
+            <Outlet></Outlet>
+        </>
     )
 }
 

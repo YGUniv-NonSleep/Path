@@ -2,6 +2,7 @@ import {
     BrowserRouter,
     Routes, // v5에서 v6되면서 Switch에서 이름이 Routes로 변경됨.
     Route,
+    match, location, history
  } from "react-router-dom";
 
 import Path from "../routes/Path"
@@ -14,9 +15,9 @@ import Login from "../routes/Member/login";
 import SignUp from "../routes/Member/signUp";
 
 import Company from "../routes/Member/Company";
-import CompStore from "../routes/Member/Company";
-import CompCreate from "../routes/Member/Company";
-import CompManage from "../routes/Member/Company";
+import CompStore from "../routes/Member/Company/CompStore";
+import CompCreate from "../routes/Member/Company/CompCreate";
+import CompManage from "../routes/Member/Company/CompManage";
 
 import Menubar from "./Menubar";
 
@@ -41,15 +42,18 @@ import Menubar from "./Menubar";
                 <Route path="/member" element={<Member />} />
             </Routes>
             <Routes>
-                <Route path="/company" element={<Company />} />
-                <Route path="/company/store" element={<CompStore />} />
-                <Route path="/company/create" element={<CompCreate />} />
-                {/* <Route path="/company/store/comId" element={<CompStore />} /> pathvariable */}
-                <Route path="/company/manage" element={<CompManage />} />
-                <Route path="/company/manage/items" element={<CompManage />} />
-                <Route path="/company/manage/item-edit" element={<CompManage />} />
-                <Route path="/company/manage/info-edit" element={<CompManage />} />
-                <Route path="/company/manage/resign" element={<CompManage />} />
+                <Route path="/company" element={<Company />}>
+                    <Route path="store" element={<CompStore />}>
+                        <Route path=":comId" element={<CompStore />} />
+                    </Route>
+                    <Route path="create" element={<CompCreate />} />
+                    <Route path="manage" element={<CompManage />}>
+                        <Route index path="items" element={<CompManage />} />
+                        <Route path="item-edit" element={<CompManage />} />
+                        <Route path="info-edit" element={<CompManage />} />
+                        <Route path="resign" element={<CompManage />} />
+                    </Route>
+                </Route>
             </Routes>
             <Routes>
                 <Route path="/oder" element={<Oder />} />

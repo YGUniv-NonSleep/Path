@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -16,6 +16,7 @@ function CompStore(props) {
         <CompStoreCon>
             <CompStoreSubCon>
                 { props.loading ? <p>마이 업체 화면 나왔다</p> : <h2>로드 중...</h2> }
+                <Outlet></Outlet>
             </CompStoreSubCon>
         </CompStoreCon>
     )

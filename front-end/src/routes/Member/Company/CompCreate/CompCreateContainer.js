@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Company from "./Company";
+import CompCreate from "./CompCreate";
 
-function CompanyContainer() {
+function CompCreateContainer() {
     // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
     const [loading, setLoading] = useState(false);
 
@@ -10,11 +10,11 @@ function CompanyContainer() {
     }, []);
 
     return (
-        <Company
+        <CompCreate
             loading={loading}
         >
-        </Company>
+        </CompCreate>
     )
 }
 
-export default CompanyContainer;
+export default CompCreateContainer;

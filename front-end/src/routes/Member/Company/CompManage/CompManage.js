@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -16,6 +16,7 @@ function CompManage(props) {
         <CompManageCon>
             <CompManageSubCon>
                 { props.loading ? <p>업체 관리 화면 나왔다</p> : <h2>로드 중...</h2> }
+                <Outlet></Outlet>
             </CompManageSubCon>
         </CompManageCon>
     )
