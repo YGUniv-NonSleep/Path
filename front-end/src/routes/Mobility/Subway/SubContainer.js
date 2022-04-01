@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import MobilityPresenter from "./MobilityPresenter";
-import MapApi from "../../MapApi";
+import SubPresenter from "./SubPresenter";
+import MapApi from "../../../MapApi";
 
-function MobilityContainer() {
+function SubContainer() {
     const [map, setMap] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -23,11 +23,11 @@ function MobilityContainer() {
     }, []);
 
     return (
-        <MobilityPresenter 
+        <SubPresenter 
             loading = {loading}
         >
-            </MobilityPresenter>
+            </SubPresenter>
     )
 }
 
-export default MobilityContainer;
+export default SubContainer;

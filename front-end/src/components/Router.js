@@ -13,6 +13,9 @@ import CarPool from "../routes/CarPool";
 import Login from "../routes/Member/login";
 import SignUp from "../routes/Member/signUp";
 
+import Bus from "../routes/Mobility/Bus";
+import Subway from "../routes/Mobility/Subway";
+
 import Menubar from "./Menubar";
 
 // https://kyung-a.tistory.com/36
@@ -40,6 +43,8 @@ import Menubar from "./Menubar";
             </Routes>
             <Routes>
                 <Route path="/mobility" element={<Mobility />} />
+                <Route path="/mobility/bus" element={<Bus/>} />
+                <Route path="/mobility/subway" element={<Subway />} />
             </Routes>
             <Routes>
                 <Route path="/community" element={<Community />} />
