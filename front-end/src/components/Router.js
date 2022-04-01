@@ -41,12 +41,13 @@ import Menubar from "./Menubar";
                 <Route path="/member" element={<Member />} />
             </Routes>
             <Routes>
-                <Route path="/company/*" element={<Company />}>
-                    <Route path="store" element={<CompStore />}>
-                        <Route path=":comId" element={<CompStore />} />
-                    </Route>
-                    <Route path="create" element={<CompCreate />} />
-                    <Route path="manage/*" element={<CompManage />}>
+                <Route path="/company" element={<Company />} />
+                <Route path="/company/store" element={<CompStore />}>
+                    <Route path=":comId" element={<CompStore />} />
+                </Route>
+                <Route path="/company/create" element={<CompCreate />} />
+                <Route path="/company/manage" element={<CompManage />}>
+                    <Route path=":comId" element={<CompStore />}>
                         <Route index path="items" element={<CompManage />} />
                         <Route path="item-edit" element={<CompManage />} />
                         <Route path="info-edit" element={<CompManage />} />
