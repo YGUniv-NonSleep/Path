@@ -29,7 +29,7 @@ const Sidebar = () => {
       <SideNav>
         <Icon />
         <BarContainer>
-          
+
         </BarContainer>
       </SideNav>
   );
