@@ -98,7 +98,6 @@ function MapApi() {
 
         for(var i = 0 ; i < data.result.lane.length; i++) {
             for(var j=0 ; j <data.result.lane[i].section.length; j++) {
-
                 for(var k=0 ; k < data.result.lane[i].section[j].graphPos.length; k++) {
                     //console.log(data.result.lane[i].section[j].graphPos.length)
                     lineArray.push(new kakao.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
@@ -121,6 +120,39 @@ function MapApi() {
 
         return polyline
     }
+
+    function drawKakaoBusPolyLine(data) {
+        let lineArray = null;
+        lineArray = new Array();
+
+        console.log(data[0])
+
+        console.log(data[0].x)
+        console.log(data[0].y)
+
+        //lineArray.push(new kakao.maps.LatLng(y,x))
+
+        for(var i=0; i<data.length; i++){
+            lineArray.push(new kakao.maps.LatLng(data[i].y, data[i].x))
+        }
+
+        let polyline = new kakao.maps.Polyline({
+            //map: data.map,
+            //path: [],
+            strokeWeight: 5,
+            strokeColor: '#FF00FF',
+            strokeOpacity: 0.8,
+            strokeStyle: 'dashed'
+        });
+        
+        console.log(lineArray)
+        polyline.setPath(lineArray)
+        polyline.setZIndex(10);
+
+        return polyline
+    }
+
+
 
     // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
     // marker.setMap(null);
@@ -145,7 +177,7 @@ function MapApi() {
 
 
     return {
-        createMap, setController, getInfo, drawKakaoMarker, drawKakaoPolyLine, //getLatLng,
+        drawKakaoBusPolyLine, createMap, setController, getInfo, drawKakaoMarker, drawKakaoPolyLine, //getLatLng,
     }
 }
 

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import BusPresenter from "./BusPresenter";
 import MapApi from "../../../MapApi";
+import { MobilityApi } from "../../../OdsayApi";
 
 function BusContainer() {
-    const [map, setMap] = useState(null);
+    const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
 
     async function mapLoad() {
@@ -18,9 +19,32 @@ function BusContainer() {
         }
     }
 
+    async function busInfo(){
+        let busNo = 410
+        let busInfo = await MobilityApi.getBusId(busNo).catch((error) => console.log(error));
+        console.log(busInfo)
+        let busDetailInfo = await MobilityApi.getBusLineDetail(busInfo).catch((error) => console.log(error));
+        console.log(busDetailInfo)
+        console.log(busDetailInfo.result.station)
+
+        const bPoly = await MapApi().drawKakaoBusPolyLine(busDetailInfo.result.station)
+                           
+        bPoly.setMap(map)
+        console.log(bPoly)
+
+    }
+
+
+
+
+
     useEffect(() => {
         mapLoad()
     }, []);
+
+    useEffect(() => {
+        busInfo()
+    }, [map]);
 
     return (
         <BusPresenter 
