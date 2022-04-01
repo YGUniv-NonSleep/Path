@@ -24,10 +24,6 @@ import Subway from "../routes/Mobility/Subway";
 import Menubar from "./Menubar";
 
 // https://kyung-a.tistory.com/36
-// https://roylee0704.github.io/react-flexbox-grid/
-// https://rsuitejs.com/
-// https://www.w3schools.com/css/css_website_layout.asp
-// https://tech.devsisters.com/posts/react-extend-theme/
 
  function Router() {
     return (
