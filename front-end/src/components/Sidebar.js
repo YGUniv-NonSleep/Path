@@ -1,6 +1,5 @@
 import {Link, Route, Switch, BrowserRouter as Router} from "react-router-dom";
 import styled from "styled-components";
-import Icon from "./Icon";
 
 // https://blog.logrocket.com/react-router-v6-future-reach-router/
 // https://velog.io/@wiostz98kr/TIL50-l-React-Router-match.params-location.search
@@ -27,7 +26,6 @@ const Sidebar = () => {
   
   return (
       <SideNav>
-        <Icon />
         <BarContainer>
 
         </BarContainer>

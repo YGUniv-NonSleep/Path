@@ -3,7 +3,7 @@ import MobilityPresenter from "./MobilityPresenter";
 import MapApi from "../../MapApi";
 
 function MobilityContainer() {
-    const [map, setMap] = useState(null);
+    const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
 
     async function mapLoad() {

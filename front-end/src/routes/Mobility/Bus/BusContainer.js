@@ -37,7 +37,7 @@ function BusContainer() {
     }, []);
 
     useEffect(() => {
-        busInfo()
+        // busInfo()
     }, [map]);
 
     return (
