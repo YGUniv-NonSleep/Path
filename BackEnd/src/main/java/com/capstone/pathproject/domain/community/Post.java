@@ -34,9 +34,9 @@ public class Post {
     @Column(name = "POST_TYPE")
     private PostType type;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "POST_PARENT_ID")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private Post parent;
 
     @Column(name = "POST_TITLE")

@@ -1,11 +1,14 @@
 package com.capstone.pathproject.domain.mobility;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,4 +47,24 @@ public class MobilityCompany {
 
     @Column(name = "MOBIL_CO_MINUTE_FEE")
     private String minuteFee;
+
+    @OneToMany(mappedBy = "mobilityCompany",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Mobility> mobilities = new ArrayList<Mobility>();
+
+    @Builder(builderMethodName = "createMobilityCompany")
+    public MobilityCompany(String name, String companyNumber, LocalDate openDate, String mail, String ceoName, String ceoPhone, String unlockFee, String minuteFee) {
+        this.name = name;
+        this.companyNumber = companyNumber;
+        this.openDate = openDate;
+        this.mail = mail;
+        this.ceoName = ceoName;
+        this.ceoPhone = ceoPhone;
+        this.unlockFee = unlockFee;
+        this.minuteFee = minuteFee;
+    }
+
+    public void addMobility(Mobility mobility) {
+        mobilities.add(mobility);
+        mobility.addMobilityCompany(this);
+    }
 }

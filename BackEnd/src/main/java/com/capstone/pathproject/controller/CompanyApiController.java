@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*")
+import javax.validation.Valid;
+
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/company")
@@ -18,26 +20,25 @@ public class CompanyApiController {
 
     private final CompanyService companyService;
 
-    @GetMapping("/")
-    public ResponseEntity<Message<CompanyDTO>> myCompany(){
+    @GetMapping("/myCompany")
+    public  ResponseEntity<Message<CompanyDTO>> myCompany(){
         //로그인 기능 추가 후 작성
-        //Message<CompanyDTO> message = companyService.myCompany();
+        Message<CompanyDTO> message = companyService.companyDetailByMember(1L);
+
+
         return null;
     }
 
     @GetMapping("/{comId}")
     public ResponseEntity<Message<CompanyDTO>> companyDetail(@PathVariable("comId") Long comId){
         Message<CompanyDTO> message = companyService.companyDetail(comId);
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Message<CompanyDTO>> createCom(@RequestBody CompanyDTO companyDTO){
-        System.out.println(companyDTO.toString());
+    public ResponseEntity createCom(@Valid @RequestBody CompanyDTO companyDTO){
         Message<CompanyDTO> message = companyService.createCompany(companyDTO);
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
@@ -49,9 +50,9 @@ public class CompanyApiController {
     @PatchMapping("/update")
     public ResponseEntity<Message<CompanyDTO>> updateCompany(@RequestBody CompanyDTO companyDTO){
         Message<CompanyDTO> message = companyService.updateCompany(companyDTO);
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
 
 
 

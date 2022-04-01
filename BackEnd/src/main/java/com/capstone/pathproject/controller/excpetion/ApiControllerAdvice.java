@@ -24,6 +24,6 @@ public class ApiControllerAdvice {
                 .header(StatusEnum.BAD_REQUEST)
                 .message("유효성 검사 실패")
                 .body(errors).build();
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 }
