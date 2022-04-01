@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -12,6 +12,7 @@ const CompSubCon = styled.div`
 `;
 
 function Company(props) {
+    
     return (
         <>
             <CompCon>

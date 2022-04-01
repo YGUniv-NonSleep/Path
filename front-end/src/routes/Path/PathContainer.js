@@ -44,6 +44,7 @@ function PathContainer() {
             let graphicData = await PathApi.getGraphicRoute(
                 mapObj
             ).catch((error) => console.log(error));
+            console.log(graphicData)
             
             const sp = await MapApi().drawKakaoMarker(startPoint.la, startPoint.ma)
             sp.setMap(map)
@@ -108,7 +109,7 @@ function PathContainer() {
 
     // 길 찾기 Hook
     useEffect(() => {
-        //wayFind()
+        // wayFind()
     }, [map])
 
     useEffect(() => {

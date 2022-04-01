@@ -1,8 +1,7 @@
 import {
     BrowserRouter,
     Routes, // v5에서 v6되면서 Switch에서 이름이 Routes로 변경됨.
-    Route,
-    match, location, history
+    Route
  } from "react-router-dom";
 
 import Path from "../routes/Path"
@@ -42,12 +41,12 @@ import Menubar from "./Menubar";
                 <Route path="/member" element={<Member />} />
             </Routes>
             <Routes>
-                <Route path="/company" element={<Company />}>
+                <Route path="/company/*" element={<Company />}>
                     <Route path="store" element={<CompStore />}>
                         <Route path=":comId" element={<CompStore />} />
                     </Route>
                     <Route path="create" element={<CompCreate />} />
-                    <Route path="manage" element={<CompManage />}>
+                    <Route path="manage/*" element={<CompManage />}>
                         <Route index path="items" element={<CompManage />} />
                         <Route path="item-edit" element={<CompManage />} />
                         <Route path="info-edit" element={<CompManage />} />
