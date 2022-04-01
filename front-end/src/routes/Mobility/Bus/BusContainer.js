@@ -22,28 +22,22 @@ function BusContainer() {
     async function busInfo(){
         let busNo = 410
         let busInfo = await MobilityApi.getBusId(busNo).catch((error) => console.log(error));
-        console.log(busInfo)
+        // console.log(busInfo)
+
         let busDetailInfo = await MobilityApi.getBusLineDetail(busInfo).catch((error) => console.log(error));
-        console.log(busDetailInfo)
-        console.log(busDetailInfo.result.station)
+        // console.log(busDetailInfo)
 
-        const bPoly = await MapApi().drawKakaoBusPolyLine(busDetailInfo.result.station)
-                           
+        const bPoly = await MapApi().drawKakaoBusPolyLine(busDetailInfo.result.station)                           
+        // console.log(bPoly)
         bPoly.setMap(map)
-        console.log(bPoly)
-
     }
-
-
-
-
 
     useEffect(() => {
         mapLoad()
     }, []);
 
     useEffect(() => {
-        busInfo()
+        // busInfo()
     }, [map]);
 
     return (

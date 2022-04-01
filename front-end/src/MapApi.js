@@ -177,7 +177,8 @@ function MapApi() {
 
 
     return {
-        drawKakaoBusPolyLine, createMap, setController, getInfo, drawKakaoMarker, drawKakaoPolyLine, //getLatLng,
+        createMap, setController, getInfo,  //getLatLng,
+        drawKakaoMarker, drawKakaoPolyLine, drawKakaoBusPolyLine,
     }
 }
 

@@ -3,7 +3,7 @@ import SubPresenter from "./SubPresenter";
 import MapApi from "../../../MapApi";
 
 function SubContainer() {
-    const [map, setMap] = useState(null);
+    const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
 
     async function mapLoad() {

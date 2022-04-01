@@ -122,7 +122,7 @@ const Menubar = () => {
           <ScLink to="/"></ScLink>
         </Image>
       </Ul>
-      {/* <PathRouteElement></PathRouteElement> */}
+      <PathRouteElement></PathRouteElement>
       <CompRouteElement></CompRouteElement>
       <BtnUl>
         <Li $current={currLocation === "/login" && true}>

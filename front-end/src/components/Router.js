@@ -13,7 +13,6 @@ import CarPool from "../routes/CarPool";
 import Login from "../routes/Member/login";
 import SignUp from "../routes/Member/signUp";
 
-
 import Company from "../routes/Member/Company";
 import CompStore from "../routes/Member/Company/CompStore";
 import CompCreate from "../routes/Member/Company/CompCreate";
@@ -22,14 +21,9 @@ import CompManage from "../routes/Member/Company/CompManage";
 import Bus from "../routes/Mobility/Bus";
 import Subway from "../routes/Mobility/Subway";
 
-
 import Menubar from "./Menubar";
 
 // https://kyung-a.tistory.com/36
-// https://roylee0704.github.io/react-flexbox-grid/
-// https://rsuitejs.com/
-// https://www.w3schools.com/css/css_website_layout.asp
-// https://tech.devsisters.com/posts/react-extend-theme/
 
  function Router() {
     return (
