@@ -50,7 +50,7 @@ public class Company {
     @Column(name = "COM_LONG")
     private String longitude;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
     private Member member;
 
@@ -68,7 +68,6 @@ public class Company {
         this.latitude = latitude;
         this.longitude = longitude;
         this.member = member;
-
     }
 
     public CompanyDTO toDTO(){
@@ -85,8 +84,6 @@ public class Company {
                 .phone(this.phone)
                 .build();
     }
-
-
 
 
 }

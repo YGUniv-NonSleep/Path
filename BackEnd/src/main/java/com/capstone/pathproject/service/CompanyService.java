@@ -10,10 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -74,25 +72,22 @@ public class CompanyService {
 
     }
 
-    public Message<CompanyDTO> companyDetailByMember(Long memId){
+    public Message<List<CompanyDTO>> companyDetailByMember(Long memId){
 
         List<Company> result = companyRepository.findByMemberId(memId);
 
         ArrayList<CompanyDTO> rs = new ArrayList<>();
-
-       result.stream().map(c -> c.toDTO()).forEach(s-> rs.add(s));
+        result.stream().map(Company::toDTO).forEach(rs::add);
 
         for(CompanyDTO c : rs) {
             System.out.println(c);
       }
-//
-//        while (){
-//            System.out.println("1");
-//        }
 
-        System.out.println(result.get(0));
-
-        return null;
+        return Message.<List<CompanyDTO>>createMessage()
+                .message("업체 조회 성공")
+                .body(rs)
+                .header(StatusEnum.OK)
+                .build();
     }
 }
 
