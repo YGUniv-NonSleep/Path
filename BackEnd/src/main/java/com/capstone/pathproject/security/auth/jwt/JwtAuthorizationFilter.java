@@ -119,12 +119,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private void reissueToken(HttpServletRequest request, HttpServletResponse response, String token) {
         // Redis에 키값이 들어있고, 동일한 Ip인가?
-        if (!isTokenEqualsRedisValue(request, token)) return;
+        try {
+            if (!isTokenEqualsRedisValue(request, token)) return;
+        } catch (NullPointerException e) {
+            log.error("NullPointerException : isTokenEqualsRedisValue()", e);
+            return;
+        }
         // RefreshToken 재발급 시작
         log.info("토큰 재발급 로직 실행 : reissueToken");
         // RefreshToken의 Claims(payload)부분 꺼내기
         Claims refreshClaims = jwtTokenUtil.getClaimsFormToken(TokenType.REFRESH_TOKEN, token);
-        String loginId = refreshClaims.get("id").toString();
+        String loginId = refreshClaims.get("sub").toString();
         // 시큐리티 세션에 저장하기
         Authentication authentication = getAuthentication(loginId);
         setAuthentication(authentication);
@@ -138,17 +143,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private boolean isTokenEqualsRedisValue(HttpServletRequest request, String token) {
         String browserIp = (String) redisTemplate.opsForValue().get(token);
-        if (browserIp.isEmpty()) return false;
-        boolean checkIp = ClientUtil.getIp(request).equals(browserIp);
-        String result;
-        if (checkIp) {
-            result = "RefreshToken의 browserIp가 동일 [{}]";
-            deleteRedisKey(token);
-        } else {
-            result = "RefreshToken의 browserIp가 동일하지 않음 [{}]";
-            deleteRedisKey(token);
+        if (browserIp.isEmpty()) {
+            log.error("RefreshToken의 browserIp가 비어있습니다. : isTokenEqualsRedisValue()");
+            return false;
         }
-        log.error(result, request.getRequestURI());
+        boolean checkIp = ClientUtil.getIp(request).equals(browserIp);
+        String result = checkIp ? "RefreshToken의 browserIp가 동일 [{}]" : "RefreshToken의 browserIp가 동일하지 않음 [{}]";
+        log.info(result, request.getRequestURI());
+        deleteRedisKey(token);
         return checkIp;
     }
 

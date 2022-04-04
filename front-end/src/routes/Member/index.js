@@ -1,3 +1,5 @@
-import MemberContainer from "./MemberContainer";
+import MemberContainer from './MemberContainer';
+import LoginContainer from './Login/LoginContainer';
+import SignUpContainer from './SignUp/SignUpContainer';
 
-export default MemberContainer;
+export { MemberContainer, LoginContainer, SignUpContainer };

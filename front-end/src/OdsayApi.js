@@ -7,6 +7,7 @@ const odsayApi = axios.create({
 const key = process.env.REACT_APP_ODSAY_API;
 
 export const PathApi = {
+
   getDirection: async (data) => {
     // 검색한 모든 경로 정보 들고오는 친구
     const response = await odsayApi.get(
@@ -15,6 +16,7 @@ export const PathApi = {
     //console.log(response)
     return response.data.result;
   },
+
   getGraphicRoute: async (mapObj) => {
     // 찾은 경로 그림 그릴 준비하는 친구
     const response = await odsayApi.get(
@@ -24,5 +26,24 @@ export const PathApi = {
     return response.data;
   },
 };
+
+export const MobilityApi = {
+
+  getBusId: async (data) => { console.log(data)
+    const response = await odsayApi.get(
+      `/searchBusLane?lang=0&busNo=${data}&CID=4000&apiKey=${key}`
+    ).catch((error) => console.log(error));
+    // console.log(response.data.result.lane[0].busID);
+    return response.data.result.lane[0].busID;
+  },
+
+  getBusLineDetail: async (busID) => { console.log(busID)
+    const response = await odsayApi.get(
+      `/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`
+    ).catch((error) => console.log(error));
+    // console.log(response);
+    return response.data;
+  },
+}
 
 export default odsayApi;

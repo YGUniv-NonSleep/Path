@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { NavLink, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import pathLogo from "../assets/path_logo.svg";
+import PathRouteElement from "./PathRouteElement";
+import CompRouteElement from "./CompRouteElement";
 
 const NavContainer = styled.nav`
   display: flex;
@@ -115,46 +117,21 @@ const Menubar = () => {
 
   return (
     <NavContainer>
-        <Ul>
-          <Image>
-            <ScLink to="/"></ScLink>
-          </Image>
-        </Ul>
-        <Ul>
-          <Li $current={currLocation === "/" && true}>
-            <ScLink to="/" $current={currLocation === "/" && true}>
-              원클릭 패쓰
-            </ScLink>
-          </Li>
-          <Li $current={currLocation === "/oder" && true}>
-            <ScLink to="/oder" $current={currLocation === "/oder" && true}>
-              원클릭 오더
-            </ScLink>
-          </Li>
-          <Li $current={currLocation === "/mobility" && true}>
-            <ScLink to="/mobility" $current={currLocation === "/mobility" && true}>
-              이동수단
-            </ScLink>
-          </Li>
-          <Li $current={currLocation === "/carPool" && true}>
-            <ScLink to="/carPool" $current={currLocation === "/carPool" && true}>
-              카풀
-            </ScLink>
-          </Li>
-          <Li $current={currLocation === "/community" && true}>
-            <ScLink to="/community" $current={currLocation === "/community" && true}>
-              고객센터
-            </ScLink>
-          </Li>
-        </Ul>
-        <BtnUl>
-          <Li $current={currLocation === "/login" && true}>
-            <ScLink to="/login" $current={currLocation === "/login" && true}>
-              <Button>회원</Button>
-            </ScLink>
-          </Li>
-        </BtnUl>
-      </NavContainer>
+      <Ul>
+        <Image>
+          <ScLink to="/"></ScLink>
+        </Image>
+      </Ul>
+      <PathRouteElement></PathRouteElement>
+      <CompRouteElement></CompRouteElement>
+      <BtnUl>
+        <Li $current={currLocation === "/login" && true}>
+          <ScLink to="/login" $current={currLocation === "/login" && true}>
+            <Button>회원</Button>
+          </ScLink>
+        </Li>
+      </BtnUl>
+    </NavContainer>
   );
 };
 
