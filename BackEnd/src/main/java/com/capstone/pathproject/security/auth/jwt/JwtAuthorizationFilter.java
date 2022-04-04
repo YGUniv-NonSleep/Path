@@ -146,7 +146,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         if (browserIp.isEmpty()) return false;
         boolean checkIp = ClientUtil.getIp(request).equals(browserIp);
         String result = checkIp ? "RefreshToken의 browserIp가 동일 [{}]" : "RefreshToken의 browserIp가 동일하지 않음 [{}]";
-        log.error(result, request.getRequestURI());
+        log.info(result, request.getRequestURI());
         deleteRedisKey(token);
         return checkIp;
     }

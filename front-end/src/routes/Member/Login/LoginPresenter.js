@@ -49,17 +49,14 @@ function LoginPresenter(props) {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography
-            component="h1" // <h1> 태그로 감싼다
-            variant="h5" // 실제 디자인은 <h5>로 표현
-          >
+          <Typography component="h1" variant="h5">
             Sign in
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
-              required // 무조건 입력
-              fullWidth // ui 상으로 화면 전체를 사용하고 싶을 때
+              required
+              fullWidth
               onChange={props.handleInput}
               id="loginId"
               label="아이디"
@@ -85,7 +82,7 @@ function LoginPresenter(props) {
               onClick={props.handleSubmit}
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }} // sx는 컴포넌트 디자인을 간단히 고치고싶을 때
+              sx={{ mt: 3, mb: 2 }}
             >
               Sign In
             </Button>

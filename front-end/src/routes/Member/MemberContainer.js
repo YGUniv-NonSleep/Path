@@ -3,7 +3,6 @@ import MemberPresenter from './MemberPresenter';
 import axios from 'axios';
 
 function MemberContainer() {
-  // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -11,12 +10,12 @@ function MemberContainer() {
     console.log('렌더링될때마다함');
   }, []);
 
-  // === AccessToken 확인 == //
+  // === AccessToken 재발급 == //
 
   // ======== 테스트 ====== //
-  const testSubmit = () => {
+  const testReissue = () => {
     axios
-      .post(process.env.REACT_APP_SPRING_API + '/api/member/test', {
+      .get(process.env.REACT_APP_SPRING_API + '/api/member/reissue', {
         withCredentials: true,
       })
       .then((res) => {
@@ -27,9 +26,22 @@ function MemberContainer() {
       });
   };
 
-  const testUserSubmit = () => {
+  const testBusiness = () => {
     axios
-      .get(process.env.REACT_APP_SPRING_API + '/api/user', {
+      .get(process.env.REACT_APP_SPRING_API + '/api/business', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const testAdmin = () => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/admin', {
         withCredentials: true,
       })
       .then((res) => {
@@ -43,8 +55,9 @@ function MemberContainer() {
   return (
     <MemberPresenter
       loading={loading}
-      testSubmit={testSubmit}
-      testUserSubmit={testUserSubmit}
+      testBusiness={testBusiness}
+      testAdmin={testAdmin}
+      testReissue={testReissue}
     ></MemberPresenter>
   );
 }

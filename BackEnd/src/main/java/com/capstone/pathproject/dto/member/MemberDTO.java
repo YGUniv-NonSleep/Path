@@ -49,7 +49,7 @@ public class MemberDTO {
     @Builder(builderMethodName = "createMemberDTO")
     public MemberDTO(String loginId, String password, String mail, String name,
                      String phone, String addr, String addrDetail, memberGender gender, String birthday) {
-        this.role = Role.ROLE_USER;
+        this.role = Role.ROLE_MEMBER;
         this.loginId = loginId;
         this.password = password;
         this.mail = mail;

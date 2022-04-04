@@ -30,7 +30,7 @@ public class MemberService {
                     .message("회원이 존재함")
                     .body(memberDTO).build();
         }
-        memberDTO.updateMemberRole(Role.ROLE_USER);
+        memberDTO.updateMemberRole(Role.ROLE_MEMBER);
         memberDTO.encodePassword(bCryptPasswordEncoder.encode(memberDTO.getPassword()));
         memberRepository.save(memberDTO.toEntity());
         return Message.<MemberDTO>createMessage()
