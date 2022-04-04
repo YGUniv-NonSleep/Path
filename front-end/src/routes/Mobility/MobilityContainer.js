@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import MobilityPresenter from "./MobilityPresenter"
+import MobilityPresenter from "./MobilityPresenter";
 import MapApi from "../../MapApi";
 
 function MobilityContainer() {
-    const [map, setMap] = useState(null);
+    const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
 
     async function mapLoad() {
         try {
-            let mapInfo = await MapApi();
+            let createMap = await MapApi().createMap();
+            let setController = await MapApi().setController(createMap);
+            settingMap(setController);
             setLoading(true);
 
-            console.log(mapInfo().center)
-            
         } catch(error) {
             console.log(error);
         }

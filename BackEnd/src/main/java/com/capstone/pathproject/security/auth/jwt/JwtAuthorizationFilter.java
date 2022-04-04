@@ -119,7 +119,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private void reissueToken(HttpServletRequest request, HttpServletResponse response, String token) {
         // Redis에 키값이 들어있고, 동일한 Ip인가?
-        if (!isTokenEqualsRedisValue(request, token)) return;
+        try {
+            if (!isTokenEqualsRedisValue(request, token)) return;
+        } catch (NullPointerException e) {
+            log.error("NullPointerException : isTokenEqualsRedisValue()", e);
+            return;
+        }
         // RefreshToken 재발급 시작
         log.info("토큰 재발급 로직 실행 : reissueToken");
         // RefreshToken의 Claims(payload)부분 꺼내기
@@ -140,15 +145,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String browserIp = (String) redisTemplate.opsForValue().get(token);
         if (browserIp.isEmpty()) return false;
         boolean checkIp = ClientUtil.getIp(request).equals(browserIp);
-        String result;
-        if (checkIp) {
-            result = "RefreshToken의 browserIp가 동일 [{}]";
-            deleteRedisKey(token);
-        } else {
-            result = "RefreshToken의 browserIp가 동일하지 않음 [{}]";
-            deleteRedisKey(token);
-        }
+        String result = checkIp ? "RefreshToken의 browserIp가 동일 [{}]" : "RefreshToken의 browserIp가 동일하지 않음 [{}]";
         log.error(result, request.getRequestURI());
+        deleteRedisKey(token);
         return checkIp;
     }
 

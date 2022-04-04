@@ -22,11 +22,11 @@ public class MobilityPayment {
     @Column(name = "MOBIL_PAY_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MOBIL_ID")
     private Mobility mobility;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
     private Member member;
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
 import MapApi from "../../MapApi";
+import { PathApi } from "../../OdsayApi"
 
 function PathContainer() {
     const [map, settingMap] = useState(null);
@@ -13,6 +14,7 @@ function PathContainer() {
             let createMap = await MapApi().createMap();
             let setController = await MapApi().setController(createMap);
             settingMap(setController);
+            // settingMap(createMap)
             setLoading(true);
 
         } catch(error) {
@@ -23,8 +25,8 @@ function PathContainer() {
     async function wayFind() {
         try {
             // 출발지, 도착지의 위도, 경도를 얻어왔다고 가정
-            const startPoint = { la: 126.926493082645, ma: 37.6134436427887 }
-            const arrivalPoint = { la: 127.126936754911, ma: 37.5004198786564 }
+            const startPoint = { la: 126.93737555322481, ma: 37.55525165729346 }
+            const arrivalPoint = { la: 126.88265238619182, ma: 37.481440035175375 }
     
             let pathWay = await PathApi.getDirection({
                 startPoint, arrivalPoint
@@ -34,41 +36,46 @@ function PathContainer() {
             // const a = pathWay.path.map(mo => { return mo })
             // console.log(a)
 
-            const BaseX = Math.floor(startPoint.la);
-            const BaseY = Math.floor(startPoint.ma);
+            // const BaseX = Math.floor(startPoint.la);
+            // const BaseY = Math.floor(startPoint.ma);
             const mo = pathWay.path.map(mo => { return mo.info.mapObj });
-            const mapObj = `${BaseX}:${BaseY}@${mo[0]}`
+            const mapObj = `${mo[0]}`
 
             let graphicData = await PathApi.getGraphicRoute(
                 mapObj
             ).catch((error) => console.log(error));
-                
-            console.log("여기까진?")
+            console.log(graphicData)
             
             const sp = await MapApi().drawKakaoMarker(startPoint.la, startPoint.ma)
-            console.log(sp.setMap(map))
-            sp.getMap(map)
-
-            //settingMap(sp.setMap(map))
-            //sp.settingMap(map)
-            console.log("1")
+            sp.setMap(map)
 
             const ap = await MapApi().drawKakaoMarker(arrivalPoint.la, arrivalPoint.ma)
-            //ap.setMap(map)
-            console.log("2")
+            ap.setMap(map)
             
-            // const dkpl = await MapApi().drawKakaoPolyLine(graphicData)
-            // console.log(dkpl)
-            console.log("3")
+            const dkpl = await MapApi().drawKakaoPolyLine(graphicData)
+            dkpl.setMap(map)
 
-            console.log(graphicData.result.boundary)
+            // console.log(graphicData.result.boundary)
             if(graphicData.result.boundary) {
-                console.log("boundary ar")
-            }
+                // console.log("boundary ar")
+                let points = [
+                    new kakao.maps.LatLng(startPoint.ma, startPoint.la),
+                    new kakao.maps.LatLng(arrivalPoint.ma, arrivalPoint.la)
+                ]
 
-            //settingMap(map)
-            //setWay(pathWay)
-            
+                let bounds = new kakao.maps.LatLngBounds();
+
+                for(var i=0; i<points.length; i++) {
+                    bounds.extend(points[i])
+                }
+
+                // console.log(bounds)
+                map.setBounds(bounds)
+
+                const moving = moveMapLatLon(map.getCenter())
+                map.panTo(moving)                
+
+            }
 
         } catch (error) {
             console.log(error)
@@ -80,7 +87,11 @@ function PathContainer() {
         console.log(info)
         return info
     }
-    
+
+    function moveMapLatLon(data) {
+        let moveLatLon = new kakao.maps.LatLng(data.Ma, data.La-0.038);
+        return moveLatLon
+    }
 
     // async function mapClickEvent() {
     //     try {
@@ -98,8 +109,8 @@ function PathContainer() {
 
     // 길 찾기 Hook
     useEffect(() => {
-        wayFind()
-    }, [way])
+        // wayFind()
+    }, [map])
 
     useEffect(() => {
         getMapInfo(map)

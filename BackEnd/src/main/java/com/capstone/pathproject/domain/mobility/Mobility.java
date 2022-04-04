@@ -1,6 +1,7 @@
 package com.capstone.pathproject.domain.mobility;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,7 @@ public class Mobility {
     @Column(name = "MOBIL_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MOBIL_CO_ID")
     private MobilityCompany mobilityCompany;
 
@@ -40,4 +41,18 @@ public class Mobility {
     @Enumerated(EnumType.STRING)
     @Column(name = "MOBIL_TYPE")
     private MobilityType type;
+
+    @Builder(builderMethodName = "createMobility")
+    public Mobility(MobilityCompany mobilityCompany, int battery, String longitude, String latitude, MobilityState state, MobilityType type) {
+        this.mobilityCompany = mobilityCompany;
+        this.battery = battery;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.state = state;
+        this.type = type;
+    }
+
+    public void addMobilityCompany(MobilityCompany mobilityCompany) {
+        this.mobilityCompany = mobilityCompany;
+    }
 }

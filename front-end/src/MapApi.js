@@ -4,7 +4,7 @@ function MapApi() {
         const mapContainer = document.getElementById('map') // 지도 표시 div 탐색
 
         let mapOption = {
-            center: new kakao.maps.LatLng(37.6134436427887, 126.926493082645), // 지도의 중심좌표
+            center: new kakao.maps.LatLng(37.55525165729346, 126.93737555322481), // 지도의 중심좌표
             level: 3, // 지도 확대 레벨
             mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도 맵타입
         };
@@ -30,7 +30,7 @@ function MapApi() {
     
     
     function getInfo(mapData) {
-        console.log(mapData)
+        //console.log(mapData)
 
         // 지도의 현재 중심좌표를 얻어옵니다 
         let center = mapData.getCenter();
@@ -76,7 +76,7 @@ function MapApi() {
     
     // 지도위 마커 표시해주는 함수
     function drawKakaoMarker(x,y) {
-        console.log(x, y)
+        // console.log(x, y)
         let marker = new kakao.maps.Marker({ // 마커 생성
             position: new kakao.maps.LatLng(y,x), // 마커 표시 위치
             clickable: true // 마커 클릭 이벤트 설정 여부
@@ -88,25 +88,71 @@ function MapApi() {
     }
 
     function drawKakaoPolyLine(data) {
-        let lineArray;
+        let lineArray = null;
+        lineArray = new Array();
 
         // console.log(data)
-        // console.log(data.result.lane.length)
+        // console.log(data.result)
         // console.log(data.result.lane[0].section.length)
-        //console.log(data.result.lane[0].section[0].graphPos[0])
+        // console.log(data.result.lane[0].section[0].graphPos[0])
 
         for(var i = 0 ; i < data.result.lane.length; i++) {
             for(var j=0 ; j <data.result.lane[i].section.length; j++) {
-                lineArray = null;
-				lineArray = new Array();
                 for(var k=0 ; k < data.result.lane[i].section[j].graphPos.length; k++) {
+                    //console.log(data.result.lane[i].section[j].graphPos.length)
                     lineArray.push(new kakao.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
                 }
             }
         }
 
-        //  return lineArray
+        let polyline = new kakao.maps.Polyline({
+            //map: data.map,
+            //path: [],
+            strokeWeight: 5,
+            strokeColor: '#FF00FF',
+            strokeOpacity: 0.8,
+            strokeStyle: 'dashed'
+        });
+        
+        console.log(lineArray)
+        polyline.setPath(lineArray)
+        polyline.setZIndex(3);
+
+        return polyline
     }
+
+    function drawKakaoBusPolyLine(data) {
+        let lineArray = null;
+        lineArray = new Array();
+
+        console.log(data[0])
+
+        console.log(data[0].x)
+        console.log(data[0].y)
+
+        //lineArray.push(new kakao.maps.LatLng(y,x))
+
+        for(var i=0; i<data.length; i++){
+            lineArray.push(new kakao.maps.LatLng(data[i].y, data[i].x))
+        }
+
+        let polyline = new kakao.maps.Polyline({
+            //map: data.map,
+            //path: [],
+            strokeWeight: 5,
+            strokeColor: '#FF00FF',
+            strokeOpacity: 0.8,
+            strokeStyle: 'dashed'
+        });
+        
+        console.log(lineArray)
+        polyline.setPath(lineArray)
+        polyline.setZIndex(10);
+
+        return polyline
+    }
+
+
 
     // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
     // marker.setMap(null);
@@ -131,7 +177,8 @@ function MapApi() {
 
 
     return {
-        createMap, setController, getInfo, drawKakaoMarker, drawKakaoPolyLine, //getLatLng,
+        createMap, setController, getInfo,  //getLatLng,
+        drawKakaoMarker, drawKakaoPolyLine, drawKakaoBusPolyLine,
     }
 }
 

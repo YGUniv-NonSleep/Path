@@ -1,7 +1,7 @@
 package com.capstone.pathproject.service;
 
 import com.capstone.pathproject.domain.company.Company;
-import com.capstone.pathproject.dto.CompanyDTO;
+import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.CompanyRepository;
@@ -9,7 +9,11 @@ import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class CompanyService {
     public Message<CompanyDTO> createCompany(CompanyDTO companyDTO){
         //Optional<Member> member = memberRepository.findById(companyDTO.getMemberId());
         //System.out.println(companyDTO.toString());
+
         companyRepository.save(companyDTO.toEntity());
         return Message.<CompanyDTO>createMessage()
                 .header(StatusEnum.OK)
@@ -48,39 +53,46 @@ public class CompanyService {
     }
 
     public Message<CompanyDTO> companyDetail(Long companyId) {
-        Optional<Company> cRs =  companyRepository.findById(companyId);
-        Company rs = cRs.get();
+        Optional<Company> findCompany =  companyRepository.findById(companyId);
 
-        CompanyDTO companyDto = CompanyDTO.createCompanyDTD()
-                .id(rs.getId())
-                .name(rs.getName())
-                .companyNumber(rs.getCompanyNumber())
-                .openDate(rs.getOpenDate())
-                .category(rs.getCategory())
-                .mail(rs.getMail())
-                .phone(rs.getPhone())
-                .longitude(rs.getLongitude())
-                .latitude(rs.getLatitude())
-                .member(rs.getMember())
-                .build();
+        if (findCompany.isPresent()){
+            Company result = findCompany.get();
+            CompanyDTO companyDTO = result.toDTO();
 
-        //        CompanyDTO cd = rs.get().toDTO();
-//        CompanyDTO cdd = CompanyDTO.createDTOByCompany()
-//                .c(rs.get())
-//                .build();
+            return Message.<CompanyDTO>createMessage()
+                    .header(StatusEnum.OK)
+                    .message("find Success")
+                    .body(companyDTO)
+                    .build();
+        }else{
+            return Message.<CompanyDTO>createMessage()
+                    .header(StatusEnum.NOT_FOUND)
+                    .message("업체가 없음")
+                    .build();
+        }
 
-//        System.out.println(rs.get().toString());
-//        System.out.println(cd.toString());
-//        System.out.println(cdd.toString());
 
-        //System.out.println(d.toString());
-        //System.out.println(rs.get().getId());
+    }
 
-        return Message.<CompanyDTO>createMessage()
-                .header(StatusEnum.OK)
-                .message("find Success")
-                .body(companyDto)
-                .build();
+    public Message<CompanyDTO> companyDetailByMember(Long memId){
+
+        List<Company> result = companyRepository.findByMemberId(memId);
+
+        ArrayList<CompanyDTO> rs = new ArrayList<>();
+
+       result.stream().map(c -> c.toDTO()).forEach(s-> rs.add(s));
+
+        for(CompanyDTO c : rs) {
+            System.out.println(c);
+      }
+//
+//        while (){
+//            System.out.println("1");
+//        }
+
+        System.out.println(result.get(0));
+
+        return null;
     }
 }
 
