@@ -11,7 +11,7 @@ function MemberPresenter(props) {
       </div>
       <Button onClick={props.testBusiness}>Business</Button>
       <Button onClick={props.testAdmin}>Admin</Button>
-      <Button onClick={props.testReissue}>재발급</Button>
+      <Button onClick={props.tokenReissue}>재발급</Button>
     </Container>
   );
 }
