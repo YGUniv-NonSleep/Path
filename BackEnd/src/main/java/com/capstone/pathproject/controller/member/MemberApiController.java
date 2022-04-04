@@ -23,8 +23,7 @@ public class MemberApiController {
     @PostMapping("/signup")
     public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO) {
         Message<MemberDTO> message = memberService.signup(memberDTO);
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @GetMapping("/test")
