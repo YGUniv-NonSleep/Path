@@ -32,8 +32,11 @@ public class MemberApiController {
     }
 
     @GetMapping("/member/reissue")
-    public ResponseEntity<Message<Object>> reissue(@AuthenticationPrincipal PrincipalDetails principalDetails, HttpServletResponse response) {
+    public ResponseEntity<Message<Object>> reissue(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         String username = principalDetails.getUsername();
+        System.out.println("username = " + username);
+        String loginId = principalDetails.getMember().getLoginId();
+        System.out.println("loginId = " + loginId);
         Message<Object> message = Message.createMessage()
                 .header(StatusEnum.OK)
                 .message("회원이 존재함")
