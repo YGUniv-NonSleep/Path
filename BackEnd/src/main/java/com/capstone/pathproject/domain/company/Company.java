@@ -50,7 +50,8 @@ public class Company {
     @Column(name = "COM_LONG")
     private String longitude;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+            //(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
     private Member member;
 
@@ -84,6 +85,5 @@ public class Company {
                 .phone(this.phone)
                 .build();
     }
-
 
 }

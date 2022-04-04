@@ -3,6 +3,7 @@ package com.capstone.pathproject.dto.company;
 import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.dto.member.MemberDTO;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -51,19 +52,6 @@ public class CompanyDTO {
         this.member = member;
     }
 
-    @Builder(builderMethodName = "createDTOByCompany")
-    public CompanyDTO(Company c) {
-        this.id = c.getId();
-        this.name = c.getName();
-        this.companyNumber = c.getCompanyNumber();
-        this.openDate = c.getOpenDate();
-        this.category = c.getCategory();
-        this.mail = c.getMail();
-        this.phone = c.getPhone();
-        this.longitude = c.getLongitude();
-        this.latitude = c.getLatitude();
-        this.member = c.getMember();
-    }
 
     public Company toEntity() {
         return Company.createCompany()
@@ -76,7 +64,9 @@ public class CompanyDTO {
                 .phone(phone)
                 .member(member)
                 .build();
+    }
 
-
+    public void addMember(Member member){
+        //this.member = member;
     }
 }

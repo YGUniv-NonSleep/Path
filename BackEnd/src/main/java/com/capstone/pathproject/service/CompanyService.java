@@ -1,6 +1,7 @@
 package com.capstone.pathproject.service;
 
 import com.capstone.pathproject.domain.company.Company;
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
@@ -68,8 +69,6 @@ public class CompanyService {
                     .message("업체가 없음")
                     .build();
         }
-
-
     }
 
     public Message<List<CompanyDTO>> companyDetailByMember(Long memId){
@@ -77,11 +76,12 @@ public class CompanyService {
         List<Company> result = companyRepository.findByMemberId(memId);
 
         ArrayList<CompanyDTO> rs = new ArrayList<>();
-        result.stream().map(Company::toDTO).forEach(rs::add);
+        result.stream().map(company -> company.toDTO()).forEach(rs::add);
 
-        for(CompanyDTO c : rs) {
-            System.out.println(c);
-      }
+//        for(CompanyDTO c : rs) {
+//  //          c.addMember(member.get());
+//            System.out.println(c);
+//      }
 
         return Message.<List<CompanyDTO>>createMessage()
                 .message("업체 조회 성공")

@@ -75,11 +75,12 @@ public class ProductApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @GetMapping("/company")
-    public ResponseEntity<Message<List<ProductDTO>>> productListByCompany(@RequestBody CompanyDTO companyDTO){
-         productService.productListByCompany(companyDTO);
+    //업체 별 상품 조회
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<Message<List<ProductDTO>>> productListByCompany(@PathVariable("companyId")Long companyId ){
+         Message<List<ProductDTO>> message = productService.productListByCompany(companyId);
 
-        return null;
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PostMapping("/createOption")

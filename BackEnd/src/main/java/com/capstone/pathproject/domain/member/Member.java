@@ -1,5 +1,6 @@
 package com.capstone.pathproject.domain.member;
 
+import com.capstone.pathproject.dto.member.MemberDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -79,9 +80,27 @@ public class Member {
         this.score = 100;
 
         if (birthday.isEmpty()) {
-            this.birthday = null;
+            this.birthday = LocalDate.now();
         } else {
             this.birthday = LocalDate.parse(birthday);
         }
     }
+
+//    public MemberDTO toDTO(Member member){
+//        return MemberDTO.createMemberDTO()
+//                .addr(this.addr)
+//                .phone(this.phone)
+//                .addrDetail(this.addrDetail)
+//                .birthday(String.valueOf(this.birthday))
+//                .phone(this.phone)
+//                .gender(this.gender)
+//                .loginId(this.loginId)
+//                .name(this.name)
+//                .mail(this.mail)
+//                .password(this.password)
+//                .account(this.account)
+//                .score(this.score)
+//                .build();
+//    }
+
 }

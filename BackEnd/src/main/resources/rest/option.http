@@ -1,4 +1,4 @@
-POST http://localhost:8080/api/product/createOption
+POST https://localhost:8080/api/product/createOption
 Content-Type: application/json
 
 {
@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/api/product/createDetailOption
+POST https://localhost:8080/api/product/createDetailOption
 Content-Type: application/json
 
 {

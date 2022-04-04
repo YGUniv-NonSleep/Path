@@ -7,7 +7,7 @@ GET http://localhost:8080/api/product/1
 Accept: application/json
 
 ###
-POST http://localhost:8080/api/product/createProduct
+POST https://localhost:8080/api/product/createProduct
 Content-Type: application/json
 
 {
@@ -19,9 +19,17 @@ Content-Type: application/json
   "company": {
     "id": 1
   },
-  "prodbasic": {
+  "prodBasic": {
     "id": 1
-  }
+  },
+  "optionList": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    }
+  ]
 }
 
 

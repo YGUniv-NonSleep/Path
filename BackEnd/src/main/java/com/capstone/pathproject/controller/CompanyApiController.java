@@ -5,6 +5,8 @@ import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.CompanyRepository;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
+import com.capstone.pathproject.security.util.JwtTokenUtil;
 import com.capstone.pathproject.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +39,7 @@ public class CompanyApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
 
     }
+
 
     @GetMapping("/{comId}")
     public ResponseEntity<Message<CompanyDTO>> companyDetail(@PathVariable("comId") Long comId) {
