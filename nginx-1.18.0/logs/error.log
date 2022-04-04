@@ -1,0 +1,3 @@
+2022/03/08 15:34:22 [emerg] 5112#22836: CreateDirectory() "C:\Users\bon300-19\Desktop\Path\nginx-1.18.0/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2022/03/29 21:14:20 [alert] 10324#1952: worker process 11824 exited with code C0000142
+2022/03/29 21:14:20 [alert] 10324#1952: could not respawn worker

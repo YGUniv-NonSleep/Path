@@ -1,16 +1,17 @@
 package com.capstone.pathproject.domain.community;
 
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.dto.PostDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -35,8 +36,8 @@ public class Post {
     private PostType type;
 
     @OneToOne
-    @JoinColumn(name = "POST_PARENT_ID")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "POST_PARENT_ID")
     private Post parent;
 
     @Column(name = "POST_TITLE")
@@ -67,6 +68,20 @@ public class Post {
         this.view = view;
         this.writeDate = LocalDate.now();
         this.photoName = photoName;
+    }
+
+    public PostDTO toDTO(){
+        return PostDTO.createPostDTO()
+                .member(this.member)
+                .type(this.type)
+                .view(this.view)
+                .writeDate(this.writeDate)
+                .content(this.content)
+                .title(this.title)
+                .parent(this.parent)
+                .photoName(this.photoName)
+                .id(this.id)
+                .build();
     }
 
 }
