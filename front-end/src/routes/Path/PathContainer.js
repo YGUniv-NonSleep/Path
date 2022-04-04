@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
 import MapApi from "../../MapApi";
-import { PathApi } from "../../OdsayApi"
+import { PathApi } from "../../OdsayApi";
+import { JusoApi } from "../../JusoApi";
 
 function PathContainer() {
     const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
     const [way, setWay] = useState(null); // 찾은 경로
 
+    const options = ['포항 1', '부산 2', '포항 3', '부산 4']; // 주소들을 담아줄 배열
+    const [jusoValue, setJusoValue] = useState(options); // 가져온 주소 받아서 띄워줄 배열 state
+    const [startPoint, setStartPoint] = useState('');
+    const [arrivalPoint, setArrivalPoint] = useState('');
+
+
+    // 카카오 지도를 불러오는 함수
     // MapApi 기능들 전부 함수화 시키기 호출할 때마다 필요 없는 것도 많이 호출 함.
     async function mapLoad() {
         try {
@@ -22,6 +30,32 @@ function PathContainer() {
         }
     }
 
+
+    // 출발지를 저장하는 함수
+    const onchangeSP = (e, sp) => {
+        // setStartPoint(e.target.innerText)
+        setStartPoint(sp)
+        // console.log(sp)
+        console.log(JusoApi.getJuso('원서'))
+    }
+    // 도착지를 저장하는 함수
+    const onchangeAP = (e, ap) => {
+        setArrivalPoint(ap);
+        // console.log(ap)
+    }
+    // 다시입력을 수행하는 함수
+    const refreshPoints = (e) => {
+        // console.log(e.target)
+        setStartPoint('')
+        setArrivalPoint('');
+    }
+
+    // console.log(startPoint)
+    // console.log(arrivalPoint)
+
+
+    // 길 찾기를 수행하는 함수
+    // 사용자 입력에 조건 추가 요망.
     async function wayFind() {
         try {
             // 출발지, 도착지의 위도, 경도를 얻어왔다고 가정
@@ -82,12 +116,14 @@ function PathContainer() {
         }
     }
 
+    // 맵의 정보를 가져옴
     async function getMapInfo(mapData) {
         let info = await MapApi().getInfo(mapData);
         console.log(info)
         return info
     }
 
+    // 맵을 옆으로 보기좋게 이동시켜줌
     function moveMapLatLon(data) {
         let moveLatLon = new kakao.maps.LatLng(data.Ma, data.La-0.038);
         return moveLatLon
@@ -102,26 +138,29 @@ function PathContainer() {
     //     }
     // }
 
+    // mapClickEvent()
+
+
     // 처음 접속시 세팅 Effect Hook
     useEffect(() => {
         mapLoad()
     }, []);
 
-    // 길 찾기 Hook
     useEffect(() => {
-        // wayFind()
-    }, [map])
-
-    useEffect(() => {
-        getMapInfo(map)
-        // mapClickEvent()
+        //getMapInfo(map)
     }, [map]);
 
     return (
         <PathPresenter 
             loading = {loading}
-        >
-            </PathPresenter>
+            jusoValue = {jusoValue}
+            startPoint = {startPoint}
+            arrivalPoint = {arrivalPoint}
+            onchangeSP = {onchangeSP}
+            onchangeAP = {onchangeAP}
+            refreshPoints = {refreshPoints}
+            wayFind = {wayFind}
+        ></PathPresenter>
     )
 }
 
