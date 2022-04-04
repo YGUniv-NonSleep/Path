@@ -126,10 +126,9 @@ function SignUpPresenter(props) {
                     name="email"
                     label="이메일 주소"
                     onChange={props.handleInput}
-                    error={emailError !== '' || false} // error 속성은 오류 발생시 input 빨갛게 해줌, 공백아닐때 에러발생
+                    error={emailError !== '' || false}
                   />
                 </Grid>
-                {/* 해당 텍스트필드에 맞는 Error 코드넣음 */}
                 <FormHelperTexts>{emailError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField

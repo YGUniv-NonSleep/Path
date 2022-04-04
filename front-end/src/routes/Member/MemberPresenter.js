@@ -9,8 +9,9 @@ function MemberPresenter(props) {
       <div className="Member">
         {props.loading ? <p>맴버 화면 나왔다</p> : <h2>로드 중...</h2>}
       </div>
-      <Button onClick={props.testSubmit}>테스트버튼</Button>
-      <Button onClick={props.testUserSubmit}>테스트버튼</Button>
+      <Button onClick={props.testBusiness}>Business</Button>
+      <Button onClick={props.testAdmin}>Admin</Button>
+      <Button onClick={props.tokenReissue}>재발급</Button>
     </Container>
   );
 }
