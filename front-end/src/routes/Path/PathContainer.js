@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
 import MapApi from "../../MapApi";
-import { PathApi } from "../../OdsayApi";
-import { JusoApi } from "../../JusoApi";
 
 function PathContainer() {
     const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
     const [way, setWay] = useState(null); // 찾은 경로
 
-    const options = ['포항 1', '부산 2', '포항 3', '부산 4']; // 주소들을 담아줄 배열
+    const options = []; // 주소들을 담아줄 배열
     const [jusoValue, setJusoValue] = useState(options); // 가져온 주소 받아서 띄워줄 배열 state
+
     const [startPoint, setStartPoint] = useState('');
     const [arrivalPoint, setArrivalPoint] = useState('');
+    const [insertPoint, setInsertPoint] = useState('');
 
 
     // 카카오 지도를 불러오는 함수
@@ -34,24 +34,49 @@ function PathContainer() {
     // 출발지를 저장하는 함수
     const onchangeSP = (e, sp) => {
         // setStartPoint(e.target.innerText)
+        setInsertPoint(sp)
         setStartPoint(sp)
         // console.log(sp)
-        console.log(JusoApi.getJuso('원서'))
     }
     // 도착지를 저장하는 함수
     const onchangeAP = (e, ap) => {
-        setArrivalPoint(ap);
+        setInsertPoint(ap)
+        setArrivalPoint(ap)
         // console.log(ap)
     }
     // 다시입력을 수행하는 함수
     const refreshPoints = (e) => {
         // console.log(e.target)
+        setInsertPoint('')
         setStartPoint('')
-        setArrivalPoint('');
+        setArrivalPoint('')
     }
 
     // console.log(startPoint)
     // console.log(arrivalPoint)
+
+    useEffect(() => {
+        // 장소 검색 객체를 생성합니다
+        const ps = new kakao.maps.services.Places();
+
+        ps.keywordSearch(insertPoint, function(result, status, pagination){
+            if(status === daum.maps.services.Status.OK){
+                console.log(result)
+                let k = result.map((item)=>{
+                    return {
+                        pN: item.place_name,
+                        aN: item.address_name
+                    }
+                })
+                // console.log(k)
+                options.push(k)
+                // setJusoValue(option)
+                // console.log(options)
+            } else return "몬가... 잘못됨.."
+        })
+
+    }, [insertPoint])
+    // console.log(jusoValue)
 
 
     // 길 찾기를 수행하는 함수

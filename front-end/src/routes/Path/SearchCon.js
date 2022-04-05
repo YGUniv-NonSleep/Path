@@ -31,7 +31,7 @@ const DirectionSummaryList = styled.div`
 // margin-top: 90px;
 
 function SearchCon(props) {
-    console.log(props.juso)
+    // console.log(props.juso)
   return (
     <>
       <SideNav>
