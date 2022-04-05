@@ -8,8 +8,8 @@ function MemberContainer() {
 
   useEffect(() => {
     setLoading((current) => !current);
-    console.log('AccessToken 재발급');
     tokenReissue();
+    console.log('AccessToken 재발급');
   }, []);
 
   // === AccessToken 재발급 == //
@@ -25,9 +25,11 @@ function MemberContainer() {
         axios.defaults.headers.common['authorization'] = authorization;
         console.log('AccessToken 발급 완료');
         tokenDecode(authorization);
+        return true;
       })
       .catch((err) => {
         console.log(err);
+        return false;
       });
   };
 

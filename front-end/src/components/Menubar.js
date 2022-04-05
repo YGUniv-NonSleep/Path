@@ -1,20 +1,22 @@
-import styled from "styled-components";
-import { NavLink, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import pathLogo from "../assets/path_logo.svg";
-import PathRouteElement from "./PathRouteElement";
-import CompRouteElement from "./CompRouteElement";
+import styled from 'styled-components';
+import { NavLink, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import pathLogo from '../assets/path_logo.svg';
+import PathRouteElement from './PathRouteElement';
+import CompRouteElement from './CompRouteElement';
+import jwt_decode from 'jwt-decode';
+import axios from 'axios';
 
 const NavContainer = styled.nav`
   display: flex;
   flex-direction: column;
   position: fixed;
-  
+
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(3px);
   z-index: 100;
   padding: 0 0 40 0px;
-  
+
   width: 95px;
   height: 100%;
   @media (max-height: 768px) {
@@ -28,14 +30,13 @@ const Ul = styled.ul`
   display: flex-inline;
   align-items: center;
   width: 100%;
-  
 `;
 
 const BtnUl = styled.ul`
   display: flex-inline;
   align-items: center;
   width: 100%;
-  position:absolute;
+  position: absolute;
   top: 90%;
 `;
 
@@ -69,7 +70,7 @@ const Button = styled.button`
   padding: 1.5em 4em;
   position: relative;
   text-transform: uppercase;
-  ::before;
+  ::before ;
 
   ::after {
     -webkit-transition: all 0.3s;
@@ -84,16 +85,14 @@ const Button = styled.button`
     left: 0;
     top: 0;
     width: 0;
-  };
-  
+  }
+
   &:hover {
-    color:#E30914 ;
-    
-  };
+    color: #e30914;
+  }
   &:hover:after {
     width: 100%;
   }
-
 `;
 
 const ScLink = styled(NavLink)`
@@ -101,7 +100,7 @@ const ScLink = styled(NavLink)`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${(props) => (props.$current ? "#E30914" : "white")};
+  color: ${(props) => (props.$current ? '#E30914' : 'white')};
   @media (max-width: 768px) {
     height: 50px;
   }
@@ -111,9 +110,59 @@ const Menubar = () => {
   const location = useLocation();
   const [currLocation, setCurrLocation] = useState(null);
 
-  useEffect(()=>{
+  useEffect(() => {
     setCurrLocation(location.pathname);
   }, [location]);
+
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    tokenReissue();
+  }, []);
+
+  // === AccessToken 재발급 == //
+  const tokenReissue = () => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/member/reissue', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data.message);
+        const authorization = res.headers.authorization;
+        // 이후 모든 axios 요청 헤더에 access token값 붙여서 보냄.
+        axios.defaults.headers.common['authorization'] = authorization;
+        console.log('AccessToken 발급 완료');
+        const decoded = tokenDecode(authorization);
+        setUsername(decoded.name);
+      })
+      .catch((err) => {
+        console.log(err);
+        setUsername('');
+      });
+  };
+
+  // === AccessToken 값 디코딩 === //
+  const tokenDecode = (authorization) => {
+    var decoded = jwt_decode(authorization);
+    console.log(decoded);
+    return decoded;
+  };
+
+  // === 로그아웃 진행 === //
+  const userLogOut = () => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/logout', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        console.log('로그아웃');
+        window.location.href = '/';
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <NavContainer>
@@ -125,11 +174,17 @@ const Menubar = () => {
       <PathRouteElement></PathRouteElement>
       <CompRouteElement></CompRouteElement>
       <BtnUl>
-        <Li $current={currLocation === "/login" && true}>
-          <ScLink to="/login" $current={currLocation === "/login" && true}>
-            <Button>회원</Button>
-          </ScLink>
-        </Li>
+        {username != '' ? (
+          <Li $current={currLocation === '/logout' && true}>
+            <Button onClick={userLogOut}>로그아웃</Button>
+          </Li>
+        ) : (
+          <Li $current={currLocation === '/login' && true}>
+            <ScLink to="/login" $current={currLocation === '/login' && true}>
+              <Button>회원</Button>
+            </ScLink>
+          </Li>
+        )}
       </BtnUl>
     </NavContainer>
   );

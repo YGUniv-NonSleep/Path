@@ -4,6 +4,8 @@ import com.capstone.pathproject.dto.member.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
+import com.capstone.pathproject.security.auth.jwt.JwtProperties;
+import com.capstone.pathproject.security.util.CookieUtil;
 import com.capstone.pathproject.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Collection;
@@ -24,11 +27,27 @@ import java.util.Collection;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final CookieUtil cookieUtil;
 
     @PostMapping("/signup")
     public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO) {
         Message<MemberDTO> message = memberService.signup(memberDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie refreshTokenCookie = new Cookie(JwtProperties.REFRESH_HEADER_STRING, null);
+        refreshTokenCookie.setMaxAge(0);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        response.addCookie(refreshTokenCookie);
+        cookieUtil.addSameSite(response, "None");
+        Message<Object> message = Message.createMessage()
+                .header(StatusEnum.OK)
+                .message("로그아웃 성공")
+                .build();
+        return new ResponseEntity(message, HttpStatus.OK);
     }
 
     @GetMapping("/member/reissue")
