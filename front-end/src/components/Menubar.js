@@ -37,7 +37,7 @@ const BtnUl = styled.ul`
   align-items: center;
   width: 100%;
   position: absolute;
-  top: 90%;
+  top: 85%;
 `;
 
 const Image = styled.div`
@@ -66,7 +66,8 @@ const Button = styled.button`
   color: #fff;
   display: block;
   font-size: 0.4em;
-  margin: 1em auto;
+  margin: 2em auto;
+
   padding: 1.5em 4em;
   position: relative;
   text-transform: uppercase;
@@ -137,7 +138,6 @@ const Menubar = () => {
       })
       .catch((err) => {
         console.log(err);
-        setUsername('');
       });
   };
 
@@ -156,12 +156,17 @@ const Menubar = () => {
       })
       .then((res) => {
         console.log(res);
+        setUsername('');
         console.log('로그아웃');
         window.location.href = '/';
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const clickToMember = () => {
+    window.location.href = '/member';
   };
 
   return (
@@ -172,10 +177,11 @@ const Menubar = () => {
         </Image>
       </Ul>
       <PathRouteElement></PathRouteElement>
-      <CompRouteElement></CompRouteElement>
+      {/* <CompRouteElement></CompRouteElement> */}
       <BtnUl>
         {username != '' ? (
           <Li $current={currLocation === '/logout' && true}>
+            <Button onClick={clickToMember}>내 정보</Button>
             <Button onClick={userLogOut}>로그아웃</Button>
           </Li>
         ) : (
