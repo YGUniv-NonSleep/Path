@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "name": "sad",
-  "proId": 1
+  "proId": 3
 }
 
 ###
@@ -13,5 +13,8 @@ Content-Type: application/json
 {
   "name": "String",
   "price": 4000,
-  "optionId": 2
+  "optionId": 7
 }
+###
+
+DELETE https://localhost:8080/api/product/deleteOption/17

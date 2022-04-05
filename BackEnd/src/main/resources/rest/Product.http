@@ -24,13 +24,35 @@ Content-Type: application/json
   },
   "optionList": [
     {
-      "id": 1
+      "name": "샷추가",
+      "detailOptionList": [
+        {
+          "name": "1샷추가",
+          "price": 300
+        },
+        {
+          "name": "2샷추가",
+          "price": 500
+        }
+      ]
     },
     {
-      "id": 2
+      "name": "온도",
+      "detailOptionList": [
+        {
+          "name": "차갑게",
+          "price": 0
+        },
+        {
+          "name": "뜨겁게",
+          "price": 0
+        }
+      ]
     }
   ]
 }
+
+
 
 
 ###
@@ -57,5 +79,5 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:8080/api/product/deleteProduct/4
+DELETE https://localhost:8080/api/product/deleteProduct/3
 

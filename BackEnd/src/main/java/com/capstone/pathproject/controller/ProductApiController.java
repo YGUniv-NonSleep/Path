@@ -29,8 +29,8 @@ public class ProductApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteBasic")
-    public ResponseEntity<Message> deleteBasic(@RequestParam("basicId") Long basicId){
+    @DeleteMapping("/deleteBasic/{basicId}")
+    public ResponseEntity<Message> deleteBasic(@PathVariable("basicId") Long basicId){
         Message message = productService.deleteBasic(basicId);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
@@ -114,7 +114,7 @@ public class ProductApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteDetailOption")
+    @DeleteMapping("/deleteDetailOption/{DetailOptionId}")
     public ResponseEntity<Message<DetailOptionDTO>> deleteDetailOption(@PathVariable("DetailOptionId")Long detailOptionId){
         Message message = productService.deleteDetailOption(detailOptionId);
         System.out.println(message);

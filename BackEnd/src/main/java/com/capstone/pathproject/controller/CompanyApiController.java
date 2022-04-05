@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +28,7 @@ public class CompanyApiController {
 
     private final CompanyService companyService;
 
-    @GetMapping("/myCompany")
+    @GetMapping("/store")
     public ResponseEntity myCompany() {
 //        Optional<Company> company = companyRepository.findById(1L);
 //        System.out.println(company.get().getCompanyNumber());
@@ -34,6 +36,9 @@ public class CompanyApiController {
 //        System.out.println(company.get().getMember().getLoginId());
 //        return null;
 //        //로그인 기능 추가 후 작성
+         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+
         Message<List<CompanyDTO>> message = companyService.companyDetailByMember(1L);
 
         return new ResponseEntity<>(message, HttpStatus.OK);
@@ -53,8 +58,8 @@ public class CompanyApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public Message deleteCompany(@RequestParam("comId") Long comId) {
+    @DeleteMapping("/delete/{comId}")
+    public Message deleteCompany(@PathVariable("comId") Long comId) {
         Message message = companyService.deleteCompany(comId);
         return message;
     }
