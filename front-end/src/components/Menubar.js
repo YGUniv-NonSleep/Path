@@ -124,11 +124,11 @@ const Menubar = () => {
   // === AccessToken 재발급 == //
   const tokenReissue = () => {
     axios
-      .get(process.env.REACT_APP_SPRING_API + '/api/member/reissue', {
+      .post(process.env.REACT_APP_SPRING_API + '/api/token', '', {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data.message);
+        console.log(res.data);
         const authorization = res.headers.authorization;
         // 이후 모든 axios 요청 헤더에 access token값 붙여서 보냄.
         axios.defaults.headers.common['authorization'] = authorization;
@@ -151,7 +151,7 @@ const Menubar = () => {
   // === 로그아웃 진행 === //
   const userLogOut = () => {
     axios
-      .get(process.env.REACT_APP_SPRING_API + '/api/logout', {
+      .delete(process.env.REACT_APP_SPRING_API + '/api/token', {
         withCredentials: true,
       })
       .then((res) => {

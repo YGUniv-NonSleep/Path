@@ -16,9 +16,6 @@ function LoginContainer() {
       [name]: value,
     });
   };
-  useEffect(() => {
-    console.log('마운트 될 때만 실행');
-  }, []);
   // ========== 로그인 유효성 검사 ==========//
   const isValidLoginId =
     loginId.length >= 4 && loginId != '' && loginId != ' ' && loginId != null;
