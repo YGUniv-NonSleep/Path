@@ -95,14 +95,15 @@ public class PostApiController {
     @GetMapping("/view/search")
     public ResponseEntity search(String keyword, @PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
         Message<List<PostDTO>> message = postService.search(keyword,pageable);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
     @GetMapping("/view/{postId}")
     public ResponseEntity read(@PathVariable("postId") Long id, Model model){
         Message<List<PostDTO>> message = postService.updateView(id);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        //model.addAttribute("view",postService.updateView(id));
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 

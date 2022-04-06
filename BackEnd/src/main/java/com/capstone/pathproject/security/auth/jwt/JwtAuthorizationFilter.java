@@ -138,6 +138,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         reissueAccessToken(request, response, principalDetails);
         // RefreshToken 생성 및 쿠키 추가
         reissueRefreshToken(request, response, principalDetails);
+        cookieUtil.addSameSite(response, "None");
         log.info("토큰 재발급 완료 : AccessToken, RefreshToken [{}]", request.getRequestURI());
     }
 
