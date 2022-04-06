@@ -1,8 +1,12 @@
-POST http://localhost:8080/api/product/createBasic
+POST https://localhost:8080/api/product/createBasic
 Content-Type: application/json
 
 {
-
+  "name": "String",
+  "image": "String",
+  "detail": "String",
+  "brand": "String",
+  "category": "String"
 }
 
 ###

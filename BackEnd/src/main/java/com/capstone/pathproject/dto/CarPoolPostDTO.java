@@ -29,7 +29,7 @@ public class CarPoolPostDTO {
     private String picture;
 
     @Builder(builderMethodName = "createCarPoolDTO")
-    public CarPoolPostDTO(Long id, Member member, Vehicle vehicle,String title, String content, LocalDate start, LocalDate end, Integer recruit,
+    public CarPoolPostDTO(Long id, Member member, Vehicle vehicle, String title, String content, LocalDate start, LocalDate end, Integer recruit,
                           Long startLongitude, Long startLatitude, Long arrLongitude, Long arrLatitude, LocalDateTime startTime, String picture){
 
         this.id = id;

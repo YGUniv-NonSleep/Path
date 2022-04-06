@@ -1,15 +1,12 @@
 package com.capstone.pathproject.controller;
 
-import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.product.DetailOptionDTO;
 import com.capstone.pathproject.dto.product.OptionDTO;
 import com.capstone.pathproject.dto.product.ProdBasicDTO;
 import com.capstone.pathproject.dto.product.ProductDTO;
 import com.capstone.pathproject.dto.response.Message;
-import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +26,8 @@ public class ProductApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteBasic")
-    public ResponseEntity<Message> deleteBasic(@RequestParam("basicId") Long basicId){
+    @DeleteMapping("/deleteBasic/{basicId}")
+    public ResponseEntity<Message> deleteBasic(@PathVariable("basicId") Long basicId){
         Message message = productService.deleteBasic(basicId);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
@@ -75,11 +72,12 @@ public class ProductApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @GetMapping("/company")
-    public ResponseEntity<Message<List<ProductDTO>>> productListByCompany(@RequestBody CompanyDTO companyDTO){
-         productService.productListByCompany(companyDTO);
+    //업체 별 상품 조회
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<Message<List<ProductDTO>>> productListByCompany(@PathVariable("companyId")Long companyId ){
+         Message<List<ProductDTO>> message = productService.productListByCompany(companyId);
 
-        return null;
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PostMapping("/createOption")
@@ -113,7 +111,7 @@ public class ProductApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteDetailOption")
+    @DeleteMapping("/deleteDetailOption/{DetailOptionId}")
     public ResponseEntity<Message<DetailOptionDTO>> deleteDetailOption(@PathVariable("DetailOptionId")Long detailOptionId){
         Message message = productService.deleteDetailOption(detailOptionId);
         System.out.println(message);

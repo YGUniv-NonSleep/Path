@@ -15,8 +15,10 @@ import com.capstone.pathproject.repository.product.OptionRepository;
 import com.capstone.pathproject.repository.product.ProdBasicRepository;
 import com.capstone.pathproject.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,17 +65,10 @@ public class ProductService {
     }
     //ProdBasic
     public Message<ProdBasicDTO> basicDetail(Long prodBasicId) {
-        Optional<ProdBasic> pb = prodBasicRepository.findById(prodBasicId);
-        ProdBasic rs = pb.get();
 
-        ProdBasicDTO prodBasicDTO = ProdBasicDTO.createProdBasicDTO()
-                .id(rs.getId())
-                .name(rs.getName())
-                .image(rs.getImage())
-                .detail(rs.getDetail())
-                .brand(rs.getBrand())
-                .categori(rs.getCategori())
-                .build();
+
+        Optional<ProdBasic> result = prodBasicRepository.findById(prodBasicId);
+        ProdBasicDTO prodBasicDTO = result.get().toDTO();
 
         return Message.<ProdBasicDTO>createMessage()
                 .header(StatusEnum.OK)
@@ -117,7 +112,6 @@ public class ProductService {
         //System.out.println(rs.toString());
         System.out.println(rs.getOptionList());
 
-
         ProductDTO result = ProductDTO.createProductDTO()
                 .prodbasic(rs.getProdbasic())
                 .company(rs.getCompany())
@@ -139,17 +133,28 @@ public class ProductService {
                 .build();
     }
 
-    public Message<List<ProductDTO>> productListByCompany(CompanyDTO companyDTO){
-        List<Product> rs = productRepository.findByCompany(companyDTO.toEntity());
+    public Message<List<ProductDTO>> productListByCompany(Long companyId){
 
-        System.out.println(rs);
+        List<Product> result = productRepository.findByCompanyId(companyId);
 
-        return null;
-//        return Message.<List<ProductDTO>>createMessage()
-//                .header(StatusEnum.OK)
-//                .message("Product find Success")
-//                .body()
-//                .build();
+//        for(Product p: result){
+//            System.out.println(
+//                    p.toString() + "1"
+//            );
+//        }
+
+        ArrayList<ProductDTO> rs = new ArrayList<>();
+        result.stream().map(product -> product.toDTO()).forEach(productDTO -> rs.add(productDTO));
+
+        for (ProductDTO p : rs){
+            System.out.println(p);
+        }
+
+        return Message.<List<ProductDTO>>createMessage()
+                .message("상품 조회 성공")
+                .body(rs)
+                .header(StatusEnum.OK)
+                .build();
     }
 
     //public Message<Product> productListBy
