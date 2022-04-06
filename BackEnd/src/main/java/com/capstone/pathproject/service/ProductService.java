@@ -3,7 +3,6 @@ package com.capstone.pathproject.service;
 import com.capstone.pathproject.domain.company.Option;
 import com.capstone.pathproject.domain.company.ProdBasic;
 import com.capstone.pathproject.domain.company.Product;
-import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.product.DetailOptionDTO;
 import com.capstone.pathproject.dto.product.OptionDTO;
 import com.capstone.pathproject.dto.product.ProdBasicDTO;
@@ -15,7 +14,6 @@ import com.capstone.pathproject.repository.product.OptionRepository;
 import com.capstone.pathproject.repository.product.ProdBasicRepository;
 import com.capstone.pathproject.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,13 +30,10 @@ public class ProductService {
     private final DetailOptionRepository detailOptionRepository;
 
     //ProdBasic create
-    public Message<ProdBasicDTO> createBasic(ProdBasicDTO prodBasicDTO) {
-        System.out.println(prodBasicDTO.toString());
-
-        ProdBasic d = prodBasicDTO.toEntity();
-        System.out.println(d.toString());
-
+    public Message<ProdBasicDTO> createBasic(ProdBasicDTO prodBasicDTO, String fileName) {
+        prodBasicDTO.addFile(fileName);
         prodBasicRepository.save(prodBasicDTO.toEntity());
+
         return Message.<ProdBasicDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("ProdBasic Create Success")
@@ -54,7 +49,9 @@ public class ProductService {
                 .build();
     }
     //ProdBasic updete
-    public Message<ProdBasicDTO> updateBasic(ProdBasicDTO prodBasicDTO){
+    public Message<ProdBasicDTO> updateBasic(ProdBasicDTO prodBasicDTO, String fileName){
+
+        prodBasicDTO.addFile(fileName);
         prodBasicRepository.save(prodBasicDTO.toEntity());
 
         return Message.<ProdBasicDTO>createMessage()

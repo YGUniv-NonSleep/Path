@@ -38,7 +38,7 @@ public class ProdBasicDTO {
     }
 
 
-
-
-
+    public void addFile(String fileName) {
+        this.image = fileName;
+    }
 }
