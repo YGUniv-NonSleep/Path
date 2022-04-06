@@ -3,6 +3,7 @@ import styled from "styled-components";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
+import Icon from "../../../components/Icon";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -18,12 +19,12 @@ const BarContainer = styled.div`
   z-index: 10
   width: 390px;
   height: 90%;
-  margin-top: 90px;
+  margin-top: 150px;
 `;
 
 const Ul = styled.ul`
   position: fixed;
-  top: 10px;
+  top: 75px;
   left: 110px;
 `;
 
@@ -45,7 +46,7 @@ const Station = styled.button`
 
 const Text = styled.p`
   position: absolute;
-  top: 190px;
+  top: 230px;
   left: 15px;
   font-size: 13px;
   font-weight: bold;
@@ -53,7 +54,7 @@ const Text = styled.p`
 
 const Line = styled.hr`
   position: absolute;
-  top: 210px;
+  top: 250px;
   left: 15px;
   width: 350px;
   height: 1px;
@@ -63,7 +64,7 @@ const Line = styled.hr`
 
 const Text1 = styled.p`
   position: absolute;
-  top: 350px;
+  top: 400px;
   left: 15px;
   font-size: 13px;
   font-weight: bold;
@@ -71,7 +72,7 @@ const Text1 = styled.p`
 
 const Line1 = styled.hr`
   position: absolute;
-  top: 370px;
+  top: 420px;
   left: 15px;
   width: 350px;
   height: 1px;
@@ -82,6 +83,7 @@ const Line1 = styled.hr`
 const Bus = () => {
   return (
     <SideNav>
+      <Icon></Icon>
       <Ul>
         <Btn>버스</Btn>
         <Station>버스정류장</Station>

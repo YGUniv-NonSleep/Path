@@ -22,13 +22,7 @@ const BarContainer = styled.div`
   margin-top: 90px;
 `;
 
-const Ul = styled.ul`
-  position: fixed;
-  top: 10px;
-  left: 110px;
-`;
-
-const Subway = () => {
+const Scooter = () => {
   return (
     <SideNav>
       <Icon />
@@ -50,4 +44,4 @@ const Subway = () => {
   );
 };
 
-export default Subway;
+export default Scooter;
