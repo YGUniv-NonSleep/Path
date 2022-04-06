@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), redisTemplate, jwtTokenUtil, cookieUtil))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository, redisTemplate, jwtTokenUtil, cookieUtil))
                 .authorizeRequests()
-                .antMatchers("/api/member/**").hasAnyRole("ADMIN", "BUSINESS", "MEMBER")
+                .antMatchers("/api/member/**", "/api/token/**").hasAnyRole("ADMIN", "BUSINESS", "MEMBER")
                 .antMatchers("/api/business/**").hasAnyRole("ADMIN", "BUSINESS")
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
