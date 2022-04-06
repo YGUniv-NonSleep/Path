@@ -4,19 +4,14 @@ import OderPresenter from "./OderPresenter"
 
 function OderContainer() {
     const [loading, setLoading] = useState(false);
-    //const [formInfo, setFormInfo] = useState(null);
+    const [formInfo, setFormInfo] = useState(null);
 
     useEffect(() => {
         setLoading((current) => !current);
-        
     }, []);
 
-    const res = null;
-
-    function oderSubmit(e) {
+    function compFormSubmit(e) {
         e.preventDefault();
-
-        console.log('ㅎㅇㅎㅇ')
 
         const data = {    
             "name": e.target.name.value,
@@ -31,22 +26,38 @@ function OderContainer() {
                 "id":1
             }           
         }
-
-        //const json = JSON.parse(data)
-        // const json = JSON.stringify(data)
-        console.log(data)
-
-        // console.log(data)
-        //setFormInfo(data)
-
-        axios.post(
-            process.env.REACT_APP_SPRING_API +"/api/company/create",data
-        ).then((res)=>{
-            console.log(res)
-        }).catch((err)=>{
-            console.log(err)
-        })
+        setFormInfo(data)
     }
+
+    function createCompany() {
+        if(formInfo != null){
+            console.log(formInfo)
+            // axios.post(
+            //     process.env.REACT_APP_SPRING_API +"/api/company", formInfo
+            // ).then((res)=>{
+            //     console.log(res)
+            // }).catch((err)=>{
+            //     console.log(err)
+            // })
+        } else return
+    }
+
+    useEffect(() => {
+        createCompany()
+    }, [formInfo])
+
+    const test = (event) => {
+        event.preventDefault();
+        axios.get(
+            process.env.REACT_APP_SPRING_API+"/api/company/1"
+            //"https://localhost:8080/api/company/1"
+            )
+            .then((res) => {
+                console.log(res);        
+          }).catch((err) => {
+                console.log(err);            
+          });
+      };
 
     // useEffect(()=>{
     //     console.log(formInfo)
@@ -58,8 +69,9 @@ function OderContainer() {
     return (
         <OderPresenter 
             loading = {loading}
-            onSubmit = {oderSubmit}
-            res = {res}
+            createCompany = {createCompany}
+            test = {test}
+            compFormSubmit = {compFormSubmit}
         >
             </OderPresenter>
     )

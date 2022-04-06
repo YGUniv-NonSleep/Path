@@ -1,5 +1,5 @@
 import SignUpPresenter from './SignUpPresenter';
-import { useEffect, useState, React } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
@@ -37,12 +37,12 @@ function SignUpContainer() {
     });
   };
 
-  const [birthday, setBirtyday] = useState(null);
+  const [birthday, setBirthday] = useState(null);
 
-  const handleBirtyday = (date) => {
+  const handleBirthday = (date) => {
     console.log(date);
     console.log(dayjs(date).format('YYYY-MM-DD'));
-    setBirtyday(dayjs(date).format('YYYY-MM-DD'));
+    setBirthday(dayjs(date).format('YYYY-MM-DD'));
   };
 
   // ====== 회원가입 입력 유효성 검사 ====== //
@@ -189,7 +189,7 @@ function SignUpContainer() {
       handleInput={handleInput}
       handleAgree={handleAgree}
       errorList={errorList}
-      handleBirtyday={handleBirtyday}
+      handleBirthday={handleBirthday}
       inputValue={inputValue}
       birthday={birthday}
     ></SignUpPresenter>
