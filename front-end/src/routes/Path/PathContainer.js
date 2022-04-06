@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
+import { PathApi } from "../../OdsayApi"
 import MapApi from "../../MapApi";
 
 function PathContainer() {
@@ -123,7 +124,7 @@ function PathContainer() {
                 ]
 
                 let bounds = new kakao.maps.LatLngBounds();
-
+                
                 for(var i=0; i<points.length; i++) {
                     bounds.extend(points[i])
                 }
