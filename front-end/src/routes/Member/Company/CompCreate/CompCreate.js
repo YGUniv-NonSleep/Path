@@ -16,6 +16,22 @@ function CompCreate(props) {
         <CompCreateCon>
             <CompCreateSubCon>
             { props.loading ? <p>업체 가입 화면 나왔다</p> : <h2>로드 중...</h2> }
+            {/* <button onClick={props.test} >Test</button> */}
+            <form 
+                className="compForm" 
+                onSubmit={props.compFormSubmit} 
+                encType="multipart/form-data">
+                <input type="text" placeholder="업체명" name="name"/>
+                <input type="text" placeholder="사업자등록번호" name="crn"/>
+                <input type="date" placeholder="개업일자" name="openDate"/>
+                <input type="text" placeholder="카테고리" name="category"/>
+                <input type="text" placeholder="이메일" name="email"/>
+                <input type="text" placeholder="전화번호" name="phone"/>
+                <input type="text" placeholder="위도" name="lat"/>
+                <input type="text" placeholder="경도" name="long"/>
+                <input type="file" name="userfile" multiple="multiple" />
+                <button onClick={props.createCompany}>업체등록</button>
+            </form>
             <Outlet></Outlet>
             </CompCreateSubCon>
         </CompCreateCon>

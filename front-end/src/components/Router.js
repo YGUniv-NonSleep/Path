@@ -18,6 +18,8 @@ import CompCreate from '../routes/Member/Company/CompCreate';
 import CompManage from '../routes/Member/Company/CompManage';
 import Bus from '../routes/Mobility/Bus';
 import Subway from '../routes/Mobility/Subway';
+import Scooter from '../routes/Mobility/Scooter';
+import Bike from '../routes/Mobility/Bike';
 
 import Menubar from './Menubar';
 
@@ -57,10 +59,10 @@ function Router() {
       </Routes>
       <Routes>
       <Route path="/mobility" element={<Mobility />} />
-                <Route path="/mobility/bus" element={<Bus/>} />
-                <Route path="/mobility/subway" element={<Subway />} />
-                <Route path="/mobility/scooter" element={<Scooter />} />
-                <Route path="/mobility/bike" element={<Bike />} />
+        <Route path="/mobility/bus" element={<Bus/>} />
+        <Route path="/mobility/subway" element={<Subway />} />
+        <Route path="/mobility/scooter" element={<Scooter />} />
+        <Route path="/mobility/bike" element={<Bike />} />
       </Routes>
       <Routes>
         <Route path="/community" element={<Community />} />
