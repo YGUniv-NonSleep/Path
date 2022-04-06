@@ -88,26 +88,23 @@ public class PostApiController {
     @GetMapping("/view")
     public ResponseEntity getPostList(@PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
         Message<List<PostDTO>> message = postService.getPostList(pageable);
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     //수정해야함
     @GetMapping("/view/search")
     public ResponseEntity search(String keyword, @PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
         Message<List<PostDTO>> message = postService.search(keyword,pageable);
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message,status);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
     @GetMapping("/view/{postId}")
     public ResponseEntity read(@PathVariable("postId") Long id, Model model){
         Message<List<PostDTO>> message = postService.updateView(id);
-        HttpStatus status = message.getHttpStatus();
         //model.addAttribute("view",postService.updateView(id));
 
-        return new ResponseEntity<>(message,status);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
