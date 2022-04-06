@@ -16,9 +16,6 @@ function LoginContainer() {
       [name]: value,
     });
   };
-  useEffect(() => {
-    console.log('마운트 될 때만 실행');
-  }, []);
   // ========== 로그인 유효성 검사 ==========//
   const isValidLoginId =
     loginId.length >= 4 && loginId != '' && loginId != ' ' && loginId != null;
@@ -65,7 +62,7 @@ function LoginContainer() {
   const onLoginSuccess = (res) => {
     const authorization = res.headers.authorization;
     axios.defaults.headers.common['authorization'] = authorization; // axios 모든 요청 헤더에 토큰값 넣기
-    window.location.href = '/member';
+    window.location.href = '/';
   };
 
   const testSubmit = () => {
