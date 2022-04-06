@@ -1,4 +1,4 @@
-package com.capstone.pathproject.security.util;
+package com.capstone.pathproject.util;
 
 import com.capstone.pathproject.security.auth.jwt.JwtProperties;
 import lombok.extern.slf4j.Slf4j;

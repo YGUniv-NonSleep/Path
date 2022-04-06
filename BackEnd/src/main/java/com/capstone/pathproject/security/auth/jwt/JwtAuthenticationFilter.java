@@ -2,15 +2,13 @@ package com.capstone.pathproject.security.auth.jwt;
 
 import com.capstone.pathproject.dto.member.LoginRequestDTO;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
-import com.capstone.pathproject.security.util.ClientUtil;
-import com.capstone.pathproject.security.util.CookieUtil;
-import com.capstone.pathproject.security.util.JwtTokenUtil;
+import com.capstone.pathproject.util.ClientUtil;
+import com.capstone.pathproject.util.CookieUtil;
+import com.capstone.pathproject.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

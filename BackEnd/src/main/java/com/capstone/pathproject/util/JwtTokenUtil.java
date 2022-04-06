@@ -1,4 +1,4 @@
-package com.capstone.pathproject.security.util;
+package com.capstone.pathproject.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
