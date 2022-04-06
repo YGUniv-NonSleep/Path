@@ -57,31 +57,39 @@ const Icon = () => {
       </Li>
 
       <Li>
+        <Link to="/mobility/scooter" style={{ color: "black"}}>
         <IconButton color="primary">
           <ElectricScooter />
         </IconButton>
         <Typography variant="subtitle2">킥보드</Typography>
+        </Link>
       </Li>
 
       <Li>
+        <Link to="/mobility/Bike" style={{ color: "black"}}>
         <IconButton color="primary">
           <PedalBike />
         </IconButton>
         <Typography variant="subtitle2">자전거</Typography>
+        </Link>
       </Li>
 
       <Li>
-        <IconButton color="primary">
+      <Link to="/mobility/walk" style={{ color: "black" }}>
+      <IconButton color="primary">
           <DirectionsWalk />
         </IconButton>
         <Typography variant="subtitle2">도보</Typography>
+        </Link>
       </Li>
       
       <Li>
+        <Link to="/mobility/car" style={{ color: "black" }}>
         <IconButton color="primary">
           <DirectionsCarFilled />
         </IconButton>
         <Typography variant="subtitle2">자동차</Typography>
+        </Link>
       </Li>
     </Ul>
   );

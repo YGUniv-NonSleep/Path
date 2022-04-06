@@ -33,7 +33,7 @@ export const MobilityApi = {
     const response = await odsayApi.get(
       `/searchBusLane?lang=0&busNo=${data}&CID=4000&apiKey=${key}`
     ).catch((error) => console.log(error));
-    // console.log(response.data.result.lane[0].busID);
+     console.log(response.data.result.lane[0].busID);
     return response.data.result.lane[0].busID;
   },
 
@@ -41,9 +41,12 @@ export const MobilityApi = {
     const response = await odsayApi.get(
       `/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`
     ).catch((error) => console.log(error));
-    // console.log(response);
+     console.log(response);
     return response.data;
   },
-}
+};
+
+
+
 
 export default odsayApi;

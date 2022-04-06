@@ -28,7 +28,7 @@ const Ul = styled.ul`
   left: 110px;
 `;
 
-const Subway = () => {
+const Bike = () => {
   return (
     <SideNav>
       <Icon />
@@ -50,4 +50,4 @@ const Subway = () => {
   );
 };
 
-export default Subway;
+export default Bike;

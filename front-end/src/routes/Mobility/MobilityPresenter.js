@@ -2,10 +2,10 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Map from "../../components/Map";
 import Sidebar from "../../components/Sidebar";
-import Icon from '../../components/Icon'
+import Icon from "../../components/Icon";
 
 const MobilContainer = styled.div`
-    z-index: 10;
+   
 `
 
 function MobilityPresenter(props) {
