@@ -40,8 +40,6 @@ function SignUpContainer() {
   const [birthday, setBirtyday] = useState(null);
 
   const handleBirtyday = (date) => {
-    console.log(date);
-    console.log(dayjs(date).format('YYYY-MM-DD'));
     setBirtyday(dayjs(date).format('YYYY-MM-DD'));
   };
 
@@ -166,7 +164,7 @@ function SignUpContainer() {
       birthday: birthday,
     };
     axios
-      .post(process.env.REACT_APP_SPRING_API + '/api/signup', data, {
+      .post(process.env.REACT_APP_SPRING_API + '/api/member', data, {
         withCredentials: true,
       })
       .then((res) => {
