@@ -1,15 +1,12 @@
 package com.capstone.pathproject.controller;
 
-import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.product.DetailOptionDTO;
 import com.capstone.pathproject.dto.product.OptionDTO;
 import com.capstone.pathproject.dto.product.ProdBasicDTO;
 import com.capstone.pathproject.dto.product.ProductDTO;
 import com.capstone.pathproject.dto.response.Message;
-import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

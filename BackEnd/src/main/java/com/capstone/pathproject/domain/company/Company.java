@@ -31,6 +31,9 @@ public class Company {
     @Column(name = "COM_CRN")
     private String companyNumber;
 
+    @Column(name = "COM_THUMBNAIL")
+    private String thumbnail;
+
     @Column(name = "COM_OPEN_DATE")
     private LocalDate openDate;
 
@@ -58,7 +61,7 @@ public class Company {
     public Company(){}
 
     @Builder(builderMethodName = "createCompany")
-    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, Member member) {
+    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, Member member, String thumbnail) {
         this.id = id;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
@@ -68,7 +71,9 @@ public class Company {
         this.phone = phone;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.thumbnail = thumbnail;
         this.member = member;
+
     }
 
     public CompanyDTO toDTO(){
@@ -83,6 +88,7 @@ public class Company {
                 .name(this.name)
                 .openDate(this.openDate)
                 .phone(this.phone)
+                .thumbnail(this.thumbnail)
                 .build();
     }
 

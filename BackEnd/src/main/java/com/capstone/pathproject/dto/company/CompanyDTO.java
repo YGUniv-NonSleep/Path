@@ -38,8 +38,10 @@ public class CompanyDTO {
 
     private String longitude;
 
+    private String thumbnail;
+
     @Builder(builderMethodName = "createCompanyDTD")
-    public CompanyDTO(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, Member member) {
+    public CompanyDTO(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, Member member, String thumbnail) {
         this.id = id;
         this.name = name;
         this.companyNumber = companyNumber;
@@ -50,6 +52,7 @@ public class CompanyDTO {
         this.longitude = longitude;
         this.latitude = latitude;
         this.member = member;
+        this.thumbnail = thumbnail;
     }
 
 
@@ -63,10 +66,15 @@ public class CompanyDTO {
                 .openDate(openDate)
                 .phone(phone)
                 .member(member)
+                .thumbnail(thumbnail)
                 .build();
     }
 
     public void addMember(Member member){
         //this.member = member;
+    }
+
+    public void addFile(String fileName){
+        this.thumbnail = fileName;
     }
 }

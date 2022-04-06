@@ -36,6 +36,9 @@ public class Product {
     @Column(name = "PRO_STOCK")
     private int stock;
 
+    @Column(name = "PRO_PICTURE")
+    private String picture;
+
     @ManyToOne
     @JoinColumn(name = "COM_ID")
     private Company company;
@@ -50,7 +53,7 @@ public class Product {
 
 
     @Builder(builderMethodName = "createProduct")
-    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodBasic, List<Option> optionList){
+    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodBasic,String picture, List<Option> optionList){
         this.id = id;
         this.price = price;
         this.exposure = exposure;
@@ -59,12 +62,12 @@ public class Product {
         this.stock = stock;
         this.company = company;
         this.prodbasic = prodBasic;
+        this.picture = picture;
         this.optionList = optionList;
-    }
-
-    public Product() {
 
     }
+
+    public Product() {}
 
     public ProductDTO toDTO(){
         return ProductDTO.createProductDTO()
@@ -77,6 +80,7 @@ public class Product {
                 .price(this.price)
                 .prodbasic(this.prodbasic)
                 .stock(this.stock)
+                .picture(this.picture)
                 .build();
     }
 

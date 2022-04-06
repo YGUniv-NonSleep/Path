@@ -1,7 +1,6 @@
 package com.capstone.pathproject.service;
 
 import com.capstone.pathproject.domain.company.Company;
-import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
@@ -22,9 +21,11 @@ public class CompanyService {
 
     private final MemberRepository memberRepository;
 
-    public Message<CompanyDTO> createCompany(CompanyDTO companyDTO){
+    public Message<CompanyDTO> createCompany(CompanyDTO companyDTO, String fileName){
         //Optional<Member> member = memberRepository.findById(companyDTO.getMemberId());
         //System.out.println(companyDTO.toString());
+        //HttpServletRequest httpServletRequest;
+        companyDTO.addFile(fileName);
 
         companyRepository.save(companyDTO.toEntity());
         return Message.<CompanyDTO>createMessage()
@@ -42,8 +43,10 @@ public class CompanyService {
                 .build();
     }
 
-    public Message<CompanyDTO> updateCompany(CompanyDTO companyDTO) {
+    public Message<CompanyDTO> updateCompany(CompanyDTO companyDTO, String fileName) {
+        companyDTO.addFile(fileName);
         companyRepository.save(companyDTO.toEntity());
+
         return Message.<CompanyDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("Update Success")

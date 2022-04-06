@@ -1,7 +1,7 @@
-POST https://localhost:8080/api/company/create
-Content-Type: application/json
+POST https://localhost:8080/api/company
+Content-Type: multipart/form-data
 
-{
+ "json":"{
   "companyNumber":"123123",
   "openDate":"2022-12-12",
   "category":"MART",
@@ -11,4 +11,4 @@ Content-Type: application/json
   "member":{
     "id":1
   }
-}
+}"
