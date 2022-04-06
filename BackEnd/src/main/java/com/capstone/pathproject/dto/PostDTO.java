@@ -14,6 +14,7 @@ import java.time.LocalDate;
 public class PostDTO {
     private Long id; //pk
     private Member member; //글쓴이
+    @NotNull
     private PostType type;
     private Post parent; //부모
     @NotNull
@@ -24,7 +25,7 @@ public class PostDTO {
     private LocalDate writeDate;
     private String photoName;
 
-    @Builder(builderMethodName = "checkPostDTO")
+    @Builder(builderMethodName = "createPostDTO")
     public PostDTO(Long id, Member member, PostType type, Post parent, String title, String content,
                    int view, LocalDate writeDate,  String photoName){
         this.id = id;

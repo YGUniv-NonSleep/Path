@@ -15,21 +15,10 @@ const SideNav = styled.nav`
   height: 100%;
 `;
 
-const BarContainer = styled.div`
-  z-index: 10
-  width: 390px;
-  height: 90%;
-  margin-top: 90px;
-`;
-
 const Sidebar = () => {
   
   return (
-      <SideNav>
-        <BarContainer>
-
-        </BarContainer>
-      </SideNav>
+      <SideNav />
   );
 };
 
