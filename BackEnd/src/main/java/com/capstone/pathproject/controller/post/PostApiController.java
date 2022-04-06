@@ -103,7 +103,6 @@ public class PostApiController {
     public ResponseEntity read(@PathVariable("postId") Long id, Model model){
         Message<List<PostDTO>> message = postService.updateView(id);
         //model.addAttribute("view",postService.updateView(id));
-
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
