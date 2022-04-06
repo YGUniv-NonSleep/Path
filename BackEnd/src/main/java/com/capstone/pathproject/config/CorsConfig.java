@@ -1,4 +1,4 @@
-package com.capstone.pathproject.security.config;
+package com.capstone.pathproject.config;
 
 import com.capstone.pathproject.security.auth.jwt.JwtProperties;
 import org.springframework.context.annotation.Bean;
