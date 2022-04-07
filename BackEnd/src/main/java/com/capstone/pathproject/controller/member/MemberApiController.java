@@ -92,20 +92,21 @@ public class MemberApiController {
     }
 
     // 회원 비밀번호 찾기
-    @PostMapping("/forget/password")
-    public ResponseEntity forgotPassword(@RequestBody MemberDTO memberDTO) {
-        memberService.forgotPassword(memberDTO);
-    }
+//    @PostMapping("/forget/password")
+//    public ResponseEntity forgotPassword(@RequestBody MemberDTO memberDTO) {
+//        memberService.forgotPassword(memberDTO);
+//    }
 
 
 
     // === 테스트 요청 === //
     @GetMapping("/member")
-    public String user(Authentication authentication) {
+    public ResponseEntity user(Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Member member = principalDetails.getMember();
         System.out.println("member = " + member.toString());
-        return "user";
+        Message<MemberDTO> memberInfo = memberService.getMemberInfo(1L);
+        return new ResponseEntity(memberInfo, HttpStatus.OK);
     }
 
     @GetMapping("/business")

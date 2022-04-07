@@ -8,6 +8,7 @@ function MemberContainer() {
 
   useEffect(() => {
     setLoading((current) => !current);
+    testMember();
   }, []);
 
   // === AccessToken 값 디코딩 === //
@@ -57,12 +58,26 @@ function MemberContainer() {
       });
   };
 
+  const testBtn = () => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/test', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <MemberPresenter
       loading={loading}
       testBusiness={testBusiness}
       testAdmin={testAdmin}
       testMember={testMember}
+      testBtn={testBtn}
     ></MemberPresenter>
   );
 }

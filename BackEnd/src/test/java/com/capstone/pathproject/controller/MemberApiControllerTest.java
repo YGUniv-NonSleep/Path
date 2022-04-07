@@ -1,8 +1,10 @@
 package com.capstone.pathproject.controller;
 
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.memberGender;
 import com.capstone.pathproject.dto.member.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.service.member.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,8 @@ class MemberApiControllerTest {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -73,6 +77,23 @@ class MemberApiControllerTest {
         System.out.println("header : " + response.getBody().getHeader().toString());
         System.out.println("message : " + response.getBody().getMessage());
         System.out.println("body : " + response.getBody().getBody().toString());
+    }
+
+    @Test
+    void id값꺼내기() throws Exception {
+        //given
+        MemberDTO memberDTO = setAllMemberDTO();
+        Member member = memberDTO.toEntity();
+        System.out.println(member);
+        System.out.println("==================================================");
+        Member saveMember = memberRepository.save(member);
+        System.out.println(member);
+        System.out.println("saveMember = " + saveMember);
+
+        //when
+
+        //then
+
     }
 
     private MemberDTO setAllMemberDTO() {

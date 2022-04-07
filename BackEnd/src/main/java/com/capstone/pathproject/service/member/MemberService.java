@@ -130,7 +130,7 @@ public class MemberService {
                 .body(memberEntity.getLoginId()).build();
     }
 
-    public void forgotPassword(MemberDTO memberDTO) {
-
-    }
+//    public void forgotPassword(MemberDTO memberDTO) {
+//
+//    }
 }
