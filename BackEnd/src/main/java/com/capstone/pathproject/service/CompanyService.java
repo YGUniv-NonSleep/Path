@@ -10,10 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +21,11 @@ public class CompanyService {
 
     private final MemberRepository memberRepository;
 
-    public Message<CompanyDTO> createCompany(CompanyDTO companyDTO){
+    public Message<CompanyDTO> createCompany(CompanyDTO companyDTO, String fileName){
         //Optional<Member> member = memberRepository.findById(companyDTO.getMemberId());
         //System.out.println(companyDTO.toString());
+        //HttpServletRequest httpServletRequest;
+        companyDTO.addFile(fileName);
 
         companyRepository.save(companyDTO.toEntity());
         return Message.<CompanyDTO>createMessage()
@@ -43,8 +43,10 @@ public class CompanyService {
                 .build();
     }
 
-    public Message<CompanyDTO> updateCompany(CompanyDTO companyDTO) {
+    public Message<CompanyDTO> updateCompany(CompanyDTO companyDTO, String fileName) {
+        companyDTO.addFile(fileName);
         companyRepository.save(companyDTO.toEntity());
+
         return Message.<CompanyDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("Update Success")
@@ -70,29 +72,25 @@ public class CompanyService {
                     .message("업체가 없음")
                     .build();
         }
-
-
     }
 
-    public Message<CompanyDTO> companyDetailByMember(Long memId){
+    public Message<List<CompanyDTO>> companyDetailByMember(Long memId){
 
         List<Company> result = companyRepository.findByMemberId(memId);
 
         ArrayList<CompanyDTO> rs = new ArrayList<>();
+        result.stream().map(company -> company.toDTO()).forEach(rs::add);
 
-       result.stream().map(c -> c.toDTO()).forEach(s-> rs.add(s));
+//        for(CompanyDTO c : rs) {
+//  //          c.addMember(member.get());
+//            System.out.println(c);
+//      }
 
-        for(CompanyDTO c : rs) {
-            System.out.println(c);
-      }
-//
-//        while (){
-//            System.out.println("1");
-//        }
-
-        System.out.println(result.get(0));
-
-        return null;
+        return Message.<List<CompanyDTO>>createMessage()
+                .message("업체 조회 성공")
+                .body(rs)
+                .header(StatusEnum.OK)
+                .build();
     }
 }
 

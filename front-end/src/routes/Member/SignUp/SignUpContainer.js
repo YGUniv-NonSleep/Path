@@ -1,5 +1,5 @@
 import SignUpPresenter from './SignUpPresenter';
-import { useEffect, useState, React } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
@@ -37,7 +37,7 @@ function SignUpContainer() {
     });
   };
 
-  const [birthday, setBirtyday] = useState(null);
+  const [birthday, setBirthday] = useState(null);
 
   const handleBirtyday = (date) => {
     setBirtyday(dayjs(date).format('YYYY-MM-DD'));
@@ -187,7 +187,7 @@ function SignUpContainer() {
       handleInput={handleInput}
       handleAgree={handleAgree}
       errorList={errorList}
-      handleBirtyday={handleBirtyday}
+      handleBirthday={handleBirthday}
       inputValue={inputValue}
       birthday={birthday}
     ></SignUpPresenter>

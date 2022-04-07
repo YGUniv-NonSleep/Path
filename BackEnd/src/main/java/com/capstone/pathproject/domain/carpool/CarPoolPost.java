@@ -68,7 +68,7 @@ public class CarPoolPost {
 
 
     @Builder(builderMethodName = "createContent")
-    public CarPoolPost(Long id, Member member, Vehicle vehicle,String title, String content, LocalDate start, LocalDate end, Integer recruit, Long startLongitude, Long startLatitude,
+    public CarPoolPost(Long id, Member member, Vehicle vehicle, String title, String content, LocalDate start, LocalDate end, Integer recruit, Long startLongitude, Long startLatitude,
                        Long arrLongitude, Long arrLatitude, LocalDateTime startTime, String picture) {
         this.id = id;
         this.member = member;

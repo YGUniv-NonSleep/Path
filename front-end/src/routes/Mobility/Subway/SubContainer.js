@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import SubPresenter from "./SubPresenter";
 import MapApi from "../../../MapApi";
+import { MobilityApi, SubMobility } from "../../../OdsayApi";
 
 function SubContainer() {
     const [map, settingMap] = useState(null);
@@ -18,9 +19,37 @@ function SubContainer() {
         }
     }
 
+    async function subInfo(){
+        //반월당역 검색 후 stationID 얻어오기
+        //busapi 참고하기
+
+        var points = [
+            new kakao.maps.LatLng(35.865578, 128.59302)
+        ];
+
+        var bounds = new kakao.maps.LatLngBounds();    
+
+        var i, marker;
+        for (i = 0; i < points.length; i++) {
+            // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
+            marker = new kakao.maps.Marker({ position : points[i] });
+            marker.setMap(map);
+            
+            // LatLngBounds 객체에 좌표를 추가합니다
+            bounds.extend(points[i]);
+        }
+            map.setBounds(bounds);
+        
+    }
+
+
     useEffect(() => {
         mapLoad()
     }, []);
+
+    useEffect(() =>{
+        subInfo()
+    }, [map]);
 
     return (
         <SubPresenter 

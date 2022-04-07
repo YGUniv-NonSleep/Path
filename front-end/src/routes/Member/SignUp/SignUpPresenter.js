@@ -249,7 +249,7 @@ function SignUpPresenter(props) {
                       inputFormat={'yyyy-MM-dd'}
                       mask={'____-__-__'}
                       error={birthdayError !== '' || null}
-                      onChange={props.handleBirtyday}
+                      onChange={props.handleBirthday}
                       renderInput={(params) => (
                         <TextField
                           {...params}

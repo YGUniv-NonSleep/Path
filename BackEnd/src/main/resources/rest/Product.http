@@ -7,7 +7,7 @@ GET http://localhost:8080/api/product/1
 Accept: application/json
 
 ###
-POST http://localhost:8080/api/product/createProduct
+POST https://localhost:8080/api/product/createProduct
 Content-Type: application/json
 
 {
@@ -19,10 +19,40 @@ Content-Type: application/json
   "company": {
     "id": 1
   },
-  "prodbasic": {
+  "prodBasic": {
     "id": 1
-  }
+  },
+  "optionList": [
+    {
+      "name": "샷추가",
+      "detailOptionList": [
+        {
+          "name": "1샷추가",
+          "price": 300
+        },
+        {
+          "name": "2샷추가",
+          "price": 500
+        }
+      ]
+    },
+    {
+      "name": "온도",
+      "detailOptionList": [
+        {
+          "name": "차갑게",
+          "price": 0
+        },
+        {
+          "name": "뜨겁게",
+          "price": 0
+        }
+      ]
+    }
+  ]
 }
+
+
 
 
 ###
@@ -49,5 +79,5 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:8080/api/product/deleteProduct/4
+DELETE https://localhost:8080/api/product/deleteProduct/3
 
