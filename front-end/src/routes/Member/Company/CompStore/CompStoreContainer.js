@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import CompStore from "./CompStore";
 
@@ -6,9 +7,15 @@ function CompStoreContainer() {
     const [loading, setLoading] = useState(false);
     
     useEffect(() => {
-        setLoading((current) => !current);
+        setLoading(true);
     }, []);
 
+    useEffect(() => {
+        axios.get(process.env.REACT_APP_SPRING_API +"/api/company/myStore")
+        .then((res) => {console.log(res)})
+        .catch((err)=>{console.log(err)})
+    }, [])
+    
     return (
         <CompStore
             loading={loading}

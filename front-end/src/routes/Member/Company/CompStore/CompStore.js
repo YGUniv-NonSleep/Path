@@ -12,6 +12,7 @@ const CompStoreSubCon = styled.div`
 `;
 
 function CompStore(props) {
+    
     return (
         <CompStoreCon>
             <CompStoreSubCon>

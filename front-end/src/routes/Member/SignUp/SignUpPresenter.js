@@ -254,7 +254,7 @@ function SignUpPresenter(props) {
                         <TextField
                           {...params}
                           required
-                          name="birtyday"
+                          name="birthday"
                           error={birthdayError !== '' || null}
                         />
                       )}
