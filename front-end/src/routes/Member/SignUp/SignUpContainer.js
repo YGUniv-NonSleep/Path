@@ -39,7 +39,7 @@ function SignUpContainer() {
 
   const [birthday, setBirthday] = useState(null);
 
-  const handleBirtyday = (date) => {
+  const handleBirthday = (date) => {
     setBirtyday(dayjs(date).format('YYYY-MM-DD'));
   };
 
