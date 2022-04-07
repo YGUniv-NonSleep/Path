@@ -174,7 +174,7 @@ function SignUpPresenter(props) {
                     fullWidth
                     id="phone"
                     name="phone"
-                    label="전화번호"
+                    label="전화번호 (010-XXXX-XXXX)"
                     onChange={props.handleInput}
                     error={phoneError !== '' || false}
                   />

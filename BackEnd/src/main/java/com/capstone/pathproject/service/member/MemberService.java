@@ -17,13 +17,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Transactional
+
     public Message<MemberDTO> signup(MemberDTO memberDTO) {
         if (isValidateDuplicateMember(memberDTO)) {
             return Message.<MemberDTO>createMessage()
@@ -46,6 +46,7 @@ public class MemberService {
         return findMembers.isPresent();
     }
 
+    @Transactional(readOnly = true)
     public Message<MemberDTO> getMemberInfo(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         Member memberEntity = member.orElse(null);
@@ -72,20 +73,21 @@ public class MemberService {
 
     }
 
-    @Transactional
+
     public Message<MemberDTO> updateMember(Long id, MemberDTO memberDTO) {
         Optional<Member> member = memberRepository.findById(id);
-        if (!member.isPresent()) {
+        Member memberEntity = member.orElse(null);
+        if (memberEntity == null) {
             return Message.<MemberDTO>createMessage()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 없습니다.")
                     .body(null).build();
         } else {
-            Member memberEntity = member.get();
-            if(StringUtils.isNotBlank(memberDTO.getMail())) memberEntity.updateMail(memberDTO.getMail());
-            if(StringUtils.isNotBlank(memberDTO.getPhone())) memberEntity.updatePhone(memberDTO.getPhone());
-            if(StringUtils.isNotBlank(memberDTO.getAddr())) memberEntity.updateAddr(memberDTO.getAddr());
-            if(StringUtils.isNotBlank(memberDTO.getAddrDetail())) memberEntity.updateAddrDetail(memberDTO.getAddrDetail());
+            if (StringUtils.isNotBlank(memberDTO.getMail())) memberEntity.updateMail(memberDTO.getMail());
+            if (StringUtils.isNotBlank(memberDTO.getPhone())) memberEntity.updatePhone(memberDTO.getPhone());
+            if (StringUtils.isNotBlank(memberDTO.getAddr())) memberEntity.updateAddr(memberDTO.getAddr());
+            if (StringUtils.isNotBlank(memberDTO.getAddrDetail()))
+                memberEntity.updateAddrDetail(memberDTO.getAddrDetail());
             MemberDTO newMemberDTO = MemberDTO.createMemberDTO()
                     .id(memberEntity.getId())
                     .mail(memberEntity.getMail())
@@ -104,4 +106,20 @@ public class MemberService {
     }
 
 
+    public Message<MemberDTO> deleteMember(Long id) {
+        Optional<Member> member = memberRepository.findById(id);
+        Member memberEntity = member.orElse(null);
+        if (memberEntity == null) {
+            return Message.<MemberDTO>createMessage()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("회원이 없습니다.")
+                    .body(null).build();
+        } else {
+            memberRepository.delete(memberEntity);
+            return Message.<MemberDTO>createMessage()
+                    .header(StatusEnum.OK)
+                    .message("회원 탈퇴하였습니다.")
+                    .build();
+        }
+    }
 }
