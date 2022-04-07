@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -20,7 +20,6 @@ function Company(props) {
                 { props.loading ? <p>업체 화면 나왔다</p> : <h2>로드 중...</h2> }
                 </CompSubCon>
             </CompCon>
-            <Outlet></Outlet>
         </>
     )
 }

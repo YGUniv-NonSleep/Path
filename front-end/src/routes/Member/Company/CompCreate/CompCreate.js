@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -32,7 +32,6 @@ function CompCreate(props) {
                 <input type="file" name="userfile" multiple="multiple" />
                 <button onClick={props.createCompany}>업체등록</button>
             </form>
-            <Outlet></Outlet>
             </CompCreateSubCon>
         </CompCreateCon>
     )
