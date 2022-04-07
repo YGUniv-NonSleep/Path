@@ -2,6 +2,7 @@ package com.capstone.pathproject.domain.member;
 
 import com.capstone.pathproject.dto.member.MemberDTO;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
         sequenceName = "MEMBER_SEQ",
         initialValue = 1, allocationSize = 1)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Member {
 
     @Id
@@ -63,9 +65,7 @@ public class Member {
     private int score;
 
     @Builder(builderMethodName = "createMember")
-    public Member(Role role, String loginId, String password, String mail, String name,
-                  String phone, String addr, String addrDetail, memberGender gender, String birthday,
-                  String account) {
+    public Member(Role role, String loginId, String password, String mail, String name, String phone, String addr, String addrDetail, memberGender gender, LocalDate birthday, String account) {
         this.role = role;
         this.loginId = loginId;
         this.password = password;
@@ -75,32 +75,67 @@ public class Member {
         this.addr = addr;
         this.addrDetail = addrDetail;
         this.gender = gender;
+        this.birthday = birthday;
         this.signupDay = LocalDate.now();
         this.account = account;
         this.score = 100;
-
-        if (birthday.isEmpty()) {
-            this.birthday = LocalDate.now();
-        } else {
-            this.birthday = LocalDate.parse(birthday);
-        }
     }
 
-//    public MemberDTO toDTO(Member member){
-//        return MemberDTO.createMemberDTO()
-//                .addr(this.addr)
-//                .phone(this.phone)
-//                .addrDetail(this.addrDetail)
-//                .birthday(String.valueOf(this.birthday))
-//                .phone(this.phone)
-//                .gender(this.gender)
-//                .loginId(this.loginId)
-//                .name(this.name)
-//                .mail(this.mail)
-//                .password(this.password)
-//                .account(this.account)
-//                .score(this.score)
-//                .build();
-//    }
+    public MemberDTO toDTO() {
+        return MemberDTO.createMemberDTO()
+                .id(id)
+                .role(role)
+                .loginId(loginId)
+                .password(password)
+                .mail(mail)
+                .name(name)
+                .phone(phone)
+                .addr(addr)
+                .addrDetail(addrDetail)
+                .gender(gender)
+                .birthday(birthday)
+                .signupDay(signupDay)
+                .account(account)
+                .score(score)
+                .build();
+    }
 
+    public void updateMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void updatePhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void updateAddr(String addr) {
+        this.addr = addr;
+    }
+
+    public void updateAddrDetail(String addrDetail) {
+        this.addrDetail = addrDetail;
+    }
+
+//    public Member(Role role, String loginId, String password, String mail, String name,
+//                  String phone, String addr, String addrDetail, memberGender gender, String birthday,
+//                  String account) {
+//        this.role = role;
+//        this.loginId = loginId;
+//        this.password = password;
+//        this.mail = mail;
+//        this.name = name;
+//        this.phone = phone;
+//        this.addr = addr;
+//        this.addrDetail = addrDetail;
+//        this.gender = gender;
+//        this.signupDay = LocalDate.now();
+//        this.account = account;
+//        this.score = 100;
+//
+//        if (birthday.isEmpty()) {
+//            this.birthday = null;
+//        } else {
+//            this.birthday = LocalDate.parse(birthday);
+//        }
+//    }
 }

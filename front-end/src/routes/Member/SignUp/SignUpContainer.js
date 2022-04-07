@@ -39,10 +39,8 @@ function SignUpContainer() {
 
   const [birthday, setBirthday] = useState(null);
 
-  const handleBirthday = (date) => {
-    console.log(date);
-    console.log(dayjs(date).format('YYYY-MM-DD'));
-    setBirthday(dayjs(date).format('YYYY-MM-DD'));
+  const handleBirtyday = (date) => {
+    setBirtyday(dayjs(date).format('YYYY-MM-DD'));
   };
 
   // ====== 회원가입 입력 유효성 검사 ====== //
@@ -166,7 +164,7 @@ function SignUpContainer() {
       birthday: birthday,
     };
     axios
-      .post(process.env.REACT_APP_SPRING_API + '/api/signup', data, {
+      .post(process.env.REACT_APP_SPRING_API + '/api/member', data, {
         withCredentials: true,
       })
       .then((res) => {

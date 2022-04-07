@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -83,7 +85,7 @@ class MemberApiControllerTest {
                 .addr("대구시 동구 산격동")
                 .addrDetail("1111")
                 .gender(memberGender.MALE)
-                .birthday("2000-01-01")
+                .birthday(LocalDate.parse("2000-01-01"))
                 .build();
     }
 }

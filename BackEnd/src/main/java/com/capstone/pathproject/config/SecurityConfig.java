@@ -1,11 +1,10 @@
 package com.capstone.pathproject.config;
 
 import com.capstone.pathproject.repository.member.MemberRepository;
-import com.capstone.pathproject.security.auth.PrincipalDetailsService;
 import com.capstone.pathproject.security.auth.jwt.JwtAuthenticationFilter;
 import com.capstone.pathproject.security.auth.jwt.JwtAuthorizationFilter;
-import com.capstone.pathproject.security.util.CookieUtil;
-import com.capstone.pathproject.security.util.JwtTokenUtil;
+import com.capstone.pathproject.util.CookieUtil;
+import com.capstone.pathproject.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
