@@ -67,9 +67,9 @@ class MemberApiControllerTest {
         //given
         MemberDTO memberDTO = setAllMemberDTO();
         //when
-        Message<MemberDTO> message = memberService.signup(memberDTO);
+        Message<String> message = memberService.signup(memberDTO);
         //then
-        ResponseEntity<Message<MemberDTO>> response = new ResponseEntity<>(message, HttpStatus.OK);
+        ResponseEntity<Message<String>> response = new ResponseEntity<Message<String>>(message, HttpStatus.OK);
         System.out.println("header : " + response.getBody().getHeader().toString());
         System.out.println("message : " + response.getBody().getMessage());
         System.out.println("body : " + response.getBody().getBody().toString());

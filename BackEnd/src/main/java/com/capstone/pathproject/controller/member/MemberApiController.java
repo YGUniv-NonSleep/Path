@@ -59,7 +59,7 @@ public class MemberApiController {
     // 회원 등록
     @PostMapping("/member")
     public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO) {
-        Message<MemberDTO> message = memberService.signup(memberDTO);
+        Message<String> message = memberService.signup(memberDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -83,6 +83,21 @@ public class MemberApiController {
         Message<MemberDTO> message = memberService.deleteMember(id);
         return new ResponseEntity(message, HttpStatus.OK);
     }
+
+    // 회원 아이디 찾기
+    @PostMapping("/forgot/loginid")
+    public ResponseEntity forgotLoginId(@RequestBody MemberDTO memberDTO) {
+        Message<String> message = memberService.forgotLoginId(memberDTO);
+        return new ResponseEntity(message, HttpStatus.OK);
+    }
+
+    // 회원 비밀번호 찾기
+    @PostMapping("/forget/password")
+    public ResponseEntity forgotPassword(@RequestBody MemberDTO memberDTO) {
+        memberService.forgotPassword(memberDTO);
+    }
+
+
 
     // === 테스트 요청 === //
     @GetMapping("/member")
