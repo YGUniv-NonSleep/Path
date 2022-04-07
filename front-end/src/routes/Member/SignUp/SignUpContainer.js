@@ -40,7 +40,7 @@ function SignUpContainer() {
   const [birthday, setBirthday] = useState(null);
 
   const handleBirthday = (date) => {
-    setBirtyday(dayjs(date).format('YYYY-MM-DD'));
+    setBirthday(dayjs(date).format('YYYY-MM-DD'));
   };
 
   // ====== 회원가입 입력 유효성 검사 ====== //
