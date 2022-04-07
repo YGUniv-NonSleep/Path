@@ -52,6 +52,12 @@ function PathContainer() {
         setStartPoint('')
         setArrivalPoint('')
     }
+    // 출발지 도착지 전환하는 함수
+    const switchPoints = () => {
+        let temp = startPoint
+        setStartPoint(arrivalPoint)
+        setArrivalPoint(temp)
+    }
 
     // console.log(startPoint)
     // console.log(arrivalPoint)
@@ -184,6 +190,7 @@ function PathContainer() {
             arrivalPoint = {arrivalPoint}
             onchangeSP = {onchangeSP}
             onchangeAP = {onchangeAP}
+            switchPoints = {switchPoints}
             refreshPoints = {refreshPoints}
             wayFind = {wayFind}
         ></PathPresenter>

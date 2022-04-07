@@ -15,6 +15,7 @@ function PathPresenter(props) {
           ap: props.arrivalPoint,
           onchangeSP: props.onchangeSP,
           onchangeAP: props.onchangeAP,
+          switchPoints: props.switchPoints,
           refreshPoints: props.refreshPoints,
           wayFind: props.wayFind
         }}
