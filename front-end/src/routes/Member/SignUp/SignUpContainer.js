@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 function SignUpContainer() {
   // ====== 회원가입 입력 ====== //
   const [inputValue, setInputValue] = useState({
+    role: '',
     loginId: '',
     password: '',
     rePassword: '',
@@ -18,6 +19,7 @@ function SignUpContainer() {
   });
 
   const {
+    role,
     loginId,
     email,
     name,
@@ -77,7 +79,8 @@ function SignUpContainer() {
 
   const isValidInput = () => {
     const loginIdRegex = /^[a-zA-Z0-9\s]+$/;
-    if (!loginIdRegex.test(loginId))
+    if (!loginIdRegex.test(loginId) && loginId.length <= 4)
+      // setLoginIdError('아이디를 4자 이상 입력해주세요.')
       setLoginIdError('올바른 아이디 형식이 아닙니다.');
     else setLoginIdError('');
 
@@ -153,6 +156,7 @@ function SignUpContainer() {
     e.preventDefault();
     if (!isValidInput()) return;
     const data = {
+      role: role,
       loginId: loginId,
       mail: email,
       name: name,
@@ -163,6 +167,7 @@ function SignUpContainer() {
       gender: gender,
       birthday: birthday,
     };
+    console.log(data);
     axios
       .post(process.env.REACT_APP_SPRING_API + '/api/member', data, {
         withCredentials: true,

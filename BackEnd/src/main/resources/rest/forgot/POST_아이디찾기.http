@@ -1,0 +1,7 @@
+POST https://localhost:8080/api/forgot/loginid
+Content-Type: application/json
+
+{
+  "name": "전상용",
+  "mail": "bbbb@naver.com"
+}

@@ -51,7 +51,7 @@ function CommunityPresenter(props) {
               <CommuBoard>날짜</CommuBoard>
               <CommuBoard>게시글타입</CommuBoard>
             </tr>
-            { props.board == null ? <tr><NullCommuBoard colSpan={6}>아직 없음.</NullCommuBoard></tr>
+            { props.board == null || props.board == '' ? <tr><NullCommuBoard colSpan={6}>아직 없음.</NullCommuBoard></tr>
               : (
                 props.board.body.map((post, index) => {
                   return (
