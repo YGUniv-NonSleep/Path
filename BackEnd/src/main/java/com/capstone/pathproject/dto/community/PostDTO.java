@@ -1,4 +1,4 @@
-package com.capstone.pathproject.dto;
+package com.capstone.pathproject.dto.community;
 
 import com.capstone.pathproject.domain.community.Post;
 import com.capstone.pathproject.domain.community.PostType;
@@ -29,7 +29,7 @@ public class PostDTO {
     public PostDTO(Long id, Member member, PostType type, Post parent, String title, String content,
                    int view, LocalDate writeDate,  String photoName){
         this.id = id;
-        this. member = member;
+        this.member = member;
         this.type = type;
         this.parent = parent;
         this.title = title;

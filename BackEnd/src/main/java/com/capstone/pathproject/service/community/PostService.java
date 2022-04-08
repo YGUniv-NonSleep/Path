@@ -1,21 +1,19 @@
-package com.capstone.pathproject.service;
+package com.capstone.pathproject.service.community;
 
 
 import com.capstone.pathproject.domain.community.Post;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
-import com.capstone.pathproject.dto.PostDTO;
-import com.capstone.pathproject.dto.member.MemberDTO;
+import com.capstone.pathproject.dto.community.PostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.repository.PostRepository;
+import com.capstone.pathproject.repository.community.PostRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -89,30 +87,30 @@ public class PostService {
     public Message<PostDTO> update(PostDTO postDTO, String fileName) {
         Optional<Post> result = postRepository.findById(postDTO.getId());
         if (result.isPresent()) {
-//            PostDTO updateResult = PostDTO.createPostDTO()
-//                    .id(postDTO.getId())
-//                    .member(postDTO.getMember())
-//                    .parent(postDTO.getParent())
-//                    .view(postDTO.getView())
-//                    .writeDate(postDTO.getWriteDate())
-//                    .content(postDTO.getContent())
-//                    .photoName(fileName)
-//                    .type(postDTO.getType())
-//                    .title(postDTO.getTitle())
-//                    .build();
-
-            PostDTO updateResult = result.get().toDTO();
-
-//            PostDTO updateResult = result.get().toDTO();
-
-
-            postRepository.save(updateResult.toEntity());
+            PostDTO updateResult = PostDTO.createPostDTO()
+                    .id(postDTO.getId())
+                    .member(postDTO.getMember())
+                    .parent(postDTO.getParent())
+                    .view(postDTO.getView())
+                    .writeDate(postDTO.getWriteDate())
+                    .content(postDTO.getContent())
+                    .photoName(fileName)
+                    .type(postDTO.getType())
+                    .title(postDTO.getTitle())
+                    .build();
+          //  PostDTO updateResult = result.get().toDTO();
+            if(postDTO.getMember().getId() == 1){
+                postRepository.save(updateResult.toEntity());
+                return Message.<PostDTO>createMessage()
+                        .header(StatusEnum.OK)
+                        .message("업데이트 완료")
+                        .body(postDTO).build();
+            }
         }
-
         return Message.<PostDTO>createMessage()
-                .header(StatusEnum.OK)
-                .message("업데이트 완료")
-                .body(postDTO).build();
+                .header(StatusEnum.BAD_REQUEST)
+                .message("작성자가 아닙니다!")
+                .build();
     }
 
 
@@ -121,12 +119,18 @@ public class PostService {
         Optional<Post> result = postRepository.findById(postId);
         Long rs = result.get().getId();
         if (result.isPresent()) {
-            postRepository.deleteById(rs);
+            if(result.get().getMember().getId() == 1) {
+               // postRepository.deleteById(rs);
+                postRepository.deleteById(rs);
+                return Message.<PostDTO>createMessage()
+                        .header(StatusEnum.OK)
+                        .message("삭제완료")
+                        .build();
+            }
         }
-
-        return Message.<PostDTO>createMessage()
-                .header(StatusEnum.OK)
-                .message("삭제완료")
+         return Message.<PostDTO>createMessage()
+                .header(StatusEnum.BAD_REQUEST)
+                .message("작성자가 아닙니다!")
                 .build();
     }
 
@@ -195,12 +199,20 @@ public class PostService {
     @Transactional
     public Message<PostDTO> repdelete(Long postId) {
         Optional<Post> result = postRepository.findById(postId);//postId = 25;
-
-            postRepository.deleteById(result.get().getId());
-            return Message.<PostDTO>createMessage()
-                    .header(StatusEnum.OK)
-                    .message("삭제완료")
-                    .build();
+        Optional<Member> memberOptional = memberRepository.findById(result.get().getMember().getId());
+            if(result.isPresent()){
+                if(memberOptional.get().getRole().equals(Role.ROLE_ADMIN)){
+                    postRepository.deleteById(result.get().getId());
+                    return Message.<PostDTO>createMessage()
+                            .header(StatusEnum.OK)
+                            .message("삭제완료")
+                            .build();
+                }
+            }
+        return Message.<PostDTO>createMessage()
+                .header(StatusEnum.OK)
+                .message("관리자가 아닙니다!")
+                .build();
         }
 
 

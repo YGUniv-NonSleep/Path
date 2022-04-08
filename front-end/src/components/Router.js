@@ -59,10 +59,10 @@ function Router() {
       </Routes>
       <Routes>
       <Route path="/mobility" element={<Mobility />} />
-                <Route path="/mobility/bus" element={<Bus/>} />
-                <Route path="/mobility/subway" element={<Subway />} />
-                <Route path="/mobility/scooter" element={<Scooter />} />
-                <Route path="/mobility/bike" element={<Bike />} />
+        <Route path="/mobility/bus" element={<Bus/>} />
+        <Route path="/mobility/subway" element={<Subway />} />
+        <Route path="/mobility/scooter" element={<Scooter />} />
+        <Route path="/mobility/bike" element={<Bike />} />
       </Routes>
       <Routes>
         <Route path="/community" element={<Community />} />

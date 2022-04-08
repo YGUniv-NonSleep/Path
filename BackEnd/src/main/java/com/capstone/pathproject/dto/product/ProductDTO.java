@@ -21,16 +21,18 @@ public class ProductDTO {
     private int stock;
     private Company company;
     private ProdBasic prodbasic;
+    private String picture;
     private List<Option> optionList;
 
     @Builder(builderMethodName = "createProductDTO")
-    public ProductDTO(long id, int price, Boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodbasic, List<Option> optionList){
+    public ProductDTO(long id, int price, Boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodbasic, String picture, List<Option> optionList){
     this.id = id;
     this.price = price;
     this.exposure = exposure;
     this.discount = discount;
     this.created = created;
     this.stock = stock;
+    this.picture = picture;
     this.company = company;
     this.prodbasic = prodbasic;
     this.optionList = optionList;
@@ -48,6 +50,7 @@ public class ProductDTO {
                 .prodBasic(prodbasic)
                 .company(company)
                 .optionList(optionList)
+                .picture(picture)
                 .build();
     }
 

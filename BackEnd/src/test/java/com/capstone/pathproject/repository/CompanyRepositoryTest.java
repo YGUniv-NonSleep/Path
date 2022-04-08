@@ -1,7 +1,6 @@
 package com.capstone.pathproject.repository;
 
 import com.capstone.pathproject.domain.company.Company;
-import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

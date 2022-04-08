@@ -174,7 +174,7 @@ function SignUpPresenter(props) {
                     fullWidth
                     id="phone"
                     name="phone"
-                    label="전화번호"
+                    label="전화번호 (010-XXXX-XXXX)"
                     onChange={props.handleInput}
                     error={phoneError !== '' || false}
                   />
@@ -249,12 +249,12 @@ function SignUpPresenter(props) {
                       inputFormat={'yyyy-MM-dd'}
                       mask={'____-__-__'}
                       error={birthdayError !== '' || null}
-                      onChange={props.handleBirtyday}
+                      onChange={props.handleBirthday}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           required
-                          name="birtyday"
+                          name="birthday"
                           error={birthdayError !== '' || null}
                         />
                       )}

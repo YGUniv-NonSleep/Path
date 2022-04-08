@@ -1,0 +1,5 @@
+GET https://localhost:8080/api/member/1
+Content-Type: application/json
+
+# 로그인 후 토큰값을 가지고 조회하기
+# 맨뒤의 숫자가 멤버pk

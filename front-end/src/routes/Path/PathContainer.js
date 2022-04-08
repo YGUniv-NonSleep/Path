@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PathPresenter from "./PathPresenter"
+import { PathApi } from "../../OdsayApi"
 import MapApi from "../../MapApi";
 
 function PathContainer() {
@@ -50,6 +51,12 @@ function PathContainer() {
         setInsertPoint('')
         setStartPoint('')
         setArrivalPoint('')
+    }
+    // 출발지 도착지 전환하는 함수
+    const switchPoints = () => {
+        let temp = startPoint
+        setStartPoint(arrivalPoint)
+        setArrivalPoint(temp)
     }
 
     // console.log(startPoint)
@@ -123,7 +130,7 @@ function PathContainer() {
                 ]
 
                 let bounds = new kakao.maps.LatLngBounds();
-
+                
                 for(var i=0; i<points.length; i++) {
                     bounds.extend(points[i])
                 }
@@ -183,6 +190,7 @@ function PathContainer() {
             arrivalPoint = {arrivalPoint}
             onchangeSP = {onchangeSP}
             onchangeAP = {onchangeAP}
+            switchPoints = {switchPoints}
             refreshPoints = {refreshPoints}
             wayFind = {wayFind}
         ></PathPresenter>

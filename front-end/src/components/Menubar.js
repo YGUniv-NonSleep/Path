@@ -177,7 +177,7 @@ const Menubar = () => {
         </Image>
       </Ul>
       <PathRouteElement></PathRouteElement>
-      {/* <CompRouteElement></CompRouteElement> */}
+      <CompRouteElement></CompRouteElement>
       <BtnUl>
         {username != '' ? (
           <Li $current={currLocation === '/logout' && true}>
