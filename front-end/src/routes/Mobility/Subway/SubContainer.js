@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import SubPresenter from "./SubPresenter";
 import MapApi from "../../../MapApi";
+import { SubPath, SubTime} from "../../../OdsayApi";
 
 function SubContainer() {
     const [map, settingMap] = useState(null);
@@ -19,6 +20,14 @@ function SubContainer() {
     }
 
     async function subInfo(){
+
+        let stationID = 40230
+        let stationTime = await SubTime.getSubTime(stationID).catch((error) => console.log(error));
+        console.log(stationTime)
+
+        let subPath = 4000
+        let pathRoute = await SubPath.getSubPath(subPath).catch((error) => console.log(error));
+        console.log(pathRoute)
 
       
         var points = [
