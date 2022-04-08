@@ -1,11 +1,22 @@
 package com.capstone.pathproject.controller;
 
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.dto.response.StatusEnum;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
+import com.capstone.pathproject.security.auth.jwt.JwtProperties;
+import com.capstone.pathproject.security.auth.jwt.TokenType;
+import com.capstone.pathproject.security.filter.LogFilter;
 import com.capstone.pathproject.service.CompanyService;
+import com.capstone.pathproject.util.JwtTokenUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,11 +34,38 @@ import java.util.List;
 public class CompanyApiController {
 
     private final CompanyService companyService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/myStore")
-    public ResponseEntity<Message<List<CompanyDTO>>> myCompany() {
+    public ResponseEntity myCompany(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Message message;
 
-        Message<List<CompanyDTO>> message = companyService.companyDetailByMember(1L);
+        if(principalDetails != null){
+            Member member = principalDetails.getMember();
+            System.out.println("member = " + member);
+            message = companyService.companyDetailByMember(member.getId());
+        }else{
+            message = Message.createMessage()
+                    .header(StatusEnum.NOT_FOUND)
+                    .message("로그인을 해 주세요!!")
+                    .build();
+        }
+
+//        String header = request.getHeader(JwtProperties.HEADER_STRING);//access token 임
+//        System.out.println("header = " + header); // "Bearer 토큰값" -> "Bearer " 잘라야 진짜 토큰값
+//        String accesstoken = header.replace(JwtProperties.TOKEN_PREFIX, "");//진짜 엑세스토큰임
+//        Claims body = jwtTokenUtil.getClaimsFormToken(TokenType.ACCESS_TOKEN, accesstoken);
+//        System.out.println("body = " + body);
+//        Object id = body.get("id");
+//        System.out.println("id = " + id);
+//        Object name = body.get("name");
+//        System.out.println("name = " + name);
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        PrincipalDetails principalDetails1 = (PrincipalDetails) authentication.getPrincipal();
+//        principalDetails1.getMember()
+//        System.out.println("name = " + name);
+
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -41,19 +79,30 @@ public class CompanyApiController {
     @PostMapping("/")
     public ResponseEntity createCom(@Valid @RequestPart(value="json") CompanyDTO companyDTO,
                                     @RequestPart(value = "picture", required = false) MultipartFile file ,
-                                    HttpServletRequest httpServletRequest) {
+                                    HttpServletRequest httpServletRequest,
+                                    @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        String fileName;
+        if ( file != null ){
+            System.out.println("파일있어!");
+            fileName = file.getOriginalFilename();
+            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "company\\";
 
-        String fileName = file.getOriginalFilename();
-        String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "company\\";
+            try {
+                file.transferTo(new File(filePath + fileName));
 
-        try {
-            file.transferTo(new File(filePath + fileName));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
-        }catch (Exception e){
-            e.printStackTrace();
+        }else{
+            System.out.println("파일없어!");
+            fileName = "";
         }
 
-        Message<CompanyDTO> message = companyService.createCompany(companyDTO,fileName);
+        companyDTO.addFile(fileName);
+        companyDTO.addMember(principalDetails.getMember());
+
+        Message<CompanyDTO> message = companyService.createCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -66,21 +115,30 @@ public class CompanyApiController {
     @PatchMapping("/")
     public ResponseEntity<Message<CompanyDTO>> updateCompany(@Valid @RequestPart(value="json") CompanyDTO companyDTO,
                                                              @RequestPart(value = "picture", required = false) MultipartFile file ,
-                                                             HttpServletRequest httpServletRequest) {
+                                                             HttpServletRequest httpServletRequest,
+                                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        String fileName;
 
-        String fileName = file.getOriginalFilename();
-        String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "company\\";
+        if ( file != null ){
+            System.out.println("파일있어!");
+            fileName = file.getOriginalFilename();
+            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "company\\";
 
-        try {
-            file.transferTo(new File(filePath + fileName));
+            try {
+                file.transferTo(new File(filePath + fileName));
 
-        }catch (Exception e){
-            e.printStackTrace();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("파일없어!");
+            fileName = "";
         }
 
-        Message<CompanyDTO> message = companyService.updateCompany(companyDTO, fileName);
+        companyDTO.addFile(fileName);
+        companyDTO.addMember(principalDetails.getMember());
+
+        Message<CompanyDTO> message = companyService.updateCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
-
-
 }
