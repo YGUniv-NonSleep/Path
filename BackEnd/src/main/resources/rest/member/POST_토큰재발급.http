@@ -1,0 +1,4 @@
+POST https://localhost:8080/api/token
+Content-Type: application/json
+
+# 토큰값 가진 상태에서 실행

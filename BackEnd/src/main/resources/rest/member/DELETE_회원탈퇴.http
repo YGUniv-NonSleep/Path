@@ -1,0 +1,3 @@
+DELETE https://localhost:8080/api/member/1
+
+# 맨 뒤의 번호 pk로 삭제
