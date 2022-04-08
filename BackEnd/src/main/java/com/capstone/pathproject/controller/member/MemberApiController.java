@@ -92,11 +92,11 @@ public class MemberApiController {
     }
 
     // 회원 비밀번호 찾기
-//    @PostMapping("/forget/password")
-//    public ResponseEntity forgotPassword(@RequestBody MemberDTO memberDTO) {
-//        memberService.forgotPassword(memberDTO);
-//    }
-
+    @PostMapping("/forget/password")
+    public ResponseEntity forgotPassword(@RequestBody MemberDTO memberDTO) {
+        Message<String> message = memberService.forgotPassword(memberDTO);
+        return new ResponseEntity(message, HttpStatus.OK);
+    }
 
 
     // === 테스트 요청 === //
