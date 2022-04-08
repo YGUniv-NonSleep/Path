@@ -79,7 +79,8 @@ function SignUpContainer() {
 
   const isValidInput = () => {
     const loginIdRegex = /^[a-zA-Z0-9\s]+$/;
-    if (!loginIdRegex.test(loginId))
+    if (!loginIdRegex.test(loginId) && loginId.length <= 4)
+      // setLoginIdError('아이디를 4자 이상 입력해주세요.')
       setLoginIdError('올바른 아이디 형식이 아닙니다.');
     else setLoginIdError('');
 

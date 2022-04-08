@@ -96,7 +96,7 @@ function SignUpPresenter(props) {
           <Typography component="h1" variant="h5">
             회원가입
           </Typography>
-          <Boxs
+          <Box
             component="form"
             noValidate
             onSubmit={props.handleSubmit}
@@ -282,7 +282,7 @@ function SignUpPresenter(props) {
               </Button>
             </FormControl>
             <FormHelperTexts>{registerError}</FormHelperTexts>
-          </Boxs>
+          </Box>
         </Box>
       </Container>
     </ThemeProvider>
