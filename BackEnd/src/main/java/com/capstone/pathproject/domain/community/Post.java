@@ -1,7 +1,7 @@
 package com.capstone.pathproject.domain.community;
 
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.dto.PostDTO;
+import com.capstone.pathproject.dto.community.PostDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter

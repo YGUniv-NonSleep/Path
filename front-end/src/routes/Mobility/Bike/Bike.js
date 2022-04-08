@@ -1,9 +1,6 @@
 import { Link, Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import styled from "styled-components";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
-import Icon from "../../../components/Icon";
+import MIcon from "../MIcon";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -11,8 +8,8 @@ const SideNav = styled.nav`
   z-index: 5;
   background-color: white;
   box-shadow: 3px 3px 3px gray;
-  width: 390px;
-  height: 100%;
+  width: 380px;
+  height: 90px;
 `;
 
 const BarContainer = styled.div`
@@ -31,20 +28,10 @@ const Ul = styled.ul`
 const Bike = () => {
   return (
     <SideNav>
-      <Icon />
+      <MIcon />
 
       <BarContainer>
-        <TextField
-          sx={{ left: "15px", width: "360px" }}
-          size="small"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
+        
       </BarContainer>
     </SideNav>
   );

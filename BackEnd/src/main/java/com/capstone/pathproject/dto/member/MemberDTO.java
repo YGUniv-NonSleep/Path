@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDTO {
 
-
     private Long id;
     private Role role;
 
@@ -54,7 +53,7 @@ public class MemberDTO {
     @Builder(builderMethodName = "createMemberDTO")
     public MemberDTO(Long id, Role role, String loginId, String password, String mail, String name, String phone, String addr, String addrDetail, memberGender gender, LocalDate birthday, LocalDate signupDay, String account, int score) {
         this.id = id;
-        this.role = Role.ROLE_MEMBER;
+        this.role = role;
         this.loginId = loginId;
         this.password = password;
         this.mail = mail;
@@ -85,7 +84,7 @@ public class MemberDTO {
                 .build();
     }
 
-    public void encodePassword(String encodePassword) {
+    public void changePassword(String encodePassword) {
         this.password = encodePassword;
     }
 
