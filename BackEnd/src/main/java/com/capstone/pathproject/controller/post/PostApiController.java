@@ -1,17 +1,13 @@
 package com.capstone.pathproject.controller.post;
 
 
-import com.capstone.pathproject.domain.community.Post;
-import com.capstone.pathproject.dto.PostDTO;
-import com.capstone.pathproject.dto.member.MemberDTO;
+import com.capstone.pathproject.dto.community.PostDTO;
 import com.capstone.pathproject.dto.response.Message;
-import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.service.PostService;
+import com.capstone.pathproject.service.community.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -33,8 +29,10 @@ public class PostApiController {
 
 
     ///Post Controller///
-    @PostMapping(value = "/create")
-    public ResponseEntity<Message<PostDTO>> create(@Valid @RequestPart(value = "key", required = false) PostDTO postDTO, @RequestPart(value = "userfile",required = false) MultipartFile file, HttpServletRequest request) {
+    @PostMapping("/create")
+    public ResponseEntity<Message<PostDTO>> create(@Valid @RequestPart(value = "key", required = false) PostDTO postDTO,
+                                                   @RequestPart(value = "userfile",required = false) MultipartFile file,
+                                                   HttpServletRequest request) {
         String fileName;
         if(file == null){
             fileName = "";
@@ -88,26 +86,21 @@ public class PostApiController {
     @GetMapping("/view")
     public ResponseEntity getPostList(@PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
         Message<List<PostDTO>> message = postService.getPostList(pageable);
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message, status);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
     //수정해야함
     @GetMapping("/view/search")
     public ResponseEntity search(String keyword, @PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
         Message<List<PostDTO>> message = postService.search(keyword,pageable);
-        HttpStatus status = message.getHttpStatus();
-        return new ResponseEntity<>(message,status);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
     @GetMapping("/view/{postId}")
     public ResponseEntity read(@PathVariable("postId") Long id, Model model){
         Message<List<PostDTO>> message = postService.updateView(id);
-        HttpStatus status = message.getHttpStatus();
-        //model.addAttribute("view",postService.updateView(id));
-
-        return new ResponseEntity<>(message,status);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 

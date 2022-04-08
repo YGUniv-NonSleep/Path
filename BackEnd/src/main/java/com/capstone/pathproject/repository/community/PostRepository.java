@@ -1,4 +1,4 @@
-package com.capstone.pathproject.repository;
+package com.capstone.pathproject.repository.community;
 
 import com.capstone.pathproject.domain.community.Post;
 
