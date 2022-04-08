@@ -2,8 +2,7 @@ POST https://localhost:8080/api/product/createBasic
 Content-Type: application/json
 
 {
-  "name": "String",
-  "image": "String",
+  "name": "아메리",
   "detail": "String",
   "brand": "String",
   "category": "String"

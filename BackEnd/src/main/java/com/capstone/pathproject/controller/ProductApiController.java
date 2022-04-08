@@ -24,32 +24,35 @@ public class ProductApiController {
 
     private final ProductService productService;
 
-    @PostMapping("/Basic")
+    @PostMapping("/basic")
     public ResponseEntity<Message<ProdBasicDTO>> createBasic(@RequestPart(value="json") ProdBasicDTO prodBasicDTO,
                                                              @RequestPart(value = "picture", required = false) MultipartFile file ,
                                                              HttpServletRequest httpServletRequest){
+        String fileName;
+        if (file != null){
+            fileName = file.getOriginalFilename();
+            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "product\\";
+            try {
+                file.transferTo(new File(filePath + fileName));
 
-        String fileName = file.getOriginalFilename();
-        String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "product\\";
-
-        try {
-            file.transferTo(new File(filePath + fileName));
-
-        }catch (Exception e){
-            e.printStackTrace();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            fileName = "";
         }
 
         Message<ProdBasicDTO> message = productService.createBasic(prodBasicDTO, fileName);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @DeleteMapping("/Basic/{basicId}")
+    @DeleteMapping("/basic/{basicId}")
     public ResponseEntity<Message> deleteBasic(@PathVariable("basicId") Long basicId){
         Message message = productService.deleteBasic(basicId);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @PatchMapping("/Basic")
+    @PatchMapping("/basic")
     public ResponseEntity<Message<ProdBasicDTO>> updateBasic(@RequestPart(value="json") ProdBasicDTO prodBasicDTO,
                                                              @RequestPart(value = "picture", required = false) MultipartFile file ,
                                                              HttpServletRequest httpServletRequest){
@@ -75,6 +78,14 @@ public class ProductApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    @GetMapping("/basic")
+    public ResponseEntity findBasic(@RequestParam(value = "name" , required = false,defaultValue = "")String name,
+                                    @RequestParam(value = "brand", required = false,defaultValue = "")String brand) {
+
+        Message message = productService.findBasicByName(name, brand);
+
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
 
     @PostMapping("/")
     public ResponseEntity<Message<ProductDTO>> createProduct(@RequestBody ProductDTO productDTO){

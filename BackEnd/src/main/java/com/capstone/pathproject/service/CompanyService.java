@@ -21,11 +21,11 @@ public class CompanyService {
 
     private final MemberRepository memberRepository;
 
-    public Message<CompanyDTO> createCompany(CompanyDTO companyDTO, String fileName){
+    public Message<CompanyDTO> createCompany(CompanyDTO companyDTO){
         //Optional<Member> member = memberRepository.findById(companyDTO.getMemberId());
         //System.out.println(companyDTO.toString());
         //HttpServletRequest httpServletRequest;
-        companyDTO.addFile(fileName);
+
 
         companyRepository.save(companyDTO.toEntity());
         return Message.<CompanyDTO>createMessage()
@@ -43,8 +43,7 @@ public class CompanyService {
                 .build();
     }
 
-    public Message<CompanyDTO> updateCompany(CompanyDTO companyDTO, String fileName) {
-        companyDTO.addFile(fileName);
+    public Message<CompanyDTO> updateCompany(CompanyDTO companyDTO) {
         companyRepository.save(companyDTO.toEntity());
 
         return Message.<CompanyDTO>createMessage()
