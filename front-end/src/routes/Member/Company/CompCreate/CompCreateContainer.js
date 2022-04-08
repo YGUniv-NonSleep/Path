@@ -21,10 +21,7 @@ function CompCreateContainer() {
             "mail": e.target.email.value,
             "phone": e.target.phone.value,
             "latitude": e.target.lat.value,
-            "longitude": e.target.long.value,        
-            "member":{
-                "id":1
-            }           
+            "longitude": e.target.long.value,  
         };
 
         let formData = new FormData();
