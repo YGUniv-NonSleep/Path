@@ -3,7 +3,7 @@ import styled from "styled-components";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import Icon from "../../../components/Icon";
+import MIcon from "../MIcon";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -83,7 +83,7 @@ const Line1 = styled.hr`
 const Bus = () => {
   return (
     <SideNav>
-      <Icon></Icon>
+      <MIcon />
       <Ul>
         <Btn>버스</Btn>
         <Station>버스정류장</Station>

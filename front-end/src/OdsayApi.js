@@ -28,7 +28,6 @@ export const PathApi = {
 };
 
 export const MobilityApi = {
-
   getBusId: async (data) => { console.log(data)
     const response = await odsayApi.get(
       `/searchBusLane?lang=0&busNo=${data}&CID=4000&apiKey=${key}`
@@ -45,8 +44,6 @@ export const MobilityApi = {
     return response.data;
   },
 };
-
-
 
 
 export default odsayApi;
