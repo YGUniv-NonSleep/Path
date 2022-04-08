@@ -1,8 +1,10 @@
 package com.capstone.pathproject.controller;
 
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.memberGender;
 import com.capstone.pathproject.dto.member.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.service.member.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -26,6 +30,8 @@ class MemberApiControllerTest {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -65,13 +71,29 @@ class MemberApiControllerTest {
         //given
         MemberDTO memberDTO = setAllMemberDTO();
         //when
-        Message<MemberDTO> message = memberService.signup(memberDTO);
-        HttpStatus status = message.getHttpStatus();
+        Message<String> message = memberService.signup(memberDTO);
         //then
-        ResponseEntity<Message<MemberDTO>> response = new ResponseEntity<>(message, status);
+        ResponseEntity<Message<String>> response = new ResponseEntity<Message<String>>(message, HttpStatus.OK);
         System.out.println("header : " + response.getBody().getHeader().toString());
         System.out.println("message : " + response.getBody().getMessage());
         System.out.println("body : " + response.getBody().getBody().toString());
+    }
+
+    @Test
+    void id값꺼내기() throws Exception {
+        //given
+        MemberDTO memberDTO = setAllMemberDTO();
+        Member member = memberDTO.toEntity();
+        System.out.println(member);
+        System.out.println("==================================================");
+        Member saveMember = memberRepository.save(member);
+        System.out.println(member);
+        System.out.println("saveMember = " + saveMember);
+
+        //when
+
+        //then
+
     }
 
     private MemberDTO setAllMemberDTO() {
@@ -84,7 +106,7 @@ class MemberApiControllerTest {
                 .addr("대구시 동구 산격동")
                 .addrDetail("1111")
                 .gender(memberGender.MALE)
-                .birthday("2000-01-01")
+                .birthday(LocalDate.parse("2000-01-01"))
                 .build();
     }
 }

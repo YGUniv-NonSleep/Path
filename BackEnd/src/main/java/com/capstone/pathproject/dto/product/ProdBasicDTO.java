@@ -13,16 +13,16 @@ public class ProdBasicDTO {
     private String image;
     private String detail;
     private String brand;
-    private String categori;
+    private String category;
 
     @Builder(builderMethodName = "createProdBasicDTO")
-    public ProdBasicDTO(Long id, String name, String image, String detail, String brand, String categori){
+    public ProdBasicDTO(Long id, String name, String image, String detail, String brand, String category){
         this.id = id;
         this.name = name;
         this.image = image;
         this.detail = detail;
         this.brand = brand;
-        this.categori = categori;
+        this.category = category;
 
     }
 
@@ -33,12 +33,12 @@ public class ProdBasicDTO {
                 .image(image)
                 .detail(detail)
                 .brand(brand)
-                .categori(categori)
+                .category(category)
                 .build();
     }
 
 
-
-
-
+    public void addFile(String fileName) {
+        this.image = fileName;
+    }
 }

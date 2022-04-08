@@ -36,6 +36,7 @@ const Subway = () => {
       <BarContainer>
         <TextField
           sx={{ left: "15px", width: "360px" }}
+          size="small"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

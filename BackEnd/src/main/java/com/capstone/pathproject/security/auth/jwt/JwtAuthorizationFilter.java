@@ -3,13 +3,13 @@ package com.capstone.pathproject.security.auth.jwt;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
-import com.capstone.pathproject.security.util.ClientUtil;
-import com.capstone.pathproject.security.util.CookieUtil;
-import com.capstone.pathproject.security.util.JwtTokenUtil;
+import com.capstone.pathproject.util.ClientUtil;
+import com.capstone.pathproject.util.CookieUtil;
+import com.capstone.pathproject.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +23,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +30,12 @@ import java.util.concurrent.TimeUnit;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final MemberRepository memberRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private final JwtTokenUtil jwtTokenUtil;
     private final CookieUtil cookieUtil;
     private static final String[] whiteList = {"/", "/login", "/logout", "/api/signup"};
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository, RedisTemplate redisTemplate, JwtTokenUtil jwtTokenUtil, CookieUtil cookieUtil) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository, StringRedisTemplate redisTemplate, JwtTokenUtil jwtTokenUtil, CookieUtil cookieUtil) {
         super(authenticationManager);
         this.memberRepository = memberRepository;
         this.redisTemplate = redisTemplate;
@@ -70,6 +69,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 // Refresh Token 있을 때
                 log.info("RefreshToken 조회 [{}]", requestURI);
                 String refreshToken = cookieUtil.exchangeToken(refreshTokenCookie).replace(JwtProperties.TOKEN_PREFIX, "");
+                System.out.println("refreshToken = " + refreshToken);
                 if (!jwtTokenUtil.isValidToken(TokenType.REFRESH_TOKEN, refreshToken)) {
                     // RefreshToken 유효성 실패
                     chain.doFilter(request, response);
@@ -129,25 +129,37 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         log.info("토큰 재발급 로직 실행 : reissueToken");
         // RefreshToken의 Claims(payload)부분 꺼내기
         Claims refreshClaims = jwtTokenUtil.getClaimsFormToken(TokenType.REFRESH_TOKEN, token);
-        String loginId = refreshClaims.get("id").toString();
+        String loginId = refreshClaims.get("sub").toString();
         // 시큐리티 세션에 저장하기
         Authentication authentication = getAuthentication(loginId);
         setAuthentication(authentication);
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         // AccessToken 생성 및 추가
         reissueAccessToken(request, response, principalDetails);
-        // RefreshToken 생성 및 쿠키 추가
-        reissueRefreshToken(request, response, principalDetails);
+        // RefreshToken 만료시간 확인 후 재발급
+        if (jwtTokenUtil.isRefreshTokenExpireReissueTime(token)) {
+            // RefreshToken 생성 및 쿠키 추가
+            reissueRefreshToken(request, response, principalDetails);
+            cookieUtil.addSameSite(response, "None");
+        }
         log.info("토큰 재발급 완료 : AccessToken, RefreshToken [{}]", request.getRequestURI());
     }
 
     private boolean isTokenEqualsRedisValue(HttpServletRequest request, String token) {
-        String browserIp = (String) redisTemplate.opsForValue().get(token);
-        if (browserIp.isEmpty()) return false;
+        System.out.println("token = " + token);
+        Object browserIp = redisTemplate.opsForValue().get(token);
+        System.out.println("browserIp = " + browserIp);
+        if (browserIp == null) {
+            log.error("RefreshToken의 browserIp가 비어있습니다. : isTokenEqualsRedisValue()");
+            return false;
+        }
         boolean checkIp = ClientUtil.getIp(request).equals(browserIp);
-        String result = checkIp ? "RefreshToken의 browserIp가 동일 [{}]" : "RefreshToken의 browserIp가 동일하지 않음 [{}]";
-        log.error(result, request.getRequestURI());
-        deleteRedisKey(token);
+        if(checkIp) {
+            log.info("RefreshToken의 browserIp가 동일 [{}]", request.getRequestURI());
+        } else {
+           log.error("RefreshToken의 browserIp가 동일하지 않음 [{}]", request.getRequestURI());
+            deleteRedisKey(token);
+        }
         return checkIp;
     }
 

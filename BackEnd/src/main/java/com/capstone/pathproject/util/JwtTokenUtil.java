@@ -1,4 +1,4 @@
-package com.capstone.pathproject.security.util;
+package com.capstone.pathproject.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -25,7 +25,7 @@ public class JwtTokenUtil {
         return JWT.create()
                 .withSubject(principalDetails.getUsername())
                 .withHeader(createHeader("ACCESS_TOKEN"))
-                .withClaim("id", principalDetails.getMember().getLoginId())
+                .withClaim("id", principalDetails.getMember().getId())
                 .withClaim("name", principalDetails.getMember().getName())
                 .withExpiresAt(createExpireDate(JwtProperties.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
@@ -36,7 +36,7 @@ public class JwtTokenUtil {
         return JWT.create()
                 .withSubject(principalDetails.getUsername())
                 .withHeader(createHeader("REFRESH_TOKEN"))
-                .withClaim("id", principalDetails.getMember().getLoginId())
+                .withClaim("id", principalDetails.getMember().getId())
                 .withClaim("name", principalDetails.getMember().getName())
                 .withExpiresAt(createExpireDate(JwtProperties.REFRESH_EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(JwtProperties.REFRESH));

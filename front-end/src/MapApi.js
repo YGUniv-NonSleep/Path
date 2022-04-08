@@ -130,6 +130,7 @@ function MapApi() {
         console.log(data[0].x)
         console.log(data[0].y)
 
+
         //lineArray.push(new kakao.maps.LatLng(y,x))
 
         for(var i=0; i<data.length; i++){
@@ -178,7 +179,8 @@ function MapApi() {
 
     return {
         createMap, setController, getInfo,  //getLatLng,
-        drawKakaoMarker, drawKakaoPolyLine, drawKakaoBusPolyLine,
+        drawKakaoMarker, drawKakaoPolyLine, drawKakaoBusPolyLine
+
     }
 }
 

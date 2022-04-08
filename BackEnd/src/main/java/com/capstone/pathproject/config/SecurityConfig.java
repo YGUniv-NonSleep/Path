@@ -1,15 +1,16 @@
-package com.capstone.pathproject.security.config;
+package com.capstone.pathproject.config;
 
 import com.capstone.pathproject.repository.member.MemberRepository;
-import com.capstone.pathproject.security.auth.PrincipalDetailsService;
 import com.capstone.pathproject.security.auth.jwt.JwtAuthenticationFilter;
 import com.capstone.pathproject.security.auth.jwt.JwtAuthorizationFilter;
-import com.capstone.pathproject.security.util.CookieUtil;
-import com.capstone.pathproject.security.util.JwtTokenUtil;
+import com.capstone.pathproject.util.CookieUtil;
+import com.capstone.pathproject.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,7 +24,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MemberRepository memberRepository;
-    private final RedisTemplate redisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private final JwtTokenUtil jwtTokenUtil;
     private final CookieUtil cookieUtil;
     private final CorsFilter corsFilter;
@@ -44,10 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), redisTemplate, jwtTokenUtil, cookieUtil))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository, redisTemplate, jwtTokenUtil, cookieUtil))
                 .authorizeRequests()
-                .antMatchers("/api/reissue/**").hasAnyRole("ADMIN", "BUSINESS", "USER")
-                .antMatchers("/api/user/**").hasAnyRole("ADMIN", "BUSINESS", "USER")
+                .antMatchers(HttpMethod.POST, "/api/member").permitAll()
+                .antMatchers("/api/member/**", "/api/token/**").hasAnyRole("ADMIN", "BUSINESS", "MEMBER")
                 .antMatchers("/api/business/**").hasAnyRole("ADMIN", "BUSINESS")
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll();
     }
+
+
 }

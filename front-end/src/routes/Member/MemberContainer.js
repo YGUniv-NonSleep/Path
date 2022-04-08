@@ -1,22 +1,27 @@
 import { useEffect, useState } from 'react';
 import MemberPresenter from './MemberPresenter';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 function MemberContainer() {
-  // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading((current) => !current);
-    console.log('렌더링될때마다함');
+    testMember();
   }, []);
 
-  // === AccessToken 확인 == //
+  // === AccessToken 값 디코딩 === //
+  const tokenDecode = (authorization) => {
+    var decoded = jwt_decode(authorization);
+    console.log(decoded);
+    return decoded;
+  };
 
   // ======== 테스트 ====== //
-  const testSubmit = () => {
+  const testMember = () => {
     axios
-      .post(process.env.REACT_APP_SPRING_API + '/api/member/test', {
+      .get(process.env.REACT_APP_SPRING_API + '/api/member', {
         withCredentials: true,
       })
       .then((res) => {
@@ -27,9 +32,35 @@ function MemberContainer() {
       });
   };
 
-  const testUserSubmit = () => {
+  const testBusiness = () => {
     axios
-      .get(process.env.REACT_APP_SPRING_API + '/api/user', {
+      .get(process.env.REACT_APP_SPRING_API + '/api/business', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const testAdmin = () => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/admin', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const testBtn = () => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/test', {
         withCredentials: true,
       })
       .then((res) => {
@@ -43,8 +74,10 @@ function MemberContainer() {
   return (
     <MemberPresenter
       loading={loading}
-      testSubmit={testSubmit}
-      testUserSubmit={testUserSubmit}
+      testBusiness={testBusiness}
+      testAdmin={testAdmin}
+      testMember={testMember}
+      testBtn={testBtn}
     ></MemberPresenter>
   );
 }

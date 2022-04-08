@@ -22,7 +22,7 @@ public class Option {
     @Column(name = "OPTION_NAME")
     private String name;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "OPTION_ID")
     private List<DetailOption> detailOptionList;
 
