@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 function SignUpContainer() {
   // ====== 회원가입 입력 ====== //
   const [inputValue, setInputValue] = useState({
+    role: '',
     loginId: '',
     password: '',
     rePassword: '',
@@ -18,6 +19,7 @@ function SignUpContainer() {
   });
 
   const {
+    role,
     loginId,
     email,
     name,
@@ -153,6 +155,7 @@ function SignUpContainer() {
     e.preventDefault();
     if (!isValidInput()) return;
     const data = {
+      role: role,
       loginId: loginId,
       mail: email,
       name: name,
@@ -163,6 +166,7 @@ function SignUpContainer() {
       gender: gender,
       birthday: birthday,
     };
+    console.log(data);
     axios
       .post(process.env.REACT_APP_SPRING_API + '/api/member', data, {
         withCredentials: true,

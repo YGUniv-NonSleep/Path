@@ -59,6 +59,7 @@ public class MemberApiController {
     // 회원 등록
     @PostMapping("/member")
     public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO) {
+        System.out.println("memberDTO = " + memberDTO);
         Message<String> message = memberService.signup(memberDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
