@@ -1,31 +1,22 @@
-package com.capstone.pathproject.controller;
+package com.capstone.pathproject.controller.company;
 
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
-import com.capstone.pathproject.security.auth.jwt.JwtProperties;
-import com.capstone.pathproject.security.auth.jwt.TokenType;
-import com.capstone.pathproject.security.filter.LogFilter;
-import com.capstone.pathproject.service.CompanyService;
+import com.capstone.pathproject.service.company.CompanyService;
 import com.capstone.pathproject.util.JwtTokenUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 
 @RestController
@@ -141,4 +132,14 @@ public class CompanyApiController {
         Message<CompanyDTO> message = companyService.updateCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
+    @PostMapping("/member/{companyId}/{memberId}")
+    public ResponseEntity addCompanyMember(@PathVariable("companyId") Long companyId,
+                                             @PathVariable("memberId") Long memberId){
+
+        Message message = companyService.addCompanyMember(companyId, memberId);
+
+        return new ResponseEntity(message,HttpStatus.OK);
+    }
+
 }
