@@ -2,10 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { Link } from 'react-router-dom'
 import styled from "styled-components";
-import CommunityContents from './CommunityContents'
-
-
-
+import { Link } from 'react-router-dom';
 
 const CommuCon = styled.div`
   width: 390px;
@@ -26,14 +23,12 @@ const NullCommuBoard = styled.td`
 `;
 
 function CommunityPresenter(props) {
-  console.log(props.board);
-  
+  // console.log(props.board);
   return (
     <div className="Community">
       <CommuCon>
         <CommuSubCon>
           {props.loading ? <p>커뮤니티 화면 나왔다</p> : <h2>로드 중...</h2>}
-          <div>여기다가 쓰면 됨</div>
           <form
             id="myForm"
             name="myForm"
@@ -53,7 +48,6 @@ function CommunityPresenter(props) {
           </form>
         </CommuSubCon>
         <CommuSubCon>
-          {props.loading ? <p>커뮤니티 화면 나왔다</p> : <h2>로드 중...</h2>}
           <table>
             <tr>
               <CommuBoard>게시글번호</CommuBoard>
@@ -73,9 +67,9 @@ function CommunityPresenter(props) {
                       <CommuBoard2>
                         <Link to={{
                           pathname : `/community/${post.id}`,
-                          state:{
-                            post : post
-                          }
+                          // state:{
+                          //   post : post
+                          // }
                         }}>{post.title}
                         </Link>
                       </CommuBoard2>
