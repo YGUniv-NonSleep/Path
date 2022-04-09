@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
 import { Link } from 'react-router-dom'
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
 
 const CommuCon = styled.div`
   width: 390px;
@@ -23,7 +21,7 @@ const NullCommuBoard = styled.td`
 `;
 
 function CommunityPresenter(props) {
-  // console.log(props.board);
+  console.log(props.board);
   return (
     <div className="Community">
       <CommuCon>
@@ -60,18 +58,14 @@ function CommunityPresenter(props) {
             { props.board == null || props.board == '' ? <tr><NullCommuBoard colSpan={6}>아직 없음.</NullCommuBoard></tr>
               : (
                 props.board.body.map((post, index) => {
-                  console.log(post);
+                  // console.log(post);
                   return (
                     <tr key={index}>
                       <CommuBoard2>{post.id}</CommuBoard2>
                       <CommuBoard2>
                         <Link to={{
-                          pathname : `/community/${post.id}`,
-                          // state:{
-                          //   post : post
-                          // }
-                        }}>{post.title}
-                        </Link>
+                          pathname : `/community/${post.id}`
+                        }}>{post.title}</Link>
                       </CommuBoard2>
                       <CommuBoard2>{post.member.id}</CommuBoard2>
                       <CommuBoard2>{post.view}</CommuBoard2>
