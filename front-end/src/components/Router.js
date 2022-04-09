@@ -9,6 +9,7 @@ import { MemberContainer as Member } from '../routes/Member';
 import Oder from '../routes/Oder';
 import Mobility from '../routes/Mobility';
 import Community from '../routes/Community';
+import CommunityContents from '../routes/Community/CommunityContents'
 import CarPool from '../routes/CarPool';
 import { LoginContainer as Login } from '../routes/Member';
 import SearchId from '../routes/Member/SearchId'
@@ -72,6 +73,7 @@ function Router() {
       </Routes>
       <Routes>
         <Route path="/community" element={<Community />} />
+        <Route path="/community/:postId" element={<CommunityContents />} />
       </Routes>
       <Routes>
         <Route path="/carpool" element={<CarPool />} />

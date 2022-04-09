@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 const CommuCon = styled.div`
   width: 390px;
@@ -20,13 +21,12 @@ const NullCommuBoard = styled.td`
 `;
 
 function CommunityPresenter(props) {
-  console.log(props.board);
+  // console.log(props.board);
   return (
     <div className="Community">
       <CommuCon>
         <CommuSubCon>
           {props.loading ? <p>커뮤니티 화면 나왔다</p> : <h2>로드 중...</h2>}
-          <div>여기다가 쓰면 됨</div>
           <form
             id="myForm"
             name="myForm"
@@ -35,13 +35,17 @@ function CommunityPresenter(props) {
           >
             <input type="text" placeholder="???" name="title" />
             <input type="text" placeholder="???" name="content" />
-            <input type="text" placeholder="type" name="type" />
+            <select type="text" placeholder="type" name="type" >
+                <option>NOTICE</option>
+                <option>FAQ</option>
+                <option>COMPLAINT</option>
+                <option>QNA</option>
+            </select>
             <input type="file" name="userfile" multiple="multiple" />
             <button type="submit">submit</button>
           </form>
         </CommuSubCon>
         <CommuSubCon>
-          {props.loading ? <p>커뮤니티 화면 나왔다</p> : <h2>로드 중...</h2>}
           <table>
             <tr>
               <CommuBoard>게시글번호</CommuBoard>
@@ -57,7 +61,15 @@ function CommunityPresenter(props) {
                   return (
                     <tr key={index}>
                       <CommuBoard2>{post.id}</CommuBoard2>
-                      <CommuBoard2>{post.title}</CommuBoard2>
+                      <CommuBoard2>
+                        <Link to={{
+                          pathname : `/community/${post.id}`,
+                          // state:{
+                          //   post : post
+                          // }
+                        }}>{post.title}
+                        </Link>
+                      </CommuBoard2>
                       <CommuBoard2>{post.member.id}</CommuBoard2>
                       <CommuBoard2>{post.view}</CommuBoard2>
                       <CommuBoard2>{post.writeDate}</CommuBoard2>
