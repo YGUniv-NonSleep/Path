@@ -3,7 +3,7 @@ import styled from "styled-components";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import Icon from "../../../components/Icon";
+import MIcon from "../MIcon";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -28,10 +28,32 @@ const Ul = styled.ul`
   left: 110px;
 `;
 
+const Btn = styled.button`
+position: absolute;
+top: 160px;
+left: 10px;
+width: 182px;
+height: 40px;
+font-size: 12px;
+`;
+
+const Btn1 = styled.button`
+position: absolute;
+top: 160px;
+left: 190px;
+width: 180px;
+height: 40px;
+font-size: 12px;
+`;
+
 const Subway = () => {
   return (
     <SideNav>
-      <Icon />
+      <MIcon />
+
+      <Ul>
+        
+      </Ul>
 
       <BarContainer>
         <TextField
@@ -45,6 +67,10 @@ const Subway = () => {
             ),
           }}
         />
+
+        <Btn>시간표</Btn>
+        <Btn1>출구정보</Btn1>
+
       </BarContainer>
     </SideNav>
   );

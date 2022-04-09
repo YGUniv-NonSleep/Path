@@ -12,6 +12,7 @@ function MemberPresenter(props) {
       <Button onClick={props.testMember}>Member</Button>
       <Button onClick={props.testBusiness}>Business</Button>
       <Button onClick={props.testAdmin}>Admin</Button>
+      <Button onClick={props.testBtn}>test</Button>
     </Container>
   );
 }

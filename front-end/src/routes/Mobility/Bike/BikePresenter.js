@@ -6,8 +6,9 @@ function BikePresenter(props) {
     return (
         <div className="Mobility"> 
         <Bike/>
+        <Map />
             { props.loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2> }
-            <Map />
+            
         </div>
     )
 }

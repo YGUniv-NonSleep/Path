@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 function SignUpContainer() {
   // ====== 회원가입 입력 ====== //
   const [inputValue, setInputValue] = useState({
+    role: '',
     loginId: '',
     password: '',
     rePassword: '',
@@ -18,6 +19,7 @@ function SignUpContainer() {
   });
 
   const {
+    role,
     loginId,
     email,
     name,
@@ -40,8 +42,6 @@ function SignUpContainer() {
   const [birthday, setBirthday] = useState(null);
 
   const handleBirthday = (date) => {
-    console.log(date);
-    console.log(dayjs(date).format('YYYY-MM-DD'));
     setBirthday(dayjs(date).format('YYYY-MM-DD'));
   };
 
@@ -156,6 +156,7 @@ function SignUpContainer() {
     e.preventDefault();
     if (!isValidInput()) return;
     const data = {
+      role: role,
       loginId: loginId,
       mail: email,
       name: name,
@@ -166,8 +167,9 @@ function SignUpContainer() {
       gender: gender,
       birthday: birthday,
     };
+    console.log(data);
     axios
-      .post(process.env.REACT_APP_SPRING_API + '/api/signup', data, {
+      .post(process.env.REACT_APP_SPRING_API + '/api/member', data, {
         withCredentials: true,
       })
       .then((res) => {

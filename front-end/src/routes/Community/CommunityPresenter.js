@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { useEffect } from "react";
+import { Link } from 'react-router-dom'
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
@@ -58,6 +60,7 @@ function CommunityPresenter(props) {
             { props.board == null || props.board == '' ? <tr><NullCommuBoard colSpan={6}>아직 없음.</NullCommuBoard></tr>
               : (
                 props.board.body.map((post, index) => {
+                  console.log(post);
                   return (
                     <tr key={index}>
                       <CommuBoard2>{post.id}</CommuBoard2>
@@ -83,11 +86,8 @@ function CommunityPresenter(props) {
         </CommuSubCon>
       </CommuCon>
     </div>
-  );
-} //create
-//update == created인 내용을 update하는거 ,,, created된 내용을 받아와야한다는거잖아
-//update할려면 조회가 먼저
-//
+  );  
+} 
 CommunityPresenter.propTypes = {
   // ex) prop: PropTypes.type.isRequired,
   loading: PropTypes.bool.isRequired,

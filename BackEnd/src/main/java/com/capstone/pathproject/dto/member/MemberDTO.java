@@ -5,15 +5,16 @@ import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.domain.member.memberGender;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDTO {
 
+    private Long id;
     private Role role;
 
     @NotBlank(message = "로그인 아이디가 입력되지 않았습니다")
@@ -41,15 +42,18 @@ public class MemberDTO {
     @NotNull(message = "성별이 입력되지 않았습니다")
     private memberGender gender;
 
-    @NotBlank(message = "생년월일이 입력되지 않았습니다")
-    private String birthday;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Past
+    private LocalDate birthday;
 
+    private LocalDate signupDay;
     private String account;
+    private int score;
 
     @Builder(builderMethodName = "createMemberDTO")
-    public MemberDTO(String loginId, String password, String mail, String name,
-                     String phone, String addr, String addrDetail, memberGender gender, String birthday) {
-        this.role = Role.ROLE_MEMBER;
+    public MemberDTO(Long id, Role role, String loginId, String password, String mail, String name, String phone, String addr, String addrDetail, memberGender gender, LocalDate birthday, LocalDate signupDay, String account, int score) {
+        this.id = id;
+        this.role = role;
         this.loginId = loginId;
         this.password = password;
         this.mail = mail;
@@ -59,6 +63,9 @@ public class MemberDTO {
         this.addrDetail = addrDetail;
         this.gender = gender;
         this.birthday = birthday;
+        this.signupDay = signupDay;
+        this.account = account;
+        this.score = score;
     }
 
     public Member toEntity() {
@@ -77,24 +84,7 @@ public class MemberDTO {
                 .build();
     }
 
-    @Override
-    public String toString() {
-        return "MemberDTO{" + "\n" +
-                "          role=" + role + "\n" +
-                "          loginId='" + loginId + '\'' + "\n" +
-                "          password='" + password + '\'' + "\n" +
-                "          mail='" + mail + '\'' + "\n" +
-                "          name='" + name + '\'' + "\n" +
-                "          phone='" + phone + '\'' + "\n" +
-                "          addr='" + addr + '\'' + "\n" +
-                "          addrDetail='" + addrDetail + '\'' + "\n" +
-                "          gender=" + gender + "\n" +
-                "          birthday='" + birthday + '\'' + "\n" +
-                "          account='" + account + '\'' + "\n" +
-                '}';
-    }
-
-    public void encodePassword(String encodePassword) {
+    public void changePassword(String encodePassword) {
         this.password = encodePassword;
     }
 
@@ -102,7 +92,7 @@ public class MemberDTO {
         this.account = account;
     }
 
-    public void updateMemberRole(Role role) {
+    public void changeMemberRole(Role role) {
         this.role = role;
     }
 }

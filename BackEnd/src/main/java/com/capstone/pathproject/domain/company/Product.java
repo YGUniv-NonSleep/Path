@@ -45,7 +45,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "BASIC_ID")
-    private ProdBasic prodbasic;
+    private ProdBasic prodBasic;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "PRO_ID")
@@ -61,7 +61,7 @@ public class Product {
         this.created = created;
         this.stock = stock;
         this.company = company;
-        this.prodbasic = prodBasic;
+        this.prodBasic = prodBasic;
         this.picture = picture;
         this.optionList = optionList;
 
@@ -78,7 +78,7 @@ public class Product {
                 .exposure(this.exposure)
                 .optionList(this.optionList)
                 .price(this.price)
-                .prodbasic(this.prodbasic)
+                .prodBasic(this.prodBasic)
                 .stock(this.stock)
                 .picture(this.picture)
                 .build();

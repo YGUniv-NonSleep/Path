@@ -1,0 +1,83 @@
+GET http://localhost:8080/api/product/company
+Accept: application/json
+
+
+###
+GET http://localhost:8080/api/product/1
+Accept: application/json
+
+###
+POST https://localhost:8080/api/product/
+Content-Type: application/json
+
+{
+  "price": 123214,
+  "exposure": true,
+  "discount": 123,
+  "created": "2011-11-11",
+  "stock": 1,
+  "company": {
+    "id": 1
+  },
+  "prodBasic": {
+    "id": 1
+  },
+  "optionList": [
+    {
+      "name": "샷추가",
+      "detailOptionList": [
+        {
+          "name": "1샷추가",
+          "price": 300
+        },
+        {
+          "name": "2샷추가",
+          "price": 500
+        }
+      ]
+    },
+    {
+      "name": "온도",
+      "detailOptionList": [
+        {
+          "name": "차갑게",
+          "price": 0
+        },
+        {
+          "name": "뜨겁게",
+          "price": 0
+        }
+      ]
+    }
+  ]
+}
+
+
+
+
+###
+GET http://localhost:8080/api/product/7
+
+###
+PATCH http://localhost:8080/api/product/updateProduct
+Content-Type: application/json
+
+{
+  "id": 1,
+  "price": 2222,
+  "exposure": true,
+  "discount": 123,
+  "created": "2011-11-11",
+  "stock": 1,
+  "company": {
+    "id": 4
+  },
+  "prodbasic": {
+    "id": 1
+  }
+}
+
+
+###
+DELETE https://localhost:8080/api/product/deleteProduct/3
+

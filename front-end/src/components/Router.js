@@ -4,6 +4,7 @@ import {
   Route,
 } from 'react-router-dom';
 
+import { useParams } from 'react-router-dom';
 import Path from '../routes/Path';
 import { MemberContainer as Member } from '../routes/Member';
 import Oder from '../routes/Oder';
@@ -30,7 +31,6 @@ import Bike from '../routes/Mobility/Bike';
 import Menubar from './Menubar';
 
 // https://kyung-a.tistory.com/36
-
 function Router() {
   return (
     <BrowserRouter>

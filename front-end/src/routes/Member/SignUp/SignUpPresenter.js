@@ -69,6 +69,7 @@ function SignUpPresenter(props) {
   } = props.errorList;
 
   const {
+    role,
     loginId,
     email,
     name,
@@ -104,6 +105,43 @@ function SignUpPresenter(props) {
           >
             <FormControl component="fieldset" variant="standard">
               <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      회원 유형
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-radio-buttons-group-label"
+                      defaultValue="member"
+                      name="role"
+                    >
+                      <FormControlLabel
+                        value="member"
+                        control={
+                          <Radio
+                            value="ROLE_MEMBER"
+                            onChange={props.handleInput}
+                            checked={role === 'ROLE_MEMBER'}
+                          />
+                        }
+                        label="일반 회원"
+                      />
+                      <FormControlLabel
+                        value="business"
+                        control={
+                          <Radio
+                            value="ROLE_BUSINESS"
+                            onChange={props.handleInput}
+                            checked={role === 'ROLE_BUSINESS'}
+                          />
+                        }
+                        label="업체 회원"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <FormHelperTexts>{genderError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -174,7 +212,7 @@ function SignUpPresenter(props) {
                     fullWidth
                     id="phone"
                     name="phone"
-                    label="전화번호"
+                    label="전화번호 (010-XXXX-XXXX)"
                     onChange={props.handleInput}
                     error={phoneError !== '' || false}
                   />
