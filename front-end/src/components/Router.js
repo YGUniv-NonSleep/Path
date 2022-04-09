@@ -17,6 +17,7 @@ import { SignUpContainer as SignUp } from '../routes/Member';
 
 import Company from '../routes/Member/Company';
 import CompStore from '../routes/Member/Company/CompStore';
+import CompDetail from '../routes/Member/Company/CompDetail';
 import CompCreate from '../routes/Member/Company/CompCreate';
 import CompManage from '../routes/Member/Company/CompManage';
 
@@ -48,16 +49,15 @@ function Router() {
       <Routes>
         <Route path="/company" element={<Company />} />
         <Route path="/company/store" element={<CompStore />}>
-          <Route path=":comId" element={<CompStore />} />
+          <Route path=":comId" element={<CompDetail />} />
         </Route>
         <Route path="/company/create" element={<CompCreate />} />
-        <Route path="/company/manage" element={<CompManage />}>
-          <Route path=":comId" element={<CompStore />}>
-            <Route index path="items" element={<CompManage />} />
-            <Route path="item-edit" element={<CompManage />} />
-            <Route path="info-edit" element={<CompManage />} />
-            <Route path="resign" element={<CompManage />} />
-          </Route>
+        <Route path="/company/manage/:comId" element={<CompManage />}>
+        {/* 없으면 업체 등록하라고 팝업창, 마이 업체 경로 타고 들어온거 아니면 첫 번째 업체 관리로 들어옴 */}
+          <Route index path="items" element={<CompManage />} />
+          <Route path="item-edit" element={<CompManage />} />
+          <Route path="info-edit" element={<CompManage />} />
+          <Route path="resign" element={<CompManage />} />
         </Route>
       </Routes>
       <Routes>

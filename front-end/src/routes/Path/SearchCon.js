@@ -102,7 +102,7 @@ function SearchCon(props) {
                   variant="contained"
                   sx={{ width: 80, height: 35, marginLeft: "84px" }}
                   endIcon={<ChevronRightIcon sx={{ marginRight: -1 }} />}
-                  // onClick={props.juso.wayFind}
+                  onClick={props.juso.wayFind}
                 >
                   <Typography
                     variant="inherit"
