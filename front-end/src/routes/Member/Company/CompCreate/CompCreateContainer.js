@@ -23,6 +23,7 @@ function CompCreateContainer() {
             "latitude": e.target.lat.value,
             "longitude": e.target.long.value,                 
         };
+        //console.log(data.category)
 
         let formData = new FormData();
         formData.append("picture", e.target.userfile.files[0]);
@@ -35,7 +36,6 @@ function CompCreateContainer() {
 
     function createCompany() {
         if(formInfo != null){
-            console.log(formInfo)
             axios.post(
                 process.env.REACT_APP_SPRING_API +"/api/company/", formInfo, {
                     headers: {
