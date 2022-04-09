@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import SPresenter from "./SPresenter";
 import MapApi from "../../../MapApi";
 
-
-
-
 function SContainer() {
     const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -70,4 +67,3 @@ function SContainer() {
 }
 
 export default SContainer;
-

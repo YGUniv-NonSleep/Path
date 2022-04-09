@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import CommunityPresenter from "./CommunityPresenter";
 import CommunityContents from './CommunityContents';
 
@@ -7,6 +8,9 @@ function CommunityContainer() {
   const [loading, setLoading] = useState(false);
   const [formInfo, setFormInfo] = useState(null);
   const [board, setBoard] = useState(null);
+
+  const { postId } = useParams();
+  console.log(postId);
 
   useEffect(() => {
     setLoading((current) => !current);
@@ -57,14 +61,7 @@ function CommunityContainer() {
         console.log(error);
       });
   }, [formInfo]);
-
-  // 주소 파라미터 받을때 수행할 hook
-  useEffect(() => { 
-    axios.get(process.env.REACT_APP_SPRING_API + `/api/post/${1}`)
-    .then((res)=>{console.log(res)})
-    .catch((err)=>{console.log(err)})
-  }, [])
-
+  
   return (
     <CommunityPresenter
       loading={loading}
