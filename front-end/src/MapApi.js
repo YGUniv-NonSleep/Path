@@ -125,10 +125,10 @@ function MapApi() {
         let lineArray = null;
         lineArray = new Array();
 
-        console.log(data[0])
+        // console.log(data[0])
 
-        console.log(data[0].x)
-        console.log(data[0].y)
+        // console.log(data[0].x)
+        // console.log(data[0].y)
 
 
         //lineArray.push(new kakao.maps.LatLng(y,x))

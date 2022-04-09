@@ -6,8 +6,9 @@ import { MobilityApi } from "../../../OdsayApi";
 function BusContainer() {
     const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [busNo, setBusNo] = useState(null);
+    const [busNo, setBusNo] = useState('');
     const [markers, setMarkers] = useState([]);
+    const [poly, setPoly] = useState('');
 
     function onChanged(e) {
         if(e != undefined){
@@ -43,13 +44,10 @@ function BusContainer() {
     async function busInfo(data){
         let busNo = data
 
-        console.log(markers)
-        removeMarkers();
+        removeMarkers()
+        if(poly!=''){removeGraphics()}
         
-        // if(markers.length != 0) {
-            
-        // }
-
+        
         let busInfo = await MobilityApi.getBusId(busNo).catch((error) => console.log(error));
          //console.log(busInfo)
 
@@ -57,54 +55,47 @@ function BusContainer() {
          //console.log(busDetailInfo)
 
         const bPoly = await MapApi().drawKakaoBusPolyLine(busDetailInfo.result.station)                           
-        //console.log(bPoly)
+        console.log(bPoly)
         bPoly.setMap(map)
+        setPoly(bPoly)
 
         const array = busDetailInfo.result.station;
         //console.log(array.length)
-
-
-        let points = null;
-        points = new Array();
-        
-        for(var i=0; i<array.length; i++){
-            points.push(new kakao.maps.LatLng(array[i].y, array[i].x))
-        }
-        // console.log(points)
-        console.log("???")
-
         
         var bounds = new kakao.maps.LatLngBounds();
          
-        for (var i = 0; i < points.length; i++) {
-            //console.log(points[i])
-            const a = new kakao.maps.Marker({ position : points[i] })
-            setMarkers({...a})
+        for (var i = 0; i < array.length; i++) {
+            
+            let markerPosition = new kakao.maps.LatLng(array[i].y, array[i].x)
 
-            // console.log(markers[i])
-            // markers[i].setMap(map)
-
-
-            a.setMap(map)
+            const mk = new kakao.maps.Marker({ 
+                position : markerPosition
+            })
+            mk.setMap(map)
+            setMarkers((current) => [...current, mk])
             // LatLngBounds 객체에 좌표를 추가합니다
-            bounds.extend(points[i]);
+            bounds.extend(markerPosition);
         }
-        // points=null;
-        // console.log(bounds)
-        // console.log(map)
-        console.log(markers)
-
         map.setBounds(bounds);
 
         function removeMarkers() {
-            console.log(markers)
-            for(var i=0; i<markers.length; i++){
-                console.log(markers[i])
-                //markers[i].setMap(null);
+            for(var i=0; i<markers.length; i++) {
+                markers[i].setMap(null);
             }
             setMarkers([])
-            console.log(markers)
         }
+
+        function removeGraphics() {
+            // for(var i=0; i<poly; i++){
+            //     bPoly.Sg[i].setMap(null);
+            // }
+            console.log(poly)
+            poly.setMap(null)
+            setPoly('')
+        }
+
+
+
     }
 
     useEffect(() => {
@@ -112,7 +103,7 @@ function BusContainer() {
     }, []);
 
     useEffect(() => {
-         //busInfo()
+        //busInfo()
     }, [map]);
 
     return (
