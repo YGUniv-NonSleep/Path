@@ -1,15 +1,21 @@
 package com.capstone.pathproject.controller.post;
 
 
+import com.capstone.pathproject.domain.community.Post;
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.community.PostDTO;
 import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.dto.response.StatusEnum;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.service.community.PostService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,29 +38,32 @@ public class PostApiController {
     @PostMapping("/create")
     public ResponseEntity<Message<PostDTO>> create(@Valid @RequestPart(value = "key", required = false) PostDTO postDTO,
                                                    @RequestPart(value = "userfile",required = false) MultipartFile file,
-                                                   HttpServletRequest request) {
+                                                   HttpServletRequest request,
+                                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
         String fileName;
         if(file == null){
             fileName = "";
         }else{
-        fileName = file.getOriginalFilename(); //null 발생
-        String filePath = request.getSession().getServletContext().getRealPath("") +"post\\"; //webapp/post
+        fileName = file.getOriginalFilename();
+        String filePath = request.getSession().getServletContext().getRealPath("") +"post\\";
 
         try{
             file.transferTo(new File(filePath + fileName));
-            System.out.println("업로드 완료");
         }catch (IllegalStateException | IOException e){
-            System.out.println("실패");
             e.printStackTrace();
         }
         }
-        Message<PostDTO> message = postService.create(postDTO,fileName);
+        Message<PostDTO> message = postService.create(postDTO,fileName,principalDetails);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
     @PatchMapping("/update")
-    public ResponseEntity<Message<PostDTO>> update(@RequestPart(value = "key" , required = false) PostDTO postDTO, @RequestPart(value = "userfile",required = false) MultipartFile file, HttpServletRequest request){
+    public ResponseEntity<Message<PostDTO>> update(@RequestPart(value = "key" , required = false) PostDTO postDTO,
+                                                   @RequestPart(value = "userfile",required = false) MultipartFile file,
+                                                   HttpServletRequest request,
+                                                   @AuthenticationPrincipal PrincipalDetails principalDetails){
+
         String fileName;
         if(file == null){
             fileName = "";
@@ -63,26 +72,24 @@ public class PostApiController {
             String filePath = request.getSession().getServletContext().getRealPath("") + "post\\";
             try{
                 file.transferTo(new File(filePath + fileName));
-                System.out.println("업데이트완료");
             }catch (IllegalStateException | IOException e){
-                System.out.println("실패");
                 e.printStackTrace();
             }
         }
-        Message<PostDTO> message = postService.update(postDTO,fileName);
+
+        Message<PostDTO> message = postService.update(postDTO,fileName,principalDetails);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Message<PostDTO>> delete(@RequestParam("postId") Long postId){
-        Message<PostDTO> message = postService.delete(postId);
+    public ResponseEntity<Message<PostDTO>> delete(@RequestParam("postId") Long postId,@AuthenticationPrincipal PrincipalDetails principalDetails){
+        Message<PostDTO> message = postService.delete(postId,principalDetails);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
-//view로 들어오면 post db내용 보여주는거 및 paging
     @GetMapping("/view")
     public ResponseEntity getPostList(@PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
         Message<List<PostDTO>> message = postService.getPostList(pageable);
@@ -97,18 +104,21 @@ public class PostApiController {
     }
 
 
-    @GetMapping("/view/{postId}")
-    public ResponseEntity read(@PathVariable("postId") Long id, Model model){
+    @GetMapping("/updateView/{postId}")
+    public ResponseEntity updateView(@PathVariable("postId") Long id){
         Message<List<PostDTO>> message = postService.updateView(id);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
 
-    //////답글 Controller/////
+
 
     @PostMapping("/reply/create")
-    public ResponseEntity<Message<PostDTO>> repcreate(@Valid @RequestPart(value = "key", required = false) PostDTO postDTO, @RequestPart(value = "userfile", required = false) MultipartFile file, HttpServletRequest request){
+    public ResponseEntity<Message<PostDTO>> repcreate(@Valid @RequestPart(value = "key", required = false) PostDTO postDTO,
+                                                      @RequestPart(value = "userfile", required = false) MultipartFile file,
+                                                      HttpServletRequest request,
+                                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
         String fileName;
         if(file == null){
             fileName = "";
@@ -117,13 +127,11 @@ public class PostApiController {
             String filePath = request.getSession().getServletContext().getRealPath("") + "post\\";
             try{
                 file.transferTo(new File(filePath + fileName));
-                System.out.println("업로드 완료");
             }catch (IllegalStateException | IOException e){
-                System.out.println("실패");
                 e.printStackTrace();
             }
         }
-        Message<PostDTO> message = postService.repcreate(postDTO,fileName);
+        Message<PostDTO> message = postService.repcreate(postDTO,fileName,principalDetails);
         return new ResponseEntity<>(message,HttpStatus.OK);
 
     }
@@ -131,7 +139,10 @@ public class PostApiController {
 
 
     @PatchMapping("/reply/update")
-    public ResponseEntity<Message<PostDTO>> repupdate(@RequestPart(value = "key", required = false) PostDTO postDTO, @RequestPart(value = "userfile", required = false) MultipartFile file, HttpServletRequest request){
+    public ResponseEntity<Message<PostDTO>> repupdate(@RequestPart(value = "key", required = false) PostDTO postDTO,
+                                                      @RequestPart(value = "userfile", required = false) MultipartFile file,
+                                                      HttpServletRequest request,
+                                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
         String fileName;
         if(file == null){
             fileName = "";
@@ -140,21 +151,19 @@ public class PostApiController {
             String filePath = request.getSession().getServletContext().getRealPath("") + "post\\";
             try{
                 file.transferTo(new File(filePath + fileName));
-                System.out.println("업로드 완료");
             }catch (IllegalStateException | IOException e){
-                System.out.println("실패");
                 e.printStackTrace();
             }
         }
-        Message<PostDTO> message = postService.repupdate(postDTO,fileName);
+        Message<PostDTO> message = postService.repupdate(postDTO,fileName,principalDetails);
         return new ResponseEntity<>(message,HttpStatus.OK);
 
     }
 
 
     @DeleteMapping("/reply/delete")
-    public ResponseEntity<Message<PostDTO>> repdelete(@RequestParam("postId") Long postId){
-        Message<PostDTO> message = postService.repdelete(postId);
+    public ResponseEntity<Message<PostDTO>> repdelete(@RequestParam("postId") Long postId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        Message<PostDTO> message = postService.repdelete(postId,principalDetails);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 }

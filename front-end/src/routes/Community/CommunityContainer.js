@@ -49,7 +49,7 @@ function CommunityContainer() {
     console.log(formInfo);
     axios.get(process.env.REACT_APP_SPRING_API + "/api/post/view")
       .then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
         setBoard(response.data);
       })
       .catch((error) => {
