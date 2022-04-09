@@ -13,11 +13,15 @@ import Community from '../routes/Community';
 import CommunityContents from '../routes/Community/CommunityContents'
 import CarPool from '../routes/CarPool';
 import { LoginContainer as Login } from '../routes/Member';
+import SearchId from '../routes/Member/SearchId'
+import SearchPw from '../routes/Member/SearchPw'
 import { SignUpContainer as SignUp } from '../routes/Member';
+
 import Company from '../routes/Member/Company';
 import CompStore from '../routes/Member/Company/CompStore';
 import CompCreate from '../routes/Member/Company/CompCreate';
 import CompManage from '../routes/Member/Company/CompManage';
+
 import Bus from '../routes/Mobility/Bus';
 import Subway from '../routes/Mobility/Subway';
 import Scooter from '../routes/Mobility/Scooter';
@@ -37,6 +41,8 @@ function Router() {
       </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/searchId" element={<SearchId />} />
+        <Route path="/searchPw" element={<SearchPw />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/member" element={<Member />} />
       </Routes>

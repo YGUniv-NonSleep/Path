@@ -3,7 +3,8 @@ import styled from "styled-components";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import Icon from "../../../components/Icon";
+import MIcon from "../MIcon";
+import Box from "@mui/material/Box";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -80,19 +81,35 @@ const Line1 = styled.hr`
   background-color: rgb(211, 211, 211);
 `;
 
-const Bus = () => {
+const Bus = (props) => {
+  // console.log(props.onChange)
   return (
     <SideNav>
-      <Icon></Icon>
+      <MIcon />
       <Ul>
         <Btn>버스</Btn>
         <Station>버스정류장</Station>
       </Ul>
 
       <BarContainer>
-        <TextField
+        <Box 
+        component="form"
+        noValidate
+        onSubmit={props.submit}
+        sx={{mt:3}}
+        >  
+          <TextField
           sx={{ left: "15px", width: "360px" }}
           size="small"
+          id="busNo"
+          name="busNo"
+          value={props.busNo}
+          onChange={props.onChange}
+          onKeyPress={(e) => {
+            if(e.key === 'Enter'){
+              return props.submit
+            }
+          }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -102,6 +119,8 @@ const Bus = () => {
             ),
           }}
         />
+        </Box>
+        
 
         <Text>최근 검색</Text>
         <Line></Line>

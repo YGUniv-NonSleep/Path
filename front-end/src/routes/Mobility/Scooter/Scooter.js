@@ -1,9 +1,7 @@
 import { Link, Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import styled from "styled-components";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
-import Icon from "../../../components/Icon";
+import MIcon from "../MIcon";
+
 
 const SideNav = styled.nav`
   position: fixed;
@@ -11,36 +9,64 @@ const SideNav = styled.nav`
   z-index: 5;
   background-color: white;
   box-shadow: 3px 3px 3px gray;
-  width: 390px;
-  height: 100%;
+  width: 380px;
+  height: 90px;
 `;
 
 const BarContainer = styled.div`
-  z-index: 10
+  z-index: 5;
   width: 390px;
   height: 90%;
   margin-top: 90px;
+  
 `;
+
+
+/*
+const Mobil = styled.div`
+position: absolute;
+top: 10px;
+left: 610px;
+width: 400px;
+height: 150px;
+border-radius: 10px;
+background-color: white;
+box-shadow: 3px 3px 3px gray;
+`;
+
+const Btn = styled.button`
+position:absolute;
+top: 100px;
+left: 45px;
+width: 150px;
+height: 40px;
+`;
+
+const Btn1 = styled.button`
+position:absolute;
+top: 100px;
+left: 210px;
+width: 150px;
+height: 40px;
+`;
+
+<Mobil>
+        <Btn>벨울리기</Btn>
+        <Btn1>예약하기</Btn1>
+      </Mobil>
+*/
 
 const Scooter = () => {
   return (
     <SideNav>
-      <Icon />
 
       <BarContainer>
-        <TextField
-          sx={{ left: "15px", width: "360px" }}
-          size="small"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
+        <MIcon />
+       
       </BarContainer>
     </SideNav>
+      
+   
   );
 };
 

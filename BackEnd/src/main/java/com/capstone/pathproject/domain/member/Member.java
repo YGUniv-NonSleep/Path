@@ -116,26 +116,6 @@ public class Member {
         this.addrDetail = addrDetail;
     }
 
-//    public Member(Role role, String loginId, String password, String mail, String name,
-//                  String phone, String addr, String addrDetail, memberGender gender, String birthday,
-//                  String account) {
-//        this.role = role;
-//        this.loginId = loginId;
-//        this.password = password;
-//        this.mail = mail;
-//        this.name = name;
-//        this.phone = phone;
-//        this.addr = addr;
-//        this.addrDetail = addrDetail;
-//        this.gender = gender;
-//        this.signupDay = LocalDate.now();
-//        this.account = account;
-//        this.score = 100;
-//
-//        if (birthday.isEmpty()) {
-//            this.birthday = null;
-//        } else {
-//            this.birthday = LocalDate.parse(birthday);
-//        }
-//    }
+    public void updateEncodePassword(String encodePassword) { this.password = encodePassword; }
+
 }

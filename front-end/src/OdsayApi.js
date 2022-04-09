@@ -28,7 +28,6 @@ export const PathApi = {
 };
 
 export const MobilityApi = {
-
   getBusId: async (data) => { console.log(data)
     const response = await odsayApi.get(
       `/searchBusLane?lang=0&busNo=${data}&CID=4000&apiKey=${key}`
@@ -43,10 +42,28 @@ export const MobilityApi = {
     ).catch((error) => console.log(error));
      console.log(response);
     return response.data;
-  },
+  }
 };
 
+export const SubTime = {
+  getSubTime: async(data) => { console.log(data)
+    const response = await odsayApi.get(
+      `/subwayTimeTable?lang=0&stationID=${data}&apiKey=${key}`
+    ).catch((error) => console.log(error));
+    console.log(response.data.result);
+    return response.data.result;
+  }
+};
 
+export const SubPath = {
+  getSubPath: async(data) => { console.log(data)
+    const response = await odsayApi.get(
+      `/subwayPath?lang=0&CID=${data}&SID=40135&EID=40230&apiKey=${key}`
+    ).catch((error) => console.log(error));
+    console.log(response.data);
+    return response.data.result;
+  }
+}
 
 
 export default odsayApi;

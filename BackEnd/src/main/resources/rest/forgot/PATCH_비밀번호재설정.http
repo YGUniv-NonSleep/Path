@@ -1,0 +1,6 @@
+PATCH https://localhost:8080/api/forgot/password/1
+Content-Type: application/json
+
+{
+  "password": "!asdf1234"
+}
