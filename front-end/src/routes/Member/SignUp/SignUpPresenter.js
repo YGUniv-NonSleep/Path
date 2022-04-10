@@ -68,7 +68,7 @@ function SignUpPresenter(props) {
     registerError,
   } = props.errorList;
 
-  const { role, gender } = props.inputValue;
+  const { gender } = props.inputValue;
 
   return (
     <ThemeProvider theme={theme}>
