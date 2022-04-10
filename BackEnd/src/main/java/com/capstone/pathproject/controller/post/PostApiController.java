@@ -104,9 +104,9 @@ public class PostApiController {
     }
 
 
-    @GetMapping("/updateView/{postId}")
-    public ResponseEntity updateView(@PathVariable("postId") Long id){
-        Message<List<PostDTO>> message = postService.updateView(id);
+    @GetMapping("/view/{postId}")
+    public ResponseEntity viewParams(@PathVariable("postId") Long id){
+        Message<List<PostDTO>> message = postService.viewParams(id);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 

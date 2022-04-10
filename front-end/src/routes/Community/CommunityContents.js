@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
+import PropTypes, { func } from "prop-types";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import CommunityContainer from "./CommunityContainer";
 
 const CommuCon = styled.div`
   width: 390px;
@@ -24,51 +25,50 @@ const CommunityContents = () => {
 
   // 주소 파라미터 받을때 수행할 hook
   useEffect(() => { 
-    axios.get(process.env.REACT_APP_SPRING_API + `/api/post/test/${postId}`)
+    axios.get(process.env.REACT_APP_SPRING_API + `/api/post/view/${postId}`)
     .then((res)=>{
       console.log(res.data.body);
       setContent(res.data.body)
     })
     .catch((err)=>{console.log(err)})
   }, [])
-  
   return (
     <CommuCon>
       <CommuSubCon>
-        <h2>ㅎㅇ{postId}</h2>
         <h2 align="center">게시글 상세정보</h2>
         <div className="post-view-wrapper">
           {/* {content.content} */}
           {content ? (
             <>
               <div className="post-view-row">
-                <label>게시글 번호</label>
+                <label>게시글 번호 : </label>
                 <label>{content.id}</label>
               </div>
               <div className="post-view-row">
-                <label>제목</label>
+                <label>제목 : </label>
                 <label>{content.title}</label>
               </div>
               <div className="post-view-row">
-                <label>작성자</label>
-                <label>{content.member.id}</label>
+                <label>작성자 : </label>
+                <label>{content.member.name}</label>
               </div>
               <div className="post-view-row">
-                <label>조회수</label>
+                <label>조회수 : </label>
                 <label>{content.view}</label>
               </div>
               <div className="post-view-row">
-                <label>작성일</label>
+                <label>작성일 : </label>
                 <label>{content.writeDate}</label>
               </div>
               <div className="post-view-row">
-                <label>타입</label>
+                <label>타입 : </label>
                 <label>{content.type}</label>
               </div>
               <div className="post-view-row">
-                <label>내용</label>
-                <div>{content.content}</div>
+                <label>내용 : </label>
+                <div>{content.content}</div><br></br>
               </div>
+              <h2>답글</h2>
             </>
           ) : (
             "해당 게시글을 찾을 수 없습니다."
@@ -79,7 +79,7 @@ const CommunityContents = () => {
           >
             목록으로 돌아가기
           </button>
-        </div>
+          </div>
       </CommuSubCon>
     </CommuCon>
   );

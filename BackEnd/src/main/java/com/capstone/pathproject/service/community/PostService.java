@@ -52,12 +52,14 @@ public class PostService {
 
 
     @Transactional
-    public Message updateView (Long id) {
+    public Message viewParams(Long id) {
         postRepository.updateView(id);
+        Optional<Post> post = postRepository.findById(id);
+        PostDTO postDTO = post.get().toDTO();
         return Message.<PostDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("조회수 증가성공")
-                .build();
+                .body(postDTO).build();
     }
 
     @Transactional
