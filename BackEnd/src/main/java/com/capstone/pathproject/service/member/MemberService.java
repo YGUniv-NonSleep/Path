@@ -150,7 +150,7 @@ public class MemberService {
                     .header(StatusEnum.BAD_REQUEST)
                     .message("아이디 또는 비밀번호를 입력하지 않았습니다.").build();
         }
-        Optional<Member> member = memberRepository.findByLoginId(memberDTO.getLoginId());
+        Optional<Member> member = memberRepository.findByLoginIdAndPhone(memberDTO.getLoginId(), memberDTO.getPhone());
         return ValidateOptionalMember(member);
     }
 
