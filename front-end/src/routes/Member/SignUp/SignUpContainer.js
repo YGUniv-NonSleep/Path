@@ -2,6 +2,7 @@ import SignUpPresenter from './SignUpPresenter';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 function SignUpContainer() {
   // ====== 회원가입 입력 ====== //
@@ -184,12 +185,17 @@ function SignUpContainer() {
           alert(res.data.message);
         } else {
           alert('패스콕 회원가입이 되셨습니다.');
-          // window.location.href = '/login';
+          goBackPage();
         }
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const navigate = useNavigate();
+  const goBackPage = () => {
+    navigate(-1);
   };
 
   return (
