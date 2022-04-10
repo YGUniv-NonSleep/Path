@@ -33,6 +33,7 @@ function SignUpContainer() {
 
   const handleInput = (e) => {
     const { name, value } = e.target;
+    console.log(e.target);
     setInputValue({
       ...inputValue,
       [name]: value,
@@ -79,9 +80,8 @@ function SignUpContainer() {
 
   const isValidInput = () => {
     const loginIdRegex = /^[a-zA-Z0-9\s]+$/;
-    if (!loginIdRegex.test(loginId) && loginId.length <= 4)
-      // setLoginIdError('아이디를 4자 이상 입력해주세요.')
-      setLoginIdError('올바른 아이디 형식이 아닙니다.');
+    if (!loginIdRegex.test(loginId) || loginId.length < 4)
+      setLoginIdError('영문자+숫자 조합으로 4자리 이상 입력해주세요');
     else setLoginIdError('');
 
     const emailRegex =
@@ -178,7 +178,7 @@ function SignUpContainer() {
           alert(res.data.message);
         } else {
           alert('패스콕 회원가입이 되셨습니다.');
-          window.location.href = '/login';
+          // window.location.href = '/login';
         }
       })
       .catch((err) => {
