@@ -11,13 +11,14 @@ function CompStoreContainer() {
         setLoading(true);
     }, []);
 
-    async function getStore() {
+    function getStore() {
         console.log(myStore)
-        const s = await axios.get(
-            process.env.REACT_APP_SPRING_API +"/api/company/myStore"
-        ).catch((err)=>{console.log(err)})
-        // console.log(s.data.body)
-        setMyStore((cur)=>[...cur, s.data.body])
+        axios.get(process.env.REACT_APP_SPRING_API +"/api/company/myStore")
+        .then((res) => {
+            console.log(res)
+            setMyStore((cur)=>[...cur, res.data.body])
+        })
+        .catch((err)=>{console.log(err)})
     }
 
     useEffect(() => {

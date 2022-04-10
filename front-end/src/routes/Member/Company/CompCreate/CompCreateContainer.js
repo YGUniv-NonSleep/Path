@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CompCreate from "./CompCreate";
 
 function CompCreateContainer() {
     const [loading, setLoading] = useState(false);
     const [formInfo, setFormInfo] = useState(null);
+    const navigation = useNavigate()
 
     useEffect(() => {
         setLoading((current) => !current);
@@ -44,6 +46,8 @@ function CompCreateContainer() {
                 }
             ).then((res)=>{
                 console.log(res)
+                alert("업체 등록 완료")
+                navigation(-1)
             }).catch((err)=>{
                 console.log(err)
             })

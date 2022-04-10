@@ -21,13 +21,16 @@ function CompStore(props) {
       <CompStoreSubCon>
         { props.loading ? <p>마이 업체 화면 나왔다</p> : <h2>로드 중...</h2> }
         { stores != null || stores != undefined ? (
-            stores.map((item) => {
-                //console.log(item)
+            stores.map((item, index) => {
+                console.log(item)
                 return (
-                    <Fragment>
-                        <div>{item.id}</div>
+                    <Fragment key={index}>
+                        <div>업체 카테고리: {item.category}</div>
+                        <div>업체 이메일: {item.mail}</div>
+                        <div>업체명: {item.name}</div>
+                        <div>업체 전화번호: {item.phone}</div>
                         <Link to={`${item.id}`}>
-                            <button>업체 세부</button>
+                            <button>업체 세부정보</button>
                         </Link>
                     </Fragment>
                 )
@@ -36,6 +39,7 @@ function CompStore(props) {
             <h2>정보를 불러오는데 실패하였습니다..</h2>
             )
         }
+        <br/><br/>
         <Link to="/company/create">
           <button>업체 가입하기</button>
         </Link>
