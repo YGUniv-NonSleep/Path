@@ -167,7 +167,6 @@ function SignUpContainer() {
       gender: gender,
       birthday: birthday,
     };
-    console.log(data);
     axios
       .post(process.env.REACT_APP_SPRING_API + '/api/member', data, {
         withCredentials: true,

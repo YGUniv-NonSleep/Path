@@ -1,33 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SearchId from './SearchId';
+import SearchId from './SearchIdPresenter';
 import { useNavigate } from 'react-router-dom';
 
 function SearchIdContainer({ history }) {
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [inputValue, setInputValue] = useState({
+    name: '',
+    email: '',
+  });
+  const { name, email } = inputValue;
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const errorList = { nameError, emailError };
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setLoading(true);
-  }, []);
+  const goBackPage = () => {
+    navigate(-1);
+  };
 
-  function onChanged(e) {
-    if (e != undefined) {
-      if (e.target.id === 'name') {
-        setName(e.target.value);
-      } else if (e.target.id === 'email') {
-        setEmail(e.target.value);
-      }
-    } else return 0;
-  }
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
 
-  useEffect(() => {
-    onChanged();
-  }, [name, email]);
+  const isValidInput = () => {
+    const nameRegex = /^[가-힣a-zA-Z]+$/;
+    if (!nameRegex.test(name) || name.length < 1)
+      setNameError('올바른 이름을 입력해주세요');
+    else setNameError('');
 
-  function handleSubmit(e) {
+    const emailRegex =
+      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    if (!emailRegex.test(email))
+      setEmailError('올바른 이메일 형식이 아닙니다.');
+    else setEmailError('');
+
+    if (emailRegex.test(email) && nameRegex.test(name)) {
+      console.log('유효성 검사 성공');
+      return true;
+    } else {
+      console.log('유효성 검사 실패');
+      return false;
+    }
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isValidInput()) return;
     const data = {
       name: name,
       mail: email,
@@ -38,29 +61,26 @@ function SearchIdContainer({ history }) {
       })
       .then((res) => {
         console.log(res);
-        console.log(res.data.message);
-        console.log(res.data.body.loginId);
-        alert(res.data.message + '\n' + '아이디 : ' + res.data.body.loginId);
-        goBackPage();
+        if (res.data == '') {
+          alert('회원이 존재하지 않습니다.');
+        } else {
+          alert(
+            res.data.message + '\n' + '회원 아이디 : ' + res.data.body.loginId
+          );
+          goBackPage();
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  const navigate = useNavigate();
-
-  const goBackPage = () => {
-    navigate('/login');
   };
 
   return (
     <SearchId
       loading={loading}
-      onChanged={onChanged}
       handleSubmit={handleSubmit}
-      name={name}
-      email={email}
+      handleInput={handleInput}
+      errorList={errorList}
     ></SearchId>
   );
 }
