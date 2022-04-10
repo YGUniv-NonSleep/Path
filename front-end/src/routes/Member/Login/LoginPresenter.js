@@ -1,9 +1,16 @@
-import { Link } from "react-router-dom";
-import { 
-  Avatar, Button, CssBaseline, TextField, FormControlLabel,
-  Checkbox, Grid, Box, Typography, Container 
-} from '@mui/material'
-import MuiLink from '@mui/material/Link';
+import { Link } from 'react-router-dom';
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -16,11 +23,7 @@ function Copyright(props) {
       {...props}
     >
       {'Copyright © '}
-      <MuiLink color="inherit" underline="none" variant="body2">
-        <Link to="/">
-          Your Website
-        </Link>
-      </MuiLink>{' '}
+      <Link to="/">Your Website </Link>
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -45,8 +48,8 @@ function LoginPresenter(props) {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography component="h1" variant="h4">
+            회원가입
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
@@ -82,29 +85,15 @@ function LoginPresenter(props) {
             >
               Sign In
             </Button>
-            <Button onClick={props.testSubmit}>테스트 버튼</Button>
-            <Button onClick={props.testUserSubmit}>유저 테스트 버튼</Button>
             <Grid container spacing={3}>
-              <Grid item xs={3}>
-                <MuiLink color="inherit" underline="hover" variant="body2">
-                  <Link to="/searchId">
-                    아이디를 잊으셨나요?
-                  </Link>
-                </MuiLink>
+              <Grid item xs={4}>
+                <Link to="/searchId">아이디 찾기</Link>
               </Grid>
-              <Grid item xs={3}>
-                <MuiLink color="inherit" underline="hover" variant="body2">
-                  <Link to="/searchPw">
-                    비밀번호를 잊으셨나요?
-                  </Link>
-                </MuiLink>
+              <Grid item xs={4}>
+                <Link to="/searchPw">비밀번호 찾기</Link>
               </Grid>
-              <Grid item xs={3}>
-                <MuiLink color="inherit" underline="hover" variant="body2">
-                  <Link to="/signup">
-                    {'회원가입'}
-                  </Link>
-                </MuiLink>
+              <Grid item xs={4}>
+                <Link to="/signup">회원가입</Link>
               </Grid>
             </Grid>
           </Box>
