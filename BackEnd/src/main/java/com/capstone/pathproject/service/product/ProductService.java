@@ -1,4 +1,4 @@
-package com.capstone.pathproject.service;
+package com.capstone.pathproject.service.product;
 
 import com.capstone.pathproject.domain.company.Option;
 import com.capstone.pathproject.domain.company.ProdBasic;
@@ -63,7 +63,6 @@ public class ProductService {
     //ProdBasic
     public Message<ProdBasicDTO> basicDetail(Long prodBasicId) {
 
-
         Optional<ProdBasic> result = prodBasicRepository.findById(prodBasicId);
         ProdBasicDTO prodBasicDTO = result.get().toDTO();
 
@@ -71,6 +70,24 @@ public class ProductService {
                 .header(StatusEnum.OK)
                 .message("find Success")
                 .body(prodBasicDTO)
+                .build();
+    }
+
+    public Message<List<ProdBasicDTO>> findBasicByName(String name, String brand){
+
+        List<ProdBasic> prodBasicList = prodBasicRepository.findByNameContainingAndBrandContaining(name, brand);
+        ArrayList<ProdBasicDTO> prodBasicDTOList = new ArrayList<>();
+
+        prodBasicList.stream()
+                .map(prodBasic -> prodBasic.toDTO())
+                .forEach(prodBasicDTO -> prodBasicDTOList.add(prodBasicDTO));
+
+        System.out.println(prodBasicList);
+
+        return Message.<List<ProdBasicDTO>>createMessage()
+                .header(StatusEnum.OK)
+                .body(prodBasicDTOList)
+                .message("조회 성공!")
                 .build();
     }
 
@@ -103,53 +120,52 @@ public class ProductService {
                 .build();
     }
 
-    public Message<ProductDTO> productDetail(Long  prodId){
-        Product rs = productRepository.findById(prodId).get();
+    public Message<ProductDTO> productDetail(Long prodId){
+
+        Product product = productRepository.findById(prodId).get();
 
         //System.out.println(rs.toString());
-        System.out.println(rs.getOptionList());
+        System.out.println(product.getOptionList());
 
-        ProductDTO result = ProductDTO.createProductDTO()
-                .prodbasic(rs.getProdbasic())
-                .company(rs.getCompany())
-                .optionList(rs.getOptionList())
-                .created(rs.getCreated())
-                .discount(rs.getDiscount())
-                .exposure(rs.getExposure())
-                .id(rs.getId())
-                .price(rs.getPrice())
-                .stock(rs.getStock())
-                .build();
+//        ProductDTO result = ProductDTO.createProductDTO()
+//                .prodbasic(product.getProdbasic())
+//                .company(product.getCompany())
+//                .optionList(product.getOptionList())
+//                .created(product.getCreated())
+//                .discount(product.getDiscount())
+//                .exposure(product.getExposure())
+//                .id(product.getId())
+//                .price(product.getPrice())
+//                .stock(product.getStock())
+//                .build();
 
-        System.out.println(result.getOptionList());
+        ProductDTO productDTO = product.toDTO();
+
+        System.out.println(productDTO.getOptionList());
 
         return Message.<ProductDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("Product find Success")
-                .body(result)
+                .body(productDTO)
                 .build();
     }
 
     public Message<List<ProductDTO>> productListByCompany(Long companyId){
 
-        List<Product> result = productRepository.findByCompanyId(companyId);
+        List<Product> productList = productRepository.findByCompanyId(companyId);
+        ArrayList<ProductDTO> productDTOList = new ArrayList<>();
 
-//        for(Product p: result){
-//            System.out.println(
-//                    p.toString() + "1"
-//            );
-//        }
+        productList.stream()
+                .map(product -> product.toDTO())
+                .forEach(productDTO -> productDTOList.add(productDTO));
 
-        ArrayList<ProductDTO> rs = new ArrayList<>();
-        result.stream().map(product -> product.toDTO()).forEach(productDTO -> rs.add(productDTO));
-
-        for (ProductDTO p : rs){
+        for (ProductDTO p : productDTOList){
             System.out.println(p);
         }
 
         return Message.<List<ProductDTO>>createMessage()
                 .message("상품 조회 성공")
-                .body(rs)
+                .body(productDTOList)
                 .header(StatusEnum.OK)
                 .build();
     }
@@ -157,6 +173,7 @@ public class ProductService {
     //public Message<Product> productListBy
 
     public Message<OptionDTO> createOption(OptionDTO optionDTO){
+
         optionRepository.save(optionDTO.toEntity());
 
         return Message.<OptionDTO>createMessage()
@@ -167,6 +184,7 @@ public class ProductService {
     }
 
     public Message deleteOption(Long optionId){
+
         optionRepository.deleteById(optionId);
 
         return Message.createMessage()
@@ -176,6 +194,7 @@ public class ProductService {
     }
 
     public Message<OptionDTO> updateOption(OptionDTO optionDTO){
+
         optionRepository.save(optionDTO.toEntity());
 
         return Message.<OptionDTO>createMessage()
@@ -186,6 +205,7 @@ public class ProductService {
     }
 
     public Message<OptionDTO> selectOption(Long optionId){
+
         Option rs = optionRepository.findById(optionId).get();
 
         OptionDTO result = OptionDTO.createOptionDTO()
@@ -201,6 +221,7 @@ public class ProductService {
     }
 
     public Message<DetailOptionDTO> createDetailOption(DetailOptionDTO detailOptionDTO){
+
         detailOptionRepository.save(detailOptionDTO.toEntity());
 
         return Message.<DetailOptionDTO>createMessage()
@@ -211,6 +232,7 @@ public class ProductService {
     }
 
     public Message deleteDetailOption(Long detailOptionId){
+
         detailOptionRepository.deleteById(detailOptionId);
 
         return Message.createMessage()
@@ -220,6 +242,7 @@ public class ProductService {
     }
 
     public Message<DetailOptionDTO> updateDetailOption(DetailOptionDTO detailOptionDTO){
+
         detailOptionRepository.save(detailOptionDTO.toEntity());
 
         return Message.<DetailOptionDTO>createMessage()

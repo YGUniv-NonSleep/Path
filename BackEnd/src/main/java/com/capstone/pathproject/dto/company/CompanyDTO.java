@@ -71,7 +71,7 @@ public class CompanyDTO {
     }
 
     public void addMember(Member member){
-        //this.member = member;
+        this.member = member;
     }
 
     public void addFile(String fileName){

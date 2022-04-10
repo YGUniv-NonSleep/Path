@@ -1,11 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import CommunityPresenter from "./CommunityPresenter";
+import CommunityContents from './CommunityContents';
 
 function CommunityContainer() {
   const [loading, setLoading] = useState(false);
   const [formInfo, setFormInfo] = useState(null);
   const [board, setBoard] = useState(null);
+
+  const { postId } = useParams();
+  console.log(postId);
 
   useEffect(() => {
     setLoading((current) => !current);
@@ -49,14 +54,14 @@ function CommunityContainer() {
     console.log(formInfo);
     axios.get(process.env.REACT_APP_SPRING_API + "/api/post/view")
       .then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
         setBoard(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, [formInfo]);
-
+  
   return (
     <CommunityPresenter
       loading={loading}

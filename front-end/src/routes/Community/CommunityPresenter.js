@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Link } from 'react-router-dom'
 import styled from "styled-components";
 
 const CommuCon = styled.div`
@@ -26,7 +27,6 @@ function CommunityPresenter(props) {
       <CommuCon>
         <CommuSubCon>
           {props.loading ? <p>커뮤니티 화면 나왔다</p> : <h2>로드 중...</h2>}
-          <div>여기다가 쓰면 됨</div>
           <form
             id="myForm"
             name="myForm"
@@ -35,13 +35,17 @@ function CommunityPresenter(props) {
           >
             <input type="text" placeholder="???" name="title" />
             <input type="text" placeholder="???" name="content" />
-            <input type="text" placeholder="type" name="type" />
+            <select type="text" placeholder="type" name="type" >
+                <option>NOTICE</option>
+                <option>FAQ</option>
+                <option>COMPLAINT</option>
+                <option>QNA</option>
+            </select>
             <input type="file" name="userfile" multiple="multiple" />
             <button type="submit">submit</button>
           </form>
         </CommuSubCon>
         <CommuSubCon>
-          {props.loading ? <p>커뮤니티 화면 나왔다</p> : <h2>로드 중...</h2>}
           <table>
             <tr>
               <CommuBoard>게시글번호</CommuBoard>
@@ -54,10 +58,15 @@ function CommunityPresenter(props) {
             { props.board == null || props.board == '' ? <tr><NullCommuBoard colSpan={6}>아직 없음.</NullCommuBoard></tr>
               : (
                 props.board.body.map((post, index) => {
+                  // console.log(post);
                   return (
                     <tr key={index}>
                       <CommuBoard2>{post.id}</CommuBoard2>
-                      <CommuBoard2>{post.title}</CommuBoard2>
+                      <CommuBoard2>
+                        <Link to={{
+                          pathname : `/community/${post.id}`
+                        }}>{post.title}</Link>
+                      </CommuBoard2>
                       <CommuBoard2>{post.member.id}</CommuBoard2>
                       <CommuBoard2>{post.view}</CommuBoard2>
                       <CommuBoard2>{post.writeDate}</CommuBoard2>
@@ -71,11 +80,8 @@ function CommunityPresenter(props) {
         </CommuSubCon>
       </CommuCon>
     </div>
-  );
-} //create
-//update == created인 내용을 update하는거 ,,, created된 내용을 받아와야한다는거잖아
-//update할려면 조회가 먼저
-//
+  );  
+} 
 CommunityPresenter.propTypes = {
   // ex) prop: PropTypes.type.isRequired,
   loading: PropTypes.bool.isRequired,

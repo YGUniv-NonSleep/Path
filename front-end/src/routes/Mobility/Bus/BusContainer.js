@@ -6,6 +6,28 @@ import { MobilityApi } from "../../../OdsayApi";
 function BusContainer() {
     const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [busNo, setBusNo] = useState('');
+    const [markers, setMarkers] = useState([]);
+    const [poly, setPoly] = useState('');
+
+    function onChanged(e) {
+        if(e != undefined){
+            console.log(e.target.value)
+            setBusNo(e.target.value)
+        } else {
+            return 0
+        }
+    }
+
+    useEffect(() => {
+        onChanged()
+    }, [busNo])
+
+    function submit(e){
+        e.preventDefault()
+        console.log(busNo)
+        busInfo(busNo)
+    }
 
     async function mapLoad() {
         try {
@@ -19,42 +41,60 @@ function BusContainer() {
         }
     }
 
-    async function busInfo(){
-        let busNo = 410
+    async function busInfo(data){
+        let busNo = data
+
+        removeMarkers()
+        if(poly!=''){removeGraphics()}
+        
+        
         let busInfo = await MobilityApi.getBusId(busNo).catch((error) => console.log(error));
          //console.log(busInfo)
 
         let busDetailInfo = await MobilityApi.getBusLineDetail(busInfo).catch((error) => console.log(error));
-         console.log(busDetailInfo)
+         //console.log(busDetailInfo)
 
         const bPoly = await MapApi().drawKakaoBusPolyLine(busDetailInfo.result.station)                           
-        //console.log(bPoly)
+        console.log(bPoly)
         bPoly.setMap(map)
+        setPoly(bPoly)
 
         const array = busDetailInfo.result.station;
         //console.log(array.length)
- 
-        // 버튼을 클릭하면 아래 배열의 좌표들이 모두 보이게 지도 범위를 재설정합니다 
-
-        let points = null;
-        points = new Array();
-
-        for(var i=0; i<array.length; i++){
-            points.push(new kakao.maps.LatLng(array[i].y, array[i].x))
-        }
-        //console.log(points)
-        // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
         
-        var bounds = new kakao.maps.LatLngBounds();   
-        for (var i = 0; i < points.length; i++) {
-            var marker =  new kakao.maps.Marker({ position : points[i] });
-            marker.setMap(map);
+        var bounds = new kakao.maps.LatLngBounds();
+         
+        for (var i = 0; i < array.length; i++) {
             
+            let markerPosition = new kakao.maps.LatLng(array[i].y, array[i].x)
+
+            const mk = new kakao.maps.Marker({ 
+                position : markerPosition
+            })
+            mk.setMap(map)
+            setMarkers((current) => [...current, mk])
             // LatLngBounds 객체에 좌표를 추가합니다
-            bounds.extend(points[i]);
+            bounds.extend(markerPosition);
         }
-        
         map.setBounds(bounds);
+
+        function removeMarkers() {
+            for(var i=0; i<markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            setMarkers([])
+        }
+
+        function removeGraphics() {
+            // for(var i=0; i<poly; i++){
+            //     bPoly.Sg[i].setMap(null);
+            // }
+            console.log(poly)
+            poly.setMap(null)
+            setPoly('')
+        }
+
+
 
     }
 
@@ -63,14 +103,16 @@ function BusContainer() {
     }, []);
 
     useEffect(() => {
-         busInfo()
+        //busInfo()
     }, [map]);
 
     return (
         <BusPresenter 
             loading = {loading}
-        >
-            </BusPresenter>
+            onChanged = {onChanged}
+            submit = {submit}
+            busNo = {busNo}    
+        > </BusPresenter>
     )
 }
 
