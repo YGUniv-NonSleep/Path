@@ -11,8 +11,8 @@ import Mobility from '../routes/Mobility';
 import Community from '../routes/Community';
 import CarPool from '../routes/CarPool';
 import { LoginContainer as Login } from '../routes/Member';
-import SearchId from '../routes/Member/SearchId'
-import SearchPw from '../routes/Member/SearchPw'
+import SearchId from '../routes/Member/SearchId';
+import SearchPw from '../routes/Member/SearchPw';
 import { SignUpContainer as SignUp } from '../routes/Member';
 
 import Company from '../routes/Member/Company';
@@ -64,8 +64,8 @@ function Router() {
         <Route path="/oder" element={<Oder />} />
       </Routes>
       <Routes>
-      <Route path="/mobility" element={<Mobility />} />
-        <Route path="/mobility/bus" element={<Bus/>} />
+        <Route path="/mobility" element={<Mobility />} />
+        <Route path="/mobility/bus" element={<Bus />} />
         <Route path="/mobility/subway" element={<Subway />} />
         <Route path="/mobility/scooter" element={<Scooter />} />
         <Route path="/mobility/bike" element={<Bike />} />
@@ -79,6 +79,5 @@ function Router() {
     </BrowserRouter>
   );
 }
-
 
 export default Router;
