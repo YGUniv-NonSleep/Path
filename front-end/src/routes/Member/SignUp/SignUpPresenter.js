@@ -21,6 +21,8 @@ import NativeSelect from '@mui/material/NativeSelect';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 function Copyright(props) {
   return (
@@ -55,6 +57,7 @@ const theme = createTheme();
 
 function SignUpPresenter(props) {
   const {
+    roleError,
     loginIdError,
     emailError,
     passwordState,
@@ -68,7 +71,7 @@ function SignUpPresenter(props) {
     registerError,
   } = props.errorList;
 
-  const { gender } = props.inputValue;
+  const { role, gender } = props.inputValue;
 
   return (
     <ThemeProvider theme={theme}>
@@ -96,22 +99,24 @@ function SignUpPresenter(props) {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <FormControl fullWidth>
-                    <InputLabel
-                      variant="standard"
-                      htmlFor="uncontrolled-native"
-                    >
-                      회원 유형
+                    <InputLabel id="demo-simple-select-label">
+                      회원유형
                     </InputLabel>
-                    <NativeSelect
-                      defaultValue={'ROLE_MEMBER'}
-                      onChange={props.handleInput}
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="role"
+                      label="회원유형"
+                      value={role}
                       name="role"
+                      onChange={props.handleInput}
+                      error={roleError !== '' || false}
                     >
-                      <option value={'ROLE_MEMBER'}>일반 회원</option>
-                      <option value={'ROLE_BUSINESS'}>업체 회원</option>
-                    </NativeSelect>
+                      <MenuItem value={'ROLE_MEMBER'}>일반회원</MenuItem>
+                      <MenuItem value={'ROLE_BUSINESS'}>업체회원</MenuItem>
+                    </Select>
                   </FormControl>
                 </Grid>
+                <FormHelperTexts>{roleError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
                     required
