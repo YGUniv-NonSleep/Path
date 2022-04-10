@@ -2,32 +2,30 @@ import {
   BrowserRouter,
   Routes, // v5에서 v6되면서 Switch에서 이름이 Routes로 변경됨.
   Route,
-} from "react-router-dom";
+} from 'react-router-dom';
 
-import Path from "../routes/Path";
-import { MemberContainer as Member } from "../routes/Member";
-import Oder from "../routes/Oder";
-import Mobility from "../routes/Mobility";
-import Community from "../routes/Community";
-import CommunityContents from "../routes/Community/CommunityContents";
-import CarPool from "../routes/CarPool";
-import { LoginContainer as Login } from "../routes/Member";
-import SearchId from "../routes/Member/SearchId";
-import SearchPw from "../routes/Member/SearchPw";
-import { SignUpContainer as SignUp } from "../routes/Member";
+import Path from '../routes/Path';
+import { MemberContainer as Member } from '../routes/Member';
+import Oder from '../routes/Oder';
+import Mobility from '../routes/Mobility';
+import Community from '../routes/Community';
+import CommunityContents from '../routes/Community/CommunityContents';
+import CarPool from '../routes/CarPool';
+import { LoginContainer as Login } from '../routes/Member';
+import SearchId from '../routes/Member/SearchId';
+import SearchPw from '../routes/Member/SearchPw';
+import { SignUpContainer as SignUp } from '../routes/Member';
+import Company from '../routes/Member/Company';
+import CompStore from '../routes/Member/Company/CompStore';
+import CompDetail from '../routes/Member/Company/CompDetail';
+import CompCreate from '../routes/Member/Company/CompCreate';
+import CompManage from '../routes/Member/Company/CompManage';
+import Scooter from '../routes/Mobility/Scooter';
+import Bus from '../routes/Mobility/Bus';
+import Subway from '../routes/Mobility/Subway';
+import Bike from '../routes/Mobility/Bike';
 
-import Company from "../routes/Member/Company";
-import CompStore from "../routes/Member/Company/CompStore";
-import CompDetail from "../routes/Member/Company/CompDetail";
-import CompCreate from "../routes/Member/Company/CompCreate";
-import CompManage from "../routes/Member/Company/CompManage";
-
-import Scooter from "../routes/Mobility/Scooter";
-import Bus from "../routes/Mobility/Bus";
-import Subway from "../routes/Mobility/Subway";
-import Bike from "../routes/Mobility/Bike";
-
-import Menubar from "./Menubar";
+import Menubar from './Menubar';
 
 // https://kyung-a.tistory.com/36
 

@@ -46,6 +46,7 @@ function SignUpContainer() {
   };
 
   // ====== 회원가입 입력 유효성 검사 ====== //
+  const [roleError, setRoleError] = useState('');
   const [loginIdError, setLoginIdError] = useState('');
   const [checked, setChecked] = useState(false);
   const [emailError, setEmailError] = useState('');
@@ -60,6 +61,7 @@ function SignUpContainer() {
   const [registerError, setRegisterError] = useState('');
 
   const errorList = {
+    roleError,
     loginIdError,
     emailError,
     passwordState,
@@ -78,10 +80,13 @@ function SignUpContainer() {
   };
 
   const isValidInput = () => {
+    if (role == '' || role == undefined)
+      setRoleError('회원유형을 선택해주세요');
+    else setRoleError('');
+
     const loginIdRegex = /^[a-zA-Z0-9\s]+$/;
-    if (!loginIdRegex.test(loginId) && loginId.length <= 4)
-      // setLoginIdError('아이디를 4자 이상 입력해주세요.')
-      setLoginIdError('올바른 아이디 형식이 아닙니다.');
+    if (!loginIdRegex.test(loginId) || loginId.length < 4)
+      setLoginIdError('영문자+숫자 조합으로 4자리 이상 입력해주세요');
     else setLoginIdError('');
 
     const emailRegex =
@@ -132,6 +137,8 @@ function SignUpContainer() {
     if (!checked) alert('회원가입 약관에 동의해주세요.');
 
     if (
+      role != '' &&
+      role != undefined &&
       loginIdRegex.test(loginId) &&
       emailRegex.test(email) &&
       passwordRegex.test(password) &&
@@ -167,7 +174,6 @@ function SignUpContainer() {
       gender: gender,
       birthday: birthday,
     };
-    console.log(data);
     axios
       .post(process.env.REACT_APP_SPRING_API + '/api/member', data, {
         withCredentials: true,
@@ -178,7 +184,7 @@ function SignUpContainer() {
           alert(res.data.message);
         } else {
           alert('패스콕 회원가입이 되셨습니다.');
-          window.location.href = '/login';
+          // window.location.href = '/login';
         }
       })
       .catch((err) => {
