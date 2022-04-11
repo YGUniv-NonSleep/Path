@@ -48,24 +48,30 @@ const SwitchButton = styled(Button)`
 `;
 
 function SearchCon(props) {
-  // console.log(props.juso)
+  // console.log(props.juso.onchangeSP)
+
+  let jusoOption = props.juso.jusoValue.map((it) => {
+    // console.log(it)
+    return `${it.pN} (${it.aN})`
+  })
+
   return (
     <>
       <SideNav>
         <SearchArea>
           <Autocomplete
-            value={props.juso.sp}
+            value={props.juso.sp || ''}
             onInputChange={props.juso.onchangeSP}
             id="sp-input"
-            options={props.juso.jusoValue}
+            options={jusoOption}
             sx={{ width: 350 }}
             renderInput={(params) => <TextField {...params} label="Start" />}
           ></Autocomplete>
           <Autocomplete
-            value={props.juso.ap}
+            value={props.juso.ap || ''}
             onInputChange={props.juso.onchangeAP}
             id="ap-input"
-            options={props.juso.jusoValue}
+            options={jusoOption}
             sx={{ width: 350 }}
             renderInput={(params) => <TextField {...params} label="Arrival" />}
           ></Autocomplete>
