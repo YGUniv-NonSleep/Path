@@ -11,8 +11,8 @@ function PathPresenter(props) {
       <SearchCon
         juso={{
           jusoValue: props.jusoValue,
-          sp: props.startPoint,
-          ap: props.arrivalPoint,
+          sp: props.SPoint,
+          ap: props.APoint,
           onchangeSP: props.onchangeSP,
           onchangeAP: props.onchangeAP,
           switchPoints: props.switchPoints,

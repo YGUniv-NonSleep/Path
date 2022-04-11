@@ -6,14 +6,13 @@ import MapApi from "../../MapApi";
 function PathContainer() {
     const [map, settingMap] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [way, setWay] = useState(null); // 찾은 경로
+    const [way, setWay] = useState([]); // 찾은 경로
 
-    const options = []; // 주소들을 담아줄 배열
-    const [jusoValue, setJusoValue] = useState(options); // 가져온 주소 받아서 띄워줄 배열 state
+    const [jusoValue, setJusoValue] = useState([]); // 가져온 주소 받아서 띄워줄 배열 state
 
-    const [startPoint, setStartPoint] = useState('');
-    const [arrivalPoint, setArrivalPoint] = useState('');
-    const [insertPoint, setInsertPoint] = useState('');
+    const [SPoint, setSPoint] = useState(''); // 출발지 주소창
+    const [APoint, setAPoint] = useState(''); // 도착지 주소창
+    const [insertPoint, setInsertPoint] = useState(''); // 입력에 반응하는 창 state
 
 
     // 카카오 지도를 불러오는 함수
@@ -31,65 +30,97 @@ function PathContainer() {
         }
     }
 
-
     // 출발지를 저장하는 함수
     const onchangeSP = (e, sp) => {
-        // setStartPoint(e.target.innerText)
+        // setSPoint(e.target.innerText)
         setInsertPoint(sp)
-        setStartPoint(sp)
+        setSPoint(sp)
         // console.log(sp)
     }
     // 도착지를 저장하는 함수
     const onchangeAP = (e, ap) => {
         setInsertPoint(ap)
-        setArrivalPoint(ap)
+        setAPoint(ap)
         // console.log(ap)
     }
     // 다시입력을 수행하는 함수
     const refreshPoints = (e) => {
         // console.log(e.target)
         setInsertPoint('')
-        setStartPoint('')
-        setArrivalPoint('')
+        setSPoint('')
+        setAPoint('')
     }
     // 출발지 도착지 전환하는 함수
     const switchPoints = () => {
-        let temp = startPoint
-        setStartPoint(arrivalPoint)
-        setArrivalPoint(temp)
+        let temp = SPoint
+        setSPoint(APoint)
+        setAPoint(temp)
     }
 
-    // console.log(startPoint)
-    // console.log(arrivalPoint)
-
-    useEffect(() => {
+    function placeSearch() {
         // 장소 검색 객체를 생성합니다
         const ps = new kakao.maps.services.Places();
 
         ps.keywordSearch(insertPoint, function(result, status, pagination){
             if(status === daum.maps.services.Status.OK){
-                console.log(result)
+                // console.log(result)
                 let k = result.map((item)=>{
-                    return {
+                    const data = {
                         pN: item.place_name,
-                        aN: item.address_name
+                        aN: item.address_name,
+                        x: item.x,
+                        y: item.y
                     }
+                    return data
                 })
                 // console.log(k)
-                options.push(k)
-                // setJusoValue(option)
-                // console.log(options)
+                setJusoValue([...k])
+
+                // let asd = k.filter((it)=>{
+                //     return it.pN == SPoint
+                // })
             } else return "몬가... 잘못됨.."
         })
+    }
 
+    // 장소 검색 로직
+    useEffect(() => {
+        placeSearch()
     }, [insertPoint])
-    // console.log(jusoValue)
+    
+    function getKeywordLatLng(data) {
+        let idx = data.indexOf("(")
+        let string = data.substr(0, idx-1)
 
+        const ps = new kakao.maps.services.Places();
+
+        const a = ps.keywordSearch(string, function(result, status, pagination){
+            if(status === daum.maps.services.Status.OK){
+                // console.log(result)
+                let k = result.map((item)=>{
+                    const data = {
+                        pN: item.place_name,
+                        aN: item.address_name,
+                        x: item.x,
+                        y: item.y
+                    }
+                    return data
+                })
+                console.log(k)
+                return k
+            } else return "몬가... 몬가... 잘못됨.."
+        })
+        console.log(a)
+
+        // return string
+    }
 
     // 길 찾기를 수행하는 함수
     // 사용자 입력에 조건 추가 요망.
     async function wayFind() {
         try {
+            const SP = getKeywordLatLng(SPoint)
+            const AP = getKeywordLatLng(APoint)
             // 출발지, 도착지의 위도, 경도를 얻어왔다고 가정
             const startPoint = { la: 126.93737555322481, ma: 37.55525165729346 }
             const arrivalPoint = { la: 126.88265238619182, ma: 37.481440035175375 }
@@ -110,7 +141,7 @@ function PathContainer() {
             let graphicData = await PathApi.getGraphicRoute(
                 mapObj
             ).catch((error) => console.log(error));
-            console.log(graphicData)
+            // console.log(graphicData)
             
             const sp = await MapApi().drawKakaoMarker(startPoint.la, startPoint.ma)
             sp.setMap(map)
@@ -186,8 +217,8 @@ function PathContainer() {
         <PathPresenter 
             loading = {loading}
             jusoValue = {jusoValue}
-            startPoint = {startPoint}
-            arrivalPoint = {arrivalPoint}
+            SPoint = {SPoint}
+            APoint = {APoint}
             onchangeSP = {onchangeSP}
             onchangeAP = {onchangeAP}
             switchPoints = {switchPoints}
