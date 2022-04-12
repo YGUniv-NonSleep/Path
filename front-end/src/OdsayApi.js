@@ -13,7 +13,9 @@ export const PathApi = {
     const response = await odsayApi.get(
         `/searchPubTransPathT?lang=0&SX=${data.startPoint.la}&SY=${data.startPoint.ma}&EX=${data.arrivalPoint.la}&EY=${data.arrivalPoint.ma}&apiKey=${key}`
       ).catch((error) => console.log(error));
-    //console.log(response)
+    console.log(response.data.result)
+    // response.data.result.path.pathType	(int) 1-지하철, 2-버스, 3-버스+지하철
+
     return response.data.result;
   },
 
