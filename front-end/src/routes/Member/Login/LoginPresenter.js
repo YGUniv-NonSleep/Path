@@ -61,7 +61,7 @@ function LoginPresenter(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h4">
-            회원가입
+            로그인
           </Typography>
           <Box
             component="form"

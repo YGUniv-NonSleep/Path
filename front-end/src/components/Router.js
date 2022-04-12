@@ -17,6 +17,7 @@ import { LoginContainer as Login } from '../routes/Member';
 import SearchId from '../routes/Member/SearchId';
 import SearchPw from '../routes/Member/SearchPw';
 import { SignUpContainer as SignUp } from '../routes/Member';
+import { UpdateMemContainer as UpdateMem } from '../routes/Member';
 
 import Company from '../routes/Member/Company';
 import CompStore from '../routes/Member/Company/CompStore';
@@ -54,6 +55,7 @@ function Router() {
         <Route path="/searchPw" element={<SearchPw />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/member" element={<Member />} />
+        <Route path="/member/update" element={<UpdateMem />} />
       </Routes>
       <Routes>
         <Route path="/company" element={<Company />} />
