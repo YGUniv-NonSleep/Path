@@ -10,6 +10,7 @@ function UpdateMemContainer() {
   const goBackPage = () => {
     navigate(-1);
   };
+
   const [memberId, setMemberId] = useState('');
 
   useEffect(() => {
@@ -17,7 +18,6 @@ function UpdateMemContainer() {
     console.log('실행됨');
   }, []);
 
-  // === AccessToken 재발급 == //
   const tokenReissue = () => {
     axios
       .post(process.env.REACT_APP_SPRING_API + '/api/token', '', {
@@ -31,16 +31,30 @@ function UpdateMemContainer() {
         console.log('AccessToken 발급 완료');
         const decoded = tokenDecode(authorization);
         setMemberId(decoded.id);
+        getMemberInfo();
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  // === AccessToken 값 디코딩 === //
   const tokenDecode = (authorization) => {
     var decoded = jwt_decode(authorization);
     return decoded;
+  };
+
+  const getMemberInfo = () => {
+    const url = process.env.REACT_APP_SPRING_API + '/api/member/' + memberId;
+    axios
+      .get(url, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const [inputValue, setInputValue] = useState({
@@ -68,29 +82,64 @@ function UpdateMemContainer() {
   const errorList = { emailError, phoneError, addrError, addrDetailError };
 
   const isValidInput = () => {
+    let inputValid = true;
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-    if (!emailRegex.test(email))
-      setEmailError('올바른 이메일 형식이 아닙니다.');
-    else setEmailError('');
-
     const phoneRegex = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/;
-    if (!phoneRegex.test(phone) || phone.length < 1)
-      setPhoneError('올바른 전화번호를 입력해주세요');
-    else setPhoneError('');
-
     const addrRegex = /^[가-힣\s0-9a-zA-Z]+$/;
-    if (!addrRegex.test(addr) || addr.length < 1)
-      setAddrError('올바른 주소를 입력해주세요');
-    else setAddrError('');
 
-    if (!addrRegex.test(addrDetail))
-      setAddrDetailError('올바른 상세주소를 입력해주세요');
-    else setAddrDetailError('');
+    if (!isEmpty(email)) {
+      if (!emailRegex.test(email)) {
+        setEmailError('올바른 이메일 형식이 아닙니다.');
+        inputValid = false;
+      } else setEmailError('');
+    }
+
+    if (!isEmpty(phone)) {
+      if (!phoneRegex.test(phone) || phone.length < 1) {
+        setPhoneError('올바른 전화번호를 입력해주세요');
+        inputValid = false;
+      } else setPhoneError('');
+    }
+
+    if (!isEmpty(addr)) {
+      if (!addrRegex.test(addr) || addr.length < 1) {
+        setAddrError('올바른 주소를 입력해주세요');
+        inputValid = false;
+      } else setAddrError('');
+    }
+
+    if (!isEmpty(addrDetail)) {
+      if (!addrRegex.test(addrDetail)) {
+        setAddrDetailError('올바른 상세주소를 입력해주세요');
+        inputValid = false;
+      } else setAddrDetailError('');
+    }
+
+    if (
+      isEmpty(email) &&
+      isEmpty(phone) &&
+      isEmpty(addr) &&
+      isEmpty(addrDetail)
+    ) {
+      inputValid = false;
+    }
+
+    if (inputValid) {
+      return true;
+    } else {
+      return false;
+    }
   };
+
+  function isEmpty(str) {
+    if (typeof str == 'undefined' || str == null || str == '') return true;
+    else return false;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isValidInput()) return;
     const data = {
       mail: email,
       phone: phone,
