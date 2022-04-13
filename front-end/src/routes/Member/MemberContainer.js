@@ -48,9 +48,6 @@ function MemberContainer() {
       })
       .then((res) => {
         console.log(res);
-        setMemberId('');
-        console.log('로그아웃');
-        window.location.href = '/';
       })
       .catch((err) => {
         console.log(err);
@@ -58,7 +55,7 @@ function MemberContainer() {
   };
 
   const deleteMember = () => {
-    console.log('회원탈퇴 시작');
+    userLogOut();
     const url = process.env.REACT_APP_SPRING_API + '/api/member/' + memberId;
     axios
       .delete(url, {
@@ -68,7 +65,8 @@ function MemberContainer() {
         console.log(res);
         if (res.data.header.statusCode == 200) {
           alert(res.data.message);
-          userLogOut();
+          setMemberId('');
+          window.location.href = '/';
         }
       })
       .catch((err) => {
