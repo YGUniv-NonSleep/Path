@@ -92,18 +92,61 @@ function MapApi() {
         lineArray = new Array();
 
         // console.log(data)
-        // console.log(data.result)
-        // console.log(data.result.lane[0].section.length)
-        // console.log(data.result.lane[0].section[0].graphPos[0])
+        // console.log(data[2].lane)
+        // console.log(data[2].lane[0])
+        // console.log(data[2].lane.length)
+        
 
-        for(var i = 0 ; i < data.result.lane.length; i++) {
-            for(var j=0 ; j <data.result.lane[i].section.length; j++) {
-                for(var k=0 ; k < data.result.lane[i].section[j].graphPos.length; k++) {
-                    //console.log(data.result.lane[i].section[j].graphPos.length)
-                    lineArray.push(new kakao.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
-                }
-            }
-        }
+        // for(var i = 0; i < data.length; i++){
+        //     for(var j = 0; j < data[i].lane; j++){
+
+        //         for(var k = 0; k < data[i].lane.length; k++){
+        //             for(var l = 0; l < data[i].lane[k].section; l++){
+
+        //                 for(var n = 0; n < data[i].lane[k].section.length; n++){
+        //                     for(var m = 0; m < data[i].lane[k].section[n].graphPos; m++){
+
+        //                         for(var u = 0; u < data[i].lane[k].section[n].graphPos.length; u++){
+        //                             console.log(data[i].lane[k].section[n].graphPos[u].y)
+        //                             //lineArray.push(new kakao.maps.LatLng(data[i].lane[k].section[l].graphPos[n].y, data[i].lane[k].section[l].graphPos[n].x));
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+
+
+        const lane = data.map((item) => {
+            return item
+        })
+        
+        const section = item.lane.map((lane) => {
+            return lane
+        })
+
+        const graphPos = lane.section.map((section) => {
+            // class -> 1(버스노선), 2(지하철노선)
+            // type -> 노선 종류(버스, 지하철)
+            return section
+        })
+        console.log(graphPos)
+
+        const coordinate = section.graphPos.map((graphPos) => {
+            return graphPos
+        })
+        console.log(coordinate)
+
+        // for(var i = 0; i < data.lane.length; i++) {
+        //     for(var j=0 ; j <data.lane[i].section.length; j++) {
+        //         for(var k=0 ; k < data.lane[i].section[j].graphPos.length; k++) {
+        //             //console.log(data.lane[i].section[j].graphPos.length)
+        //             lineArray.push(new kakao.maps.LatLng(data.lane[i].section[j].graphPos[k].y, data.lane[i].section[j].graphPos[k].x));
+        //         }
+        //     }
+        // }
 
         let polyline = new kakao.maps.Polyline({
             //map: data.map,
@@ -114,7 +157,7 @@ function MapApi() {
             strokeStyle: 'dashed'
         });
         
-        console.log(lineArray)
+        // console.log(lineArray)
         polyline.setPath(lineArray)
         polyline.setZIndex(3);
 
@@ -146,7 +189,7 @@ function MapApi() {
             strokeStyle: 'dashed'
         });
         
-        console.log(lineArray)
+        // console.log(lineArray)
         polyline.setPath(lineArray)
         polyline.setZIndex(10);
 

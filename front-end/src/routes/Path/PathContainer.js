@@ -28,6 +28,11 @@ function PathContainer() {
     }
   }
 
+  // 처음 접속시 세팅 Effect Hook
+  useEffect(() => {
+    mapLoad();
+  }, []);
+
   // 출발지를 저장하는 함수
   const onchangeSP = (e, sp) => {
     // setSPoint(e.target.innerText)
@@ -75,9 +80,6 @@ function PathContainer() {
         // console.log(k)
         setJusoValue([...k]);
 
-        // let asd = k.filter((it)=>{
-        //     return it.pN == SPoint
-        // })
       } else return "몬가... 잘못됨..";
     });
   }
@@ -88,96 +90,108 @@ function PathContainer() {
   }, [insertPoint]);
 
   function getKeywordLatLng(data) {
-    let idx = data.indexOf("(");
-    let string = data.substr(0, idx - 1);
-
+    // console.log(data)
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(string, function (result, status, pagination) {
-      if (status === daum.maps.services.Status.OK) {
-        let k = result.filter((item) => {
-            // console.log(item.place_name)
-            return item.place_name === string
-        });
-        console.log(k)
-        setWay((cur) => [...cur, k[0]])
+    for(var i=0; i<data.length; i++){
 
-      } else return console.log("몬가... 몬가... 잘못됨..");
-    })
+      let idx = data[i].indexOf("(");
+      let string = data[i].substr(0, idx - 1);
+
+      ps.keywordSearch(string, function (result, status, pagination) {
+        if (status === daum.maps.services.Status.OK) {
+          let k = result.filter((item) => {
+              // console.log(item.place_name)
+              return item.place_name === string
+          });
+          // console.log(k)
+          setWay((cur) => [...cur, k[0]])
+
+        } else return console.log("몬가... 몬가... 잘못됨..");
+      })
+    }
   }
 
-  // 길 찾기를 수행하는 함수
-  // 사용자 입력에 조건 추가 요망.
-  async function wayFind() {
+  function wayFind() {
     try {
       // 출발지, 도착지의 위도, 경도 얻음
-      getKeywordLatLng(SPoint); 
-      getKeywordLatLng(APoint); // 이친구들의 콜백이 끝나야 X, Y 좌표를 얻을 수 있음
-
-      let pathWay = await PathApi.getDirection({
-        sx: way[0].x, sy: way[0].y,
-        ex: way[1].x, ey: way[1].y
-      }).catch((error) => console.log(error));
-
-      // setWay([])
-
-      // pathWay 다양한 경로는 바로 아래에서..
-      // const a = pathWay.path.map(mo => { return mo })
-      // console.log(a)
-
-      // const BaseX = Math.floor(startPoint.la);
-      // const BaseY = Math.floor(startPoint.ma);
-      const mo = pathWay.path.map((mo) => {
-        return mo.info.mapObj;
-      });
-      const mapObj = `${mo[0]}`;
-      // mapObj
-
-      let graphicData = await PathApi.getGraphicRoute(mapObj).catch((error) =>
-        console.log(error)
-      );
-      // console.log(graphicData)
-
-      const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
-      sp.setMap(map);
-
-      const ap = await MapApi().drawKakaoMarker(way[1].x, way[1].y);
-      ap.setMap(map);
-
-      const dkpl = await MapApi().drawKakaoPolyLine(graphicData);
-      dkpl.setMap(map);
-
-       console.log(graphicData.result.boundary)
-      if (graphicData.result.boundary) {
-        // console.log("boundary ar")
-        let points = [
-          new kakao.maps.LatLng(way[0].x, way[0].y),
-          new kakao.maps.LatLng(way[1].x, way[1].y),
-        ];
-
-        let bounds = new kakao.maps.LatLngBounds();
-
-        for (var i = 0; i < points.length; i++) {
-          bounds.extend(points[i]);
-        }
-
-        // console.log(bounds)
-        map.setBounds(bounds);
-
-        // const moving = moveMapLatLon(map.getCenter());
-        // map.panTo(moving);
-      }
+      getKeywordLatLng([SPoint, APoint]); // 이친구들의 콜백이 끝나야 X, Y 좌표를 얻을 수 있음    
+      
     } catch (error) {
       console.log(error);
     }
   }
+  
+  async function pathSearch(){
+    let pathWay = await PathApi.getDirection({
+      sx: way[0].x, sy: way[0].y,
+      ex: way[1].x, ey: way[1].y
+    }).catch((error) => console.log(error));
+
+    // console.log(pathWay)
+
+    // pathWay 다양한 경로는 바로 아래에서..
+    // const a = pathWay.path.map(mo => { return mo })
+    // console.log(a)
+
+    // const BaseX = Math.floor(startPoint.la);
+    // const BaseY = Math.floor(startPoint.ma);
+    const mapObj = pathWay.path.map((mo) => {
+      return mo.info.mapObj;
+    });
+    // console.log(mapObj)
+    
+
+    let graphicData = await PathApi.getGraphicRoute(mapObj).catch((error) =>
+      console.log(error)
+    );
+    // console.log(graphicData)
+
+    const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
+    sp.setMap(map);
+
+    const ap = await MapApi().drawKakaoMarker(way[1].x, way[1].y);
+    ap.setMap(map);
+
+    const dkpl = await MapApi().drawKakaoPolyLine(graphicData);
+    dkpl.setMap(map);
+
+    // console.log(graphicData.result.boundary)
+    if(graphicData.result.boundary) {
+      // console.log("boundary ar")
+      let points = [
+        new kakao.maps.LatLng(way[0].x, way[0].y),
+        new kakao.maps.LatLng(way[1].x, way[1].y),
+      ];
+
+      let bounds = new kakao.maps.LatLngBounds();
+
+      for (var i = 0; i < points.length; i++) {
+        bounds.extend(points[i]);
+      }
+
+      // console.log(bounds)
+      map.setBounds(bounds);
+
+      // const moving = moveMapLatLon(map.getCenter());
+      // map.panTo(moving);
+    }
+  }
+
+  useEffect(() => {
+    if(way.length == 0) return 0
+    else if(way.length == 2){
+      pathSearch()
+      setWay([])
+    } else return // console.log(way.length)
+  }, [way])
 
   // 맵의 정보를 가져옴
-  async function getMapInfo(mapData) {
-    let info = await MapApi().getInfo(mapData);
-    console.log(info);
-    return info;
-  }
+  // async function getMapInfo(mapData) {
+  //   let info = await MapApi().getInfo(mapData);
+  //   console.log(info);
+  //   return info;
+  // }
 
   // 맵을 옆으로 보기좋게 이동시켜줌
   // function moveMapLatLon(data) {
@@ -185,14 +199,9 @@ function PathContainer() {
   //   return moveLatLon;
   // }
 
-  // 처음 접속시 세팅 Effect Hook
-  useEffect(() => {
-    mapLoad();
-  }, []);
-
-  useEffect(() => {
-    // getMapInfo(map)
-  }, [map]);
+  // useEffect(() => {
+  //   // getMapInfo(map)
+  // }, [map]);
 
   return (
     <PathPresenter

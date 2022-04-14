@@ -52,10 +52,10 @@ const SwitchButton = styled.button`
 `;
 
 function SearchCon(props) {
-  // let jusoOption = props.juso.jusoValue.map((it) => {
-  //   // console.log(it)
-  //   return `${it.pN} (${it.aN})`
-  // })
+  let jusoOption = props.juso.jusoValue.map((it) => {
+    // console.log(it)
+    return `${it.pN} (${it.aN})`
+  })
 
   return (
     <>
@@ -63,26 +63,18 @@ function SearchCon(props) {
         <SearchArea>
           <Icon></Icon>
           <Autocomplete
-            value={props.juso.sp || ''}
+            value={props.juso.sp}
             onInputChange={props.juso.onchangeSP}
             id="sp-input"
-            options={
-              props.juso.jusoValue.map((it) => {
-              // console.log(it)
-              return `${it.pN} (${it.aN})`
-            })}
+            options={jusoOption}
             sx={{ width: 350 }}
             renderInput={(params) => <TextField {...params} label="Start" />}
           ></Autocomplete>
           <Autocomplete
-            value={props.juso.ap || ''}
+            value={props.juso.ap}
             onInputChange={props.juso.onchangeAP}
             id="ap-input"
-            options={
-              props.juso.jusoValue.map((it) => {
-              // console.log(it)
-              return `${it.pN} (${it.aN})`
-            })}
+            options={jusoOption}
             sx={{ width: 350 }}
             renderInput={(params) => <TextField {...params} label="Arrival" />}
           ></Autocomplete>
@@ -96,22 +88,18 @@ function SearchCon(props) {
                   sx={{ width: 80, height: 35, marginRight: "10px" }}
                   startIcon={<AutorenewIcon sx={{ marginLeft: -1 }} />}
                   onClick={props.juso.refreshPoints}
-                >
-                  <Typography
-                    variant="inherit"
-                    sx={{ width: 40, fontSize: 10 }}
-                  >
-                    다시입력
+                ><Typography variant="inherit" sx={{ width: 40, fontSize: 10 }}>
+                  다시입력
                   </Typography>
                 </Button>
+
                 <Button
                   variant="outlined"
                   sx={{ width: 80, height: 35 }}
                   startIcon={<AddIcon sx={{ marginLeft: -1 }} />}
-                >
-                  <Typography variant="inherit" sx={{ fontSize: 10 }}>
-                    경유지
-                  </Typography>
+                ><Typography variant="inherit" sx={{ fontSize: 10 }}>
+                  경유지
+                 </Typography>
                 </Button>
               </Grid>
               <Grid>
@@ -120,14 +108,9 @@ function SearchCon(props) {
                   sx={{ width: 80, height: 35, marginLeft: "84px" }}
                   endIcon={<ChevronRightIcon sx={{ marginRight: -1 }} />}
                   onClick={props.juso.wayFind}
-                >
-                  <Typography
-                    variant="inherit"
-                    align="left"
-                    sx={{ fontSize: 11 }}
-                  >
-                    길 찾기
-                  </Typography>
+                ><Typography variant="inherit" align="left" sx={{ fontSize: 11 }}>
+                  길 찾기
+                 </Typography>
                 </Button>
               </Grid>
             </Stack>
