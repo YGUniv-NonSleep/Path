@@ -1,3 +1,4 @@
+import { isPlainObject } from "@mui/utils";
 import axios from "axios";
 
 const odsayApi = axios.create({
@@ -18,13 +19,32 @@ export const PathApi = {
     return response.data.result;
   },
 
-  getGraphicRoute: async (mapObj) => {
+  getGraphicRoute: async (mapObj) => { // console.log(mapObj)
     // 찾은 경로 그림 그릴 준비하는 친구
-    const response = await odsayApi.get(
-        `/loadLane?lang=0&mapObject=0:0@${mapObj}&apiKey=${key}`
+    //let isAt = []; // at = @
+
+    // @로 구분되는 mapObj @ 위치
+    // let isAt = mapObj.map((item) => {
+    //   let list = []
+    //   let idx = item.indexOf('@')
+
+    //   while(idx != -1) {
+    //     list.push(idx)
+    //     idx = item.indexOf('@', idx+'@'.length)
+    //   }
+    //   return list
+    // })
+    let resList = []
+    
+    for(var i=0; i<mapObj.length; i++){
+      const response = await odsayApi.get(
+        `/loadLane?lang=0&mapObject=0:0@${mapObj[i]}&apiKey=${key}`
       ).catch((error) => console.log(error));
-    //console.log(response);
-    return response.data;
+
+      resList.push(response.data.result)
+    }
+    // console.log(resList);
+    return resList
   },
 };
 
