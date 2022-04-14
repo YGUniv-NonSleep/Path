@@ -30,12 +30,13 @@ export const PathApi = {
 export const MobilityApi = {
   getBusId: async (data) => { console.log(data)
     const response = await odsayApi.get(
-      `/searchBusLane?lang=0&busNo=${data}&CID=4000&apiKey=${key}`
+      `/searchBusLane?lang=0&busNo=${data}&CID=4000&apiKey=${key}`,
+
     ).catch((error) => console.log(error));
      console.log(response.data.result.lane[0].busID);
     return response.data.result.lane[0].busID;
   },
-
+  
   getBusLineDetail: async (busID) => { console.log(busID)
     const response = await odsayApi.get(
       `/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`
@@ -45,25 +46,25 @@ export const MobilityApi = {
   }
 };
 
-export const SubTime = {
-  getSubTime: async(data) => { console.log(data)
+export const BusStayApi = {
+  getBusStay: async (data) => {console.log(data)
     const response = await odsayApi.get(
-      `/subwayTimeTable?lang=0&stationID=${data}&apiKey=${key}`
+      `/searchStation?lang=0&stationName=${data}&CID=4000&stationClass=1&apiKey=${key}`
     ).catch((error) => console.log(error));
-    console.log(response.data.result);
-    return response.data.result;
+    console.log(response);
   }
 };
 
-export const SubPath = {
-  getSubPath: async(data) => { console.log(data)
-    const response = await odsayApi.get(
-      `/subwayPath?lang=0&CID=${data}&SID=40135&EID=40230&apiKey=${key}`
-    ).catch((error) => console.log(error));
-    console.log(response.data);
-    return response.data.result;
-  }
+export const SubName = {
+ getSubName: async (data) => {console.log(data)
+  const response = await odsayApi.get(
+    `/searchStation?lang=0&stationName=${data}&CID=4000&stationClass=2&apiKey=${key}`
+  ).catch((error) => console.log(error));
+ // console.log(response.data.result.station[0].stationID);
+  return response.data.result.station[0];
 }
+};
+
 
 
 export default odsayApi;

@@ -10,6 +10,18 @@ function BusContainer() {
     const [markers, setMarkers] = useState([]);
     const [poly, setPoly] = useState('');
 
+    async function mapLoad() {
+        try {
+            let createMap = await MapApi().createMap();
+            let setController = await MapApi().setController(createMap);
+            settingMap(setController);
+            setLoading(true);
+
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
     function onChanged(e) {
         if(e != undefined){
             console.log(e.target.value)
@@ -29,31 +41,16 @@ function BusContainer() {
         busInfo(busNo)
     }
 
-    async function mapLoad() {
-        try {
-            let createMap = await MapApi().createMap();
-            let setController = await MapApi().setController(createMap);
-            settingMap(setController);
-            setLoading(true);
-
-        } catch(error) {
-            console.log(error);
-        }
-    }
-
     async function busInfo(data){
-        let busNo = data
-
+        
         removeMarkers()
         if(poly!=''){removeGraphics()}
-        
-        
+       
+        let busNo = data
         let busInfo = await MobilityApi.getBusId(busNo).catch((error) => console.log(error));
          //console.log(busInfo)
-
         let busDetailInfo = await MobilityApi.getBusLineDetail(busInfo).catch((error) => console.log(error));
          //console.log(busDetailInfo)
-
         const bPoly = await MapApi().drawKakaoBusPolyLine(busDetailInfo.result.station)                           
         console.log(bPoly)
         bPoly.setMap(map)
@@ -65,11 +62,10 @@ function BusContainer() {
         var bounds = new kakao.maps.LatLngBounds();
          
         for (var i = 0; i < array.length; i++) {
-            
             let markerPosition = new kakao.maps.LatLng(array[i].y, array[i].x)
-
             const mk = new kakao.maps.Marker({ 
-                position : markerPosition
+                position : markerPosition,
+                clickable: true
             })
             mk.setMap(map)
             setMarkers((current) => [...current, mk])
@@ -86,16 +82,10 @@ function BusContainer() {
         }
 
         function removeGraphics() {
-            // for(var i=0; i<poly; i++){
-            //     bPoly.Sg[i].setMap(null);
-            // }
             console.log(poly)
             poly.setMap(null)
             setPoly('')
         }
-
-
-
     }
 
     useEffect(() => {

@@ -104,6 +104,7 @@ const Bus = (props) => {
           id="busNo"
           name="busNo"
           value={props.busNo}
+          //value={props.busStay}
           onChange={props.onChange}
           onKeyPress={(e) => {
             if(e.key === 'Enter'){

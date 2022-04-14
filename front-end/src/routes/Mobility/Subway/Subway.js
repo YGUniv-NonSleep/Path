@@ -4,6 +4,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import MIcon from "../MIcon";
+import Box from "@mui/material/Box";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -46,7 +47,7 @@ height: 40px;
 font-size: 12px;
 `;
 
-const Subway = () => {
+const Subway = (props) => {
   return (
     <SideNav>
       <MIcon />
@@ -56,17 +57,33 @@ const Subway = () => {
       </Ul>
 
       <BarContainer>
+      <Box 
+        component="form"
+        noValidate
+        onSubmit={props.submit}
+        sx={{mt:3}}
+        >
         <TextField
           sx={{ left: "15px", width: "360px" }}
           size="small"
+          id="subName"
+          name="subName"
+          value={props.subName}
+          onChange={props.onChange}
+          onKeyPress={(e) => {
+            if(e.key === 'Enter'){
+              return props.submit
+            }
+          }}
           InputProps={{
             startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
+              <InputAdornment position="start">{" "}
+              <SearchIcon />{" "}
               </InputAdornment>
             ),
           }}
         />
+        </Box>
 
         <Btn>시간표</Btn>
         <Btn1>출구정보</Btn1>
