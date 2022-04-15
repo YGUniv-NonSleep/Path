@@ -8,7 +8,7 @@ import {
   DirectionsBus,
   DirectionsSubway,
   ElectricScooter,
-  DirectionsCarFilled
+  DirectionsCarFilled,
 } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 
@@ -17,9 +17,7 @@ import IconButton from "@mui/material/IconButton";
 // http://www.tcpschool.com/css/css3_transform_2Dtransform
 
 const Ul = styled.ul`
-  position: fixed;
-  top: 10px;
-  left: 110px;
+  position: relative;
   display: grid;
   grid-template-columns: 50px 50px 50px 50px 50px 50px 50px;
 `;
@@ -39,57 +37,45 @@ const Icon = () => {
       </Li>
 
       <Li>
-        <Link to="/mobility/bus" style={{ color: "black" }}>
-          <IconButton color="primary">
-            <DirectionsBus />
-          </IconButton>
-          <Typography variant="subtitle2">버스</Typography>
-        </Link>
+        <IconButton color="primary">
+          <DirectionsBus />
+        </IconButton>
+        <Typography variant="subtitle2">버스</Typography>
       </Li>
 
       <Li>
-        <Link to="/mobility/subway" style={{ color: "black" }}>
-          <IconButton color="primary">
-            <DirectionsSubway />
-          </IconButton>
-          <Typography variant="subtitle2">지하철</Typography>
-        </Link>
+        <IconButton color="primary">
+          <DirectionsSubway />
+        </IconButton>
+        <Typography variant="subtitle2">지하철</Typography>
       </Li>
 
       <Li>
-        <Link to="/mobility/scooter" style={{ color: "black"}}>
         <IconButton color="primary">
           <ElectricScooter />
         </IconButton>
         <Typography variant="subtitle2">킥보드</Typography>
-        </Link>
       </Li>
 
       <Li>
-        <Link to="/mobility/Bike" style={{ color: "black"}}>
         <IconButton color="primary">
           <PedalBike />
         </IconButton>
         <Typography variant="subtitle2">자전거</Typography>
-        </Link>
       </Li>
 
       <Li>
-      <Link to="/mobility/walk" style={{ color: "black" }}>
-      <IconButton color="primary">
+        <IconButton color="primary">
           <DirectionsWalk />
         </IconButton>
         <Typography variant="subtitle2">도보</Typography>
-        </Link>
       </Li>
-      
+
       <Li>
-        <Link to="/mobility/car" style={{ color: "black" }}>
         <IconButton color="primary">
           <DirectionsCarFilled />
         </IconButton>
         <Typography variant="subtitle2">자동차</Typography>
-        </Link>
       </Li>
     </Ul>
   );
