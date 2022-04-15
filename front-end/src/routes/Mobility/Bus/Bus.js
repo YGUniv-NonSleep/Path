@@ -20,7 +20,7 @@ const BarContainer = styled.div`
   z-index: 10
   width: 390px;
   height: 90%;
-  margin-top: 150px;
+  margin-top: 100px;
 `;
 
 const Ul = styled.ul`
@@ -29,25 +29,9 @@ const Ul = styled.ul`
   left: 110px;
 `;
 
-const Btn = styled.button`
-  position: absolute;
-  top: 20px;
-  left: 2px;
-  width: 180px;
-  height: 40px;
-`;
-
-const Station = styled.button`
-  position: absolute;
-  top: 20px;
-  left: 180px;
-  width: 180px;
-  height: 40px;
-`;
-
 const Text = styled.p`
   position: absolute;
-  top: 230px;
+  top: 180px;
   left: 15px;
   font-size: 13px;
   font-weight: bold;
@@ -55,7 +39,7 @@ const Text = styled.p`
 
 const Line = styled.hr`
   position: absolute;
-  top: 250px;
+  top: 200px;
   left: 15px;
   width: 350px;
   height: 1px;
@@ -65,7 +49,7 @@ const Line = styled.hr`
 
 const Text1 = styled.p`
   position: absolute;
-  top: 400px;
+  top: 350px;
   left: 15px;
   font-size: 13px;
   font-weight: bold;
@@ -73,7 +57,7 @@ const Text1 = styled.p`
 
 const Line1 = styled.hr`
   position: absolute;
-  top: 420px;
+  top: 370px;
   left: 15px;
   width: 350px;
   height: 1px;
@@ -87,8 +71,6 @@ const Bus = (props) => {
     <SideNav>
       <MIcon />
       <Ul>
-        <Btn>버스</Btn>
-        <Station>버스정류장</Station>
       </Ul>
 
       <BarContainer>

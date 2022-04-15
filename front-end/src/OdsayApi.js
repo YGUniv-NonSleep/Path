@@ -31,17 +31,23 @@ export const MobilityApi = {
   getBusId: async (data) => { console.log(data)
     const response = await odsayApi.get(
       `/searchBusLane?lang=0&busNo=${data}&CID=4000&apiKey=${key}`,
-
     ).catch((error) => console.log(error));
      console.log(response.data.result.lane[0].busID);
     return response.data.result.lane[0].busID;
+  },
+
+  getBusStay: async(data) => { console.log(data)
+    const response = await odsayApi.get(
+      `/searchStation?lang=0&stationName=${data}&CID=4000&stationClass=1&apiKey=${key}`
+    ).catch((error)=>console.log(error));
+    //console.log(response.data.result.station);
+    return response.data.result.station;
   },
   
   getBusLineDetail: async (busID) => { console.log(busID)
     const response = await odsayApi.get(
       `/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`
     ).catch((error) => console.log(error));
-     console.log(response);
     return response.data;
   }
 };
