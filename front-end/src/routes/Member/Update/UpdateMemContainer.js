@@ -3,6 +3,7 @@ import UpdateMemPresenter from './UpdateMemPresenter';
 import { useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import { isEmpty } from '../../../utils/StringUtil.js';
 
 function UpdateMemContainer() {
   const navigate = useNavigate();
@@ -131,11 +132,6 @@ function UpdateMemContainer() {
       return false;
     }
   };
-
-  function isEmpty(str) {
-    if (typeof str == 'undefined' || str == null || str == '') return true;
-    else return false;
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
