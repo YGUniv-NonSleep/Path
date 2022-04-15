@@ -48,10 +48,6 @@ const FormHelperTexts = styled(FormHelperText)`
   color: #d32f2f;
 `;
 
-const Boxs = styled(Box)`
-  padding-bottom: 40px;
-`;
-
 const theme = createTheme();
 
 function SignUpPresenter(props) {
