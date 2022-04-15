@@ -12,6 +12,7 @@ const CompManageSubCon = styled.div`
 `;
 
 function CompManage(props) {
+    console.log(props.companyId)
     return (
         <CompManageCon>
             <CompManageSubCon>
@@ -21,7 +22,7 @@ function CompManage(props) {
                 <Link to="itemEdit"><button>상품 관리</button></Link>
                 <Link to="compEdit"><button>업체정보 수정</button></Link>
                 <Link to="resign"><button>업체 탈퇴</button></Link>
-                <Outlet></Outlet>
+                <Outlet context={props.companyId}></Outlet>
             </CompManageSubCon>
         </CompManageCon>
     )
