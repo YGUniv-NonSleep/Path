@@ -4,7 +4,6 @@ import SearchId from './SearchIdPresenter';
 import { useNavigate } from 'react-router-dom';
 
 function SearchIdContainer({ history }) {
-  const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState({
     name: '',
     email: '',

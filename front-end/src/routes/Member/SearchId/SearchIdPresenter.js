@@ -22,9 +22,8 @@ const FormHelperTexts = styled(FormHelperText)`
   color: #d32f2f;
 `;
 
-const theme = createTheme();
-
 function SearchId(props) {
+  const theme = createTheme();
   const { nameError, emailError, registerError } = props.errorList;
 
   return (

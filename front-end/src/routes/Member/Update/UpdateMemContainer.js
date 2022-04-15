@@ -7,17 +7,19 @@ import { isEmpty } from '../../../utils/StringUtil.js';
 
 function UpdateMemContainer() {
   const navigate = useNavigate();
-
-  const goBackPage = () => {
-    navigate(-1);
-  };
-
   const [memberId, setMemberId] = useState('');
-
-  useEffect(() => {
-    tokenReissue();
-    console.log('실행됨');
-  }, []);
+  const [inputValue, setInputValue] = useState({
+    email: '',
+    phone: '',
+    addr: '',
+    addrDetail: '',
+  });
+  const { email, phone, addr, addrDetail } = inputValue;
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [addrError, setAddrError] = useState('');
+  const [addrDetailError, setAddrDetailError] = useState('');
+  const errorList = { emailError, phoneError, addrError, addrDetailError };
 
   const tokenReissue = () => {
     axios
@@ -32,7 +34,6 @@ function UpdateMemContainer() {
         console.log('AccessToken 발급 완료');
         const decoded = tokenDecode(authorization);
         setMemberId(decoded.id);
-        getMemberInfo();
       })
       .catch((err) => {
         console.log(err);
@@ -44,28 +45,9 @@ function UpdateMemContainer() {
     return decoded;
   };
 
-  const getMemberInfo = () => {
-    const url = process.env.REACT_APP_SPRING_API + '/api/member/' + memberId;
-    axios
-      .get(url, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const goBackPage = () => {
+    navigate(-1);
   };
-
-  const [inputValue, setInputValue] = useState({
-    email: '',
-    phone: '',
-    addr: '',
-    addrDetail: '',
-  });
-
-  const { email, phone, addr, addrDetail } = inputValue;
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -74,13 +56,6 @@ function UpdateMemContainer() {
       [name]: value,
     });
   };
-
-  const [emailError, setEmailError] = useState('');
-  const [phoneError, setPhoneError] = useState('');
-  const [addrError, setAddrError] = useState('');
-  const [addrDetailError, setAddrDetailError] = useState('');
-
-  const errorList = { emailError, phoneError, addrError, addrDetailError };
 
   const isValidInput = () => {
     let inputValid = true;
@@ -155,6 +130,11 @@ function UpdateMemContainer() {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    tokenReissue();
+    console.log('실행됨');
+  }, []);
 
   return (
     <UpdateMemPresenter

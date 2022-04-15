@@ -47,9 +47,8 @@ const FormHelperTexts = styled(FormHelperText)`
   color: #d32f2f;
 `;
 
-const theme = createTheme();
-
 function UpdateMemPresenter(props) {
+  const theme = createTheme();
   const { emailError, phoneError, addrError, addrDetailError } =
     props.errorList;
 

@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { isEmpty } from '../../../utils/StringUtil.js';
 
 function SignUpContainer() {
-  // ====== 회원가입 입력 ====== //
+  const [postId, setPostId] = useState('');
+  const [addr, setAddr] = useState('');
+  const [addrExtra, setAddrExtra] = useState('');
+  const [birthday, setBirthday] = useState('');
   const [inputValue, setInputValue] = useState({
     role: '',
     loginId: '',
@@ -18,7 +21,6 @@ function SignUpContainer() {
     addrDetail: '',
     gender: 'MALE',
   });
-
   const {
     role,
     loginId,
@@ -30,26 +32,6 @@ function SignUpContainer() {
     addrDetail,
     gender,
   } = inputValue;
-
-  const [postId, setPostId] = useState('');
-  const [addr, setAddr] = useState('');
-  const [addrExtra, setAddrExtra] = useState('');
-
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setInputValue({
-      ...inputValue,
-      [name]: value,
-    });
-  };
-
-  const [birthday, setBirthday] = useState(null);
-
-  const handleBirthday = (date) => {
-    setBirthday(dayjs(date).format('YYYY-MM-DD'));
-  };
-
-  // ====== 회원가입 입력 유효성 검사 ====== //
   const [roleError, setRoleError] = useState('');
   const [loginIdError, setLoginIdError] = useState('');
   const [checked, setChecked] = useState(false);
@@ -61,7 +43,6 @@ function SignUpContainer() {
   const [addrDetailError, setAddrDetailError] = useState('');
   const [genderError, setGenderError] = useState('');
   const [birthdayError, setBirthdayError] = useState('');
-
   const errorList = {
     roleError,
     loginIdError,
@@ -73,6 +54,23 @@ function SignUpContainer() {
     addrDetailError,
     genderError,
     birthdayError,
+  };
+  const navigate = useNavigate();
+
+  const goBackPage = () => {
+    navigate(-1);
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
+  const handleBirthday = (date) => {
+    setBirthday(dayjs(date).format('YYYY-MM-DD'));
   };
 
   const handleAgree = (e) => {
@@ -187,22 +185,6 @@ function SignUpContainer() {
       });
   };
 
-  const navigate = useNavigate();
-  const goBackPage = () => {
-    navigate(-1);
-  };
-
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src =
-      '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   const daumAddrApi = () => {
     new daum.Postcode({
       oncomplete: function (data) {
@@ -258,6 +240,17 @@ function SignUpContainer() {
       },
     }).open();
   };
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src =
+      '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <SignUpPresenter

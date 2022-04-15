@@ -5,15 +5,8 @@ import jwt_decode from 'jwt-decode';
 
 function MemberContainer() {
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading((current) => !current);
-    tokenReissue();
-  }, []);
-
   const [memberId, setMemberId] = useState('');
 
-  // === AccessToken 재발급 == //
   const tokenReissue = () => {
     axios
       .post(process.env.REACT_APP_SPRING_API + '/api/token', '', {
@@ -22,7 +15,6 @@ function MemberContainer() {
       .then((res) => {
         console.log(res.data);
         const authorization = res.headers.authorization;
-        // 이후 모든 axios 요청 헤더에 access token값 붙여서 보냄.
         axios.defaults.headers.common['authorization'] = authorization;
         console.log('AccessToken 발급 완료');
         const decoded = tokenDecode(authorization);
@@ -33,14 +25,12 @@ function MemberContainer() {
       });
   };
 
-  // === AccessToken 값 디코딩 === //
   const tokenDecode = (authorization) => {
     var decoded = jwt_decode(authorization);
     console.log(decoded);
     return decoded;
   };
 
-  // === 로그아웃 진행 === //
   const userLogOut = () => {
     axios
       .delete(process.env.REACT_APP_SPRING_API + '/api/token', {
@@ -73,6 +63,11 @@ function MemberContainer() {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    setLoading((current) => !current);
+    tokenReissue();
+  }, []);
 
   return (
     <MemberPresenter
