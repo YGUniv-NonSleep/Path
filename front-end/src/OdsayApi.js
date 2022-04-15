@@ -1,4 +1,3 @@
-import { isPlainObject } from "@mui/utils";
 import axios from "axios";
 
 const odsayApi = axios.create({
@@ -14,8 +13,9 @@ export const PathApi = {
     const response = await odsayApi.get(
         `/searchPubTransPathT?lang=0&SX=${data.sx}&SY=${data.sy}&EX=${data.ex}&EY=${data.ey}&apiKey=${key}`
       ).catch((error) => console.log(error));
-    // console.log(response.data.result)
+    // console.log(response.data.error.code) -> -98 (출, 도착지가 700m이내입니다.) 도보 api 활용
     // response.data.result.path.pathType	(int) 1-지하철, 2-버스, 3-버스+지하철
+    
     return response.data.result;
   },
 

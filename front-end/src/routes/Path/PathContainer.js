@@ -7,6 +7,7 @@ function PathContainer() {
   const [map, settingMap] = useState(null);
   const [loading, setLoading] = useState(false);
   const [way, setWay] = useState([]); // 찾은 경로
+  const [polyLine, setPolyLine] = useState([]); // 그래픽 데이터
 
   const [jusoValue, setJusoValue] = useState([]); // 가져온 주소 받아서 띄워줄 배열 state
 
@@ -104,7 +105,7 @@ function PathContainer() {
               // console.log(item.place_name)
               return item.place_name === string
           });
-          // console.log(k)
+           // console.log(k)
           setWay((cur) => [...cur, k[0]])
 
         } else return console.log("몬가... 몬가... 잘못됨..");
@@ -114,6 +115,7 @@ function PathContainer() {
 
   function wayFind() {
     try {
+      setWay([])
       // 출발지, 도착지의 위도, 경도 얻음
       getKeywordLatLng([SPoint, APoint]); // 이친구들의 콜백이 끝나야 X, Y 좌표를 얻을 수 있음    
       
@@ -123,6 +125,7 @@ function PathContainer() {
   }
   
   async function pathSearch(){
+    
     let pathWay = await PathApi.getDirection({
       sx: way[0].x, sy: way[0].y,
       ex: way[1].x, ey: way[1].y
@@ -130,17 +133,11 @@ function PathContainer() {
 
     // console.log(pathWay)
 
-    // pathWay 다양한 경로는 바로 아래에서..
-    // const a = pathWay.path.map(mo => { return mo })
-    // console.log(a)
-
-    // const BaseX = Math.floor(startPoint.la);
-    // const BaseY = Math.floor(startPoint.ma);
+    // pathWay 다양한 경로
     const mapObj = pathWay.path.map((mo) => {
       return mo.info.mapObj;
     });
     // console.log(mapObj)
-    
 
     let graphicData = await PathApi.getGraphicRoute(mapObj).catch((error) =>
       console.log(error)
@@ -153,16 +150,25 @@ function PathContainer() {
     const ap = await MapApi().drawKakaoMarker(way[1].x, way[1].y);
     ap.setMap(map);
 
-    const dkpl = await MapApi().drawKakaoPolyLine(graphicData);
-    dkpl.setMap(map);
+    // graphicData -> list -> 사용자의 입력에 따라 다르게 그리기
+    const dkpl = MapApi().drawKakaoPolyLine(graphicData[0].lane);
+    console.log(dkpl.polyline)
+    dkpl.polyline.setMap(map);
 
-    // console.log(graphicData.result.boundary)
-    if(graphicData.result.boundary) {
+     // console.log(graphicData[0].boundary) // 사용자 입력에 따른 번호 변화
+    if(graphicData[0].boundary) {
       // console.log("boundary ar")
       let points = [
-        new kakao.maps.LatLng(way[0].x, way[0].y),
-        new kakao.maps.LatLng(way[1].x, way[1].y),
+        new kakao.maps.LatLng(way[0].y, way[0].x),
+        new kakao.maps.LatLng(way[1].y, way[1].x),
       ];
+      // console.log(points)
+      // 여기서 points 벌써부터 다들어와있노? 실행순서 야랄났네
+
+      for(var i=0; i<dkpl.lineArray.length; i++){
+        points.push(new kakao.maps.LatLng(dkpl.lineArray[i].Ma, dkpl.lineArray[i].La))
+      }
+      console.log(points)
 
       let bounds = new kakao.maps.LatLngBounds();
 
@@ -175,14 +181,14 @@ function PathContainer() {
 
       // const moving = moveMapLatLon(map.getCenter());
       // map.panTo(moving);
+    
     }
   }
 
   useEffect(() => {
-    if(way.length == 0) return 0
-    else if(way.length == 2){
+    if(way.length == 2) {
       pathSearch()
-      setWay([])
+      //setWay([])
     } else return // console.log(way.length)
   }, [way])
 
