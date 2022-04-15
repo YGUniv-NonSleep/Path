@@ -17,7 +17,8 @@ function PathPresenter(props) {
           onchangeAP: props.onchangeAP,
           switchPoints: props.switchPoints,
           refreshPoints: props.refreshPoints,
-          wayFind: props.wayFind
+          wayFind: props.wayFind,
+          pathSearch: props.pathSearch
         }}
       ></SearchCon>
       {props.loading ? null : <h2>로드 중...</h2>}
