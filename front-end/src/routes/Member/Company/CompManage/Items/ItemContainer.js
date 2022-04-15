@@ -1,12 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Item from "./Item";
+import {useOutletContext} from "react-router-dom"
+
 
 function ItemContainer() {
   // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState([]);
   const [myItems, setMyItems] = useState([]);
+
+  const companyId = useOutletContext();
 
   useEffect(() => {
     setLoading((current) => !current);
@@ -22,13 +26,13 @@ function ItemContainer() {
 
   function patchProductBasic(it) {
       // console.log(it)
-    const data = {
-        id: it.id,
-        name: "감자칩1",
-        detail: "맛좋은 감자칩",
-        brand: "농싱",
-        category: "과자"
-      };
+    // const data = {
+    //     id: it.id,
+    //     name: "감자칩1",
+    //     detail: "맛좋은 감자칩",
+    //     brand: "농싱",
+    //     category: "과자"
+    //   };
   
     const formData = new FormData();
     //   formData.append("picture", it.image);
@@ -74,7 +78,7 @@ function ItemContainer() {
           created: new Date(),
           stock: 10,
           company: {
-              id: 1
+              id: companyId
           },
           prodBasic: {
               id: 1
@@ -98,7 +102,7 @@ function ItemContainer() {
   }
 
   function getProduct() {
-    axios.get(process.env.REACT_APP_SPRING_API + `/api/product/comp/${1}`)
+    axios.get(process.env.REACT_APP_SPRING_API + `/api/product/comp/${companyId}`)
     .then((res) => {
         console.log(res);
         setMyItems(res.data.body)
