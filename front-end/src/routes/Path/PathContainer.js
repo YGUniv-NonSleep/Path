@@ -124,8 +124,9 @@ function PathContainer() {
     }
   }
   
-  async function pathSearch(){
-    
+  async function pathSearch(idx){
+    if(idx == undefined) idx = 0
+
     let pathWay = await PathApi.getDirection({
       sx: way[0].x, sy: way[0].y,
       ex: way[1].x, ey: way[1].y
@@ -151,12 +152,12 @@ function PathContainer() {
     ap.setMap(map);
 
     // graphicData -> list -> 사용자의 입력에 따라 다르게 그리기
-    const dkpl = MapApi().drawKakaoPolyLine(graphicData[0].lane);
+    const dkpl = MapApi().drawKakaoPolyLine(graphicData[idx].lane);
     console.log(dkpl.polyline)
     dkpl.polyline.setMap(map);
 
      // console.log(graphicData[0].boundary) // 사용자 입력에 따른 번호 변화
-    if(graphicData[0].boundary) {
+    if(graphicData[idx].boundary) {
       // console.log("boundary ar")
       let points = [
         new kakao.maps.LatLng(way[0].y, way[0].x),
@@ -220,6 +221,7 @@ function PathContainer() {
       switchPoints={switchPoints}
       refreshPoints={refreshPoints}
       wayFind={wayFind}
+      pathSearch={pathSearch}
     ></PathPresenter>
   );
 }

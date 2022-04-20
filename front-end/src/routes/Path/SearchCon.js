@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import PathList from "./PathList";
 import {
   TextField,
   Autocomplete,
@@ -116,7 +117,10 @@ function SearchCon(props) {
             </Stack>
           </Box>
         </SearchArea>
-        <DirectionSummaryList>asd</DirectionSummaryList>
+        <DirectionSummaryList>
+          {/* <button onClick={() => props.juso.pathSearch(0)}>0</button> */}
+          <PathList></PathList>
+        </DirectionSummaryList>
       </SideNav>
     </>
   );
