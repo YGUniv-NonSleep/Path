@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import MapApi from "../../api/MapApi";
-import { SubName } from "../../api/OdsayApi";
+import MapApi from "../../../api/MapApi";
+import { SubName } from "../../../api/OdsayApi";
 import { Subway } from "@mui/icons-material";
-import Map from "../../components/Map";
+import Map from "../../../components/Map";
 import styled from "styled-components";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import MIcon from "./MIcon";
+import MIcon from "../MIcon";
 import Box from "@mui/material/Box";
 
 const SideNav = styled.nav`

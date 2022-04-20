@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import PropTypes from "prop-types";
+import { Link } from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -20,15 +22,15 @@ const FormHelperTexts = styled(FormHelperText)`
   color: #d32f2f;
 `;
 
-function SearchPw(props) {
-  const { loginIdError, phoneError, registerError } = props.errorList;
+function ResetPw(props) {
+  const { passwordError, passwordState } = props.errorList;
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <Box
         sx={{
-          padding: '60px 0 0 0',
+          padding: '50px 0 0 0',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -38,41 +40,42 @@ function SearchPw(props) {
           <KeyIcon />
         </Avatar>
         <Typography component="h1" variant="h4">
-          비밀번호 찾기
+          비밀번호 재설정
         </Typography>
         <Box
           component="form"
           noValidate
-          onSubmit={props.handleSearchSubmit}
           sx={{ mt: 3 }}
+          onSubmit={props.handleResetSubmit}
         >
           <FormControl component="fieldset" variant="standard">
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   required
-                  autoFocus
                   fullWidth
-                  id="loginId"
-                  name="loginId"
-                  label="아이디"
+                  type="password"
+                  id="password"
+                  name="password"
+                  label="비밀번호 (숫자+영문자+특수문자 8자리 이상)"
                   onChange={props.handleInput}
-                  error={loginIdError !== '' || false}
+                  error={passwordState !== '' || false}
                 />
               </Grid>
-              <FormHelperTexts>{loginIdError}</FormHelperTexts>
+              <FormHelperTexts>{passwordState}</FormHelperTexts>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="phone"
-                  name="phone"
-                  label="전화번호 (010-XXXX-XXXX)"
+                  type="password"
+                  id="rePassword"
+                  name="rePassword"
+                  label="비밀번호 재입력"
                   onChange={props.handleInput}
-                  error={phoneError !== '' || false}
+                  error={passwordError !== '' || false}
                 />
               </Grid>
-              <FormHelperTexts>{phoneError}</FormHelperTexts>
+              <FormHelperTexts>{passwordError}</FormHelperTexts>
             </Grid>
             <Button
               type="submit"
@@ -81,14 +84,18 @@ function SearchPw(props) {
               sx={{ mt: 3, mb: 2 }}
               size="large"
             >
-              비밀번호 찾기
+              비밀번호 재설정
             </Button>
           </FormControl>
-          <FormHelperTexts>{registerError}</FormHelperTexts>
         </Box>
       </Box>
     </Container>
   );
 }
 
-export default SearchPw;
+ResetPw.propTypes = {
+  // ex) prop: PropTypes.type.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
+
+export default ResetPw;

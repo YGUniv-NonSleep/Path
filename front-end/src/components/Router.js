@@ -5,23 +5,34 @@ import {
 } from 'react-router-dom';
 
 import Path from '../pages/Path/PathMain';
-import { MemberContainer as Member } from '../pages/Member';
 import Oder from '../pages/Oder/OderMain';
-import Mobility from '../pages/Mobility/MobilityMain';
+
 import Community from '../pages/Community/CommunityMain';
+import CommunityContents from '../pages/Community/CommunityContents';
+
 import CarPool from '../pages/CarPool/CarPoolMain';
+
+import { MemberContainer as Member } from '../pages/Member';
 import { LoginContainer as Login } from '../pages/Member';
-import SearchId from '../pages/Member/SearchId'
-import SearchPw from '../pages/Member/SearchPw'
+import SearchId from '../pages/Member/SearchId/SearchIdMain';
+import SearchPw from '../pages/Member/SearchPw';
 import { SignUpContainer as SignUp } from '../pages/Member';
+import { UpdateMemContainer as UpdateMem } from '../pages/Member';
 
 import Company from '../pages/Company/CompanyMain';
 import CompStore from '../pages/Company/CompStore/CompStoreMain';
+import CompDetail from '../pages/Company/CompDetail';
 import CompCreate from '../pages/Company/CompCreate/CompCreateMain';
-import CompManage from '../pages/Company/CompManage/CompManageMain';
 
+import CompManage from '../pages/Company/CompManage/CompManageMain';
+import Items from '../pages/Company/CompManage/Items';
+import ItemEdit from '../pages/Company/CompManage/ItemEdit';
+import CompEdit from '../pages/Company/CompManage/CompEdit';
+import Resign from '../pages/Company/CompManage/Resign';
+
+import Mobility from '../pages/Mobility/MobilityMain';
 import Bus from '../pages/Mobility/Bus/BusMain';
-import Subway from '../pages/Mobility/SubwayMain';
+import Subway from '../pages/Mobility/Subway/SubwayMain';
 import Scooter from '../pages/Mobility/Scooter/ScooterMain';
 import Bike from '../pages/Mobility/Bike/BikeMain';
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import SearchPw from './SearchPwPresenter';
-import ResetPw from './ResetPwPresenter';
+import SearchPw from './SearchPw';
+import ResetPw from './ResetPw';
 import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 

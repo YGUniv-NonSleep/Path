@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import PropTypes, { func } from "prop-types";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import CommunityContainer from "./CommunityContainer";
 
 const CommuCon = styled.div`
   width: 390px;
