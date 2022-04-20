@@ -4,37 +4,26 @@ import {
   Route,
 } from 'react-router-dom';
 
-import Path from '../routes/Path';
-import Oder from '../routes/Oder';
+import Path from '../pages/Path/PathMain';
+import { MemberContainer as Member } from '../pages/Member';
+import Oder from '../pages/Oder/OderMain';
+import Mobility from '../pages/Mobility/MobilityMain';
+import Community from '../pages/Community/CommunityMain';
+import CarPool from '../pages/CarPool/CarPoolMain';
+import { LoginContainer as Login } from '../pages/Member';
+import SearchId from '../pages/Member/SearchId'
+import SearchPw from '../pages/Member/SearchPw'
+import { SignUpContainer as SignUp } from '../pages/Member';
 
-import Community from '../routes/Community';
-import CommunityContents from '../routes/Community/CommunityContents';
+import Company from '../pages/Company/CompanyMain';
+import CompStore from '../pages/Company/CompStore/CompStoreMain';
+import CompCreate from '../pages/Company/CompCreate/CompCreateMain';
+import CompManage from '../pages/Company/CompManage/CompManageMain';
 
-import CarPool from '../routes/CarPool';
-
-import { MemberContainer as Member } from '../routes/Member';
-import { LoginContainer as Login } from '../routes/Member';
-import SearchId from '../routes/Member/SearchId';
-import SearchPw from '../routes/Member/SearchPw';
-import { SignUpContainer as SignUp } from '../routes/Member';
-import { UpdateMemContainer as UpdateMem } from '../routes/Member';
-
-import Company from '../routes/Member/Company';
-import CompStore from '../routes/Member/Company/CompStore';
-import CompDetail from '../routes/Member/Company/CompDetail';
-import CompCreate from '../routes/Member/Company/CompCreate';
-import CompManage from '../routes/Member/Company/CompManage';
-
-import Items from '../routes/Member/Company/CompManage/Items';
-import ItemEdit from '../routes/Member/Company/CompManage/ItemEdit';
-import CompEdit from '../routes/Member/Company/CompManage/CompEdit';
-import Resign from '../routes/Member/Company/CompManage/Resign';
-
-import Mobility from '../routes/Mobility';
-import Scooter from '../routes/Mobility/Scooter';
-import Bus from '../routes/Mobility/Bus';
-import Subway from '../routes/Mobility/Subway';
-import Bike from '../routes/Mobility/Bike';
+import Bus from '../pages/Mobility/Bus/BusMain';
+import Subway from '../pages/Mobility/SubwayMain';
+import Scooter from '../pages/Mobility/Scooter/ScooterMain';
+import Bike from '../pages/Mobility/Bike/BikeMain';
 
 import Menubar from './Menubar';
 
