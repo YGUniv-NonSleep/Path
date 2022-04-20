@@ -4,26 +4,26 @@ import {
   Route,
 } from 'react-router-dom';
 
-import Path from '../routes/Path';
-import { MemberContainer as Member } from '../routes/Member';
-import Oder from '../routes/Oder';
-import Mobility from '../routes/Mobility';
-import Community from '../routes/Community';
-import CarPool from '../routes/CarPool';
-import { LoginContainer as Login } from '../routes/Member';
-import SearchId from '../routes/Member/SearchId'
-import SearchPw from '../routes/Member/SearchPw'
-import { SignUpContainer as SignUp } from '../routes/Member';
+import Path from '../pages/Path/PathMain';
+import { MemberContainer as Member } from '../pages/Member';
+import Oder from '../pages/Oder/OderMain';
+import Mobility from '../pages/Mobility/MobilityMain';
+import Community from '../pages/Community/CommunityMain';
+import CarPool from '../pages/CarPool/CarPoolMain';
+import { LoginContainer as Login } from '../pages/Member';
+import SearchId from '../pages/Member/SearchId'
+import SearchPw from '../pages/Member/SearchPw'
+import { SignUpContainer as SignUp } from '../pages/Member';
 
-import Company from '../routes/Member/Company';
-import CompStore from '../routes/Member/Company/CompStore';
-import CompCreate from '../routes/Member/Company/CompCreate';
-import CompManage from '../routes/Member/Company/CompManage';
+import Company from '../pages/Company/CompanyMain';
+import CompStore from '../pages/Company/CompStore/CompStoreMain';
+import CompCreate from '../pages/Company/CompCreate/CompCreateMain';
+import CompManage from '../pages/Company/CompManage/CompManageMain';
 
-import Bus from '../routes/Mobility/Bus';
-import Subway from '../routes/Mobility/Subway';
-import Scooter from '../routes/Mobility/Scooter';
-import Bike from '../routes/Mobility/Bike';
+import Bus from '../pages/Mobility/Bus/BusMain';
+import Subway from '../pages/Mobility/Subway/SubwayMain';
+import Scooter from '../pages/Mobility/Scooter/ScooterMain';
+import Bike from '../pages/Mobility/Bike/BikeMain';
 
 import Menubar from './Menubar';
 
