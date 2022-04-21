@@ -3,12 +3,18 @@ import LoginPresenter from './LoginPresenter';
 import axios from 'axios';
 
 function LoginContainer() {
-  // =======로그인 입력 ========//
   const [inputValue, setInputValue] = useState({
     loginId: '',
     password: '',
   });
   const { loginId, password } = inputValue;
+  const [loginIdError, setLoginIdError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const errorList = {
+    loginIdError,
+    passwordError,
+  };
+
   const handleInput = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -16,13 +22,7 @@ function LoginContainer() {
       [name]: value,
     });
   };
-  // ========== 로그인 유효성 검사 ==========//
-  const [loginIdError, setLoginIdError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const errorList = {
-    loginIdError,
-    passwordError,
-  };
+
   const isValidInput = () => {
     const loginIdRegex = /^[a-zA-Z0-9\s]+$/;
     if (!loginIdRegex.test(loginId) || loginId.length < 4)
@@ -45,7 +45,7 @@ function LoginContainer() {
       return false;
     }
   };
-  // ============== 로그인 ================= //
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isValidInput()) return;
@@ -71,6 +71,7 @@ function LoginContainer() {
         console.log(err);
       });
   };
+
   const onLoginSuccess = (res) => {
     const authorization = res.headers.authorization;
     axios.defaults.headers.common['authorization'] = authorization; // axios 모든 요청 헤더에 토큰값 넣기

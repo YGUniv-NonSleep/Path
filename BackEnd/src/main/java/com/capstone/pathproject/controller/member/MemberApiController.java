@@ -56,7 +56,6 @@ public class MemberApiController {
         return new ResponseEntity(message, HttpStatus.OK);
     }
 
-    // 회원 등록
     @PostMapping("/member")
     public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO) {
         System.out.println("memberDTO = " + memberDTO);
@@ -64,67 +63,39 @@ public class MemberApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    // 회원 조회
     @GetMapping("/member/{memberId}")
     public ResponseEntity getMember(@PathVariable("memberId") Long memberId) {
         Message<MemberDTO> message = memberService.getMemberInfo(memberId);
         return new ResponseEntity(message, HttpStatus.OK);
     }
 
-    // 회원 수정
     @PatchMapping("/member/{memberId}")
     public ResponseEntity updateMember(@PathVariable("memberId") Long id, @RequestBody MemberDTO memberDTO) {
         Message<MemberDTO> message = memberService.updateMember(id, memberDTO);
         return new ResponseEntity(message, HttpStatus.OK);
     }
 
-    // 회원 탈퇴
     @DeleteMapping("/member/{memberId}")
     public ResponseEntity deleteMember(@PathVariable("memberId") Long id) {
         Message<MemberDTO> message = memberService.deleteMember(id);
         return new ResponseEntity(message, HttpStatus.OK);
     }
 
-    // 회원 아이디 찾기
     @PostMapping("/forgot/loginid")
     public ResponseEntity forgotLoginId(@RequestBody MemberDTO memberDTO) {
         Message message = memberService.forgotLoginId(memberDTO);
         return new ResponseEntity(message, HttpStatus.OK);
     }
 
-    // 회원 비밀번호 찾기
     @PostMapping("/forgot/password")
     public ResponseEntity forgotPassword(@RequestBody MemberDTO memberDTO) {
         Message message = memberService.forgotPassword(memberDTO);
         return new ResponseEntity(message, HttpStatus.OK);
     }
 
-    // 회원 비밀번호 재설정
     @PatchMapping("/forgot/password/{memberId}")
     public ResponseEntity resetPassword(@PathVariable("memberId") Long id, @RequestBody MemberDTO memberDTO) {
         Message<Object> message = memberService.resetPassword(id, memberDTO);
         return new ResponseEntity(message, HttpStatus.OK);
     }
-
-
-    // === 테스트 요청 === //
-    @GetMapping("/member")
-    public ResponseEntity user(Authentication authentication) {
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Member member = principalDetails.getMember();
-        System.out.println("member = " + member.toString());
-        Message<MemberDTO> memberInfo = memberService.getMemberInfo(1L);
-        return new ResponseEntity(memberInfo, HttpStatus.OK);
-    }
-
-    @GetMapping("/business")
-    public String manager() {
-        return "manager";
-    }
-
-    @GetMapping("/admin")
-    public String admin() {
-        return "admin";
-    }
-
 }

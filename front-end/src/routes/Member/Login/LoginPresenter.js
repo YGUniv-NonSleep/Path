@@ -17,6 +17,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 
+const FormHelperTexts = styled(FormHelperText)`
+  width: 100%;
+  padding-left: 16px;
+  font-weight: 700;
+  color: #d32f2f;
+`;
+
 function Copyright(props) {
   return (
     <Typography
@@ -33,17 +40,9 @@ function Copyright(props) {
   );
 }
 
-const FormHelperTexts = styled(FormHelperText)`
-  width: 100%;
-  padding-left: 16px;
-  font-weight: 700;
-  color: #d32f2f;
-`;
-
-const theme = createTheme();
-
 function LoginPresenter(props) {
   const { loginIdError, passwordError } = props.errorList;
+  const theme = createTheme();
 
   return (
     <ThemeProvider theme={theme}>
@@ -61,7 +60,7 @@ function LoginPresenter(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h4">
-            회원가입
+            로그인
           </Typography>
           <Box
             component="form"

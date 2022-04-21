@@ -22,6 +22,7 @@ const FormHelperTexts = styled(FormHelperText)`
 
 function SearchPw(props) {
   const { loginIdError, phoneError, registerError } = props.errorList;
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

@@ -9,6 +9,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Link } from 'react-router-dom';
 
 function MainListItems(props) {
   return (
@@ -53,17 +54,21 @@ function SecondaryListItems(props) {
       <ListSubheader component="div" inset>
         환경 설정
       </ListSubheader>
-      <ListItemButton>
+      <ListItemButton component={Link} to="/member/update">
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText primary="정보 수정" />
+        <ListItemText
+          primary="정보 수정"
+          component={Link}
+          to="/member/update"
+        />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText primary="카드 관리" onClick={() => abc()} />
+        <ListItemText primary="카드 관리" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>

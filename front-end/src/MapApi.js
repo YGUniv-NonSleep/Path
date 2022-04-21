@@ -91,20 +91,6 @@ function MapApi() {
         let lineArray = null;
         lineArray = new Array();
 
-        // console.log(data)
-        // console.log(data.result)
-        // console.log(data.result.lane[0].section.length)
-        // console.log(data.result.lane[0].section[0].graphPos[0])
-
-        for(var i = 0 ; i < data.result.lane.length; i++) {
-            for(var j=0 ; j <data.result.lane[i].section.length; j++) {
-                for(var k=0 ; k < data.result.lane[i].section[j].graphPos.length; k++) {
-                    //console.log(data.result.lane[i].section[j].graphPos.length)
-                    lineArray.push(new kakao.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
-                }
-            }
-        }
-
         let polyline = new kakao.maps.Polyline({
             //map: data.map,
             //path: [],
@@ -113,12 +99,24 @@ function MapApi() {
             strokeOpacity: 0.8,
             strokeStyle: 'dashed'
         });
-        
-        console.log(lineArray)
+
+        // console.log(data)
+
+        for(var i = 0; i < data.length; i++){
+            for(var j = 0; j < data[i].section.length; j++){
+                for(var k=0 ; k < data[i].section[j].graphPos.length; k++){
+                    // class -> 1(버스노선), 2(지하철노선)
+                    // type -> 노선 종류(버스, 지하철)
+                    lineArray.push(new kakao.maps.LatLng(data[i].section[j].graphPos[k].y, data[i].section[j].graphPos[k].x));
+                }
+            }
+        }
+
+        // console.log(lineArray)
         polyline.setPath(lineArray)
         polyline.setZIndex(3);
 
-        return polyline
+        return {polyline, lineArray}
     }
 
     function drawKakaoBusPolyLine(data) {
@@ -146,7 +144,7 @@ function MapApi() {
             strokeStyle: 'dashed'
         });
         
-        console.log(lineArray)
+        // console.log(lineArray)
         polyline.setPath(lineArray)
         polyline.setZIndex(10);
 

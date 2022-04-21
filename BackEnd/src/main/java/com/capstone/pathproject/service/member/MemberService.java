@@ -31,6 +31,7 @@ public class MemberService {
                     .message("회원이 존재함")
                     .body(memberDTO.getLoginId()).build();
         }
+        memberDTO.changeScore(100);
         memberDTO.changePassword(encodePassword(memberDTO.getPassword()));
         memberRepository.save(memberDTO.toEntity());
         return Message.<String>createMessage()

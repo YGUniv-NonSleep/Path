@@ -24,10 +24,6 @@ function SearchPwContainer() {
   const errorList = { loginIdError, phoneError, passwordState, passwordError };
   const [memberId, setMemberId] = useState('');
 
-  useEffect(() => {
-    setLoading(true);
-  }, []);
-
   const goBackPage = () => {
     navigate(-1);
   };
@@ -133,6 +129,10 @@ function SearchPwContainer() {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    setLoading(true);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
