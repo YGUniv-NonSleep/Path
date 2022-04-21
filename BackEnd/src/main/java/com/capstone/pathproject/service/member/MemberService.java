@@ -1,7 +1,6 @@
 package com.capstone.pathproject.service.member;
 
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.dto.member.MemberDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
@@ -116,9 +115,9 @@ public class MemberService {
     }
 
     // 아이디 찾기
-    public Message forgotLoginId(MemberDTO memberDTO) {
+    public Message<Object> forgotLoginId(MemberDTO memberDTO) {
         if (StringUtils.isBlank(memberDTO.getName()) || StringUtils.isBlank(memberDTO.getMail())) {
-            return Message.<String>createMessage()
+            return Message.createMessage()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("이름 또는 이메일을 입력하지 않았습니다.").build();
         }
@@ -126,7 +125,7 @@ public class MemberService {
         return ValidateOptionalMember(member);
     }
 
-    public Message ValidateOptionalMember(Optional<Member> member) {
+    public Message<Object> ValidateOptionalMember(Optional<Member> member) {
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
             return Message.createMessage()
@@ -145,9 +144,9 @@ public class MemberService {
     }
 
     // 비밀번호 찾기
-    public Message forgotPassword(MemberDTO memberDTO) {
+    public Message<Object> forgotPassword(MemberDTO memberDTO) {
         if (StringUtils.isBlank(memberDTO.getLoginId()) || StringUtils.isBlank(memberDTO.getPhone())) {
-            return Message.<String>createMessage()
+            return Message.createMessage()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("아이디 또는 비밀번호를 입력하지 않았습니다.").build();
         }
