@@ -35,17 +35,19 @@ function Item(props) {
                     )
                   }) 
                 }
+
                 { props.myItems.map((it, index) => {
                     console.log(it)
                     return (
                         <Fragment key={index}>
                             <div>상품이름: {it.prodBasic.name}</div>
-                            <div>상품 판매 여부: {it.exposure}</div>
+                            {/* <div>상품 판매 여부: {it.exposure}</div> */}
                             <div>상품가격: {it.price}</div>
                             <div>상품재고: {it.stock}</div>
-                            <div>상품옵션이름: {it.optionList[0].name}</div>
-                            <div>상품상세옵션이름: {it.optionList[0].detailOptionList[0].name}</div>
-                            <div>상품상세옵션가격: {it.optionList[0].detailOptionList[0].price}</div>
+                            <br></br>
+                            {/* <div>상품옵션이름: {it.optionList[0].name}</div> */}
+                            {/* <div>상품상세옵션이름: {it.optionList[0].detailOptionList[0].name}</div>
+                            <div>상품상세옵션가격: {it.optionList[0].detailOptionList[0].price}</div> */}                            
                         </Fragment>
                     )
                   })
