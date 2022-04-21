@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import Path from '../routes/Path';
+import WalkPath from '../routes/WalkPath';
 import Oder from '../routes/Oder';
 
 import Community from '../routes/Community';
@@ -48,6 +49,7 @@ function Router() {
       <Routes>
         {/* 속성을 component 대신에 element */}
         <Route path="/" element={<Path />} />
+        <Route path="/walk" element={<WalkPath />} />
       </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />
