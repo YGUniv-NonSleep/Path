@@ -21,7 +21,7 @@ const SideNav = styled.nav`
 `;
 
 const BarContainer = styled.div`
-  z-index: 10
+  z-index: 10;
   width: 390px;
   height: 90%;
   margin-top: 100px;
@@ -129,8 +129,8 @@ function BusMain() {
       for (var i = 0; i < array1.length; i++) {
         let busStayMark = new kakao.maps.LatLng(array1[i].y, array1[i].x);
         console.log(busStayMark);
-        iwContent[i] = busStay[i].stationName;
-        console.log(iwContent);
+        // iwContent[i] = busStay[i].stationName;
+        // console.log(iwContent);
 
         const mark = new kakao.maps.Marker({
           position: busStayMark,

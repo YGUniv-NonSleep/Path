@@ -5,6 +5,7 @@ import Icon from "./MIcon";
 import Sidebar from "../../components/Sidebar";
 import Map from "../../components/Map";
 
+
 function MobilityMain() {
   const [map, settingMap] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,10 +27,10 @@ function MobilityMain() {
 
   return (
     <div className="Mobility">
-      <Sidebar />
       <Icon />
-      {loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2>}
+      <Sidebar />
       <Map />
+      {loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2>}
     </div>
   );
 }
