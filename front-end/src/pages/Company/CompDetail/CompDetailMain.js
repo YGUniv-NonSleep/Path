@@ -1,7 +1,8 @@
-// import { Link, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react"
+import { Link, useParams } from 'react-router-dom'
+import axios from "axios"
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const CompDetailCon = styled.div`
     width: 390px;
@@ -12,11 +13,15 @@ const CompDetailSubCon = styled.div`
     margin-left: 130px;
 `;
 
-function CompDetail(props) {
-    const { comId } = useParams()
-    const navigate = useNavigate()
+function CompDetailMain() {
+    const [loading, setLoading] = useState(false)
+    const { comId } = useParams();  // 파라미터
+    // console.log(comId);
 
-    console.log(props)
+    useEffect(() => {
+        setLoading(true)
+    }, [])
+
     return (
         <CompDetailCon>
             <CompDetailSubCon>
@@ -29,4 +34,4 @@ function CompDetail(props) {
     )
 }
 
-export default CompDetail
+export default CompDetailMain

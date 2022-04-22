@@ -92,6 +92,4 @@ export const SubName = {
 }
 };
 
-
-
 export default odsayApi;

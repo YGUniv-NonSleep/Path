@@ -21,14 +21,15 @@ import { UpdateMemContainer as UpdateMem } from '../pages/Member';
 
 import Company from '../pages/Company/CompanyMain';
 import CompStore from '../pages/Company/CompStore/CompStoreMain';
-import CompDetail from '../pages/Company/CompDetail';
+import CompDetail from '../pages/Company/CompDetail/CompDetailMain';
 import CompCreate from '../pages/Company/CompCreate/CompCreateMain';
+import ItemBasicMain from '../pages/Company/ItemBasic/ItemBasicMain';
 
 import CompManage from '../pages/Company/CompManage/CompManageMain';
-import Items from '../pages/Company/CompManage/Items';
-import ItemEdit from '../pages/Company/CompManage/ItemEdit';
-import CompEdit from '../pages/Company/CompManage/CompEdit';
-import Resign from '../pages/Company/CompManage/Resign';
+import Items from '../pages/Company/CompManage/Items/ItemsMain';
+import ItemEdit from '../pages/Company/CompManage/ItemEdit/ItemEditMain';
+import CompEdit from '../pages/Company/CompManage/CompEdit/CompEditMain';
+import Resign from '../pages/Company/CompManage/Resign/ResignMain';
 
 import Mobility from '../pages/Mobility/MobilityMain';
 import Bus from '../pages/Mobility/Bus/BusMain';
@@ -63,10 +64,12 @@ function Router() {
           <Route path=":comId" element={<CompDetail />} />
         </Route>
         <Route path="/company/create" element={<CompCreate />} />
+        <Route path="/company/basic" element={<ItemBasicMain />} />
         <Route path="/company/manage/:comId" element={<CompManage />}>
           {/* 없으면 업체 등록하라고 팝업창, 마이 업체 경로 타고 들어온거 아니면 첫 번째 업체 관리로 들어옴 */}
-          <Route index path="items" element={<Items />} />
-          <Route path="itemEdit" element={<ItemEdit />} />
+          <Route path="items" element={<Items />}>
+            <Route path="itemEdit" element={<ItemEdit />} />
+          </Route>
           <Route path="compEdit" element={<CompEdit />} />
           <Route path="resign" element={<Resign />} />
         </Route>
