@@ -1,6 +1,7 @@
 package com.capstone.pathproject.domain.member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +17,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Card {
 
+    public Card(String number) {
+        this.number = number;
+    }
+
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARD_SEQ_GENERATOR")
     @Column(name = "CARD_ID")
     private Long id;
 
@@ -32,5 +38,27 @@ public class Card {
 
     @Column(name = "CARD_NUM")
     private String number;
+
+    @Column(name = "CARD_BILLING_KEY")
     private String billingKey;
+
+    @Builder
+    public Card(Long id, Member member, LocalDateTime createTime, String cardCompany, String number, String billingKey) {
+        this.id = id;
+        this.member = member;
+        this.createTime = createTime;
+        this.cardCompany = cardCompany;
+        this.number = number;
+        this.billingKey = billingKey;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "createTime = " + createTime + ", " +
+                "cardCompany = " + cardCompany + ", " +
+                "number = " + number + ", " +
+                "billingKey = " + billingKey + ")";
+    }
 }
