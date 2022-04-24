@@ -52,7 +52,6 @@ class MemberApiControllerTest {
                 .addrExtra("산격동")
                 .gender(memberGender.MALE)
                 .birthday(LocalDate.parse("2000-01-01"))
-                .signupDay(LocalDate.now())
                 .account("계좌")
                 .score(100)
                 .build();
@@ -72,7 +71,6 @@ class MemberApiControllerTest {
                 .addrExtra("산격동")
                 .gender(memberGender.MALE)
                 .birthday(LocalDate.parse("2000-01-01"))
-                .signupDay(LocalDate.now())
                 .account("계좌")
                 .score(100)
                 .build();
