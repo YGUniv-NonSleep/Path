@@ -49,12 +49,11 @@ public class MemberDTO {
     @Past
     private LocalDate birthday;
 
-    private LocalDate signupDay;
     private String account;
     private int score;
 
     @Builder(builderMethodName = "createMemberDTO")
-    public MemberDTO(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, LocalDate signupDay, String account, int score) {
+    public MemberDTO(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
         this.id = id;
         this.role = role;
         this.loginId = loginId;
@@ -68,7 +67,6 @@ public class MemberDTO {
         this.addrExtra = addrExtra;
         this.gender = gender;
         this.birthday = birthday;
-        this.signupDay = signupDay;
         this.account = account;
         this.score = score;
     }

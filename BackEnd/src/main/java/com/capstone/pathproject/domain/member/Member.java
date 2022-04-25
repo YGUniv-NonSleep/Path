@@ -1,22 +1,22 @@
 package com.capstone.pathproject.domain.member;
 
+import com.capstone.pathproject.domain.BaseTimeEntity;
 import com.capstone.pathproject.dto.member.MemberDTO;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @ToString
+@DynamicUpdate
 @SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR",
         sequenceName = "MEMBER_SEQ",
         initialValue = 1, allocationSize = 1)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@DynamicUpdate
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
@@ -61,9 +61,6 @@ public class Member {
     @Column(name = "MEM_BIRTH")
     private LocalDate birthday;
 
-    @Column(name = "MEM_SIGNUP_DATE")
-    private LocalDate signupDay;
-
     @Column(name = "MEM_ACCOUNT")
     private String account;
 
@@ -71,7 +68,7 @@ public class Member {
     private int score;
 
     @Builder(builderMethodName = "createMember")
-    public Member( Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, LocalDate signupDay, String account, int score) {
+    public Member( Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
         this.role = role;
         this.loginId = loginId;
         this.password = password;
@@ -84,7 +81,6 @@ public class Member {
         this.addrExtra = addrExtra;
         this.gender = gender;
         this.birthday = birthday;
-        this.signupDay = LocalDate.now();
         this.account = account;
         this.score = score;
     }
@@ -102,7 +98,6 @@ public class Member {
                 .addrDetail(addrDetail)
                 .gender(gender)
                 .birthday(birthday)
-                .signupDay(signupDay)
                 .account(account)
                 .score(score)
                 .build();
