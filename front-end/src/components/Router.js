@@ -4,6 +4,8 @@ import {
   Route,
 } from 'react-router-dom';
 
+import PageNotFound from './PageNotFound';
+
 import Path from '../pages/Path/PathMain';
 import Oder from '../pages/Oder/OderMain';
 
@@ -45,10 +47,13 @@ function Router() {
   return (
     <BrowserRouter>
       <Menubar></Menubar>
-
+      
       <Routes>
         {/* 속성을 component 대신에 element */}
         <Route path="/" element={<Path />} />
+
+        {/* 404 rounte */}
+        {/* <Route path="/*" element={<PageNotFound />} /> */}
       </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />
