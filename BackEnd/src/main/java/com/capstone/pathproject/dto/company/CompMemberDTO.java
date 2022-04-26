@@ -5,10 +5,8 @@ import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public class CompMemberDTO {
 
     private Long id;

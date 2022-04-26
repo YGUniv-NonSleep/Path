@@ -67,8 +67,6 @@ public class CompanyDTO {
                 .phone(phone)
                 .member(member)
                 .thumbnail(thumbnail)
-                .latitude(latitude)
-                .longitude(longitude)
                 .build();
     }
 

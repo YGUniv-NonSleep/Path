@@ -27,7 +27,6 @@ public class JwtTokenUtil {
                 .withHeader(createHeader("ACCESS_TOKEN"))
                 .withClaim("id", principalDetails.getMember().getId())
                 .withClaim("name", principalDetails.getMember().getName())
-                .withClaim("role", principalDetails.getMember().getRole().getAuthority())
                 .withExpiresAt(createExpireDate(JwtProperties.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
     }

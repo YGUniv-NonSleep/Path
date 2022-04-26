@@ -3,18 +3,12 @@ import LoginPresenter from './LoginPresenter';
 import axios from 'axios';
 
 function LoginContainer() {
+  // =======로그인 입력 ========//
   const [inputValue, setInputValue] = useState({
     loginId: '',
     password: '',
   });
   const { loginId, password } = inputValue;
-  const [loginIdError, setLoginIdError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const errorList = {
-    loginIdError,
-    passwordError,
-  };
-
   const handleInput = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -22,33 +16,27 @@ function LoginContainer() {
       [name]: value,
     });
   };
-
-  const isValidInput = () => {
-    const loginIdRegex = /^[a-zA-Z0-9\s]+$/;
-    if (!loginIdRegex.test(loginId) || loginId.length < 4)
-      setLoginIdError('영문자+숫자 조합으로 4자리 이상 입력해주세요');
-    else setLoginIdError('');
-
-    const passwordRegex =
-      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-    if (!passwordRegex.test(password))
-      setPasswordError(
-        '숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요!'
-      );
-    else setPasswordError('');
-
-    if (loginIdRegex.test(loginId) && passwordRegex.test(password)) {
-      console.log('유효성 검사 성공');
-      return true;
-    } else {
-      console.log('유효성 검사 실패');
+  // ========== 로그인 유효성 검사 ==========//
+  const isValidLoginId =
+    loginId.length >= 4 && loginId != '' && loginId != ' ' && loginId != null;
+  const isValidPassword =
+    password.length >= 8 &&
+    password != '' &&
+    password != ' ' &&
+    password != null;
+  const handleButtonValid = () => {
+    if (!isValidLoginId) {
+      alert('아이디 입력하세요');
+      return false;
+    } else if (!isValidPassword) {
+      alert('비밀번호 입력하세요');
       return false;
     }
+    return true;
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isValidInput()) return;
+  // ============== 로그인 ================= //
+  const handleSubmit = () => {
+    if (!handleButtonValid()) return null;
     const data = {
       username: loginId,
       password: password,
@@ -71,18 +59,44 @@ function LoginContainer() {
         console.log(err);
       });
   };
-
   const onLoginSuccess = (res) => {
     const authorization = res.headers.authorization;
     axios.defaults.headers.common['authorization'] = authorization; // axios 모든 요청 헤더에 토큰값 넣기
     window.location.href = '/';
   };
 
+  const testSubmit = () => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/test', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const testUserSubmit = () => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/user', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <LoginPresenter
       handleSubmit={handleSubmit}
+      testSubmit={testSubmit}
       handleInput={handleInput}
-      errorList={errorList}
+      testUserSubmit={testUserSubmit}
     ></LoginPresenter>
   );
 }

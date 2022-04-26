@@ -8,43 +8,22 @@ const key = process.env.REACT_APP_ODSAY_API;
 
 export const PathApi = {
 
-  getDirection: async (data) => { // console.log(data)
+  getDirection: async (data) => {
     // 검색한 모든 경로 정보 들고오는 친구
     const response = await odsayApi.get(
-        `/searchPubTransPathT?lang=0&SX=${data.sx}&SY=${data.sy}&EX=${data.ex}&EY=${data.ey}&apiKey=${key}`
+        `/searchPubTransPathT?lang=0&SX=${data.startPoint.la}&SY=${data.startPoint.ma}&EX=${data.arrivalPoint.la}&EY=${data.arrivalPoint.ma}&apiKey=${key}`
       ).catch((error) => console.log(error));
-    // console.log(response.data.error.code) -> -98 (출, 도착지가 700m이내입니다.) 도보 api 활용
-    // response.data.result.path.pathType	(int) 1-지하철, 2-버스, 3-버스+지하철
-    
+    //console.log(response)
     return response.data.result;
   },
 
-  getGraphicRoute: async (mapObj) => { // console.log(mapObj)
+  getGraphicRoute: async (mapObj) => {
     // 찾은 경로 그림 그릴 준비하는 친구
-    //let isAt = []; // at = @
-
-    // @로 구분되는 mapObj @ 위치
-    // let isAt = mapObj.map((item) => {
-    //   let list = []
-    //   let idx = item.indexOf('@')
-
-    //   while(idx != -1) {
-    //     list.push(idx)
-    //     idx = item.indexOf('@', idx+'@'.length)
-    //   }
-    //   return list
-    // })
-    let resList = []
-    
-    for(var i=0; i<mapObj.length; i++){
-      const response = await odsayApi.get(
-        `/loadLane?lang=0&mapObject=0:0@${mapObj[i]}&apiKey=${key}`
+    const response = await odsayApi.get(
+        `/loadLane?lang=0&mapObject=0:0@${mapObj}&apiKey=${key}`
       ).catch((error) => console.log(error));
-
-      resList.push(response.data.result)
-    }
-    // console.log(resList);
-    return resList
+    //console.log(response);
+    return response.data;
   },
 };
 

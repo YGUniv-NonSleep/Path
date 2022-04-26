@@ -1,3 +1,3 @@
-import SearchPwContainer from './SearchPwContainer';
+import SearchPwContainer from './SearchPwContainer'
 
-export default SearchPwContainer;
+export default SearchPwContainer

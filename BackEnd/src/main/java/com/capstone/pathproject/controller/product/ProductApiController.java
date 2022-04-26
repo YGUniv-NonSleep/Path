@@ -56,20 +56,15 @@ public class ProductApiController {
                                                              @RequestPart(value = "picture", required = false) MultipartFile file ,
                                                              HttpServletRequest httpServletRequest){
 
-        String fileName;
-        if (file != null){
-            fileName = file.getOriginalFilename();
-            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "product\\";
-            try {
-                file.transferTo(new File(filePath + fileName));
+        String fileName = file.getOriginalFilename();
+        String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "product\\";
 
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }else{
-            fileName = "";
+        try {
+            file.transferTo(new File(filePath + fileName));
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
 
         Message message = productService.updateBasic(prodBasicDTO, fileName);
         return new ResponseEntity<>(message, HttpStatus.OK);
