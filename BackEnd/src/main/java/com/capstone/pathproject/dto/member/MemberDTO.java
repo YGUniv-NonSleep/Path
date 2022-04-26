@@ -33,14 +33,11 @@ public class MemberDTO {
     @NotBlank(message = "전화번호가 입력되지 않았습니다")
     private String phone;
 
-    private int postId;
-
     @NotBlank(message = "주소가 입력되지 않았습니다")
     private String addr;
 
+    @NotBlank(message = "상세주소가 입력되지 않았습니다")
     private String addrDetail;
-
-    private String addrExtra;
 
     @NotNull(message = "성별이 입력되지 않았습니다")
     private memberGender gender;
@@ -49,11 +46,12 @@ public class MemberDTO {
     @Past
     private LocalDate birthday;
 
+    private LocalDate signupDay;
     private String account;
     private int score;
 
     @Builder(builderMethodName = "createMemberDTO")
-    public MemberDTO(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
+    public MemberDTO(Long id, Role role, String loginId, String password, String mail, String name, String phone, String addr, String addrDetail, memberGender gender, LocalDate birthday, LocalDate signupDay, String account, int score) {
         this.id = id;
         this.role = role;
         this.loginId = loginId;
@@ -61,12 +59,11 @@ public class MemberDTO {
         this.mail = mail;
         this.name = name;
         this.phone = phone;
-        this.postId = postId;
         this.addr = addr;
         this.addrDetail = addrDetail;
-        this.addrExtra = addrExtra;
         this.gender = gender;
         this.birthday = birthday;
+        this.signupDay = signupDay;
         this.account = account;
         this.score = score;
     }
@@ -79,14 +76,11 @@ public class MemberDTO {
                 .mail(mail)
                 .name(name)
                 .phone(phone)
-                .postId(postId)
                 .addr(addr)
                 .addrDetail(addrDetail)
-                .addrExtra(addrExtra)
                 .gender(gender)
                 .birthday(birthday)
                 .account(account)
-                .score(score)
                 .build();
     }
 
@@ -100,9 +94,5 @@ public class MemberDTO {
 
     public void changeMemberRole(Role role) {
         this.role = role;
-    }
-
-    public void changeScore(int score) {
-        this.score = score;
     }
 }

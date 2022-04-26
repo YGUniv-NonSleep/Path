@@ -1,12 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import CompCreate from "./CompCreate";
 
 function CompCreateContainer() {
     const [loading, setLoading] = useState(false);
     const [formInfo, setFormInfo] = useState(null);
-    const navigation = useNavigate()
 
     useEffect(() => {
         setLoading((current) => !current);
@@ -25,7 +23,6 @@ function CompCreateContainer() {
             "latitude": e.target.lat.value,
             "longitude": e.target.long.value,                 
         };
-        //console.log(data.category)
 
         let formData = new FormData();
         formData.append("picture", e.target.userfile.files[0]);
@@ -38,6 +35,7 @@ function CompCreateContainer() {
 
     function createCompany() {
         if(formInfo != null){
+            console.log(formInfo)
             axios.post(
                 process.env.REACT_APP_SPRING_API +"/api/company/", formInfo, {
                     headers: {
@@ -46,8 +44,6 @@ function CompCreateContainer() {
                 }
             ).then((res)=>{
                 console.log(res)
-                alert("업체 등록 완료")
-                navigation(-1)
             }).catch((err)=>{
                 console.log(err)
             })
