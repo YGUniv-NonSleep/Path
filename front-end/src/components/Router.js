@@ -4,23 +4,9 @@ import {
   Route,
 } from 'react-router-dom';
 
-
-import Path from "../routes/Path";
-import { MemberContainer as Member } from "../routes/Member";
-import Oder from "../routes/Oder";
-import Mobility from "../routes/Mobility";
-
-import Community from "../routes/Community";
-import CommunityContents from "../routes/Community/CommunityContents";
-import CommunityAdd from "../routes/Community/CommunityAdd";
-
-
-import CarPool from "../routes/CarPool";
-import { LoginContainer as Login } from "../routes/Member";
-import SearchId from "../routes/Member/SearchId";
-import SearchPw from "../routes/Member/SearchPw";
-import { SignUpContainer as SignUp } from "../routes/Member";
-
+import Path from '../routes/Path';
+import WalkPath from '../routes/WalkPath';
+import Oder from '../routes/Oder';
 
 import Community from '../routes/Community';
 import CommunityContents from '../routes/Community/CommunityContents';
@@ -100,7 +86,6 @@ function Router() {
       <Routes>
         <Route path="/community" element={<Community />} />
         <Route path="/community/:postId" element={<CommunityContents />} />
-        <Route path="/community/add" element={<CommunityAdd />} />
       </Routes>
       <Routes>
         <Route path="/carpool" element={<CarPool />} />
