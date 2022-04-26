@@ -1,11 +1,8 @@
 import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { 
-  Box, Button,Typography, Modal 
-} from '@mui/material';
+import Modal from "../../../components/Modal";
 
 const ItemBasicCon = styled.div`
   width: 390px;
@@ -16,25 +13,29 @@ const ItemBasicSubCon = styled.div`
   margin-left: 130px;
 `;
 
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 14,
-};
-
 function ItemBasicMain() {
   const [loading, setLoading] = useState(false);
   const [basicItems, setBasicItems] = useState([]);
+  const [updateItem, setUpdateItem] = useState(null); // 수정할 데이터
 
+  // 모달 창 제어
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = (e) => {
+    setOpen(true);
+    setUpdateItem(basicItems[e.target.value]);
+  };
+  const handleClose = () => {
+    if(open === true) return setOpen(false);
+  };
+
+  // 기본 상품 수정
+  const handleChange = (e) => {
+    if(e.target.id=="updateName") setUpdateItem((prev) => ({...prev, name: e.target.value}))
+    else if(e.target.id=="updateDetail") setUpdateItem((prev) => ({...prev, detail: e.target.value}))
+    else if(e.target.id=="updateBrand") setUpdateItem((prev) => ({...prev, brand: e.target.value}))
+    else if(e.target.id=="updateCategory") setUpdateItem((prev) => ({...prev, category: e.target.value}))
+    // 사진은 나중에 추가
+  }
 
   // 기본 상품 생성
   function registProductBasic(e) {
@@ -61,9 +62,10 @@ function ItemBasicMain() {
         },
       })
       .then((res) => {
-        console.log(res.data.header.statusCode);
+        // console.log(res.data.header.statusCode);
         if(res.data.header.statusCode == 200){
           alert("성공적으로 등록되었습니다.")
+          /* 상품 추가 폼 비우기 코드 추가 */
           getProductBasic()
         } else return console.log("뭔가 안됨")
       })
@@ -72,7 +74,7 @@ function ItemBasicMain() {
       });
   }
 
-  // 기본 상품 읽기
+  // 기본 상품 전체 읽기
   function getProductBasic() {
     axios.get(process.env.REACT_APP_SPRING_API + "/api/product/basic")
       .then((res) => {
@@ -85,18 +87,19 @@ function ItemBasicMain() {
   }
 
   // 기본 상품 수정
-  function patchProductBasic(it) {
-    // console.log(it)
-    // const data = {
-    //     id: it.id,
-    //     name: "감자칩1",
-    //     detail: "맛좋은 감자칩",
-    //     brand: "농싱",
-    //     category: "과자"
-    //   };
+  function patchProductBasic() {
+    // console.log(updateItem)
+
+    const data = {
+      id: updateItem.id,
+      name: updateItem.name,
+      detail: updateItem.detail,
+      brand: updateItem.brand,
+      category: updateItem.category
+    };
 
     const formData = new FormData();
-    //   formData.append("picture", it.image);
+    //   formData.append("picture", updateItem.image);
     formData.append(
       "json",
       new Blob([JSON.stringify(data)], { type: "application/json" })
@@ -108,12 +111,14 @@ function ItemBasicMain() {
         "Content-Type": `multipart/form-data`,
         },
       }).then((res) => {
-            console.log(res);
-
-            return basicItems.filter((it) => {
-                console.log(it);
-                // getProductBasic()
-            });
+          // console.log(res);
+          
+          return basicItems.filter((it) => {
+              console.log(it);
+              alert("성공적으로 수정되었습니다.")
+              // 수정된 상품만 재랜더링하도록 수정
+              getProductBasic()
+          });
       }).catch((err) => {
             console.log(err);
       });
@@ -141,7 +146,7 @@ function ItemBasicMain() {
   useEffect(() => {
     getProductBasic();
   }, []);
-  
+
   return (
     <ItemBasicCon>
       <ItemBasicSubCon>
@@ -163,6 +168,7 @@ function ItemBasicMain() {
               <button type="submit">기본 상품 등록하기</button>
             </form>
             <br/>
+            
             {basicItems.map((item, index) => {
               return (
                 <Fragment key={index}>
@@ -173,23 +179,53 @@ function ItemBasicMain() {
                   <div>{item.category}</div>
                   <div>{item.image}</div>
                   <button type="button" onClick={() => deleteProductBasic(item.id)}>기본 상품 제거</button>
-                  <button onClick={handleOpen}>기본 상품 수정 창 오픈</button>
-                  <Modal
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    <Box sx={modalStyle}>
-                      sadasd
-                    </Box>
-                  </Modal>
+                  <button onClick={handleOpen} value={index}>기본 상품 수정 창 오픈</button>
+                  { open && 
+                    <Modal
+                      className={"basic-product-modal"}
+                      visible={open}
+                      closable={true}
+                      maskClosable={true} 
+                      onClose={handleClose}
+                    >
+                      <div>기본 상품 업데이트</div>
+                      
+                        <label htmlFor="updateName">상품명</label>
+                        <input 
+                          type={"text"} 
+                          id={"updateName"}
+                          onChange={handleChange} 
+                          value={updateItem.name}
+                        /><br/>
+                        <label htmlFor="updateDetail">디테일</label>
+                        <input 
+                          type={"text"} 
+                          id={"updateDetail"} 
+                          onChange={handleChange} 
+                          value={updateItem.detail} 
+                        /><br/>
+                        <label htmlFor="updateBrand">브랜드</label>
+                        <input 
+                          type={"text"} 
+                          id={"updateBrand"}
+                          onChange={handleChange} 
+                          value={updateItem.brand} 
+                        /><br/>
+                        <label htmlFor="updateCategory">카테고리</label>
+                        <input 
+                          type={"text"} 
+                          id={"updateCategory"} 
+                          onChange={handleChange} 
+                          value={updateItem.category} 
+                        /><br/>
+                        <button type="button" onClick={patchProductBasic}>기본 상품 수정</button>
+                      
+                    </Modal> 
+                  }
                   <br/><br/>
                 </Fragment>
               )
             })}
-            
-            <div>기본 상품 업데이트</div>
-
-
           </Fragment>
         ) : <div>새로운 기본 상품을 등록하여 주세요</div> }
       </ItemBasicSubCon>
@@ -200,6 +236,7 @@ function ItemBasicMain() {
 ItemBasicMain.propTypes = {
   // ex) prop: PropTypes.type.isRequired,
   loading: PropTypes.bool.isRequired,
+  open: PropTypes.bool
 };
 
 export default ItemBasicMain;
