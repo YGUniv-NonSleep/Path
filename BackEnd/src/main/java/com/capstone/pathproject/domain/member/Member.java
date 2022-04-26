@@ -4,6 +4,7 @@ import com.capstone.pathproject.domain.BaseTimeEntity;
 import com.capstone.pathproject.dto.member.MemberDTO;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -16,6 +17,10 @@ import java.time.LocalDate;
         sequenceName = "MEMBER_SEQ",
         initialValue = 1, allocationSize = 1)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AttributeOverrides({
+        @AttributeOverride(name = "createdDateTime", column = @Column(name = "MEM_CREATED_DATETIME")),
+        @AttributeOverride(name = "updatedDateTime", column = @Column(name = "MEM_UPDATED_DATETIME"))
+})
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -68,7 +73,7 @@ public class Member extends BaseTimeEntity {
     private int score;
 
     @Builder(builderMethodName = "createMember")
-    public Member( Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
+    public Member(Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
         this.role = role;
         this.loginId = loginId;
         this.password = password;
@@ -119,6 +124,8 @@ public class Member extends BaseTimeEntity {
         this.addrDetail = addrDetail;
     }
 
-    public void updateEncodePassword(String encodePassword) { this.password = encodePassword; }
+    public void updateEncodePassword(String encodePassword) {
+        this.password = encodePassword;
+    }
 
 }
