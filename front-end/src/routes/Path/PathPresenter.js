@@ -11,13 +11,14 @@ function PathPresenter(props) {
       <SearchCon
         juso={{
           jusoValue: props.jusoValue,
-          sp: props.startPoint,
-          ap: props.arrivalPoint,
+          sp: props.SPoint,
+          ap: props.APoint,
           onchangeSP: props.onchangeSP,
           onchangeAP: props.onchangeAP,
           switchPoints: props.switchPoints,
           refreshPoints: props.refreshPoints,
-          wayFind: props.wayFind
+          wayFind: props.wayFind,
+          pathSearch: props.pathSearch
         }}
       ></SearchCon>
       {props.loading ? null : <h2>로드 중...</h2>}
