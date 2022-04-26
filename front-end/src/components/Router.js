@@ -21,7 +21,7 @@ import CompCreate from '../pages/Company/CompCreate/CompCreateMain';
 import CompManage from '../pages/Company/CompManage/CompManageMain';
 
 import Bus from '../pages/Mobility/Bus/BusMain';
-import Subway from '../pages/Mobility/SubwayMain';
+import Subway from '../pages/Mobility/Subway/SubwayMain';
 import Scooter from '../pages/Mobility/Scooter/ScooterMain';
 import Bike from '../pages/Mobility/Bike/BikeMain';
 

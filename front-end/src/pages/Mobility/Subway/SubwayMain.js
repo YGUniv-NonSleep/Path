@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import MapApi from "../../api/MapApi";
-import { SubName } from "../../api/OdsayApi";
-import { Subway } from "@mui/icons-material";
-import Map from "../../components/Map";
+import MapApi from "../../../api/MapApi";
+import { SubwayApi, SubwayTime } from "../../../api/OdsayApi";
+import Map from "../../../components/Map";
 import styled from "styled-components";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import MIcon from "./MIcon";
+import MIcon from "../MIcon";
 import Box from "@mui/material/Box";
 
 const SideNav = styled.nav`
@@ -46,7 +45,7 @@ const Btn = styled.button`
 const Btn1 = styled.button`
   position: absolute;
   top: 160px;
-  left: 190px;
+  left: 200px;
   width: 180px;
   height: 40px;
   font-size: 12px;
@@ -92,10 +91,11 @@ function SubwayMain() {
     removeMarkers();
 
     let subName = data;
-    let stationInfo = await SubName.getSubName(subName).catch((error) =>
-      console.log(error)
-    );
-    // console.log(stationInfo)
+    let stationInfo = await SubwayApi.getSubName(subName).catch((error) => console.log(error));
+     console.log(stationInfo)
+
+     let subTime = await SubwayTime.getSubTime(stationInfo.stationID);
+     //console.log(subTime)
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
 
@@ -132,6 +132,7 @@ function SubwayMain() {
       }
       setMarkers([]);
     }
+    
   }
 
   useEffect(() => {
