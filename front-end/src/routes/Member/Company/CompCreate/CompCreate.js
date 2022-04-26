@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -12,6 +12,8 @@ const CompCreateSubCon = styled.div`
 `;
 
 function CompCreate(props) {
+    const navigate = useNavigate()
+
     return (
         <CompCreateCon>
             <CompCreateSubCon>
@@ -24,12 +26,19 @@ function CompCreate(props) {
                 <input type="text" placeholder="업체명" name="name"/>
                 <input type="text" placeholder="사업자등록번호" name="crn"/>
                 <input type="date" placeholder="개업일자" name="openDate"/>
-                <input type="text" placeholder="카테고리" name="category"/>
+                <select type="text" placeholder="카테고리" name="category" >
+                    <option value='' selected>ㅡㅡㅡㅡ 선택 ㅡㅡㅡㅡ</option>
+                    <option name="CONVENIENCESTORE">CONVENIENCESTORE</option>
+                    <option name="CAFE">CAFE</option>
+                    <option name="RESTAURANT">RESTAURANT</option>
+                    <option name="MART">MART</option>
+                </select>
                 <input type="text" placeholder="이메일" name="email"/>
                 <input type="text" placeholder="전화번호" name="phone"/>
                 <input type="text" placeholder="위도" name="lat"/>
                 <input type="text" placeholder="경도" name="long"/>
                 <input type="file" name="userfile" multiple="multiple" />
+                <button onClick={() => navigate(-1)}>돌아가기</button>
                 <button onClick={props.createCompany}>업체등록</button>
             </form>
             </CompCreateSubCon>
