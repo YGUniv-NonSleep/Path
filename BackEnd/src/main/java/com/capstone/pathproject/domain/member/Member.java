@@ -1,22 +1,22 @@
 package com.capstone.pathproject.domain.member;
 
-import com.capstone.pathproject.domain.BaseTimeEntity;
 import com.capstone.pathproject.dto.member.MemberDTO;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @ToString
-@DynamicUpdate
 @SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR",
         sequenceName = "MEMBER_SEQ",
         initialValue = 1, allocationSize = 1)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseTimeEntity {
+@DynamicUpdate
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
@@ -42,17 +42,11 @@ public class Member extends BaseTimeEntity {
     @Column(name = "MEM_PHONE")
     private String phone;
 
-    @Column(name = "MEM_POST_ID")
-    private int postId;
-
     @Column(name = "MEM_ADDR")
     private String addr;
 
     @Column(name = "MEM_ADDR_DETAIL")
     private String addrDetail;
-
-    @Column(name = "MEM_ADDR_EXTRA")
-    private String addrExtra;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "MEM_GENDER")
@@ -61,6 +55,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "MEM_BIRTH")
     private LocalDate birthday;
 
+    @Column(name = "MEM_SIGNUP_DATE")
+    private LocalDate signupDay;
+
     @Column(name = "MEM_ACCOUNT")
     private String account;
 
@@ -68,21 +65,20 @@ public class Member extends BaseTimeEntity {
     private int score;
 
     @Builder(builderMethodName = "createMember")
-    public Member( Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
+    public Member(Role role, String loginId, String password, String mail, String name, String phone, String addr, String addrDetail, memberGender gender, LocalDate birthday, String account) {
         this.role = role;
         this.loginId = loginId;
         this.password = password;
         this.mail = mail;
         this.name = name;
         this.phone = phone;
-        this.postId = postId;
         this.addr = addr;
         this.addrDetail = addrDetail;
-        this.addrExtra = addrExtra;
         this.gender = gender;
         this.birthday = birthday;
+        this.signupDay = LocalDate.now();
         this.account = account;
-        this.score = score;
+        this.score = 100;
     }
 
     public MemberDTO toDTO() {
@@ -98,6 +94,7 @@ public class Member extends BaseTimeEntity {
                 .addrDetail(addrDetail)
                 .gender(gender)
                 .birthday(birthday)
+                .signupDay(signupDay)
                 .account(account)
                 .score(score)
                 .build();

@@ -2,14 +2,9 @@ import SignUpPresenter from './SignUpPresenter';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
-import { isEmpty } from '../../../utils/StringUtil.js';
 
 function SignUpContainer() {
-  const [postId, setPostId] = useState('');
-  const [addr, setAddr] = useState('');
-  const [addrExtra, setAddrExtra] = useState('');
-  const [birthday, setBirthday] = useState('');
+  // ====== 회원가입 입력 ====== //
   const [inputValue, setInputValue] = useState({
     role: '',
     loginId: '',
@@ -18,9 +13,11 @@ function SignUpContainer() {
     email: '',
     name: '',
     phone: '',
+    addr: '',
     addrDetail: '',
     gender: 'MALE',
   });
+
   const {
     role,
     loginId,
@@ -29,37 +26,10 @@ function SignUpContainer() {
     password,
     rePassword,
     phone,
+    addr,
     addrDetail,
     gender,
   } = inputValue;
-  const [roleError, setRoleError] = useState('');
-  const [loginIdError, setLoginIdError] = useState('');
-  const [checked, setChecked] = useState(false);
-  const [emailError, setEmailError] = useState('');
-  const [passwordState, setPasswordState] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [nameError, setNameError] = useState('');
-  const [phoneError, setPhoneError] = useState('');
-  const [addrDetailError, setAddrDetailError] = useState('');
-  const [genderError, setGenderError] = useState('');
-  const [birthdayError, setBirthdayError] = useState('');
-  const errorList = {
-    roleError,
-    loginIdError,
-    emailError,
-    passwordState,
-    passwordError,
-    nameError,
-    phoneError,
-    addrDetailError,
-    genderError,
-    birthdayError,
-  };
-  const navigate = useNavigate();
-
-  const goBackPage = () => {
-    navigate(-1);
-  };
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -69,8 +39,38 @@ function SignUpContainer() {
     });
   };
 
+  const [birthday, setBirthday] = useState(null);
+
   const handleBirthday = (date) => {
     setBirthday(dayjs(date).format('YYYY-MM-DD'));
+  };
+
+  // ====== 회원가입 입력 유효성 검사 ====== //
+  const [loginIdError, setLoginIdError] = useState('');
+  const [checked, setChecked] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordState, setPasswordState] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [addrError, setAddrError] = useState('');
+  const [addrDetailError, setAddrDetailError] = useState('');
+  const [genderError, setGenderError] = useState('');
+  const [birthdayError, setBirthdayError] = useState('');
+  const [registerError, setRegisterError] = useState('');
+
+  const errorList = {
+    loginIdError,
+    emailError,
+    passwordState,
+    passwordError,
+    nameError,
+    phoneError,
+    addrError,
+    addrDetailError,
+    genderError,
+    birthdayError,
+    registerError,
   };
 
   const handleAgree = (e) => {
@@ -78,13 +78,10 @@ function SignUpContainer() {
   };
 
   const isValidInput = () => {
-    if (role == '' || role == undefined)
-      setRoleError('회원유형을 선택해주세요');
-    else setRoleError('');
-
     const loginIdRegex = /^[a-zA-Z0-9\s]+$/;
-    if (!loginIdRegex.test(loginId) || loginId.length < 4)
-      setLoginIdError('영문자+숫자 조합으로 4자리 이상 입력해주세요');
+    if (!loginIdRegex.test(loginId) && loginId.length <= 4)
+      // setLoginIdError('아이디를 4자 이상 입력해주세요.')
+      setLoginIdError('올바른 아이디 형식이 아닙니다.');
     else setLoginIdError('');
 
     const emailRegex =
@@ -116,11 +113,14 @@ function SignUpContainer() {
     else setPhoneError('');
 
     const addrRegex = /^[가-힣\s0-9a-zA-Z]+$/;
-    if (!isEmpty(addrDetail)) {
-      if (!addrRegex.test(addrDetail))
-        setAddrDetailError('올바른 상세주소를 입력해주세요');
-      else setAddrDetailError('');
-    }
+    if (!addrRegex.test(addr) || addr.length < 1)
+      setAddrError('올바른 주소를 입력해주세요');
+    else setAddrError('');
+
+    if (!addrRegex.test(addrDetail))
+      setAddrDetailError('올바른 상세주소를 입력해주세요');
+    else setAddrDetailError('');
+
     const genderRegex = /^[A-Z]+$/;
     if (!genderRegex.test(gender) || gender.length < 1)
       setGenderError('올바른 성별을 선택해주세요');
@@ -132,22 +132,24 @@ function SignUpContainer() {
     if (!checked) alert('회원가입 약관에 동의해주세요.');
 
     if (
-      !isEmpty(role) &&
       loginIdRegex.test(loginId) &&
       emailRegex.test(email) &&
       passwordRegex.test(password) &&
       password === rePassword &&
       nameRegex.test(name) &&
       phoneRegex.test(phone) &&
-      isEmpty(addrDetail)
-        ? true
-        : addrRegex.test(addrDetail) &&
-          genderRegex.test(gender) &&
-          birthday != null &&
-          checked
-    )
+      addrRegex.test(addr) &&
+      addrRegex.test(addrDetail) &&
+      genderRegex.test(gender) &&
+      birthday != null &&
+      checked
+    ) {
+      console.log('유효성 검사 성공');
       return true;
-    else return false;
+    } else {
+      console.log('유효성 검사 실패');
+      return false;
+    }
   };
 
   const handleSubmit = (e) => {
@@ -160,13 +162,12 @@ function SignUpContainer() {
       name: name,
       password: password,
       phone: phone,
-      postId: postId,
       addr: addr,
       addrDetail: addrDetail,
-      addrExtra: addrExtra,
       gender: gender,
       birthday: birthday,
     };
+    console.log(data);
     axios
       .post(process.env.REACT_APP_SPRING_API + '/api/member', data, {
         withCredentials: true,
@@ -177,80 +178,13 @@ function SignUpContainer() {
           alert(res.data.message);
         } else {
           alert('패스콕 회원가입이 되셨습니다.');
-          goBackPage();
+          window.location.href = '/login';
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  const daumAddrApi = () => {
-    new daum.Postcode({
-      oncomplete: function (data) {
-        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-        var addrApi = ''; // 주소 변수
-        var extraAddr = ''; // 참고항목 변수
-
-        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-        if (data.userSelectedType === 'R') {
-          // 사용자가 도로명 주소를 선택했을 경우
-          addrApi = data.roadAddress;
-        } else {
-          // 사용자가 지번 주소를 선택했을 경우(J)
-          addrApi = data.jibunAddress;
-        }
-
-        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-        if (data.userSelectedType === 'R') {
-          // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-          // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-          if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-            extraAddr += data.bname;
-          }
-          // 건물명이 있고, 공동주택일 경우 추가한다.
-          if (data.buildingName !== '' && data.apartment === 'Y') {
-            extraAddr +=
-              extraAddr !== '' ? ', ' + data.buildingName : data.buildingName;
-          }
-          // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-          if (extraAddr !== '') {
-            extraAddr = ' (' + extraAddr + ')';
-          }
-          // 조합된 참고항목을 해당 필드에 넣는다.
-          document.getElementById('addrExtra').value = extraAddr;
-          var extraAddrStr = extraAddr.split('(');
-          extraAddrStr = extraAddrStr[1].split(')');
-          setAddrExtra(extraAddrStr[0]);
-        } else {
-          document.getElementById('addrExtra').value = '';
-          setAddrExtra('');
-        }
-
-        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-        document.getElementById('postId').value = data.zonecode;
-        document.getElementById('addr').value = addrApi;
-        setPostId(data.zonecode);
-        setAddr(addrApi);
-        // 커서를 상세주소 필드로 이동한다.
-        document.getElementById('addrDetail').focus();
-      },
-    }).open();
-  };
-
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src =
-      '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
 
   return (
     <SignUpPresenter
@@ -261,7 +195,6 @@ function SignUpContainer() {
       handleBirthday={handleBirthday}
       inputValue={inputValue}
       birthday={birthday}
-      daumAddrApi={daumAddrApi}
     ></SignUpPresenter>
   );
 }

@@ -115,7 +115,7 @@ const Menubar = () => {
     setCurrLocation(location.pathname);
   }, [location]);
 
-  const [memberId, setMemberId] = useState('');
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     tokenReissue();
@@ -134,7 +134,7 @@ const Menubar = () => {
         axios.defaults.headers.common['authorization'] = authorization;
         console.log('AccessToken 발급 완료');
         const decoded = tokenDecode(authorization);
-        setMemberId(decoded.id);
+        setUsername(decoded.name);
       })
       .catch((err) => {
         console.log(err);
@@ -156,7 +156,7 @@ const Menubar = () => {
       })
       .then((res) => {
         console.log(res);
-        setMemberId('');
+        setUsername('');
         console.log('로그아웃');
         window.location.href = '/';
       })
@@ -179,7 +179,7 @@ const Menubar = () => {
       <PathRouteElement></PathRouteElement>
       <CompRouteElement></CompRouteElement>
       <BtnUl>
-        {memberId != '' ? (
+        {username != '' ? (
           <Li $current={currLocation === '/logout' && true}>
             <Button onClick={clickToMember}>내 정보</Button>
             <Button onClick={userLogOut}>로그아웃</Button>

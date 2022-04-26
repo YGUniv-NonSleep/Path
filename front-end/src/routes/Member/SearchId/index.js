@@ -1,3 +1,3 @@
-import SearchIdContainer from './SearchIdContainer';
+import SearchIdContainer from './SearchIdContainer'
 
-export default SearchIdContainer;
+export default SearchIdContainer
