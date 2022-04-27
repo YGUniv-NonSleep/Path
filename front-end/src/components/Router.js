@@ -31,6 +31,7 @@ import ItemEdit from '../routes/Member/Company/CompManage/ItemEdit';
 import CompEdit from '../routes/Member/Company/CompManage/CompEdit';
 import Resign from '../routes/Member/Company/CompManage/Resign';
 
+
 import Mobility from '../routes/Mobility';
 import Scooter from '../routes/Mobility/Scooter';
 import Bus from '../routes/Mobility/Bus';
@@ -38,6 +39,7 @@ import Subway from '../routes/Mobility/Subway';
 import Bike from '../routes/Mobility/Bike';
 
 import Menubar from './Menubar';
+
 
 // https://kyung-a.tistory.com/36
 
@@ -50,6 +52,7 @@ function Router() {
         {/* 속성을 component 대신에 element */}
         <Route path="/" element={<Path />} />
         <Route path="/walk" element={<WalkPath />} />
+
       </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />
