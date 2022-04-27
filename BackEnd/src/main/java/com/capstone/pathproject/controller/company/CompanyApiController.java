@@ -1,6 +1,7 @@
 package com.capstone.pathproject.controller.company;
 
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
+import java.util.List;
 
 
 @RestController
@@ -41,25 +43,8 @@ public class CompanyApiController {
                     .message("로그인을 해 주세요!!")
                     .build();
         }
-
-//        String header = request.getHeader(JwtProperties.HEADER_STRING);//access token 임
-//        System.out.println("header = " + header); // "Bearer 토큰값" -> "Bearer " 잘라야 진짜 토큰값
-//        String accesstoken = header.replace(JwtProperties.TOKEN_PREFIX, "");//진짜 엑세스토큰임
-//        Claims body = jwtTokenUtil.getClaimsFormToken(TokenType.ACCESS_TOKEN, accesstoken);
-//        System.out.println("body = " + body);
-//        Object id = body.get("id");
-//        System.out.println("id = " + id);
-//        Object name = body.get("name");
-//        System.out.println("name = " + name);
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        PrincipalDetails principalDetails1 = (PrincipalDetails) authentication.getPrincipal();
-//        principalDetails1.getMember()
-//        System.out.println("name = " + name);
-
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
-
 
     @GetMapping("/{comId}")
     public ResponseEntity<Message<CompanyDTO>> companyDetail(@PathVariable("comId") Long comId) {
@@ -77,22 +62,17 @@ public class CompanyApiController {
             System.out.println("파일있어!");
             fileName = file.getOriginalFilename();
             String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "company\\";
-
             try {
                 file.transferTo(new File(filePath + fileName));
-
             }catch (Exception e){
                 e.printStackTrace();
             }
-
         }else{
             System.out.println("파일없어!");
             fileName = "";
         }
-
         companyDTO.addFile(fileName);
         companyDTO.addMember(principalDetails.getMember());
-
         Message<CompanyDTO> message = companyService.createCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
@@ -109,15 +89,12 @@ public class CompanyApiController {
                                                              HttpServletRequest httpServletRequest,
                                                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
         String fileName;
-
         if ( file != null ){
             System.out.println("파일있어!");
             fileName = file.getOriginalFilename();
             String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "company\\";
-
             try {
                 file.transferTo(new File(filePath + fileName));
-
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -125,10 +102,8 @@ public class CompanyApiController {
             System.out.println("파일없어!");
             fileName = "";
         }
-
         companyDTO.addFile(fileName);
         companyDTO.addMember(principalDetails.getMember());
-
         Message<CompanyDTO> message = companyService.updateCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
@@ -136,10 +111,14 @@ public class CompanyApiController {
     @PostMapping("/member/{companyId}/{memberId}")
     public ResponseEntity addCompanyMember(@PathVariable("companyId") Long companyId,
                                              @PathVariable("memberId") Long memberId){
-
         Message message = companyService.addCompanyMember(companyId, memberId);
-
         return new ResponseEntity(message,HttpStatus.OK);
+    }
+
+    @GetMapping("member/{companyId}")
+    public ResponseEntity<Message<List<CompMemberDTO>>> findCompMember (@PathVariable("companyId") Long companyId){
+        Message<List<CompMemberDTO>> message =companyService.findCompMember(companyId);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 }
