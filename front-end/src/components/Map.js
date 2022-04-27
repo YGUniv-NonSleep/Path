@@ -5,9 +5,9 @@ const StyledMap = styled.div`
     height: 100vh;
 `;
 
-function Map() {
+function Map(props) {
     return (
-        <StyledMap id="map"></StyledMap>
+        <StyledMap id="map" ></StyledMap>
     )
 }
 

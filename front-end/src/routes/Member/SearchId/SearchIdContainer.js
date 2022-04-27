@@ -1,57 +1,87 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import SearchId from './SearchId'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import SearchId from './SearchIdPresenter';
+import { useNavigate } from 'react-router-dom';
 
+function SearchIdContainer({ history }) {
+  const [inputValue, setInputValue] = useState({
+    name: '',
+    email: '',
+  });
+  const { name, email } = inputValue;
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const errorList = { nameError, emailError };
+  const navigate = useNavigate();
 
-function SearchIdContainer() {
-    const [loading, setLoading] = useState(false)
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
+  const goBackPage = () => {
+    navigate(-1);
+  };
 
-    useEffect(() => {
-        setLoading(true)
-    }, [])
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
 
-    function onChanged(e) {
-        if(e != undefined) {
-            if(e.target.id === 'name') {
-                setName(e.target.value)
-            } else if(e.target.id === 'email') {
-                setEmail(e.target.value)
-            }
-        } else return 0
+  const isValidInput = () => {
+    const nameRegex = /^[가-힣a-zA-Z]+$/;
+    if (!nameRegex.test(name) || name.length < 1)
+      setNameError('올바른 이름을 입력해주세요');
+    else setNameError('');
+
+    const emailRegex =
+      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    if (!emailRegex.test(email))
+      setEmailError('올바른 이메일 형식이 아닙니다.');
+    else setEmailError('');
+
+    if (emailRegex.test(email) && nameRegex.test(name)) {
+      console.log('유효성 검사 성공');
+      return true;
+    } else {
+      console.log('유효성 검사 실패');
+      return false;
     }
+  };
 
-    useEffect(() => {
-        onChanged()
-    }, [name, email])
-
-    function handleSubmit(e) {
-        e.preventDefault()
-
-        // console.log(name)
-        // console.log(email)
-        const data = {
-            name: name,
-            email: email
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!isValidInput()) return;
+    const data = {
+      name: name,
+      mail: email,
+    };
+    axios
+      .post(process.env.REACT_APP_SPRING_API + '/api/forgot/loginid', data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data == '') {
+          alert('회원이 존재하지 않습니다.');
+        } else {
+          alert(
+            res.data.message + '\n' + '회원 아이디 : ' + res.data.body.loginId
+          );
+          goBackPage();
         }
-        
-        axios.post(
-            process.env.REACT_APP_SPRING_API + '/forgot/loginId', data, {
-            withCredentials: true,
-          }).then((res) => {console.log((res))})
-            .catch((err) => {console.log(err)})
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    return (
-        <SearchId
-            loading = {loading}
-            onChanged = {onChanged}
-            handleSubmit = {handleSubmit}
-            name = {name}
-            email = {email}
-        ></SearchId>
-    )
+  return (
+    <SearchId
+      loading={loading}
+      handleSubmit={handleSubmit}
+      handleInput={handleInput}
+      errorList={errorList}
+    ></SearchId>
+  );
 }
 
 export default SearchIdContainer;

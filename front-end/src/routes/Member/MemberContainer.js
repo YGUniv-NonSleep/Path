@@ -5,23 +5,35 @@ import jwt_decode from 'jwt-decode';
 
 function MemberContainer() {
   const [loading, setLoading] = useState(false);
+  const [memberId, setMemberId] = useState('');
 
-  useEffect(() => {
-    setLoading((current) => !current);
-    testMember();
-  }, []);
+  const tokenReissue = () => {
+    axios
+      .post(process.env.REACT_APP_SPRING_API + '/api/token', '', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data);
+        const authorization = res.headers.authorization;
+        axios.defaults.headers.common['authorization'] = authorization;
+        console.log('AccessToken 발급 완료');
+        const decoded = tokenDecode(authorization);
+        setMemberId(decoded.id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  // === AccessToken 값 디코딩 === //
   const tokenDecode = (authorization) => {
     var decoded = jwt_decode(authorization);
     console.log(decoded);
     return decoded;
   };
 
-  // ======== 테스트 ====== //
-  const testMember = () => {
+  const userLogOut = () => {
     axios
-      .get(process.env.REACT_APP_SPRING_API + '/api/member', {
+      .delete(process.env.REACT_APP_SPRING_API + '/api/token', {
         withCredentials: true,
       })
       .then((res) => {
@@ -32,52 +44,35 @@ function MemberContainer() {
       });
   };
 
-  const testBusiness = () => {
+  const deleteMember = () => {
+    userLogOut();
+    const url = process.env.REACT_APP_SPRING_API + '/api/member/' + memberId;
     axios
-      .get(process.env.REACT_APP_SPRING_API + '/api/business', {
+      .delete(url, {
         withCredentials: true,
       })
       .then((res) => {
         console.log(res);
+        if (res.data.header.statusCode == 200) {
+          alert(res.data.message);
+          setMemberId('');
+          window.location.href = '/';
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const testAdmin = () => {
-    axios
-      .get(process.env.REACT_APP_SPRING_API + '/api/admin', {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const testBtn = () => {
-    axios
-      .get(process.env.REACT_APP_SPRING_API + '/api/test', {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  useEffect(() => {
+    setLoading((current) => !current);
+    tokenReissue();
+  }, []);
 
   return (
     <MemberPresenter
       loading={loading}
-      testBusiness={testBusiness}
-      testAdmin={testAdmin}
-      testMember={testMember}
-      testBtn={testBtn}
+      deleteMember={deleteMember}
     ></MemberPresenter>
   );
 }
