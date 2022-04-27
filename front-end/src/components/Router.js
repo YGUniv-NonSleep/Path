@@ -11,7 +11,7 @@ import Mobility from "../routes/Mobility";
 
 import Community from "../routes/Community";
 import CommunityContents from "../routes/Community/CommunityContents";
-import CommunityAdd from "../routes/Community/CommunityAdd";
+//import CommunityAdd from "../routes/Community/CommunityAdd";
 
 
 import CarPool from "../routes/CarPool";
@@ -32,6 +32,14 @@ import Subway from "../routes/Mobility/Subway";
 import Bike from "../routes/Mobility/Bike";
 
 import Menubar from "./Menubar";
+import Mobility from '../routes/Mobility';
+import Scooter from '../routes/Mobility/Scooter';
+import Bus from '../routes/Mobility/Bus';
+import Subway from '../routes/Mobility/Subway';
+import Bike from '../routes/Mobility/Bike';
+
+import Menubar from './Menubar';
+import FileTest from '../routes/FileTest';
 
 // https://kyung-a.tistory.com/36
 
@@ -43,6 +51,8 @@ function Router() {
       <Routes>
         {/* 속성을 component 대신에 element */}
         <Route path="/" element={<Path />} />
+        <Route path="/walk" element={<WalkPath />} />
+        <Route path="/image" element={<FileTest />} />
       </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -78,7 +88,6 @@ function Router() {
       <Routes>
         <Route path="/community" element={<Community />} />
         <Route path="/community/:postId" element={<CommunityContents />} />
-        <Route path="/community/add" element={<CommunityAdd />} />
       </Routes>
       <Routes>
         <Route path="/carpool" element={<CarPool />} />

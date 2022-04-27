@@ -1,11 +1,14 @@
 package com.capstone.pathproject.controller.post;
 
 
-import com.capstone.pathproject.domain.community.PostType;
+import com.capstone.pathproject.domain.community.Post;
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.community.PostDTO;
 import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.service.community.PostService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +25,6 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/post")
@@ -45,7 +48,7 @@ public class PostApiController {
         String filePath = request.getSession().getServletContext().getRealPath("") +"post\\";
 
         try{
-          file.transferTo(new File(filePath + fileName));
+            file.transferTo(new File(filePath + fileName));
         }catch (IllegalStateException | IOException e){
             e.printStackTrace();
         }
@@ -80,28 +83,20 @@ public class PostApiController {
 
 
 
-    @DeleteMapping("/delete/{postId}")
-    public ResponseEntity<Message<PostDTO>> delete(@PathVariable("postId") Long postId,@AuthenticationPrincipal PrincipalDetails principalDetails){
+    @DeleteMapping("/delete")
+    public ResponseEntity<Message<PostDTO>> delete(@RequestParam("postId") Long postId,@AuthenticationPrincipal PrincipalDetails principalDetails){
         Message<PostDTO> message = postService.delete(postId,principalDetails);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 
     @GetMapping("/view")
-    public ResponseEntity getPostList(@RequestParam("type") PostType type, @PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
-        System.out.println(type);
-        Message<List<PostDTO>> message = postService.getPostList(type,pageable);
+    public ResponseEntity getPostList(@PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
+        Message<List<PostDTO>> message = postService.getPostList(pageable);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
-    @GetMapping("/reply/view")
-    public ResponseEntity getReplyList(@RequestParam("id")Long id){
-        Message<PostDTO> message = postService.getReplyList(id);
-        return new ResponseEntity<>(message,HttpStatus.OK) ;
-    }
-
-
-
+    //수정해야함
     @GetMapping("/view/search")
     public ResponseEntity search(String keyword, @PageableDefault(size=10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
         Message<List<PostDTO>> message = postService.search(keyword,pageable);
