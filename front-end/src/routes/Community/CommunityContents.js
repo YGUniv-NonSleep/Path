@@ -19,6 +19,52 @@ const CommuBoard = styled.th`
 const CommunityContents = () => {
   let navigate = useNavigate();
   const { postId } = useParams();  // 파라미터
+
+  const [content, setContent] = useState(null);
+  const [del, setDelCont] = useState(null);
+  const [repdel, setRepDel] = useState(null);
+  const [form, setForm] = useState(false);
+  const [update,setUpdate] = useState(null);
+  const [reply, setReply] = useState(null);
+  const [createState, setCreateState] = useState(false);
+  const [subadd,setSub] = useState(null);
+  const [updateState,setUpdateState] = useState(false);
+  const [subupdate,setSubUpdate] = useState(null);
+     
+
+  
+  
+//  const [username, setUsername] = useState('');
+//  // === AccessToken 재발급 == //
+//  const tokenReissue = () => {
+//   axios
+//     .post(process.env.REACT_APP_SPRING_API + '/api/token', '', {
+//       withCredentials: true,
+//     })
+//     .then((res) => {
+//       console.log(res.data);
+//       const authorization = res.headers.authorization;
+//       // 이후 모든 axios 요청 헤더에 access token값 붙여서 보냄.
+//       axios.defaults.headers.common['authorization'] = authorization;
+//       console.log('AccessToken 발급 완료');
+//       const decoded = tokenDecode(authorization);
+//       setUsername(decoded.name);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// };
+
+// // === AccessToken 값 디코딩 === //
+// const tokenDecode = (authorization) => {
+//   var decoded = jwt_decode(authorization);
+//   console.log(decoded);
+//   return decoded;
+// };
+// useEffect(() => {
+//   tokenReissue();
+// }, []);
+  
   // console.log(postId);
 
   const [content, setContent] = useState(null);
