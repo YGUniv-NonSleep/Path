@@ -32,7 +32,7 @@ public class CompanyDTO {
     @NotBlank(message = "전화번호를 입력해 주세요")
     private String phone;
 
-    private Member member;
+    private MemberDTO member;
 
     private String latitude;
 
@@ -41,7 +41,7 @@ public class CompanyDTO {
     private String thumbnail;
 
     @Builder(builderMethodName = "createCompanyDTD")
-    public CompanyDTO(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, Member member, String thumbnail) {
+    public CompanyDTO(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, MemberDTO member, String thumbnail) {
         this.id = id;
         this.name = name;
         this.companyNumber = companyNumber;
@@ -72,7 +72,7 @@ public class CompanyDTO {
                 .build();
     }
 
-    public void addMember(Member member){
+    public void addMember(MemberDTO member){
         this.member = member;
     }
 

@@ -11,6 +11,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDTO {
 
@@ -73,6 +74,7 @@ public class MemberDTO {
 
     public Member toEntity() {
         return Member.createMember()
+                .id(id)
                 .role(role)
                 .loginId(loginId)
                 .password(password)

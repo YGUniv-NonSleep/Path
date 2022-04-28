@@ -3,6 +3,7 @@ package com.capstone.pathproject.controller.company;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
+import com.capstone.pathproject.dto.file.FileForm;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
@@ -28,6 +29,14 @@ public class CompanyApiController {
 
     private final CompanyService companyService;
     private final JwtTokenUtil jwtTokenUtil;
+
+    @PostMapping("/images")
+    public ResponseEntity<Message<Object>> saveFile(@ModelAttribute FileForm fileForm){
+
+
+
+        return null;
+    }
 
     @GetMapping("/myStore")
     public ResponseEntity myCompany(@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -72,7 +81,8 @@ public class CompanyApiController {
             fileName = "";
         }
         companyDTO.addFile(fileName);
-        companyDTO.addMember(principalDetails.getMember());
+        companyDTO.addMember(principalDetails.getMember().toDTO());
+        System.out.println(companyDTO.getMember().toString());
         Message<CompanyDTO> message = companyService.createCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
@@ -103,7 +113,7 @@ public class CompanyApiController {
             fileName = "";
         }
         companyDTO.addFile(fileName);
-        companyDTO.addMember(principalDetails.getMember());
+        companyDTO.addMember(principalDetails.getMember().toDTO());
         Message<CompanyDTO> message = companyService.updateCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
