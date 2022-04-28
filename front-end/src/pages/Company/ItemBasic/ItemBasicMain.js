@@ -49,11 +49,16 @@ function ItemBasicMain() {
     };
 
     const formData = new FormData();
-    formData.append("picture", e.target.imgFile.files[0]);
-    formData.append(
-      "json",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
+
+    let inputCategory = "product"; // 보내는 백엔드 폴더 이름 명시
+    let inputImageFiles = e.target.imgFile.files;
+    
+    // FormData에 Key:Value 넣기
+    for (var i = 0; i < inputImageFiles.length; i++) {
+      formData.append('picture', inputImageFiles[i]);
+    }
+    formData.append("json", new Blob([JSON.stringify(data)], { type: "application/json" }));
+    formData.append('category', inputCategory);
 
     axios.post(process.env.REACT_APP_SPRING_API + "/api/product/basic", formData, {
         //withCredentials: true,
@@ -177,6 +182,7 @@ function ItemBasicMain() {
                   <div>{item.detail}</div>
                   <div>{item.brand}</div>
                   <div>{item.category}</div>
+                  {/* <img src="???" width={"100px"} height={"100px"} /> */}
                   <div>{item.image}</div>
                   <button type="button" onClick={() => deleteProductBasic(item.id)}>기본 상품 제거</button>
                   <button onClick={handleOpen} value={index}>기본 상품 수정 창 오픈</button>

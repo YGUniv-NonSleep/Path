@@ -109,7 +109,7 @@ function PathMain() {
     const ps = new kakao.maps.services.Places();
     ps.keywordSearch(insertPoint, function (result, status, pagination) {
       if (status === daum.maps.services.Status.OK) {
-        // console.log(result)
+         console.log(result)
         let k = result.map((item) => {
           const data = {
             pN: item.place_name,
