@@ -1,4 +1,4 @@
-package com.capstone.pathproject.repository;
+package com.capstone.pathproject.repository.company;
 
 import com.capstone.pathproject.domain.company.CompMember;
 import com.capstone.pathproject.domain.company.Company;
