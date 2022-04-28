@@ -10,6 +10,8 @@ import Oder from '../routes/Oder';
 
 import Community from '../routes/Community';
 import CommunityContents from '../routes/Community/CommunityContents';
+import CommunityAdd from '../routes/Community/CommunityAdd';
+
 
 import CarPool from '../routes/CarPool';
 
@@ -89,6 +91,7 @@ function Router() {
       <Routes>
         <Route path="/community" element={<Community />} />
         <Route path="/community/:postId" element={<CommunityContents />} />
+        <Route path="/community/add" element={<CommunityAdd/>} />
       </Routes>
       <Routes>
         <Route path="/carpool" element={<CarPool />} />
