@@ -73,7 +73,8 @@ public class Member extends BaseTimeEntity {
     private int score;
 
     @Builder(builderMethodName = "createMember")
-    public Member(Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
+    public Member(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
+        this.id = id;
         this.role = role;
         this.loginId = loginId;
         this.password = password;

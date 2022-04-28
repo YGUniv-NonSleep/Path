@@ -1,5 +1,6 @@
 package com.capstone.pathproject.service.product;
 
+import com.capstone.pathproject.domain.company.DetailOption;
 import com.capstone.pathproject.domain.company.Option;
 import com.capstone.pathproject.domain.company.ProdBasic;
 import com.capstone.pathproject.domain.company.Product;
@@ -160,7 +161,12 @@ public class ProductService {
                 .forEach(productDTO -> productDTOList.add(productDTO));
 
         for (ProductDTO p : productDTOList){
-            System.out.println(p);
+            for (Option o : p.getOptionList()) {
+                for (DetailOption d: o.getDetailOptionList()
+                     ) {
+                    System.out.println(d.toString());
+                }
+            }
         }
 
         return Message.<List<ProductDTO>>createMessage()
