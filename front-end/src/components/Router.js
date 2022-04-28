@@ -7,7 +7,7 @@ import {
 import Path from '../pages/Path/PathMain';
 import { MemberContainer as Member } from '../pages/Member';
 import Oder from '../pages/Oder/OderMain';
-import Mobility from '../pages/Mobility/MobilityMain';
+//import Mobility from '../pages/Mobility/MobilityMain';
 import Community from '../pages/Community/CommunityMain';
 import CarPool from '../pages/CarPool/CarPoolMain';
 import { LoginContainer as Login } from '../pages/Member';
@@ -64,7 +64,6 @@ function Router() {
         <Route path="/oder" element={<Oder />} />
       </Routes>
       <Routes>
-      <Route path="/mobility" element={<Mobility />} />
         <Route path="/mobility/bus" element={<Bus/>} />
         <Route path="/mobility/subway" element={<Subway />} />
         <Route path="/mobility/scooter" element={<Scooter />} />

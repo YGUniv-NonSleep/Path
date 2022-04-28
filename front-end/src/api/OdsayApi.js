@@ -93,6 +93,7 @@ export const SubwayTime = {
       `/subwayTimeTable?lang=0&stationID=${subTime}&apiKey=${key}`
     ).catch((error) => console.log(error));
     console.log(response.data.result);
+    return response.data.result;
     }
 }
 

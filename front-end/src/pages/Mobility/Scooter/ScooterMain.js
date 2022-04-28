@@ -4,7 +4,6 @@ import MapApi from "../../../api/MapApi";
 import styled from "styled-components";
 import MIcon from "../MIcon";
 import Map from "../../../components/Map";
-import Modal from "./styles/modal"
 
 const SideNav = styled.nav`
   position: fixed;
@@ -79,7 +78,7 @@ function ScooterMain() {
 
       // 마커에 클릭이벤트를 등록합니다
       kakao.maps.event.addListener(marker, "click", function () {
-        <Modal></Modal>
+        
       });
     }
     marker.setMap(map);
