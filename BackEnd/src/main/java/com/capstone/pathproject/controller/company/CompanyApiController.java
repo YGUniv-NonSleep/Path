@@ -3,9 +3,7 @@ package com.capstone.pathproject.controller.company;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
-import com.capstone.pathproject.dto.file.FileForm;
 import com.capstone.pathproject.dto.response.Message;
-import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.service.company.CompanyService;
 import com.capstone.pathproject.util.JwtTokenUtil;
@@ -30,28 +28,11 @@ public class CompanyApiController {
     private final CompanyService companyService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/images")
-    public ResponseEntity<Message<Object>> saveFile(@ModelAttribute FileForm fileForm){
-
-
-
-        return null;
-    }
-
     @GetMapping("/myStore")
     public ResponseEntity myCompany(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Message message;
-
-        if(principalDetails != null){
-            Member member = principalDetails.getMember();
-            System.out.println("member = " + member);
-            message = companyService.companyDetailByMember(member.getId());
-        }else{
-            message = Message.createMessage()
-                    .header(StatusEnum.NOT_FOUND)
-                    .message("로그인을 해 주세요!!")
-                    .build();
-        }
+        System.out.println("시작");
+        Member member = principalDetails.getMember();
+        Message<List<CompanyDTO>> message = companyService.companyDetailByMember(member.getId());
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -62,21 +43,21 @@ public class CompanyApiController {
     }
 
     @PostMapping("/")
-    public ResponseEntity createCom(@Valid @RequestPart(value="json") CompanyDTO companyDTO,
-                                    @RequestPart(value = "picture", required = false) MultipartFile file ,
+    public ResponseEntity createCom(@Valid @RequestPart(value = "json") CompanyDTO companyDTO,
+                                    @RequestPart(value = "picture", required = false) MultipartFile file,
                                     HttpServletRequest httpServletRequest,
                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
         String fileName;
-        if ( file != null ){
+        if (file != null) {
             System.out.println("파일있어!");
             fileName = file.getOriginalFilename();
-            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "company\\";
+            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("") + "company\\";
             try {
                 file.transferTo(new File(filePath + fileName));
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             System.out.println("파일없어!");
             fileName = "";
         }
@@ -94,21 +75,21 @@ public class CompanyApiController {
     }
 
     @PatchMapping("/")
-    public ResponseEntity<Message<CompanyDTO>> updateCompany(@Valid @RequestPart(value="json") CompanyDTO companyDTO,
-                                                             @RequestPart(value = "picture", required = false) MultipartFile file ,
+    public ResponseEntity<Message<CompanyDTO>> updateCompany(@Valid @RequestPart(value = "json") CompanyDTO companyDTO,
+                                                             @RequestPart(value = "picture", required = false) MultipartFile file,
                                                              HttpServletRequest httpServletRequest,
                                                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
         String fileName;
-        if ( file != null ){
+        if (file != null) {
             System.out.println("파일있어!");
             fileName = file.getOriginalFilename();
-            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "company\\";
+            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("") + "company\\";
             try {
                 file.transferTo(new File(filePath + fileName));
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             System.out.println("파일없어!");
             fileName = "";
         }
@@ -120,15 +101,15 @@ public class CompanyApiController {
 
     @PostMapping("/member/{companyId}/{memberId}")
     public ResponseEntity addCompanyMember(@PathVariable("companyId") Long companyId,
-                                             @PathVariable("memberId") Long memberId){
+                                           @PathVariable("memberId") Long memberId) {
         Message message = companyService.addCompanyMember(companyId, memberId);
-        return new ResponseEntity(message,HttpStatus.OK);
+        return new ResponseEntity(message, HttpStatus.OK);
     }
 
     @GetMapping("member/{companyId}")
-    public ResponseEntity<Message<List<CompMemberDTO>>> findCompMember (@PathVariable("companyId") Long companyId){
-        Message<List<CompMemberDTO>> message =companyService.findCompMember(companyId);
-        return new ResponseEntity<>(message,HttpStatus.OK);
+    public ResponseEntity<Message<List<CompMemberDTO>>> findCompMember(@PathVariable("companyId") Long companyId) {
+        Message<List<CompMemberDTO>> message = companyService.findCompMember(companyId);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 }
