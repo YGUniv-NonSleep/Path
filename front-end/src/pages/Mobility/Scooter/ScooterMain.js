@@ -78,8 +78,7 @@ function ScooterMain() {
 
       // 마커에 클릭이벤트를 등록합니다
       kakao.maps.event.addListener(marker, "click", function () {
-        // 마커 위에 인포윈도우를 표시합니다
-        infowindow.open(map, marker);
+        
       });
     }
     marker.setMap(map);
@@ -98,7 +97,6 @@ function ScooterMain() {
       <SideNav>
         <BarContainer>
           <MIcon />
-          {/* { loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2> } */}
         </BarContainer>
       </SideNav>
       <Map />

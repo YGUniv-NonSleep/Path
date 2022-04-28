@@ -15,6 +15,7 @@ import IconButton from "@mui/material/IconButton";
 
 const Ul = styled.ul`
   position: fixed;
+  z-index:10;
   top: 10px;
   left: 100px;
   display: grid;

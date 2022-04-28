@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import MapApi from "../../../api/MapApi";
-import { SubName } from "../../../api/OdsayApi";
-import { Subway } from "@mui/icons-material";
+
+import { SubwayApi, SubwayTime } from "../../../api/OdsayApi";
 import Map from "../../../components/Map";
 import styled from "styled-components";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -46,7 +46,7 @@ const Btn = styled.button`
 const Btn1 = styled.button`
   position: absolute;
   top: 160px;
-  left: 190px;
+  left: 200px;
   width: 180px;
   height: 40px;
   font-size: 12px;
@@ -92,10 +92,11 @@ function SubwayMain() {
     removeMarkers();
 
     let subName = data;
-    let stationInfo = await SubName.getSubName(subName).catch((error) =>
-      console.log(error)
-    );
-    // console.log(stationInfo)
+
+    let stationInfo = await SubwayApi.getSubName(subName).catch((error) => console.log(error));
+     console.log(stationInfo)
+
+     let subTime = await SubwayTime.getSubTime(stationInfo.stationID);
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
 
@@ -126,12 +127,38 @@ function SubwayMain() {
     }
     map.setBounds(bounds);
 
+
+    function displayPlaces() {
+      var listTime = subTime; 
+      
+      for ( var i=0; i<places.length; i++ ) {
+          // 마커를 생성하고 지도에 표시합니다
+          var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+              marker = addMarker(placePosition, i), 
+              itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+  
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+          // LatLngBounds 객체에 좌표를 추가합니다
+          bounds.extend(placePosition);
+  
+         (marker, places[i].place_name);
+  
+          fragment.appendChild(itemEl);
+      } 
+
+       // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
+      listTime.appendChild(fragment);
+      
+  }
+  displayPlaces.setMap(map);
+
     function removeMarkers() {
       for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
       }
       setMarkers([]);
     }
+
   }
 
   useEffect(() => {
@@ -146,7 +173,9 @@ function SubwayMain() {
     <div className="Mobility">
       <SideNav>
         <MIcon />
+
         {/* { loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2> } */}
+
         <Ul></Ul>
 
         <BarContainer>

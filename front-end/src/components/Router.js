@@ -8,6 +8,7 @@ import PageNotFound from './PageNotFound';
 
 import Path from '../pages/Path/PathMain';
 import Oder from '../pages/Oder/OderMain';
+//import Mobility from '../pages/Mobility/MobilityMain';
 
 import Community from '../pages/Community/CommunityMain';
 import CommunityContents from '../pages/Community/CommunityContents';
@@ -83,7 +84,6 @@ function Router() {
         <Route path="/oder" element={<Oder />} />
       </Routes>
       <Routes>
-        <Route path="/mobility" element={<Mobility />} />
         <Route path="/mobility/bus" element={<Bus />} />
         <Route path="/mobility/subway" element={<Subway />} />
         <Route path="/mobility/scooter" element={<Scooter />} />

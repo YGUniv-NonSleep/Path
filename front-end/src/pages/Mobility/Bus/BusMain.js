@@ -21,7 +21,7 @@ const SideNav = styled.nav`
 `;
 
 const BarContainer = styled.div`
-  z-index: 10
+  z-index: 10;
   width: 390px;
   height: 90%;
   margin-top: 100px;
@@ -129,8 +129,8 @@ function BusMain() {
       for (var i = 0; i < array1.length; i++) {
         let busStayMark = new kakao.maps.LatLng(array1[i].y, array1[i].x);
         console.log(busStayMark);
-        iwContent[i] = busStay[i].stationName;
-        console.log(iwContent);
+        // iwContent[i] = busStay[i].stationName;
+        // console.log(iwContent);
 
         const mark = new kakao.maps.Marker({
           position: busStayMark,
@@ -140,22 +140,6 @@ function BusMain() {
         bound.extend(busStayMark);
       }
 
-      // 인포윈도우를 생성합니다
-      // var infowindow = new kakao.maps.InfoWindow({
-      //     content : iwContent
-      // });
-
-      // // 마커에 마우스오버 이벤트를 등록합니다
-      // kakao.maps.event.addListener(marker, 'mouseover', function() {
-      // // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
-      //     infowindow.open(map, marker);
-      // });
-
-      // // 마커에 마우스아웃 이벤트를 등록합니다
-      // kakao.maps.event.addListener(marker, 'mouseout', function() {
-      //     // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
-      //     infowindow.close();
-      // });
       map.setBounds(bound);
     }
 
