@@ -94,15 +94,13 @@ function SubwayMain() {
     let subName = data;
 
     let stationInfo = await SubwayApi.getSubName(subName).catch((error) => console.log(error));
-     console.log(stationInfo)
-
-     let subTime = await SubwayTime.getSubTime(stationInfo.stationID);
+    // console.log(stationInfo)
+    let subTime = await SubwayTime.getSubTime(stationInfo.stationID);
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
+    let bounds = new kakao.maps.LatLngBounds();
 
-    var bounds = new kakao.maps.LatLngBounds();
-
-    var i, marker;
+    let i, marker;
     for (i = 0; i < points.length; i++) {
       // 배열의 좌표들이 잘 보이게 마커를 지도에 추가합니다
       marker = new kakao.maps.Marker({ position: points[i], clickable: true });
