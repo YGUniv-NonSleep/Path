@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import MapApi from "../../../api/MapApi";
+
 import { SubwayApi, SubwayTime } from "../../../api/OdsayApi";
 import Map from "../../../components/Map";
 import styled from "styled-components";
@@ -91,11 +92,12 @@ function SubwayMain() {
     removeMarkers();
 
     let subName = data;
+
     let stationInfo = await SubwayApi.getSubName(subName).catch((error) => console.log(error));
      console.log(stationInfo)
 
      let subTime = await SubwayTime.getSubTime(stationInfo.stationID);
-    
+
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
 
     var bounds = new kakao.maps.LatLngBounds();
@@ -124,6 +126,7 @@ function SubwayMain() {
       });
     }
     map.setBounds(bounds);
+
 
     function displayPlaces() {
       var listTime = subTime; 
@@ -155,7 +158,7 @@ function SubwayMain() {
       }
       setMarkers([]);
     }
-    
+
   }
 
   useEffect(() => {
@@ -170,6 +173,9 @@ function SubwayMain() {
     <div className="Mobility">
       <SideNav>
         <MIcon />
+
+        {/* { loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2> } */}
+
         <Ul></Ul>
 
         <BarContainer>

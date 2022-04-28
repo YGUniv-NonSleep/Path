@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,19 +7,21 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { FormHelperText, FormControl } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import styled from 'styled-components';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-
+import InputLabel from '@mui/material/InputLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormLabel from '@mui/material/FormLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import styled from 'styled-components';
+import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
 
 function Copyright(props) {
   return (
@@ -47,14 +48,11 @@ const FormHelperTexts = styled(FormHelperText)`
   color: #d32f2f;
 `;
 
-const Boxs = styled(Box)`
-  padding-bottom: 40px;
-`;
-
 const theme = createTheme();
 
 function SignUpPresenter(props) {
   const {
+    roleError,
     loginIdError,
     emailError,
     passwordState,
@@ -68,18 +66,7 @@ function SignUpPresenter(props) {
     registerError,
   } = props.errorList;
 
-  const {
-    role,
-    loginId,
-    email,
-    name,
-    password,
-    rePassword,
-    phone,
-    addr,
-    addrDetail,
-    gender,
-  } = props.inputValue;
+  const { role, gender } = props.inputValue;
 
   return (
     <ThemeProvider theme={theme}>
@@ -94,7 +81,7 @@ function SignUpPresenter(props) {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4">
             회원가입
           </Typography>
           <Box
@@ -106,42 +93,25 @@ function SignUpPresenter(props) {
             <FormControl component="fieldset" variant="standard">
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      회원 유형
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="member"
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      회원유형
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="role"
+                      label="회원유형"
+                      value={role}
                       name="role"
+                      onChange={props.handleInput}
+                      error={roleError !== '' || false}
                     >
-                      <FormControlLabel
-                        value="member"
-                        control={
-                          <Radio
-                            value="ROLE_MEMBER"
-                            onChange={props.handleInput}
-                            checked={role === 'ROLE_MEMBER'}
-                          />
-                        }
-                        label="일반 회원"
-                      />
-                      <FormControlLabel
-                        value="business"
-                        control={
-                          <Radio
-                            value="ROLE_BUSINESS"
-                            onChange={props.handleInput}
-                            checked={role === 'ROLE_BUSINESS'}
-                          />
-                        }
-                        label="업체 회원"
-                      />
-                    </RadioGroup>
+                      <MenuItem value={'ROLE_MEMBER'}>일반회원</MenuItem>
+                      <MenuItem value={'ROLE_BUSINESS'}>업체회원</MenuItem>
+                    </Select>
                   </FormControl>
                 </Grid>
-                <FormHelperTexts>{genderError}</FormHelperTexts>
+                <FormHelperTexts>{roleError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -220,13 +190,37 @@ function SignUpPresenter(props) {
                 <FormHelperTexts>{phoneError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
+                    sx={{
+                      mr: 2,
+                      verticalAlign: 'middle',
+                    }}
                     required
+                    id="postId"
+                    name="postId"
+                    label="우편번호"
+                    onChange={props.handleInput}
+                    disabled
+                    defaultValue=" "
+                  />
+                  <Button
+                    type="button"
+                    variant="contained"
+                    onClick={() => props.daumAddrApi()}
+                    endIcon={<LocalPostOfficeIcon />}
+                  >
+                    주소찾기
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
                     fullWidth
+                    required
                     id="addr"
                     name="addr"
                     label="주소"
                     onChange={props.handleInput}
-                    error={addrError !== '' || false}
+                    disabled
+                    defaultValue=" "
                   />
                 </Grid>
                 <FormHelperTexts>{addrError}</FormHelperTexts>
@@ -242,6 +236,18 @@ function SignUpPresenter(props) {
                   />
                 </Grid>
                 <FormHelperTexts>{addrDetailError}</FormHelperTexts>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    required
+                    id="addrExtra"
+                    name="addrExtra"
+                    label="참고항목"
+                    onChange={props.handleInput}
+                    disabled
+                    defaultValue=" "
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <FormControl>
                     <FormLabel id="demo-row-radio-buttons-group-label">
@@ -319,7 +325,6 @@ function SignUpPresenter(props) {
                 회원가입
               </Button>
             </FormControl>
-            <FormHelperTexts>{registerError}</FormHelperTexts>
           </Box>
         </Box>
       </Container>

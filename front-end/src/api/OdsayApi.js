@@ -36,7 +36,7 @@ export const PathApi = {
     //   return list
     // })
     let resList = []
-    
+    // console.log(mapObj)
     for(var i=0; i<mapObj.length; i++){
       const response = await odsayApi.get(
         `/loadLane?lang=0&mapObject=0:0@${mapObj[i]}&apiKey=${key}`
@@ -44,7 +44,7 @@ export const PathApi = {
 
       resList.push(response.data.result)
     }
-    // console.log(resList);
+     console.log(resList);
     return resList
   },
 };
@@ -96,7 +96,5 @@ export const SubwayTime = {
     return response.data.result;
     }
 }
-
-
 
 export default odsayApi;

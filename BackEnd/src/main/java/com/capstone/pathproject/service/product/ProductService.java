@@ -1,4 +1,4 @@
-package com.capstone.pathproject.service;
+package com.capstone.pathproject.service.product;
 
 import com.capstone.pathproject.domain.company.Option;
 import com.capstone.pathproject.domain.company.ProdBasic;

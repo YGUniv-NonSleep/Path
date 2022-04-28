@@ -22,9 +22,9 @@ function CompanyMain() {
 
     return (
         <CompCon>
-        <CompSubCon>
-        { loading ? <p>업체 화면 나왔다</p> : <h2>로드 중...</h2> }
-        </CompSubCon>
+            <CompSubCon>
+            { loading ? <p>업체 화면 나왔다</p> : <h2>로드 중...</h2> }
+            </CompSubCon>
         </CompCon>
     )
 }

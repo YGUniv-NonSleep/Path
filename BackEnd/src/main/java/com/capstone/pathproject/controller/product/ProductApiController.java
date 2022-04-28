@@ -1,12 +1,11 @@
-package com.capstone.pathproject.controller;
+package com.capstone.pathproject.controller.product;
 
-import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.product.DetailOptionDTO;
 import com.capstone.pathproject.dto.product.OptionDTO;
 import com.capstone.pathproject.dto.product.ProdBasicDTO;
 import com.capstone.pathproject.dto.product.ProductDTO;
 import com.capstone.pathproject.dto.response.Message;
-import com.capstone.pathproject.service.ProductService;
+import com.capstone.pathproject.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,15 +56,20 @@ public class ProductApiController {
                                                              @RequestPart(value = "picture", required = false) MultipartFile file ,
                                                              HttpServletRequest httpServletRequest){
 
-        String fileName = file.getOriginalFilename();
-        String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "product\\";
+        String fileName;
+        if (file != null){
+            fileName = file.getOriginalFilename();
+            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "product\\";
+            try {
+                file.transferTo(new File(filePath + fileName));
 
-        try {
-            file.transferTo(new File(filePath + fileName));
-
-        }catch (Exception e){
-            e.printStackTrace();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            fileName = "";
         }
+
 
         Message message = productService.updateBasic(prodBasicDTO, fileName);
         return new ResponseEntity<>(message, HttpStatus.OK);
@@ -81,7 +85,7 @@ public class ProductApiController {
     @GetMapping("/basic")
     public ResponseEntity findBasic(@RequestParam(value = "name" , required = false,defaultValue = "")String name,
                                     @RequestParam(value = "brand", required = false,defaultValue = "")String brand) {
-
+        
         Message message = productService.findBasicByName(name, brand);
 
         return new ResponseEntity<>(message, HttpStatus.OK);

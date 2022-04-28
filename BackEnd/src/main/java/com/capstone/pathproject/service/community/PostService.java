@@ -2,15 +2,16 @@ package com.capstone.pathproject.service.community;
 
 
 import com.capstone.pathproject.domain.community.Post;
-import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.dto.community.PostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.community.PostRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
 
 
     @Transactional
@@ -36,6 +36,7 @@ public class PostService {
                 .message("조회완료")
                 .body(listPDT).build();
     }
+
 
     @Transactional
     public Message<List<PostDTO>> search(String keyword, Pageable pageable) {
@@ -51,43 +52,20 @@ public class PostService {
 
 
     @Transactional
-    public Message updateView (Long id) {
+    public Message viewParams(Long id) {
         postRepository.updateView(id);
+        Optional<Post> post = postRepository.findById(id);
+        PostDTO postDTO = post.get().toDTO();
         return Message.<PostDTO>createMessage()
                 .header(StatusEnum.OK)
                 .message("조회수 증가성공")
-                .build();
+                .body(postDTO).build();
     }
 
-
-    ///Post Service///
     @Transactional
-    public Message<PostDTO> create(PostDTO postDTO, String fileName) {
-        PostDTO result = PostDTO.createPostDTO()
-                .id(postDTO.getId())
-                .member(postDTO.getMember())
-                .parent(postDTO.getParent())
-                .view(postDTO.getView())
-                .writeDate(postDTO.getWriteDate())
-                .content(postDTO.getContent())
-                .photoName(fileName)
-                .type(postDTO.getType())
-                .title(postDTO.getTitle())
-                .build();
-
-        postRepository.save(result.toEntity());
-        return Message.<PostDTO>createMessage()
-                .header(StatusEnum.OK)
-                .message("등록완료")
-                .body(result).build();
-    }
-
-
-    @Transactional
-    public Message<PostDTO> update(PostDTO postDTO, String fileName) {
-        Optional<Post> result = postRepository.findById(postDTO.getId());
-        if (result.isPresent()) {
-            PostDTO updateResult = PostDTO.createPostDTO()
+    public Message<PostDTO> create(PostDTO postDTO, String fileName,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if(principalDetails != null){
+            PostDTO result = PostDTO.createPostDTO()
                     .id(postDTO.getId())
                     .member(postDTO.getMember())
                     .parent(postDTO.getParent())
@@ -98,29 +76,60 @@ public class PostService {
                     .type(postDTO.getType())
                     .title(postDTO.getTitle())
                     .build();
-          //  PostDTO updateResult = result.get().toDTO();
-            if(postDTO.getMember().getId() == 1){
-                postRepository.save(updateResult.toEntity());
-                return Message.<PostDTO>createMessage()
-                        .header(StatusEnum.OK)
-                        .message("업데이트 완료")
-                        .body(postDTO).build();
-            }
+
+            postRepository.save(result.toEntity());
+            return Message.<PostDTO>createMessage()
+                    .header(StatusEnum.OK)
+                    .message("등록완료")
+                    .body(result).build();
         }
-        return Message.<PostDTO>createMessage()
-                .header(StatusEnum.BAD_REQUEST)
-                .message("작성자가 아닙니다!")
-                .build();
+            return Message.<PostDTO>createMessage()
+                    .header(StatusEnum.NOT_FOUND)
+                    .message("회원만 작성가능")
+                    .build();
+
     }
 
 
     @Transactional
-    public Message<PostDTO> delete(Long postId) {
+    public Message<PostDTO> update(PostDTO postDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        Optional<Post> result = postRepository.findById(postDTO.getId());
+        if (result.isPresent()) {
+            if(postDTO.getMember().getLoginId().equals(principalDetails.getMember().getLoginId())){
+                PostDTO updateResult = PostDTO.createPostDTO()
+                        .id(postDTO.getId())
+                        .member(postDTO.getMember())
+                        .parent(postDTO.getParent())
+                        .view(postDTO.getView())
+                        .writeDate(postDTO.getWriteDate())
+                        .content(postDTO.getContent())
+                        .photoName(fileName)
+                        .type(postDTO.getType())
+                        .title(postDTO.getTitle())
+                        .build();
+                postRepository.save(updateResult.toEntity());
+            }else{
+                return Message.<PostDTO>createMessage()
+                        .header(StatusEnum.BAD_REQUEST)
+                        .message("작성자가 아닙니다!")
+                        .build();
+            }
+    }
+        return Message.<PostDTO>createMessage()
+                .header(StatusEnum.OK)
+                .message("업데이트 완료")
+                .body(postDTO).build();
+    }
+
+
+    @Transactional
+    public Message<PostDTO> delete(Long postId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Optional<Post> result = postRepository.findById(postId);
         Long rs = result.get().getId();
+
         if (result.isPresent()) {
-            if(result.get().getMember().getId() == 1) {
-               // postRepository.deleteById(rs);
+            if(result.get().getMember().getLoginId().equals(principalDetails.getMember().getLoginId())){
                 postRepository.deleteById(rs);
                 return Message.<PostDTO>createMessage()
                         .header(StatusEnum.OK)
@@ -135,12 +144,9 @@ public class PostService {
     }
 
 
-    ///답글 SERVICE///
     @Transactional
-    public Message<PostDTO> repcreate(PostDTO postDTO, String fileName) {
-        Optional<Member> memberOptional = memberRepository.findById(postDTO.getMember().getId());
-        //Member의 ROLE이 ADMIN(관리자)이면 게시글의 답글을 등록할 수 있다.
-        if(memberOptional.get().getRole().equals(Role.ROLE_ADMIN)){
+    public Message<PostDTO> repcreate(PostDTO postDTO, String fileName,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if(principalDetails.getMember().getRole().equals(Role.ROLE_ADMIN)){
             PostDTO result = PostDTO.createPostDTO()
                     .id(postDTO.getId())
                     .type(postDTO.getType())
@@ -168,9 +174,8 @@ public class PostService {
 
 
     @Transactional
-    public Message<PostDTO> repupdate(PostDTO postDTO, String fileName) {
-          Optional<Member> memberOptional = memberRepository.findById(postDTO.getMember().getId());
-          if(memberOptional.get().getRole().equals(Role.ROLE_ADMIN)){
+    public Message<PostDTO> repupdate(PostDTO postDTO, String fileName,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+          if(principalDetails.getMember().getRole().equals(Role.ROLE_ADMIN)){
               PostDTO updateResult = PostDTO.createPostDTO()
                       .id(postDTO.getId())
                       .member(postDTO.getMember())
@@ -197,11 +202,10 @@ public class PostService {
 
 
     @Transactional
-    public Message<PostDTO> repdelete(Long postId) {
-        Optional<Post> result = postRepository.findById(postId);//postId = 25;
-        Optional<Member> memberOptional = memberRepository.findById(result.get().getMember().getId());
+    public Message<PostDTO> repdelete(Long postId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Optional<Post> result = postRepository.findById(postId);
             if(result.isPresent()){
-                if(memberOptional.get().getRole().equals(Role.ROLE_ADMIN)){
+                if(principalDetails.getMember().getRole().equals(Role.ROLE_ADMIN)){
                     postRepository.deleteById(result.get().getId());
                     return Message.<PostDTO>createMessage()
                             .header(StatusEnum.OK)
