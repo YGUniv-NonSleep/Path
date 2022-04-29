@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import MapApi from "../../../MapApi";
+import MapApi from "../../../api/MapApi";
 
-import { SubwayApi, SubwayTime } from "../../../OdsayApi";
+import { SubwayApi, SubwayTime } from "../../../api/OdsayApi";
 import Map from "../../../components/Map";
 import styled from "styled-components";
 import InputAdornment from "@mui/material/InputAdornment";
