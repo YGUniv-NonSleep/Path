@@ -31,8 +31,8 @@ public class ProductService {
     private final DetailOptionRepository detailOptionRepository;
 
     //ProdBasic create
-    public Message<ProdBasicDTO> createBasic(ProdBasicDTO prodBasicDTO, String fileName) {
-        prodBasicDTO.addFile(fileName);
+    public Message<ProdBasicDTO> createBasic(ProdBasicDTO prodBasicDTO) {
+
         prodBasicRepository.save(prodBasicDTO.toEntity());
 
         return Message.<ProdBasicDTO>createMessage()
@@ -50,9 +50,8 @@ public class ProductService {
                 .build();
     }
     //ProdBasic updete
-    public Message<ProdBasicDTO> updateBasic(ProdBasicDTO prodBasicDTO, String fileName){
+    public Message<ProdBasicDTO> updateBasic(ProdBasicDTO prodBasicDTO){
 
-        prodBasicDTO.addFile(fileName);
         prodBasicRepository.save(prodBasicDTO.toEntity());
 
         return Message.<ProdBasicDTO>createMessage()
