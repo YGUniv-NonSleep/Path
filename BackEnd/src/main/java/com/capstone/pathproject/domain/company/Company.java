@@ -77,6 +77,11 @@ public class Company {
     }
 
     public CompanyDTO toDTO(){
+        MemberDTO memberDTO = MemberDTO.createMemberDTO()
+                .id(member.getId())
+                .name(member.getName())
+                .loginId(member.getLoginId()).build();
+
         return CompanyDTO.createCompanyDTD()
                 .id(this.id)
                 .companyNumber(this.companyNumber)
@@ -84,7 +89,7 @@ public class Company {
                 .latitude(this.latitude)
                 .longitude(this.longitude)
                 .mail(this.mail)
-                .member(this.member.toDTO())
+                .member(memberDTO)
                 .name(this.name)
                 .openDate(this.openDate)
                 .phone(this.phone)
