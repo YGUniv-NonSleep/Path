@@ -50,12 +50,7 @@ public class CompanyApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @PostMapping("/image")
-    public ResponseEntity<String> saveImage(@RequestParam("multipartFile") MultipartFile multipartFile){
 
-         String fileName = fileUtil.storeFile(multipartFile);
-        return new ResponseEntity<>(fileName,HttpStatus.OK);
-    }
 
 
 
