@@ -9,11 +9,28 @@ function CompCreateContainer() {
     const navigation = useNavigate()
 
     useEffect(() => {
-        setLoading((current) => !current);
+        setLoading(true);
     }, []);
 
-    function compFormSubmit(e) {
+    async function compFormSubmit(e) {
         e.preventDefault();
+
+        let inputImageFiles = e.target.userfile.files;
+
+        const imageformData = new FormData();
+        // FormData에 Key:Value 넣기
+        for (var i = 0; i < inputImageFiles.length; i++) {
+            imageformData.append("multipartFile", inputImageFiles[i]);
+        }
+
+        const imageData = await axios.post(process.env.REACT_APP_SPRING_API + `/api/image`, imageformData, {
+            headers: {
+            "Content-Type": `multipart/form-data`,
+            },
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 
         const data = {    
             "name": e.target.name.value,
@@ -23,27 +40,22 @@ function CompCreateContainer() {
             "mail": e.target.email.value,
             "phone": e.target.phone.value,
             "latitude": e.target.lat.value,
-            "longitude": e.target.long.value,                 
+            "longitude": e.target.long.value,
+            "thumbnail": imageData.data
         };
-        //console.log(data.category)
 
-        let formData = new FormData();
-        formData.append("picture", e.target.userfile.files[0]);
-        formData.append(
-            "json", new Blob([JSON.stringify(data)], { type: "application/json" })
-        );
-
-        setFormInfo(formData)
+        // let formData = new FormData();
+        // formData.append("picture", e.target.userfile.files[0]);
+        // formData.append(
+        //     "json", new Blob([JSON.stringify(data)], { type: "application/json" })
+        // );
+        setFormInfo(data)
     }
 
     function createCompany() {
         if(formInfo != null){
             axios.post(
-                process.env.REACT_APP_SPRING_API +"/api/company/", formInfo, {
-                    headers: {
-                        "Content-Type": `multipart/form-data`,
-                      },
-                }
+                process.env.REACT_APP_SPRING_API +"/api/company/", formInfo
             ).then((res)=>{
                 console.log(res)
                 alert("업체 등록 완료")
