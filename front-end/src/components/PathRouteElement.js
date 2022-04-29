@@ -47,7 +47,7 @@ const PathRouteElement = () => {
         </ScLink>
       </Li>
       <Li $current={currLocation === "/mobility" && true}>
-        <ScLink to="/mobility" $current={currLocation === "/mobility" && true}>
+        <ScLink to="/mobility/bus" $current={currLocation === "/mobility" && true}>
           이동수단
         </ScLink>
       </Li>

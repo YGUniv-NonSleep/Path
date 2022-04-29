@@ -7,15 +7,13 @@ import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.repository.CompMemberRepository;
-import com.capstone.pathproject.repository.CompanyRepository;
+import com.capstone.pathproject.repository.company.CompMemberRepository;
+import com.capstone.pathproject.repository.company.CompanyRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
