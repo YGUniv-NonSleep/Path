@@ -1,10 +1,17 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { Link } from 'react-router-dom' 
 
+
+const CommuSubCon = styled.div`
+  margin-left: 130px;
+`;
 function CarPoolPresenter(props) {
     return (
         <div className="CarPool">
-            { props.loading ? <p>카풀 화면 나왔다</p> : <h2>로드 중...</h2> }
+           <CommuSubCon>
+               <button><Link to={{pathname : '/carpool/add'}}>등록하기</Link></button>
+           </CommuSubCon>
         </div>
     )
 }

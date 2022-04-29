@@ -6,8 +6,10 @@ import com.capstone.pathproject.dto.carpool.CarPostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.carpool.CarPostRepository;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +25,10 @@ public class CarPostService {
 
 //CRUD
     @Transactional
-    public Message<CarPostDTO> create(CarPostDTO carPostDTO, String fileName){
+    public Message<CarPostDTO> create(CarPostDTO carPostDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails){
         CarPostDTO result = CarPostDTO.createCarPostDTO()
                 .id(carPostDTO.getId())
-                .member(carPostDTO.getMember())
+                .member(principalDetails.getMember())
                 .cars(carPostDTO.getCars())
                 .title(carPostDTO.getTitle())
                 .content(carPostDTO.getContent())
