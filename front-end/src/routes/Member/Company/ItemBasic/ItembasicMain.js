@@ -117,12 +117,12 @@ function ItemBasicMain() {
     axios
       .patch(
         process.env.REACT_APP_SPRING_API + "/api/product/basic",
-        formData,
+        data,
         {
           //withCredentials: true,
-          headers: {
-            "Content-Type": `multipart/form-data`,
-          },
+          // headers: {
+          //   "Content-Type": `multipart/form-data`,
+          // },
         }
       )
       .then((res) => {
@@ -256,14 +256,14 @@ function ItemBasicMain() {
                         value={updateItem.category}
                       />
                       <br />
-                      <label htmlFor="updateFile">파일선택</label>
+                      {/* <label htmlFor="updateFile">파일선택</label>
                       <input type="text" readonly="readonly" placeholder="선택된 파일 없음" />
                       <input 
                         type={"file"} 
                         id={"updateFile"}
                         // onChange={}
                       />
-                      <br />
+                      <br /> */}
                       <button type="button" onClick={patchProductBasic}>
                         기본 상품 수정
                       </button>
@@ -276,7 +276,29 @@ function ItemBasicMain() {
             })}
           </Fragment>
         ) : (
-          <div>새로운 기본 상품을 등록하여 주세요</div>
+          <>
+            <div>새로운 기본 상품을 등록하여 주세요</div>
+            <br />
+            <form onSubmit={registProductBasic}>
+                <label htmlFor="name">상품명</label>
+                <input type="text" id="name" />
+                <br />
+                <label htmlFor="detail">디테일</label>
+                <input type="text" id="detail" />
+                <br />
+                <label htmlFor="brand">브랜드</label>
+                <input type="text" id="brand" />
+                <br />
+                <label htmlFor="category">카테고리</label>
+                <input type="text" id="category" />
+                <br />
+                <label htmlFor="imgFile">이미지</label>
+                <input type="file" id="imgFile" />
+                <br />
+                <button type="submit">기본 상품 등록하기</button>
+              </form>
+              <br />
+            </>
         )}
       </ItemBasicSubCon>
     </ItemBasicCon>
