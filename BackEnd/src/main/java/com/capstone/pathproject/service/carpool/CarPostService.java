@@ -41,6 +41,7 @@ public class CarPostService {
                 .stime(carPostDTO.getStime())
                 .startLongitude(carPostDTO.getStartLongitude())
                 .startLatitude(carPostDTO.getStartLatitude())
+                .local(carPostDTO.getLocal())
                 .build();
         carPostRepository.save(result.toEntity());
         return Message.<CarPostDTO>createMessage()

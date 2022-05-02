@@ -10,6 +10,15 @@ function CarPoolPresenter(props) {
     return (
         <div className="CarPool">
            <CommuSubCon>
+               <button>서울</button>
+               <button>서울</button>
+               <button>서울</button>
+               <button>서울</button>
+               <button>서울</button>
+               <button>서울</button>
+               <button>서울</button>
+               <button>서울</button>
+               <button>서울</button>
                <button><Link to={{pathname : '/carpool/add'}}>등록하기</Link></button>
            </CommuSubCon>
         </div>
