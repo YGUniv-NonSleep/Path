@@ -6,9 +6,8 @@ import com.capstone.pathproject.domain.carpool.Cars;
 import com.capstone.pathproject.domain.member.Member;
 import lombok.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @ToString
 @Getter
@@ -26,12 +25,13 @@ public class CarPostDTO{
     private String startLatitude;
     private String arriveLongitude;
     private String arriveLatitude;
-    private LocalDateTime stime;
+    private Time stime;
     private String photoName;
+    private String local;
 
     @Builder(builderMethodName = "createCarPostDTO")
     public CarPostDTO(Long id, Member member, Cars cars ,String title, String content, LocalDate sdate, LocalDate edate, int recruit,
-                      String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, LocalDateTime stime, String photoName){
+                      String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, Time stime, String photoName, String local){
 
         this.id = id;
         this.member = member;
@@ -45,8 +45,9 @@ public class CarPostDTO{
         this.startLatitude = startLatitude;
         this.arriveLongitude = arriveLongitude;
         this.arriveLatitude = arriveLatitude;
-        this.stime = LocalDateTime.now();
+        this.stime = stime;
         this.photoName = photoName;
+        this.local = local;
     }
     public CarPost toEntity(){
         return CarPost.createCarPost()
@@ -64,6 +65,7 @@ public class CarPostDTO{
                 .arriveLatitude(arriveLatitude)
                 .stime(stime)
                 .photoName(photoName)
+                .local(local)
                 .build();
 
     }

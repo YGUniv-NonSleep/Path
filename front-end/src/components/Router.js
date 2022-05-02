@@ -13,6 +13,7 @@ import CommunityContents from '../routes/Community/CommunityContents';
 import CommunityAdd from '../routes/Community/CommunityAdd';
 
 import CarPool from '../routes/CarPool';
+import CarPoolAdd from '../routes/CarPool/CarPoolAdd';
 
 import { MemberContainer as Member } from '../routes/Member';
 import { LoginContainer as Login } from '../routes/Member';
@@ -93,6 +94,7 @@ function Router() {
       </Routes>
       <Routes>
         <Route path="/carpool" element={<CarPool />} />
+        <Route path="/carpool/add" element={<CarPoolAdd/>} />
       </Routes>
     </BrowserRouter>
   );

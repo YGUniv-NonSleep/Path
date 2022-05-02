@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -62,15 +63,17 @@ public class CarPost {
     private String arriveLatitude;
 
     @Column(name = "CARPOST_STIME")
-    private LocalDateTime stime;
+    private Time stime;
 
     @Column(name = "CARPOST_PHOTO_NAME")
     private String photoName;
 
+    @Column(name = "CARPOST_LOCAL")
+    private String local;
 
     @Builder(builderMethodName = "createCarPost")
     public CarPost(Long id, Member member,Cars cars ,String title, String content, LocalDate sdate, LocalDate edate,
-                   int recruit, String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, LocalDateTime stime, String photoName){
+                   int recruit, String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, Time stime, String photoName,String local){
 
         this.id = id;
         this.member = member;
@@ -84,8 +87,9 @@ public class CarPost {
         this.startLatitude = startLatitude;
         this.arriveLongitude = arriveLongitude;
         this.arriveLatitude = arriveLatitude;
-        this.stime = LocalDateTime.now();
+        this.stime = stime;
         this.photoName = photoName;
+        this.local = local;
     }
 
     public CarPostDTO toDTO(){
@@ -104,6 +108,7 @@ public class CarPost {
                 .arriveLatitude(this.arriveLatitude)
                 .stime(this.stime)
                 .photoName(this.photoName)
+                .local(this.local)
                 .build();
     }
 
