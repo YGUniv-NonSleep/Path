@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class FileUtil {
         return storeFileResult;
     }
 
-    private String storeFile(MultipartFile multipartFile) {
+    public String storeFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) return null;
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
@@ -47,6 +48,8 @@ public class FileUtil {
     }
 
     private String createStoreFileName(String originalFilename) {
-        return LocalDateTime.now() + originalFilename;
+
+
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + originalFilename;
     }
 }

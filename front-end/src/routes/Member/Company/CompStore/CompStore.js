@@ -29,6 +29,11 @@ function CompStore(props) {
                         <div>업체 이메일: {item.mail}</div>
                         <div>업체명: {item.name}</div>
                         <div>업체 전화번호: {item.phone}</div>
+                        <img
+                          src={`${process.env.REACT_APP_SPRING_API}/api/image/${item.thumbnail}`}
+                          width={"100px"}
+                          height={"100px"}
+                        /><br/>
                         <Link to={`${item.id}`}>
                             <button>업체 세부정보</button>
                         </Link>

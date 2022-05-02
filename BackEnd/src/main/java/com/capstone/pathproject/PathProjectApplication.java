@@ -26,5 +26,4 @@ public class PathProjectApplication {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return () -> Optional.of(principalDetails.getMember().getLoginId());
     }
-
 }
