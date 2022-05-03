@@ -15,8 +15,8 @@ import java.util.Optional;
 
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -72,7 +72,6 @@ public class MemberService {
                     .message("회원이 있습니다.")
                     .body(memberDTO).build();
         }
-
     }
 
     // 회원 수정
@@ -122,10 +121,10 @@ public class MemberService {
                     .message("이름 또는 이메일을 입력하지 않았습니다.").build();
         }
         Optional<Member> member = memberRepository.findByNameAndMail(memberDTO.getName(), memberDTO.getMail());
-        return ValidateOptionalMember(member);
+        return ForgotValidateOptionalMember(member);
     }
 
-    public Message<Object> ValidateOptionalMember(Optional<Member> member) {
+    public Message<Object> ForgotValidateOptionalMember(Optional<Member> member) {
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
             return Message.createMessage()
@@ -151,7 +150,7 @@ public class MemberService {
                     .message("아이디 또는 비밀번호를 입력하지 않았습니다.").build();
         }
         Optional<Member> member = memberRepository.findByLoginIdAndPhone(memberDTO.getLoginId(), memberDTO.getPhone());
-        return ValidateOptionalMember(member);
+        return ForgotValidateOptionalMember(member);
     }
 
     // 비밀번호 재설정

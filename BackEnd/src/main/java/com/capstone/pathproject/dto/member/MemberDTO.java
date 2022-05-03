@@ -46,8 +46,8 @@ public class MemberDTO {
     @NotNull(message = "성별이 입력되지 않았습니다")
     private memberGender gender;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
     private String account;

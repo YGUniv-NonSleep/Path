@@ -8,11 +8,13 @@ import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.security.auth.jwt.JwtProperties;
 import com.capstone.pathproject.util.CookieUtil;
 import com.capstone.pathproject.service.member.MemberService;
+import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -23,7 +25,9 @@ import javax.validation.Valid;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final ResponseUtil responseUtil;
     private final CookieUtil cookieUtil;
+
 
     @PostMapping("/token")
     public ResponseEntity<Message<Object>> tokenReissue(@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -54,45 +58,46 @@ public class MemberApiController {
     }
 
     @PostMapping("/member")
-    public ResponseEntity<Message<String>> signup(@Valid @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<Message<?>> signup(@Valid @RequestBody MemberDTO memberDTO) {
         System.out.println("memberDTO = " + memberDTO);
         Message<String> message = memberService.signup(memberDTO);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return responseUtil.createResponseEntity(message);
     }
 
+
     @GetMapping("/member/{memberId}")
-    public ResponseEntity<Message<MemberDTO>> getMember(@PathVariable("memberId") Long memberId) {
+    public ResponseEntity<Message<?>> getMember(@PathVariable("memberId") Long memberId) {
         Message<MemberDTO> message = memberService.getMemberInfo(memberId);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PatchMapping("/member/{memberId}")
-    public ResponseEntity<Message<MemberDTO>> updateMember(@PathVariable("memberId") Long id, @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<Message<?>> updateMember(@PathVariable("memberId") Long id, @RequestBody MemberDTO memberDTO) {
         Message<MemberDTO> message = memberService.updateMember(id, memberDTO);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return responseUtil.createResponseEntity(message);
     }
 
     @DeleteMapping("/member/{memberId}")
-    public ResponseEntity<Message<MemberDTO>> deleteMember(@PathVariable("memberId") Long id) {
+    public ResponseEntity<Message<?>> deleteMember(@PathVariable("memberId") Long id) {
         Message<MemberDTO> message = memberService.deleteMember(id);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PostMapping("/forgot/loginid")
-    public ResponseEntity<Message<Object>> forgotLoginId(@RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<Message<?>> forgotLoginId(@RequestBody MemberDTO memberDTO) {
         Message<Object> message = memberService.forgotLoginId(memberDTO);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PostMapping("/forgot/password")
-    public ResponseEntity<Message<Object>> forgotPassword(@RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<Message<?>> forgotPassword(@RequestBody MemberDTO memberDTO) {
         Message<Object> message = memberService.forgotPassword(memberDTO);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PatchMapping("/forgot/password/{memberId}")
-    public ResponseEntity<Message<Object>> resetPassword(@PathVariable("memberId") Long id, @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<Message<?>> resetPassword(@PathVariable("memberId") Long id, @RequestBody MemberDTO memberDTO) {
         Message<Object> message = memberService.resetPassword(id, memberDTO);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return responseUtil.createResponseEntity(message);
     }
 }
