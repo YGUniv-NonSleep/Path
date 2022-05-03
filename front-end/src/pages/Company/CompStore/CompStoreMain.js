@@ -19,12 +19,13 @@ function CompStoreMain() {
   const [myStore, setMyStore] = useState([]);
 
   function getMyStore() {
-    console.log(myStore);
+    // console.log(myStore);
     axios
       .get(process.env.REACT_APP_SPRING_API + "/api/company/myStore")
       .then((res) => {
         // console.log(res.data.body);
-        setMyStore(res.data.body);
+        // setMyStore(res.data.body);
+        setMyStore((cur)=>[...cur, res.data.body])
       })
       .catch((err) => {
         console.log(err);
@@ -60,6 +61,11 @@ console.log(myStore)
                       <div>업체 이메일: {item.mail}</div>
                       <div>업체명: {item.name}</div>
                       <div>업체 전화번호: {item.phone}</div>
+                      <img
+                        src={`${process.env.REACT_APP_SPRING_API}/api/image/${item.thumbnail}`}
+                        width={"100px"}
+                        height={"100px"}
+                      /><br/>
                       <Link to={`${item.id}`}>
                         <button>업체 세부정보</button>
                       </Link>
