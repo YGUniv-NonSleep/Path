@@ -60,23 +60,19 @@ function SearchIdContainer({ history }) {
       })
       .then((res) => {
         console.log(res);
-        if (res.data == '') {
-          alert('회원이 존재하지 않습니다.');
-        } else {
-          alert(
-            res.data.message + '\n' + '회원 아이디 : ' + res.data.body.loginId
-          );
-          goBackPage();
-        }
+        alert(
+          res.data.message + '\n' + '회원 아이디 : ' + res.data.body.loginId
+        );
+        goBackPage();
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
+        alert(err.response.data.message);
       });
   };
 
   return (
     <SearchId
-      loading={loading}
       handleSubmit={handleSubmit}
       handleInput={handleInput}
       errorList={errorList}
