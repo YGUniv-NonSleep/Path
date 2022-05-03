@@ -59,16 +59,13 @@ function LoginContainer() {
       })
       .then((res) => {
         console.log(res);
-        if (res.headers.authorization == null && res.data == '') {
-          alert('존재하지 않습니다.');
-          return;
-        }
-        console.log(res);
         console.log(res.headers.authorization);
         onLoginSuccess(res);
       })
       .catch((err) => {
         console.log(err);
+        console.log(err.response.data);
+        alert(err.response.data.message);
       });
   };
 

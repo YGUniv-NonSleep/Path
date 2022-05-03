@@ -1,6 +1,7 @@
 package com.capstone.pathproject.security.filter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
 import javax.servlet.Filter;
@@ -14,6 +15,7 @@ import java.util.UUID;
 // doFilter() : 고객 요청이 올때마다 해당 메서드 호출
 // 모든 요청에 대해 로그를 남기는 필터
 @Slf4j
+@Order(0)
 public class LogFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
