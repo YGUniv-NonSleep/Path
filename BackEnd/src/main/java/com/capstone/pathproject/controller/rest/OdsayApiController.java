@@ -6,13 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +24,11 @@ public class OdsayApiController {
     private String apiKey;
 
     // 대중교통 길찾기
-    @GetMapping("/path/trans")
-    public List<String> TransPath() {
+    @GetMapping("/path")
+    public List<String> path(@RequestParam String sx,
+                             @RequestParam String sy,
+                             @RequestParam String ex,
+                             @RequestParam String ey) {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode path = null;
         List<String> mapObjs = new ArrayList<>();
@@ -37,11 +36,10 @@ public class OdsayApiController {
         Mono<String> mono = odsayWebClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/v1/api/searchPubTransPathT")
                         .queryParam("apiKey", apiKey)
-                        .queryParam("lang", "0")
-                        .queryParam("SX", "128.62269785225394")
-                        .queryParam("SY", "35.89624784236353")
-                        .queryParam("EX", "128.628393775388")
-                        .queryParam("EY", "35.8793239931795")
+                        .queryParam("SX", sx)
+                        .queryParam("SY", sy)
+                        .queryParam("EX", ex)
+                        .queryParam("EY", ey)
                         .build())
                 .exchangeToMono(clientResponse -> {
                     return clientResponse.bodyToMono(String.class);
