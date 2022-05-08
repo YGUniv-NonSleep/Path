@@ -124,20 +124,28 @@ function PathContainer() {
   async function pathSearch(idx) {
     if (idx == undefined) idx = 0;
 
-    let pathWay = await PathApi.getDirection({
-      sx: way[0].x,
-      sy: way[0].y,
-      ex: way[1].x,
-      ey: way[1].y,
-    }).catch((error) => console.log(error));
+    // let pathWay = await PathApi.getDirection({
+    //   sx: way[0].x,
+    //   sy: way[0].y,
+    //   ex: way[1].x,
+    //   ey: way[1].y,
+    // }).catch((error) => console.log(error));
 
     // console.log(pathWay)
 
     // pathWay 다양한 경로
-    const mapObj = pathWay.path.map((mo) => {
-      return mo.info.mapObj;
-    });
+    // const mapObj = pathWay.path.map((mo) => {
+    //   return mo.info.mapObj;
+    // });
     // console.log(mapObj)
+
+    // ===== 서버에서 mapObj 가져오기 ===== //
+    const mapObj = await PathApi.getTransPath({
+      sx: way[0].x,
+      sy: way[0].y,
+      ex: way[1].x,
+      ey: way[1].y,
+    });
 
     let graphicData = await PathApi.getGraphicRoute(mapObj).catch((error) =>
       console.log(error)
