@@ -15,21 +15,18 @@ import java.net.MalformedURLException;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UtilApiController {
+
     private final FileUtil fileUtil;
 
     @ResponseBody
     @GetMapping("/image/{imageName}")
     public Resource downloadImage(@PathVariable String imageName) throws MalformedURLException {
-
         return new UrlResource("file:" + fileUtil.getFullPath(imageName));
     }
 
     @PostMapping("/image")
     public ResponseEntity<String> saveImage(@RequestParam("multipartFile") MultipartFile multipartFile){
-
         String fileName = fileUtil.storeFile(multipartFile);
         return new ResponseEntity<>(fileName, HttpStatus.OK);
     }
-
-
 }
