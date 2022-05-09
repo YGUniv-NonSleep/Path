@@ -117,12 +117,12 @@ function ItemBasicMain() {
     axios
       .patch(
         process.env.REACT_APP_SPRING_API + "/api/product/basic",
-        data,
+        formData,
         {
           //withCredentials: true,
-          // headers: {
-          //   "Content-Type": `multipart/form-data`,
-          // },
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
         }
       )
       .then((res) => {

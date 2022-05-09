@@ -5,42 +5,16 @@ import {
 } from 'react-router-dom';
 
 import PageNotFound from './PageNotFound';
-
-import Path from '../pages/Path/PathMain';
-import Oder from '../pages/Oder/OderMain';
-//import Mobility from '../pages/Mobility/MobilityMain';
-
-import Community from '../pages/Community/CommunityMain';
-import CommunityContents from '../pages/Community/CommunityContents';
-
-import CarPool from '../pages/CarPool/CarPoolMain';
-
-import { MemberContainer as Member } from '../pages/Member';
-import { LoginContainer as Login } from '../pages/Member';
-import SearchId from '../pages/Member/SearchId/SearchIdMain';
-import SearchPw from '../pages/Member/SearchPw';
-import { SignUpContainer as SignUp } from '../pages/Member';
-import { UpdateMemContainer as UpdateMem } from '../pages/Member';
-
-import Company from '../pages/Company/CompanyMain';
-import CompStore from '../pages/Company/CompStore/CompStoreMain';
-import CompDetail from '../pages/Company/CompDetail/CompDetailMain';
-import CompCreate from '../pages/Company/CompCreate/CompCreateMain';
-import ItemBasicMain from '../pages/Company/ItemBasic/ItemBasicMain';
-
-import CompManage from '../pages/Company/CompManage/CompManageMain';
-import Items from '../pages/Company/CompManage/Items/ItemsMain';
-import ItemEdit from '../pages/Company/CompManage/ItemEdit/ItemEditMain';
-import CompEdit from '../pages/Company/CompManage/CompEdit/CompEditMain';
-import Resign from '../pages/Company/CompManage/Resign/ResignMain';
-
-import Mobility from '../pages/Mobility/MobilityMain';
-import Bus from '../pages/Mobility/Bus/BusMain';
-import Subway from '../pages/Mobility/Subway/SubwayMain';
-import Scooter from '../pages/Mobility/Scooter/ScooterMain';
-import Bike from '../pages/Mobility/Bike/BikeMain';
-
 import Menubar from './Menubar';
+
+import { Path, WalkPath } from '../pages/Path';
+import { Oder } from '../pages/Oder';
+import { Bus, Subway, Scooter, Bike } from '../pages/Mobility';
+import { Community, CommunityContents, CommunityAdd } from '../pages/Community';
+import { CarPool, CarPoolAdd } from '../pages/CarPool';
+import { Company, CompStore, CompDetail, CompCreate, ItemBasic } from '../pages/Company';
+import { CompManage, CompEdit, ItemEdit, Items, Resign } from '../pages/Company/CompManage';
+import { Member, Login, SignUp, UpdateMem, SearchId, SearchPw } from '../pages/Member';
 
 // https://kyung-a.tistory.com/36
 
@@ -52,6 +26,7 @@ function Router() {
       <Routes>
         {/* 속성을 component 대신에 element */}
         <Route path="/" element={<Path />} />
+        <Route path="/walk" element={<WalkPath />} />
 
         {/* 404 rounte */}
         {/* <Route path="/*" element={<PageNotFound />} /> */}
@@ -70,7 +45,7 @@ function Router() {
           <Route path=":comId" element={<CompDetail />} />
         </Route>
         <Route path="/company/create" element={<CompCreate />} />
-        <Route path="/company/basic" element={<ItemBasicMain />} />
+        <Route path="/company/basic" element={<ItemBasic />} />
         <Route path="/company/manage/:comId" element={<CompManage />}>
           {/* 없으면 업체 등록하라고 팝업창, 마이 업체 경로 타고 들어온거 아니면 첫 번째 업체 관리로 들어옴 */}
           <Route path="items" element={<Items />}>
@@ -92,9 +67,11 @@ function Router() {
       <Routes>
         <Route path="/community" element={<Community />} />
         <Route path="/community/:postId" element={<CommunityContents />} />
+        <Route path="/community/add" element={<CommunityAdd />} />
       </Routes>
       <Routes>
         <Route path="/carpool" element={<CarPool />} />
+        <Route path="/carpool/add" element={<CarPoolAdd/>} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,8 @@
-import MemberContainer from './MemberContainer';
-import LoginContainer from './Login/LoginMain';
-import SignUpContainer from './SignUp/SignUpContainer';
-import UpdateMemContainer from './Update/UpdateMemContainer';
+import Member from './MemberMain';
+import Login from './Login/LoginMain';
+import SignUp from './SignUp/SignUpMain';
+import UpdateMem from './Update/UpdateMemMain';
+import SearchId from './SearchId/SearchIdMain';
+import SearchPw from './SearchPw/SearchPwMain';
 
-export { MemberContainer, LoginContainer, SignUpContainer, UpdateMemContainer };
+export { Member, Login, SignUp, UpdateMem, SearchId, SearchPw };
