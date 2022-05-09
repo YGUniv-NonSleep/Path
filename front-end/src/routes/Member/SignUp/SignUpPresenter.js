@@ -59,11 +59,12 @@ function SignUpPresenter(props) {
     passwordError,
     nameError,
     phoneError,
+    postIdError,
     addrError,
     addrDetailError,
+    addrExtraError,
     genderError,
     birthdayError,
-    registerError,
   } = props.errorList;
 
   const { role, gender } = props.inputValue;
@@ -201,6 +202,8 @@ function SignUpPresenter(props) {
                     onChange={props.handleInput}
                     disabled
                     defaultValue=" "
+                    error={postIdError !== '' || false}
+                    helperText={postIdError}
                   />
                   <Button
                     type="button"
@@ -221,13 +224,13 @@ function SignUpPresenter(props) {
                     onChange={props.handleInput}
                     disabled
                     defaultValue=" "
+                    error={addrError !== '' || false}
+                    helperText={addrError}
                   />
                 </Grid>
-                <FormHelperTexts>{addrError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    required
                     id="addrDetail"
                     name="addrDetail"
                     label="상세주소"
@@ -246,6 +249,8 @@ function SignUpPresenter(props) {
                     onChange={props.handleInput}
                     disabled
                     defaultValue=" "
+                    error={addrExtraError !== '' || false}
+                    helperText={addrExtraError}
                   />
                 </Grid>
                 <Grid item xs={12}>
