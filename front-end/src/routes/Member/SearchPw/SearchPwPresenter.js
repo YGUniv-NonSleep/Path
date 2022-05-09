@@ -21,7 +21,7 @@ const FormHelperTexts = styled(FormHelperText)`
 `;
 
 function SearchPw(props) {
-  const { loginIdError, phoneError, registerError } = props.errorList;
+  const { loginIdError, phoneError } = props.errorList;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -84,7 +84,6 @@ function SearchPw(props) {
               비밀번호 찾기
             </Button>
           </FormControl>
-          <FormHelperTexts>{registerError}</FormHelperTexts>
         </Box>
       </Box>
     </Container>

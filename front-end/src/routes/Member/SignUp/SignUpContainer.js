@@ -40,7 +40,10 @@ function SignUpContainer() {
   const [passwordError, setPasswordError] = useState('');
   const [nameError, setNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [postIdError, setPostIdError] = useState('');
   const [addrDetailError, setAddrDetailError] = useState('');
+  const [addrExtraError, setAddrExtraError] = useState('');
+  const [addrError, setAddrError] = useState('');
   const [genderError, setGenderError] = useState('');
   const [birthdayError, setBirthdayError] = useState('');
   const errorList = {
@@ -51,7 +54,10 @@ function SignUpContainer() {
     passwordError,
     nameError,
     phoneError,
+    postIdError,
+    addrError,
     addrDetailError,
+    addrExtraError,
     genderError,
     birthdayError,
   };
@@ -121,6 +127,16 @@ function SignUpContainer() {
         setAddrDetailError('올바른 상세주소를 입력해주세요');
       else setAddrDetailError('');
     }
+
+    if (isEmpty(addrExtra)) setAddrExtraError('주소 찾기를 해주세요');
+    else setAddrExtraError('');
+
+    if (isEmpty(addr)) setAddrError('주소 찾기를 해주세요');
+    else setAddrError('');
+
+    if (isEmpty(postId)) setPostIdError('주소 찾기를 해주세요');
+    else setPostIdError('');
+
     const genderRegex = /^[A-Z]+$/;
     if (!genderRegex.test(gender) || gender.length < 1)
       setGenderError('올바른 성별을 선택해주세요');
