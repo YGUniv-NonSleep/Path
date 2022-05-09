@@ -139,18 +139,18 @@ function PathContainer() {
     // });
     // console.log(mapObj)
 
-    // ===== 서버에서 mapObj 가져오기 ===== //
-    const mapObj = await PathApi.getTransPath({
+    // ===== 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 ===== //
+    const graphicData = await PathApi.getTransPath({
       sx: way[0].x,
       sy: way[0].y,
       ex: way[1].x,
       ey: way[1].y,
     });
 
-    let graphicData = await PathApi.getGraphicRoute(mapObj).catch((error) =>
-      console.log(error)
-    );
-    console.log('===');
+    // let graphicData = await PathApi.getGraphicRoute(mapObj).catch((error) =>
+    // console.log(error)
+    // );
+    console.log('서버에서 여러 경로 노선 그래픽 데이터 가져옴');
     console.log(graphicData);
 
     const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);

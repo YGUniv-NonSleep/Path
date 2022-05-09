@@ -15,7 +15,6 @@ export const PathApi = {
         { withCredentials: true }
       )
       .catch((err) => console.log(err));
-
     return response.data;
   },
 
@@ -51,8 +50,6 @@ export const PathApi = {
     // })
     let resList = [];
     // console.log(mapObj)
-    console.log('graphic 경로 그리기 시작');
-    console.log(mapObj.length);
     for (var i = 0; i < mapObj.length; i++) {
       const response = await odsayApi
         .get(`/loadLane?lang=0&mapObject=0:0@${mapObj[i]}&apiKey=${key}`)
