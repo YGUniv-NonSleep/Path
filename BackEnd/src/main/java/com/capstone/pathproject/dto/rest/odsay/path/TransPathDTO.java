@@ -17,11 +17,7 @@ public class TransPathDTO {
     @Getter
     @ToString
     @NoArgsConstructor
-    private static class Result {
+    public static class Result {
         List<Path> path = new ArrayList<>();
-    }
-
-    public List<Path> getPath() {
-        return result.getPath();
     }
 }

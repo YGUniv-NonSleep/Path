@@ -32,7 +32,7 @@ public class OdsayService {
     public List<Map<String, Object>> TransPath(String sx, String sy, String ex, String ey) throws JsonProcessingException {
         ObjectMapper mapper = getObjectMapper();
         TransPathDTO transPathDTO = mapper.readValue(findTransPath(sx, sy, ex, ey), TransPathDTO.class);
-        List<Path> paths = transPathDTO.getPath();
+        List<Path> paths = transPathDTO.getResult().getPath();
         Collections.sort(paths);
         List<Map<String, Object>> results = new ArrayList<>();
         for (Path path : paths) {
@@ -46,6 +46,7 @@ public class OdsayService {
             map.put("subwayTransitCount", path.getInfo().getSubwayTransitCount());
             map.put("routeGraphic", routeGraphicDTO);
             results.add(map);
+
         }
         return results;
     }
