@@ -29,7 +29,6 @@ public class OdsayService {
     @Value("${api.odsay}")
     private String apiKey;
 
-    //대중교통 길찾기
     public List<Map<String, Object>> TransPath(String sx, String sy, String ex, String ey) throws JsonProcessingException {
         ObjectMapper mapper = getObjectMapper();
         TransPathDTO transPathDTO = mapper.readValue(findTransPath(sx, sy, ex, ey), TransPathDTO.class);
