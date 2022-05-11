@@ -1,7 +1,13 @@
 package com.capstone.pathproject.service.rest;
 
+import com.capstone.pathproject.dto.rest.odsay.graph.GraphPos;
+import com.capstone.pathproject.dto.rest.odsay.graph.RouteGraphicDTO;
+import com.capstone.pathproject.dto.rest.odsay.path.Path;
+import com.capstone.pathproject.dto.rest.odsay.path.SubPath;
+import com.capstone.pathproject.dto.rest.odsay.path.TransPathDTO;
+import com.capstone.pathproject.dto.rest.tmap.path.WalkPathDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -19,12 +24,39 @@ import java.util.List;
 public class OdsayService {
 
     private final WebClient odsayWebClient;
+    private final TmapService tmapService;
 
     @Value("${api.odsay}")
     private String apiKey;
 
-    //대중교통 길찾기
-    public List<JsonNode> TransPath(String sx, String sy, String ex, String ey) {
+    public List<Map<String, Object>> TransPath(String sx, String sy, String ex, String ey) throws JsonProcessingException {
+        ObjectMapper mapper = getObjectMapper();
+        TransPathDTO transPathDTO = mapper.readValue(findTransPath(sx, sy, ex, ey), TransPathDTO.class);
+        List<Path> paths = transPathDTO.getPath();
+        Collections.sort(paths);
+        List<Map<String, Object>> results = new ArrayList<>();
+        for (Path path : paths) {
+            Map<String, Object> map = new HashMap<>();
+            String jsonRouteGraphic = routeGraphicData(path.getInfo().getMapObj());
+            RouteGraphicDTO routeGraphicDTO = mapper.readValue(jsonRouteGraphic, RouteGraphicDTO.class);
+            map.put("totalTime", path.getInfo().getTotalTime());
+            map.put("payment", path.getInfo().getPayment());
+            map.put("pathType", path.getPathType());
+            map.put("busTransitCount", path.getInfo().getBusTransitCount());
+            map.put("subwayTransitCount", path.getInfo().getSubwayTransitCount());
+            map.put("routeGraphic", routeGraphicDTO);
+            results.add(map);
+        }
+        return results;
+    }
+
+    public ObjectMapper getObjectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return mapper;
+    }
+
+    public String findTransPath(String sx, String sy, String ex, String ey) {
         Mono<String> mono = odsayWebClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/v1/api/searchPubTransPathT")
                         .queryParam("apiKey", apiKey)
@@ -36,46 +68,17 @@ public class OdsayService {
                 .exchangeToMono(clientResponse -> {
                     return clientResponse.bodyToMono(String.class);
                 });
-        String jsonPath = mono.block();
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode path = null;
-        try {
-            path = mapper.readTree(jsonPath).get("result").get("path");
-        } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException : json 읽기 실패", e);
-        }
-        if (path == null) return null;
-        List<String> mapObjs = new ArrayList<>();
-        for (int i = 0; i < path.size(); i++) {
-            String mapObj = path.get(i).get("info").get("mapObj").asText();
-            System.out.println("mapObj = " + mapObj);
-            mapObjs.add(mapObj);
-        }
-        return routeGraphicData(mapObjs);
+        return mono.block();
     }
 
-    public List<JsonNode> routeGraphicData(List<String> mapObjs) {
-        log.info("노선 그래픽 데이터 검색 시작 : ODsay API");
-        List<JsonNode> loadLanes = new ArrayList<>();
-        for (String mapObj : mapObjs) {
-            Mono<String> mono = odsayWebClient.get()
-                    .uri(uriBuilder ->
-                            uriBuilder.path("/v1/api/loadLane")
-                                    .queryParam("apiKey", apiKey)
-                                    .queryParam("mapObject", "0:0@" + mapObj)
-                                    .build())
-                    .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
-            String json = mono.block();
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = null;
-            try {
-                jsonNode = mapper.readTree(json).get("result");
-            } catch (JsonProcessingException e) {
-                log.error("JsonProcessingException : json 변환 실패", e);
-            }
-            loadLanes.add(jsonNode);
-        }
-        return loadLanes;
+    public String routeGraphicData(String mapObj) throws JsonProcessingException {
+        Mono<String> mono = odsayWebClient.get()
+                .uri(uriBuilder ->
+                        uriBuilder.path("/v1/api/loadLane")
+                                .queryParam("apiKey", apiKey)
+                                .queryParam("mapObject", "0:0@" + mapObj)
+                                .build())
+                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
+        return mono.block();
     }
-
 }
