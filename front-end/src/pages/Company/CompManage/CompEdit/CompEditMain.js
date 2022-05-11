@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import useLoading from '../../../../hooks/useLoading';
+import useCompEdit from '../hooks/useCompEdit';
 
 const CompEditCon = styled.div`
     width: 390px;
@@ -13,12 +14,7 @@ const CompEditSubCon = styled.div`
 `;
 
 function CompEditMain() {
-    // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
-    const [loading, setLoading] = useState(false);
-    
-    useEffect(() => {
-        setLoading((current) => !current);
-    }, []);
+    const { loading } = useLoading();
 
     return (
         <CompEditCon>

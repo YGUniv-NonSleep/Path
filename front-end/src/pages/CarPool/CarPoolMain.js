@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import useLoading from '../../hooks/useLoading';
 
 const CommuCon = styled.div`
   width: 390px;
@@ -13,23 +13,14 @@ const CommuSubCon = styled.div`
 `;
 
 function CarPoolMain() {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-  }, []);
+  const { loading } = useLoading();
+  //console.log(loading)
 
   return (
     <div className="CarPool">
       <CommuCon>
         <CommuSubCon className="carPoolPresenter">
           {loading ? <h2>카풀 서비스</h2> : <h2>로드 중...</h2>}
-          <button>서울</button>
-          <button>서울</button>
-          <button>서울</button>
-          <button>서울</button>
-          <button>서울</button>
-          <button>서울</button>
           <button>서울</button>
           <button>서울</button>
           <button>서울</button>

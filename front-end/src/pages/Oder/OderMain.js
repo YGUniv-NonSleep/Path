@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import useLoading from '../../hooks/useLoading';
+import useOderMain from './hooks/useOderMain';
 
 const OderCon = styled.div`
     width: 390px;
@@ -12,11 +14,7 @@ const OderSubCon = styled.div`
 `;
 
 function OderMain() {
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        setLoading((current) => !current);
-    }, []);
+    const { loading } = useLoading()
 
     return (
         <div className="Oder">

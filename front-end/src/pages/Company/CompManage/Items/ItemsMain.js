@@ -1,8 +1,9 @@
-import axios from "axios";
-import { Fragment, useEffect, useState } from "react";
-import { Link, Outlet, useOutletContext } from "react-router-dom";
+import { Fragment } from "react";
+import { Link, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import useLoading from '../../../../hooks/useLoading';
+import useCompItems from "../hooks/useCompItems";
 
 const ItemCon = styled.div`
   width: 390px;
@@ -14,72 +15,11 @@ const ItemSubCon = styled.div`
 `;
 
 function ItemsMain() {
-  // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
-  const [loading, setLoading] = useState(false);
-  const [myItems, setMyItems] = useState([]);
-
-  const companyId = useOutletContext();
-
-  // 가게 상품 생성
-  function registProduct() {
-    const data = {
-      price: 1500,
-      exposure: false,
-      discount: 0,
-      created: new Date(),
-      stock: 10,
-      company: {
-        id: companyId,
-      },
-      prodBasic: {
-        id: 1,
-      },
-      optionList: [
-        {
-          name: "온도",
-          detailOptionList: [
-            {
-              name: "뜨거움",
-              price: 0,
-            },
-          ],
-        },
-      ],
-    };
-
-    axios
-      .post(process.env.REACT_APP_SPRING_API + "/api/product/", data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  // 가게 상품 읽기
-  function getProduct() {
-    axios
-      .get(process.env.REACT_APP_SPRING_API + `/api/product/comp/${companyId}`)
-      .then((res) => {
-        console.log(res);
-        setMyItems(res.data.body);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  // 가게 상품 상세 읽기
-  // 한 상품의 상세 정보를 얻어서 모달창에 넘겨주기
-
-  useEffect(() => {
-    setLoading(true);
-  }, []);
-
-  useEffect(() => {
-    getProduct();
-  }, []);
+  const { loading } = useLoading();
+  const { 
+    myItems, 
+    registProduct
+  } = useCompItems()
 
   return (
     <ItemCon>

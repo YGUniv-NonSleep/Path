@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { useParams, Link, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import useLoading from '../../../hooks/useLoading'
 
 const CompManageCon = styled.div`
     width: 390px;
@@ -13,14 +13,8 @@ const CompManageSubCon = styled.div`
 `;
 
 function CompManageMain() {
-    // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
-    const { comId } = useParams()
-    const [loading, setLoading] = useState(false);
-    
-    useEffect(() => {
-        setLoading(true);
-        // console.log(comId)
-    }, []);
+    const { loading } = useLoading();
+    const { comId } = useParams();
 
     return (
         <CompManageCon>

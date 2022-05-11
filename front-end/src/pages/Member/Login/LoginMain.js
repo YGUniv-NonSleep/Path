@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+
 import {
   Avatar,
   Button,
@@ -19,6 +19,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
@@ -101,16 +102,13 @@ function LoginMain() {
       })
       .then((res) => {
         console.log(res);
-        if (res.headers.authorization == null && res.data == '') {
-          alert('존재하지 않습니다.');
-          return;
-        }
-        console.log(res);
         console.log(res.headers.authorization);
         onLoginSuccess(res);
       })
       .catch((err) => {
         console.log(err);
+        console.log(err.response.data);
+        alert(err.response.data.message);
       });
   };
 

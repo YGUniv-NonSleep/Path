@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import useLoading from '../../hooks/useLoading';
 
 const CompCon = styled.div`
     width: 390px;
@@ -14,16 +13,12 @@ const CompSubCon = styled.div`
 
 function CompanyMain() {
     // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        setLoading((current) => !current);
-    }, []);
+    const { loading } = useLoading();
 
     return (
         <CompCon>
             <CompSubCon>
-            { loading ? <p>업체 화면 나왔다</p> : <h2>로드 중...</h2> }
+            { loading ? <p>업체 소개 화면 나왔다</p> : <h2>로드 중...</h2> }
             </CompSubCon>
         </CompCon>
     )

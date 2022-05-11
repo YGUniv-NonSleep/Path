@@ -1,8 +1,9 @@
-import axios from "axios";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import { Outlet, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import useLoading from '../../../hooks/useLoading';
+import useCompStore from "../hooks/useCompStore";
 
 const CompStoreCon = styled.div`
   width: 390px;
@@ -14,37 +15,9 @@ const CompStoreSubCon = styled.div`
 `;
 
 function CompStoreMain() {
-  // 여기서 api 같은거 가져와서 MemberPresenter로 props 넘겨줌.
-  const [loading, setLoading] = useState(false);
-  const [myStore, setMyStore] = useState([]);
-
-  function getMyStore() {
-    // console.log(myStore);
-    axios
-      .get(process.env.REACT_APP_SPRING_API + "/api/company/myStore")
-      .then((res) => {
-        // console.log(res.data.body);
-        // setMyStore(res.data.body);
-        setMyStore((cur)=>[...cur, res.data.body])
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  useEffect(() => {
-    setLoading(true);
-  }, []);
-
-  useEffect(() => {
-    getMyStore();
-    return () => {
-      setMyStore([]); // unmount
-    };
-  }, []);
-
-console.log(myStore)
-
+  const { loading } = useLoading();
+  const { myStore } = useCompStore();
+  
   return (
     <CompStoreCon>
       <CompStoreSubCon>
