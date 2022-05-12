@@ -20,8 +20,8 @@ public class OdsayConfiguration {
         return WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .baseUrl("https://api.odsay.com")
-                .defaultHeader("Origin", "http://localhost:8080")
-                .defaultHeader("Referer", "http://localhost:8080")
+                .defaultHeader("Origin", "https://localhost:8080")
+                .defaultHeader("Referer", "https://localhost:8080")
                 .build();
     }
 }

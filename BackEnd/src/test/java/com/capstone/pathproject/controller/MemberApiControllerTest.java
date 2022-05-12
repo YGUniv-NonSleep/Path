@@ -2,9 +2,8 @@ package com.capstone.pathproject.controller;
 
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
-import com.capstone.pathproject.domain.member.memberGender;
+import com.capstone.pathproject.domain.member.MemberGender;
 import com.capstone.pathproject.dto.member.MemberDTO;
-import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.service.member.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -50,7 +47,7 @@ class MemberApiControllerTest {
                 .addr("대구시 동구 산격로")
                 .addrDetail("1111")
                 .addrExtra("산격동")
-                .gender(memberGender.MALE)
+                .gender(MemberGender.MALE)
                 .birthday(LocalDate.parse("2000-01-01"))
                 .account("계좌")
                 .score(100)
@@ -69,7 +66,7 @@ class MemberApiControllerTest {
                 .addr("대구시 동구 산격로")
                 .addrDetail("1111")
                 .addrExtra("산격동")
-                .gender(memberGender.MALE)
+                .gender(MemberGender.MALE)
                 .birthday(LocalDate.parse("2000-01-01"))
                 .account("계좌")
                 .score(100)

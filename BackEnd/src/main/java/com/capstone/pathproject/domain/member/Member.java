@@ -61,7 +61,7 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "MEM_GENDER")
-    private memberGender gender;
+    private MemberGender gender;
 
     @Column(name = "MEM_BIRTH")
     private LocalDate birthday;
@@ -73,7 +73,7 @@ public class Member extends BaseTimeEntity {
     private int score;
 
     @Builder(builderMethodName = "createMember")
-    public Member(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
+    public Member(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, MemberGender gender, LocalDate birthday, String account, int score) {
         this.id = id;
         this.role = role;
         this.loginId = loginId;
