@@ -1,7 +1,7 @@
 package com.capstone.pathproject.domain.member;
 
 import com.capstone.pathproject.domain.BaseTimeEntity;
-import com.capstone.pathproject.dto.member.MemberDTO;
+import com.capstone.pathproject.dto.member.SignupFormDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -91,22 +91,22 @@ public class Member extends BaseTimeEntity {
         this.score = score;
     }
 
-    public MemberDTO toDTO() {
-        return MemberDTO.createMemberDTO()
-                .id(id)
-                .role(role)
-                .loginId(loginId)
-                .password(password)
-                .mail(mail)
-                .name(name)
-                .phone(phone)
-                .addr(addr)
-                .addrDetail(addrDetail)
-                .gender(gender)
-                .birthday(birthday)
-                .account(account)
-                .score(score)
-                .build();
+    @Builder(builderMethodName = "signup")
+    public Member(SignupFormDto signupFormDto) {
+        this.role = signupFormDto.getRole();
+        this.loginId = signupFormDto.getLoginId();
+        this.password = signupFormDto.getPassword();
+        this.mail = signupFormDto.getMail();
+        this.name = signupFormDto.getName();
+        this.phone = signupFormDto.getPhone();
+        this.postId = signupFormDto.getPostId();
+        this.addr = signupFormDto.getAddr();
+        this.addrDetail = signupFormDto.getAddrDetail();
+        this.addrExtra = signupFormDto.getAddrExtra();
+        this.gender = signupFormDto.getGender();
+        this.birthday = signupFormDto.getBirthday();
+        this.account = "";
+        this.score = 100;
     }
 
     public void updateMail(String mail) {
@@ -117,6 +117,10 @@ public class Member extends BaseTimeEntity {
         this.phone = phone;
     }
 
+    public void updatePost(int postId) {
+        this.postId = postId;
+    }
+
     public void updateAddr(String addr) {
         this.addr = addr;
     }
@@ -125,8 +129,13 @@ public class Member extends BaseTimeEntity {
         this.addrDetail = addrDetail;
     }
 
+    public void updateAddrExtra(String addrExtra) {
+        this.addrExtra = addrExtra;
+    }
+
     public void updateEncodePassword(String encodePassword) {
         this.password = encodePassword;
     }
+
 
 }

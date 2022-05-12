@@ -3,7 +3,7 @@ package com.capstone.pathproject.controller;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.domain.member.MemberGender;
-import com.capstone.pathproject.dto.member.MemberDTO;
+import com.capstone.pathproject.dto.member.MemberDto;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.service.member.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,11 +54,9 @@ class MemberApiControllerTest {
                 .build();
     }
 
-    private MemberDTO setAllMemberDTO() {
-        return MemberDTO.createMemberDTO()
-                .role(Role.ROLE_MEMBER)
+    private MemberDto setAllMemberDTO() {
+        return MemberDto.createMemberDto()
                 .loginId("로그인아이디")
-                .password("패스워드")
                 .mail("member@naver.com")
                 .name("이름")
                 .phone("010-1234-5678")
@@ -76,7 +74,7 @@ class MemberApiControllerTest {
     @Test
     void 회원가입_null값() throws Exception {
         //given
-        MemberDTO memberDTO = MemberDTO.createMemberDTO().build();
+        MemberDto memberDTO = MemberDto.createMemberDto().build();
         String content = objectMapper.writeValueAsString(memberDTO);
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/member")
@@ -91,7 +89,7 @@ class MemberApiControllerTest {
     @Test
     void 회원가입() throws Exception {
         //given
-        MemberDTO memberDTO = setAllMemberDTO();
+        MemberDto memberDTO = setAllMemberDTO();
         String content = objectMapper.writeValueAsString(memberDTO);
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/member")

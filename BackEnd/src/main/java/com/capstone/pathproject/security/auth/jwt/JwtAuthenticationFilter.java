@@ -1,6 +1,6 @@
 package com.capstone.pathproject.security.auth.jwt;
 
-import com.capstone.pathproject.dto.member.LoginRequestDTO;
+import com.capstone.pathproject.dto.member.LoginRequestDto;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.util.ClientUtil;
 import com.capstone.pathproject.util.CookieUtil;
@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("로그인 시도 : JwtAuthenticationFilter [{}]", requestURI);
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            LoginRequestDTO loginRequestDTO = objectMapper.readValue(request.getInputStream(), LoginRequestDTO.class);
+            LoginRequestDto loginRequestDTO = objectMapper.readValue(request.getInputStream(), LoginRequestDto.class);
             log.info("UsernamePasswordAuthenticationToken 생성 [{}]", requestURI);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
             System.out.println("authenticationToken = " + authenticationToken);
