@@ -3,9 +3,8 @@ package com.capstone.pathproject.repository.member;
 import com.capstone.pathproject.domain.member.Card;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
-import com.capstone.pathproject.domain.member.memberGender;
+import com.capstone.pathproject.domain.member.MemberGender;
 import com.capstone.pathproject.dto.member.CardDTO;
-import com.capstone.pathproject.dto.member.MemberDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,7 +55,7 @@ class CardRepositoryTest {
                 .addr("대구시 동구 산격로")
                 .addrDetail("1111")
                 .addrExtra("산격동")
-                .gender(memberGender.MALE)
+                .gender(MemberGender.MALE)
                 .birthday(LocalDate.parse("2000-01-01"))
                 .account("계좌")
                 .score(100)

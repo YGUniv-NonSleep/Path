@@ -3,7 +3,7 @@ package com.capstone.pathproject.dto.member;
 
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
-import com.capstone.pathproject.domain.member.memberGender;
+import com.capstone.pathproject.domain.member.MemberGender;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -44,7 +44,7 @@ public class MemberDTO {
     private String addrExtra;
 
     @NotNull(message = "성별이 입력되지 않았습니다")
-    private memberGender gender;
+    private MemberGender gender;
 
     @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -54,7 +54,7 @@ public class MemberDTO {
     private int score;
 
     @Builder(builderMethodName = "createMemberDTO")
-    public MemberDTO(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, memberGender gender, LocalDate birthday, String account, int score) {
+    public MemberDTO(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, MemberGender gender, LocalDate birthday, String account, int score) {
         this.id = id;
         this.role = role;
         this.loginId = loginId;
