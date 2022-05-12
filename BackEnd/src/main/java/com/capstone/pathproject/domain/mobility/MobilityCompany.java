@@ -43,16 +43,14 @@ public class MobilityCompany {
     private String ceoPhone;
 
     @Column(name = "MOBIL_CO_UNLOCK_FEE")
-    private String unlockFee;
+    private int unlockFee;
 
     @Column(name = "MOBIL_CO_MINUTE_FEE")
-    private String minuteFee;
-
-    @OneToMany(mappedBy = "mobilityCompany",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Mobility> mobilities = new ArrayList<Mobility>();
+    private int minuteFee;
 
     @Builder(builderMethodName = "createMobilityCompany")
-    public MobilityCompany(String name, String companyNumber, LocalDate openDate, String mail, String ceoName, String ceoPhone, String unlockFee, String minuteFee) {
+    public MobilityCompany(Long id, String name, String companyNumber, LocalDate openDate, String mail, String ceoName, String ceoPhone, int unlockFee, int minuteFee) {
+        this.id = id;
         this.name = name;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
@@ -61,10 +59,5 @@ public class MobilityCompany {
         this.ceoPhone = ceoPhone;
         this.unlockFee = unlockFee;
         this.minuteFee = minuteFee;
-    }
-
-    public void addMobility(Mobility mobility) {
-        mobilities.add(mobility);
-        mobility.addMobilityCompany(this);
     }
 }
