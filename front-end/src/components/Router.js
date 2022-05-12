@@ -42,6 +42,8 @@ import Bike from '../routes/Mobility/Bike';
 
 import Menubar from './Menubar';
 
+import TossPayments from '../routes/TosspaymentsTest'
+
 // https://kyung-a.tistory.com/36
 
 function Router() {
@@ -53,6 +55,9 @@ function Router() {
         {/* 속성을 component 대신에 element */}
         <Route path="/" element={<Path />} />
         <Route path="/walk" element={<WalkPath />} />
+      </Routes>
+      <Routes>        
+        <Route path="/pay" element={<TossPayments />} />
       </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />

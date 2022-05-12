@@ -1,10 +1,13 @@
 package com.capstone.pathproject.domain.company;
 
+import com.capstone.pathproject.dto.product.OptionDTO;
+import com.capstone.pathproject.dto.product.ProdBasicDTO;
 import com.capstone.pathproject.dto.product.ProductDTO;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
@@ -53,7 +56,10 @@ public class Product {
 
 
     @Builder(builderMethodName = "createProduct")
-    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodBasic,String picture, List<Option> optionList){
+    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasicDTO prodBasic, String picture, List<OptionDTO> optionList){
+
+        //optionList.stream().map(optionDTO -> optionDTO.toEntity());
+
         this.id = id;
         this.price = price;
         this.exposure = exposure;
@@ -61,9 +67,9 @@ public class Product {
         this.created = created;
         this.stock = stock;
         this.company = company;
-        this.prodBasic = prodBasic;
+        this.prodBasic = prodBasic.toEntity();
         this.picture = picture;
-        this.optionList = optionList;
+        this.optionList = toEntityList(optionList);
 
     }
 
@@ -71,18 +77,35 @@ public class Product {
 
     public ProductDTO toDTO(){
         return ProductDTO.createProductDTO()
-                .company(this.company)
+                .company(this.company.toDTO())
                 .id(this.id)
                 .created(this.created)
                 .discount(this.discount)
                 .exposure(this.exposure)
-                .optionList(this.optionList)
+                .optionList( toDtoList(optionList)  )
                 .price(this.price)
-                .prodBasic(this.prodBasic)
+                .prodBasic(this.prodBasic.toDTO())
                 .stock(this.stock)
                 .picture(this.picture)
                 .build();
     }
+
+    public List<Option> toEntityList(List<OptionDTO> dtoList ){
+
+        ArrayList<Option> optionList = null;
+
+        dtoList.stream().map(optionDTO -> optionDTO.toEntity()).forEach(option -> optionList.add(option));
+
+        return optionList;
+    }
+
+    public List<OptionDTO> toDtoList(List<Option> entityList){
+
+        ArrayList<OptionDTO> optionList = null;
+        entityList.stream().map(option -> option.toDTO()).forEach(optionDTO -> optionList.add(optionDTO));
+        return optionList;
+    }
+
 
 }
 

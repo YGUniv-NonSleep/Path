@@ -1,5 +1,6 @@
 package com.capstone.pathproject.domain.company;
 
+import com.capstone.pathproject.dto.product.DetailOptionDTO;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -36,5 +37,14 @@ public class DetailOption {
     }
 
     public DetailOption(){}
+
+    public DetailOptionDTO toDTO(){
+        return DetailOptionDTO.createDetailOptionDTO()
+                .id(id)
+                .optionId(optionId)
+                .name(name)
+                .price(price)
+                .build();
+    }
 
 }

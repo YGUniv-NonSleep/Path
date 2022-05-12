@@ -30,7 +30,7 @@ public class ProductService {
     private final OptionRepository optionRepository;
     private final DetailOptionRepository detailOptionRepository;
 
-    //ProdBasic create
+
     public Message<ProdBasicDTO> createBasic(ProdBasicDTO prodBasicDTO) {
 
         prodBasicRepository.save(prodBasicDTO.toEntity());
@@ -41,7 +41,7 @@ public class ProductService {
                 .body(prodBasicDTO)
                 .build();
     }
-    //ProdBasic delete
+
     public Message deleteBasic(Long prodBasicId){
         prodBasicRepository.deleteById(prodBasicId);
         return Message.createMessage()
@@ -49,7 +49,7 @@ public class ProductService {
                 .message("ProdBasic delete success")
                 .build();
     }
-    //ProdBasic updete
+
     public Message<ProdBasicDTO> updateBasic(ProdBasicDTO prodBasicDTO){
 
         prodBasicRepository.save(prodBasicDTO.toEntity());
@@ -60,7 +60,7 @@ public class ProductService {
                 .body(prodBasicDTO)
                 .build();
     }
-    //ProdBasic
+
     public Message<ProdBasicDTO> basicDetail(Long prodBasicId) {
 
         Optional<ProdBasic> result = prodBasicRepository.findById(prodBasicId);
@@ -159,14 +159,14 @@ public class ProductService {
                 .map(product -> product.toDTO())
                 .forEach(productDTO -> productDTOList.add(productDTO));
 
-        for (ProductDTO p : productDTOList){
-            for (Option o : p.getOptionList()) {
-                for (DetailOption d: o.getDetailOptionList()
-                     ) {
-                    System.out.println(d.toString());
-                }
-            }
-        }
+//        for (ProductDTO p : productDTOList){
+//            for (Option o : p.getOptionList()) {
+//                for (DetailOption d: o.getDetailOptionList()
+//                     ) {
+//                    System.out.println(d.toString());
+//                }
+//            }
+//        }
 
         return Message.<List<ProductDTO>>createMessage()
                 .message("상품 조회 성공")
