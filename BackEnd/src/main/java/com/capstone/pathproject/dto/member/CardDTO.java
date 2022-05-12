@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 public class CardDTO {
 
     private Long id;
-    private MemberDTO memberDTO;
+    private MemberDto memberDTO;
     private LocalDateTime createTime;
     private String cardCompany;
     private String number;
     private String billingKey;
 
     @Builder
-    public CardDTO(Long id, MemberDTO memberDTO, LocalDateTime createTime, String cardCompany, String number, String billingKey) {
+    public CardDTO(Long id, MemberDto memberDTO, LocalDateTime createTime, String cardCompany, String number, String billingKey) {
         this.id = id;
         this.memberDTO = memberDTO;
         this.createTime = createTime;
