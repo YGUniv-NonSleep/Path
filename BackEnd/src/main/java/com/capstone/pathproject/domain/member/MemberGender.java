@@ -1,5 +1,5 @@
 package com.capstone.pathproject.domain.member;
 
-public enum memberGender {
+public enum MemberGender {
     MALE, FEMALE
 }
