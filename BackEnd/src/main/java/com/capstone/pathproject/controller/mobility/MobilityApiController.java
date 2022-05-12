@@ -1,6 +1,6 @@
 package com.capstone.pathproject.controller.mobility;
 
-import com.capstone.pathproject.dto.mobility.MobilityDTO;
+import com.capstone.pathproject.dto.mobility.LocationMobilityDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.service.mobility.MobilityService;
 import com.capstone.pathproject.util.ResponseUtil;
@@ -24,7 +24,7 @@ public class MobilityApiController {
     @GetMapping("/mobil")
     public ResponseEntity<Message<?>> getLocationMobility(@RequestParam double x,
                                                           @RequestParam double y) {
-        Message<List<MobilityDTO>> mobilityDTOs = mobilityService.getLocationMobility(x, y);
+        Message<List<LocationMobilityDto>> mobilityDTOs = mobilityService.getLocationMobility(x, y);
         return responseUtil.createResponseEntity(mobilityDTOs);
     }
 }
