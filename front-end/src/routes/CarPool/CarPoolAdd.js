@@ -26,6 +26,9 @@ function CarPoolAdd(){
     const [arriveY, setArriveY] = useState(null);
     const [arriveLocal,setArriveLocal] = useState(null);
     const [dataset, setDataSet] = useState(null);
+
+    const [startAddr, setStartAddr] = useState(null);
+    const [arriveAddr, setArriveAddr] = useState(null);
   
     var geocoder = new kakao.maps.services.Geocoder();
 
@@ -37,8 +40,8 @@ function CarPoolAdd(){
                     console.log(result[0].x)
                     console.log(result[0].y)
              }
-            setStartX(result[0].x)
-            setStartY(result[0].y)
+            setStartX(result[0].y)
+            setStartY(result[0].x)
         });  
     }
     
@@ -50,8 +53,8 @@ function CarPoolAdd(){
            console.log(result[0].y)
           //var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
         }
-        setArriveX(result[0].x)
-        setArriveY(result[0].y)
+        setArriveX(result[0].y)
+        setArriveY(result[0].x)
       });
     }
   
@@ -76,11 +79,8 @@ function CarPoolAdd(){
           fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
         }
       
-        console.log(data)
-        console.log(fullAddress)
-        console.log(data.zonecode)
-        console.log(data.sido)
         setStartLocal(data.sido)
+        setStartAddr(fullAddress)
         getCoords(fullAddress);
       };
 
@@ -106,11 +106,9 @@ function CarPoolAdd(){
           fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
         }
       
-        console.log(data)
-        console.log(fullAddress)
-        console.log(data.zonecode)
-        console.log(data.sido)
+        
         setArriveLocal(data.sido)
+        setArriveAddr(fullAddress);
         getArrivedCoords(fullAddress);
       };
 
@@ -123,10 +121,10 @@ function CarPoolAdd(){
           sdate : e.target.sdate.value,
           edate : e.target.edate.value,
           stime : e.target.stime.value + ":00",
-          startLongitude : startX,
-          startLatitude : startY,
-          arriveLongitude : arriveX,
-          arriveLatitude : arriveY,
+          startLatitude : startX,
+          startLongitude : startY,
+          arriveLatitude : arriveX,
+          arriveLongitude : arriveY,
           local : arriveLocal,
           cars : {
             id : 1
@@ -170,7 +168,9 @@ function CarPoolAdd(){
                     종료날짜 : <input type="date" name="edate"></input><br></br>
                     출발시간 : <input type="time" name="stime"></input><br></br>
                     <button type="button" onClick={openStartCode}>출발지 검색</button>
+                    <p>{startAddr}</p>
                     <button type="button" onClick={openArrivedCode}>도착지 검색</button>
+                    <p>{arriveAddr}</p>
                     <input type="file" name="userfile" multiple="multiple" />
                     <button type="submit">작성하기</button>
                 </form>
