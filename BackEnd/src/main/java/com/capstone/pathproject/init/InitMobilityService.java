@@ -41,7 +41,7 @@ public class InitMobilityService {
             mobilityRepository.save(createMobility(mobility2, MobilityState.USING, MobilityType.KICKBOARD));
         }
     }
-
+    // y, x
     // 위도, 경도 (대구 경대 ~ 동대구역 지역범위)
     // 35.9003987, 128.5979169
     // 35.8721661, 128.6398022
