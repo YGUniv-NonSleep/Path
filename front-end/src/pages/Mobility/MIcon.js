@@ -1,13 +1,12 @@
-import { Link, Route, Switch, BrowserRouter as Router } from "react-router-dom";
-import styled from "styled-components";
-import { Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Typography, IconButton } from "@mui/material";
 import {
   PedalBike,
   DirectionsBus,
   DirectionsSubway,
   ElectricScooter,
 } from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
+import styled from "styled-components";
 
 // https://blog.logrocket.com/react-router-v6-future-reach-router/
 // https://velog.io/@wiostz98kr/TIL50-l-React-Router-match.params-location.search
@@ -29,7 +28,6 @@ const Li = styled.li`
 const MIcon = () => {
   return (
     <Ul>
-
       <Li>
         <Link to="/mobility/bus" style={{ color: "black" }}>
           <IconButton color="primary">

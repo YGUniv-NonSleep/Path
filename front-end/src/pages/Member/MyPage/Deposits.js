@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
+import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
 
@@ -18,9 +18,9 @@ export default function Deposits() {
         2022년 4월 22일
       </Typography>
       <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
+        <MuiLink color="primary" href="#" onClick={preventDefault}>
           더보기
-        </Link>
+        </MuiLink>
       </div>
     </React.Fragment>
   );

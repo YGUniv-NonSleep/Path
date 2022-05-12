@@ -1,9 +1,5 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import {
   Box,
@@ -16,10 +12,13 @@ import {
   Grid,
   Paper,
 } from "@mui/material";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiLink from "@mui/material/Link";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
+import useLoading from '../../hooks/useLoading';
+import useMemberMain from "./hooks/useMemberMain";
 
 import { MainListItems, SecondaryListItems } from "./MyPage/listItems";
 import Chart from "./MyPage/Chart";
@@ -72,77 +71,16 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
+const mdTheme = createTheme();
+
 function MemberMain() {
-  const [loading, setLoading] = useState(false);
-  const [memberId, setMemberId] = useState("");
+  const { loading } = useLoading();
+  const {
+    open, 
+    toggleDrawer, deleteMember, 
+  } = useMemberMain();
 
-  const mdTheme = createTheme();
-  const [open, setOpen] = useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
-  const tokenReissue = () => {
-    axios
-      .post(process.env.REACT_APP_SPRING_API + "/api/token", "", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res.data);
-        const authorization = res.headers.authorization;
-        axios.defaults.headers.common["authorization"] = authorization;
-        console.log("AccessToken 발급 완료");
-        const decoded = tokenDecode(authorization);
-        setMemberId(decoded.id);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const tokenDecode = (authorization) => {
-    var decoded = jwt_decode(authorization);
-    console.log(decoded);
-    return decoded;
-  };
-
-  const userLogOut = () => {
-    axios
-      .delete(process.env.REACT_APP_SPRING_API + "/api/token", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const deleteMember = () => {
-    userLogOut();
-    const url = process.env.REACT_APP_SPRING_API + "/api/member/" + memberId;
-    axios
-      .delete(url, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.data.header.statusCode == 200) {
-          alert(res.data.message);
-          setMemberId("");
-          window.location.href = "/";
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    tokenReissue();
-  }, []);
+  // valid check -> email, phone, addr, addrDetail
 
   return (
     <ThemeProvider theme={mdTheme}>

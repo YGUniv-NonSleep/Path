@@ -16,11 +16,9 @@ const CommuSubCon = styled.div`
 `;
 
 function CarPoolAdd() {
-  const { isStartOpen, isArrivedOpen, dataset } = useCarPoolAdd();
-  
   const { 
-    CreateCarPost, openStartCode, openArrivedCode, 
-    handleComplete, handleComplete2
+    isStartOpen, isArrivedOpen, startAddr, arriveAddr, 
+    openStartCode, openArrivedCode, handleComplete, handleComplete2
   } = useCarPoolAdd();
 
   return (
@@ -34,7 +32,9 @@ function CarPoolAdd() {
             종료날짜 : <input type="date" name="edate" /><br></br>
             출발시간 : <input type="time" name="stime" /><br></br>
             <button type="button" onClick={openStartCode}>출발지 검색</button>
+            <p>{startAddr}</p>
             <button type="button" onClick={openArrivedCode}>도착지 검색</button>
+            <p>{arriveAddr}</p>
             <input type="file" name="userfile" multiple="multiple" />
             <button type="submit">작성하기</button>
         </form>

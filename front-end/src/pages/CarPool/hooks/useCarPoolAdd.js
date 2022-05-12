@@ -13,6 +13,9 @@ function useCarPoolAdd() {
   const [arriveX, setArriveX] = useState(null);
   const [arriveY, setArriveY] = useState(null);
   const [arriveLocal, setArriveLocal] = useState(null);
+
+  const [startAddr, setStartAddr] = useState(null);
+  const [arriveAddr, setArriveAddr] = useState(null);
   const [dataset, setDataSet] = useState(null);
 
   let navigate = useNavigate();
@@ -25,8 +28,8 @@ function useCarPoolAdd() {
         console.log(result[0].x);
         console.log(result[0].y);
       }
-      setStartX(result[0].x);
-      setStartY(result[0].y);
+      setStartX(result[0].y);
+      setStartY(result[0].x);
     });
   }
 
@@ -38,14 +41,16 @@ function useCarPoolAdd() {
         console.log(result[0].y);
         //var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
       }
-      setArriveX(result[0].x);
-      setArriveY(result[0].y);
+      setArriveX(result[0].y);
+      setArriveY(result[0].x);
     });
   }
+
   const openStartCode = (e) => {
     setIsStartOpen(true);
     setIsArrivedOpen(false);
   };
+
   const handleComplete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
@@ -61,11 +66,8 @@ function useCarPoolAdd() {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    console.log(data);
-    console.log(fullAddress);
-    console.log(data.zonecode);
-    console.log(data.sido);
     setStartLocal(data.sido);
+    setStartAddr(fullAddress);
     getCoords(fullAddress);
   };
 
@@ -89,15 +91,12 @@ function useCarPoolAdd() {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    console.log(data);
-    console.log(fullAddress);
-    console.log(data.zonecode);
-    console.log(data.sido);
     setArriveLocal(data.sido);
+    setArriveAddr(fullAddress);
     getArrivedCoords(fullAddress);
   };
 
-  const CreateCarPost = (e) => {
+  const createCarPost = (e) => {
     e.preventDefault();
     var data = {
       title: e.target.title.value,
@@ -106,10 +105,10 @@ function useCarPoolAdd() {
       sdate: e.target.sdate.value,
       edate: e.target.edate.value,
       stime: e.target.stime.value + ":00",
-      startLongitude: startX,
-      startLatitude: startY,
-      arriveLongitude: arriveX,
-      arriveLatitude: arriveY,
+      startLatitude : startX,
+      startLongitude : startY,
+      arriveLatitude : arriveX,
+      arriveLongitude : arriveY,
       local: arriveLocal,
       cars: {
         id: 1,
@@ -144,9 +143,11 @@ function useCarPoolAdd() {
       });
   };
 
-  return { isStartOpen, isArrivedOpen, dataset,
-    getCoords, getArrivedCoords, openStartCode, handleComplete, openArrivedCode, 
-    handleComplete2, CreateCarPost }
+  return { 
+    isStartOpen, isArrivedOpen, dataset, startAddr, arriveAddr, 
+    navigate, getCoords, getArrivedCoords, openStartCode, openArrivedCode, 
+    handleComplete, handleComplete2, createCarPost 
+  }
 }
 
 export default useCarPoolAdd;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
+import MuiLink from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -85,9 +85,9 @@ export default function Orders() {
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
+      <MuiLink color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
         주문내역 더보기
-      </Link>
+      </MuiLink>
     </React.Fragment>
   );
 }
