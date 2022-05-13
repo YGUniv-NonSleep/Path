@@ -53,7 +53,7 @@ public class ProductApiController {
     @GetMapping("/basic")
     public ResponseEntity findBasic(@RequestParam(value = "name" , required = false,defaultValue = "")String name,
                                     @RequestParam(value = "brand", required = false,defaultValue = "")String brand) {
-        
+
         Message message = productService.findBasicByName(name, brand);
 
         return new ResponseEntity<>(message, HttpStatus.OK);
