@@ -5,6 +5,17 @@ function useItemBasic() {
   const [basicItems, setBasicItems] = useState([]);
   const [updateItem, setUpdateItem] = useState(null); // 수정할 데이터
 
+  //== 모달 창 제어 ==//
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = (e) => {
+    setOpen(true);
+    setUpdateItem(basicItems[e.target.value]);
+  };
+  const handleClose = () => {
+    if (open === true) return setOpen(false);
+  };
+
   // 기본 상품 수정
   const handleChange = (e) => {
     if (e.target.id == "updateName")
@@ -76,7 +87,7 @@ function useItemBasic() {
 
   // 기본 상품 수정
   function patchProductBasic() {
-    // console.log(updateItem)
+    console.log(updateItem)
 
     const data = {
       id: updateItem.id,
@@ -89,18 +100,17 @@ function useItemBasic() {
     const formData = new FormData();
     //   formData.append("picture", updateItem.image);
     formData.append(
-      "json",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
+      "json", new Blob([JSON.stringify(data)], { type: "application/json; charset=utf-8" })
     );
 
     axios
       .patch(
         process.env.REACT_APP_SPRING_API + "/api/product/basic",
-        formData,
+        data,
         {
-          //withCredentials: true,
+          withCredentials: true,
           headers: {
-            "Content-Type": `multipart/form-data`,
+            // "Content-Type": `multipart/form-data`,
           },
         }
       )
@@ -140,8 +150,8 @@ function useItemBasic() {
   }, []);
 
   return {
-    basicItems, updateItem, 
-    getProductBasic, 
+    basicItems, updateItem, open, 
+    getProductBasic, handleOpen, handleClose, 
     handleChange, registProductBasic, patchProductBasic, deleteProductBasic 
   };
 }

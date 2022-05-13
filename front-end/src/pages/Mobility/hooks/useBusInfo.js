@@ -40,8 +40,10 @@ function useBusInfo(){
       // console.log(e.target.value)
       if(e.target.value != "busStop"){
         setToggleValue("bus")
+        setBusNo("")
       } else {
         setToggleValue("busStop")
+        setBusNo("")
       }
     }
   
