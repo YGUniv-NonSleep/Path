@@ -1,6 +1,6 @@
 function MapApi() {
   function createMap() {
-    const mapContainer = document.getElementById('map'); // 지도 표시 div 탐색
+    const mapContainer = document.getElementById("map"); // 지도 표시 div 탐색
 
     let mapOption = {
       center: new kakao.maps.LatLng(37.55525165729346, 126.93737555322481), // 지도의 중심좌표
@@ -95,9 +95,9 @@ function MapApi() {
     let polyline = new kakao.maps.Polyline({
       path: linePath,
       strokeWeight: 5, // 선의 두께 입니다
-      strokeColor: '#FFAE00', // 선의 색깔입니다
+      strokeColor: "#FFAE00", // 선의 색깔입니다
       strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-      strokeStyle: 'solid', // 선의 스타일입니다
+      strokeStyle: "solid", // 선의 스타일입니다
     });
     return polyline;
   }
@@ -110,9 +110,9 @@ function MapApi() {
       //map: data.map,
       //path: [],
       strokeWeight: 5,
-      strokeColor: '#FF00FF',
+      strokeColor: "#FF00FF",
       strokeOpacity: 0.8,
-      strokeStyle: 'dashed',
+      strokeStyle: "dashed",
     });
 
     // console.log(data)
@@ -158,9 +158,9 @@ function MapApi() {
       //map: data.map,
       //path: [],
       strokeWeight: 5,
-      strokeColor: '#FF00FF',
+      strokeColor: "#FF00FF",
       strokeOpacity: 0.8,
-      strokeStyle: 'dashed',
+      strokeStyle: "dashed",
     });
 
     // console.log(lineArray)
