@@ -135,7 +135,17 @@ const BusStopBtn = styled.button`
   height: 40px;
 `;
 
-const BusStopList = styled.div``;
+const BusStopList = styled.div`
+  position: absolute;
+  top: 350px;
+  left: 30px;
+  width: 390px;
+  height: 600px;
+  overflow: scroll;
+`;
+
+const BusStayList = styled.div`
+`;
 
 function BusMain() {
   const { loading } = useLoading();
@@ -143,7 +153,7 @@ function BusMain() {
     busNo, busList, busStop, toggleValue, 
     onChanged, submit, onToggle
   } = useBusInfo();
-  console.log(toggleValue)
+  // console.log(toggleValue)
 
   return (
     <div className="Mobility">
@@ -199,7 +209,7 @@ function BusMain() {
                 { 
                   busList.station.map((item)=>{
                     // console.log(item)
-                    // return <div>{item.stationName}</div>
+                    return <div>{item.stationName}</div>
                   })
                 }
               </BusStopList>
@@ -207,7 +217,15 @@ function BusMain() {
           ) : toggleValue == "busStop" &&
             busStop != undefined &&
             busStop.length != 0 ? (
-            <></>
+            <>
+              <BusStayList>
+                {
+                  busStop.map((item)=> {
+                    return <div>{item.stationName}</div>
+                  })
+                }
+              </BusStayList>
+            </>
           ) : (
             <>
               <Text>최근 검색</Text>
