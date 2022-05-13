@@ -14,7 +14,7 @@ public class TmapApiController {
 
     private final TmapService tmapService;
 
-    @PostMapping("/walkpath")
+    @GetMapping("/path")
     public String walkPath(@RequestParam String sx,
                            @RequestParam String sy,
                            @RequestParam String ex,

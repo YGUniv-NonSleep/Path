@@ -21,7 +21,7 @@ public class MobilityApiController {
     private final MobilityService mobilityService;
     private final ResponseUtil responseUtil;
 
-    @GetMapping("/mobil")
+    @GetMapping("/mobilities")
     public ResponseEntity<Message<?>> getLocationMobility(@RequestParam double x,
                                                           @RequestParam double y) {
         Message<List<LocationMobilityDto>> mobilityDTOs = mobilityService.getLocationMobility(x, y);
