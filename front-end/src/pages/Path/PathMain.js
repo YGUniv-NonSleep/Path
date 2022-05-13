@@ -39,6 +39,7 @@ const SearchArea = styled.div`
 const DirectionSummaryList = styled.div`
   position: relative;
   height: 75%;
+  overflow: auto;
 `;
 
 const SwitchButton = styled.button`
@@ -57,7 +58,7 @@ const SwitchButton = styled.button`
 function PathMain() {
   const { 
     SPoint, APoint, jusoOption, loading, 
-    onchangeSP, onchangeAP, refreshPoints, switchPoints, wayFind
+    onchangeSP, onchangeAP, refreshPoints, switchPoints, wayFind, pathDrawing
   } = useInputForm()
 
   return (
@@ -119,8 +120,8 @@ function PathMain() {
           </Box>
         </SearchArea>
         <DirectionSummaryList>
-          {/* <button onClick={() => pathSearch(0)}>0</button> */}
-          <PathList></PathList>
+          <button onClick={() => pathDrawing(0)}>0</button>
+          
         </DirectionSummaryList>
       </SideNav>
       <Map />
