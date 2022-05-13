@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // 화면 로딩 확인 hook
-function useLoading(){
+function useLoading() {
   const [loading, setLoading] = useState(false);
 
   const handleLoading = () => {
     setLoading(true);
-  }
-  
+  };
+
   useEffect(() => {
-    handleLoading()
+    handleLoading();
     return () => {
       setLoading(false);
-    }
+    };
   }, []);
 
-  return { loading, handleLoading }
+  return { loading, handleLoading };
 }
 
 export default useLoading;
