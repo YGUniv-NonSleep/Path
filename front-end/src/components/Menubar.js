@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import pathLogo from '../assets/path_logo.svg';
+import pathLogo from '../assets/images/path_logo.svg';
 import PathRouteElement from './PathRouteElement';
 import CompRouteElement from './CompRouteElement';
 import jwt_decode from 'jwt-decode';
