@@ -33,20 +33,8 @@ function MapApi() {
     // 지도의 현재 중심좌표를 얻어옵니다
     let center = mapData.getCenter();
 
-    function drawKakaoWalkPolyLine(linePath) {
-        let polyline = new kakao.maps.Polyline({
-          path: linePath,
-          strokeWeight: 5, // 선의 두께 입니다
-          strokeColor: '#FFAE00', // 선의 색깔입니다
-          strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-          strokeStyle: 'solid', // 선의 스타일입니다
-        });
-        return polyline;
-      }
-
-    function drawKakaoPolyLine(data) {
-        let lineArray = null;
-        lineArray = new Array();
+    // 지도의 현재 레벨을 얻어옵니다
+    let level = mapData.getLevel();
 
     // 지도타입을 얻어옵니다
     let mapTypeId = mapData.getMapTypeId();
@@ -64,8 +52,84 @@ function MapApi() {
     let boundsStr = bounds.toString();
 
     return {
-        createMap, setController, getInfo, //getLatLng,
-        drawKakaoMarker, drawKakaoPolyLine, drawKakaoBusPolyLine, drawKakaoWalkPolyLine
+      center,
+      level,
+      mapTypeId,
+      bounds,
+      swLatLng,
+      neLatLng,
+      boundsStr,
+    };
+  }
+
+  // 지도에 클릭 이벤트를 등록합니다
+  // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+
+  // kakao.maps.event.addListener(map, 'click', getLatLng)
+
+  // function getLatLng(mouseEvent) {
+  //     // 클릭한 위도, 경도 정보를 가져옵니다
+  //     let latlng = mouseEvent.latLng;
+  //     console.log(latlng)
+  //     // 위도: latlng.getLat()
+  //     // 경도: latlng.getLng()
+
+  //     return latlng
+  // }
+
+  // 지도위 마커 표시해주는 함수
+  function drawKakaoMarker(x, y) {
+    // console.log(x, y)
+    let marker = new kakao.maps.Marker({
+      // 마커 생성
+      position: new kakao.maps.LatLng(y, x), // 마커 표시 위치
+      clickable: true, // 마커 클릭 이벤트 설정 여부
+    });
+
+    // 마커가 지도 위에 표시되도록 설정합니다
+    //marker.setMap(map);
+    return marker;
+  }
+
+  function drawKakaoWalkPolyLine(linePath) {
+    let polyline = new kakao.maps.Polyline({
+      path: linePath,
+      strokeWeight: 5, // 선의 두께 입니다
+      strokeColor: '#FFAE00', // 선의 색깔입니다
+      strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+      strokeStyle: 'solid', // 선의 스타일입니다
+    });
+    return polyline;
+  }
+
+  function drawKakaoPolyLine(data) {
+    let lineArray = null;
+    lineArray = new Array();
+
+    let polyline = new kakao.maps.Polyline({
+      //map: data.map,
+      //path: [],
+      strokeWeight: 5,
+      strokeColor: '#FF00FF',
+      strokeOpacity: 0.8,
+      strokeStyle: 'dashed',
+    });
+
+    // console.log(data)
+
+    for (var i = 0; i < data.length; i++) {
+      for (var j = 0; j < data[i].section.length; j++) {
+        for (var k = 0; k < data[i].section[j].graphPos.length; k++) {
+          // class -> 1(버스노선), 2(지하철노선)
+          // type -> 노선 종류(버스, 지하철)
+          lineArray.push(
+            new kakao.maps.LatLng(
+              data[i].section[j].graphPos[k].y,
+              data[i].section[j].graphPos[k].x
+            )
+          );
+        }
+      }
     }
 
     // console.log(lineArray);
