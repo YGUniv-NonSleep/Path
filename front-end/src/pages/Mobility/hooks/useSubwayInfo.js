@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import MapApi from "../../../api/MapApi";
-import { SubwayApi, SubwayTime } from "../../../api/OdsayApi";
+import { SubwayApi } from "../../../api/OdsayApi";
 
 function useSubwayInfo() {
   const [map, settingMap] = useState(null);
   const [subName, setSubName] = useState("");
   const [markers, setMarkers] = useState([]);
+  const [staInfo, setStaInfo] = useState([]);
+  const [subTime, setSubTime] =useState([]);
+  const [toggleValue, setToggleValue] = useState(null);
 
   async function mapLoad() {
     try {
@@ -19,7 +22,7 @@ function useSubwayInfo() {
 
   function onChanged(e) {
     if (e != undefined) {
-      console.log(e.target.value);
+     //검색한 지하철역 이름 console.log(e.target.value);
       setSubName(e.target.value);
     } else {
       return 0;
@@ -29,10 +32,19 @@ function useSubwayInfo() {
   useEffect(() => {
     onChanged();
   }, [subName]);
+  // [subName]이 실행될 때마다 useEffect 안에 있는 onChanged()를 실행하는 것
+
+  function onToggle(e){
+    if(e.target.value != "time"){
+      setToggleValue("exit")
+    } else{
+      setToggleValue("time")
+    }
+  }
 
   function submit(e) {
     e.preventDefault();
-    console.log(subName);
+    // 검색한 지하철역 이름  console.log(subName);
     subInfo(subName);
   }
 
@@ -41,11 +53,18 @@ function useSubwayInfo() {
 
     let subName = data;
 
-    let stationInfo = await SubwayApi.getSubName(subName).catch((error) =>
-      console.log(error)
-    );
-    // console.log(stationInfo)
-    let subTime = await SubwayTime.getSubTime(stationInfo.stationID);
+    let stationInfo = await SubwayApi.getSubName(subName).catch((error) => console.log(error));
+    //console.log(stationInfo)
+
+    let subInfo = await SubwayApi.getSubInfo(stationInfo.stationID).catch((error) => console.log(error));
+    console.log(subInfo)
+
+    setStaInfo(subInfo)
+
+    let subTime = await SubwayApi.getSubTime(stationInfo.stationID);
+    console.log(subTime)
+
+    //setSubTime(subTime)
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
     let bounds = new kakao.maps.LatLngBounds();
@@ -75,29 +94,6 @@ function useSubwayInfo() {
     }
     map.setBounds(bounds);
 
-    function displayPlaces() {
-      var listTime = subTime;
-
-      for (var i = 0; i < places.length; i++) {
-        // 마커를 생성하고 지도에 표시합니다
-        var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
-          marker = addMarker(placePosition, i),
-          itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        bounds.extend(placePosition);
-
-        marker, places[i].place_name;
-
-        fragment.appendChild(itemEl);
-      }
-
-      // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
-      listTime.appendChild(fragment);
-    }
-    displayPlaces.setMap(map);
-
     function removeMarkers() {
       for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
@@ -115,8 +111,8 @@ function useSubwayInfo() {
   }, [map]);
 
   return {
-    map, subName, markers, 
-    mapLoad, subInfo, submit, onChanged
+    map, subName, markers, staInfo, subTime, toggleValue, 
+    mapLoad, subInfo, submit, onChanged, onToggle
   }
 }
 

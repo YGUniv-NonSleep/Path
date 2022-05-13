@@ -5,7 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 function useCarPoolContents(){
   let navigate = useNavigate();
   const { postId } = useParams();
-
+  
   const [effectState, setEffectState] = useState(null);
   const [drawLineState, setDrawLineState] = useState(null);
   const [tDistance, setTdistance] = useState("");
@@ -106,11 +106,12 @@ function useCarPoolContents(){
     e.preventDefault();
     setShowModal(false);
   };
-
+  
   const PatchModal = (e) => {
     e.preventDefault();
     setShowModal(true);
   };
+
   const Patch = (e) => {
     e.preventDefault();
     var data = {
@@ -184,7 +185,7 @@ function useCarPoolContents(){
     setStartAddr(fullAddress);
     getCoords(fullAddress);
   };
-
+  
   const openArriveCode = (e) => {
     e.preventDefault();
     setIsArrivedOpen(true);
@@ -208,7 +209,7 @@ function useCarPoolContents(){
     setArriveAddr(fullAddress);
     getArrivedCoords(fullAddress);
   };
-
+  
   const FindWay = (e) => {
     e.preventDefault();
     setShowPtag(true);
@@ -383,7 +384,7 @@ function useCarPoolContents(){
         console.log(err);
       });
   };
-
+  
   const addMarkers = (infoObj) => {
     var size = new Tmapv2.Size(24, 38); //아이콘 크기 설정합니다.
 
@@ -401,6 +402,7 @@ function useCarPoolContents(){
 
     resultMarkerArr.push(marker_p);
   };
+  
   const drawLine = (arrPoint, traffic) => {
     var polyline_;
     if (chktraffic.length != 0) {
@@ -454,6 +456,7 @@ function useCarPoolContents(){
               strokeWeight: 6,
               map: map,
             });
+
             //라인그리기[E]
             resultdrawArr.push(polyline_);
 
@@ -483,6 +486,7 @@ function useCarPoolContents(){
                 strokeWeight: 6,
                 map: map,
               });
+
               //라인그리기[E]
               resultdrawArr.push(polyline_);
             }
@@ -570,7 +574,7 @@ function useCarPoolContents(){
     });
     // FindWay(data1,data2,data3,data4)
   };
-
+  
   function resettingMap() {
     //기존마커는 삭제
     marker_s.setMap(null);
@@ -592,6 +596,15 @@ function useCarPoolContents(){
     drawInfoArr = [];
     resultMarkerArr = [];
     resultdrawArr = [];
+  }
+
+  return {
+    effectState, drawLineState, tDistance, tTime, taxiFare, showPtag, showModal, 
+    isStartOpen, startX, startY, startLocal, isArrivedOpen, arriveX, arriveY, 
+    arriveLocal, startAddr, arriveAddr, 
+    setLocal, getCoords, getArrivedCoords, Close, PatchModal, Patch, 
+    openStartCode, handleComplete, openArriveCode, handleComplete2, 
+    FindWay, addMarkers, drawLine, Map, resettingMap, 
   }
 }
 

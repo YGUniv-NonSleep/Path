@@ -18,13 +18,13 @@ const CommuSubCon = styled.div`
 function CarPoolAdd() {
   const { 
     isStartOpen, isArrivedOpen, startAddr, arriveAddr, 
-    openStartCode, openArrivedCode, handleComplete, handleComplete2
+    createCarPost, openStartCode, openArrivedCode, handleComplete, handleComplete2
   } = useCarPoolAdd();
 
   return (
     <CommuCon>
         <CommuSubCon>
-        <form onSubmit={CreateCarPost} encType="multipart/form-data">
+        <form onSubmit={createCarPost} encType="multipart/form-data">
             <input type="text" placeholder="제목을 입력하세요" name="title" />
             <input type="text" placeholder="내용을 입력하세요" name="content" /><br></br>
             <input type="text" placeholder="탑승인원을 입력하세요" name="recruit" /><br></br>

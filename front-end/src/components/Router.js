@@ -11,7 +11,7 @@ import { Path, WalkPath } from '../pages/Path';
 import { Oder } from '../pages/Oder';
 import { Bus, Subway, Scooter, Bike } from '../pages/Mobility';
 import { Community, CommunityContents, CommunityAdd } from '../pages/Community';
-import { CarPool, CarPoolAdd } from '../pages/CarPool';
+import { CarPool, CarPoolContents, CarPoolAdd } from '../pages/CarPool';
 import { Company, CompStore, CompDetail, CompCreate, ItemBasic } from '../pages/Company';
 import { CompManage, CompEdit, ItemEdit, Items, Resign } from '../pages/Company/CompManage';
 import { Member, Login, SignUp, UpdateMem, SearchId, SearchPw } from '../pages/Member';
@@ -71,6 +71,7 @@ function Router() {
       </Routes>
       <Routes>
         <Route path="/carpool" element={<CarPool />} />
+        <Route path="/carpool/:postId" element={<CarPoolContents/>} />
         <Route path="/carpool/add" element={<CarPoolAdd/>} />
       </Routes>
     </BrowserRouter>

@@ -48,8 +48,11 @@ const MousePointer = styled.div`
 const CarPoolContents = () => {
   const { loading } = useLoading();
   const { 
-    
-   } = useCarPoolContents();
+    effectState, tDistance, tTime, taxiFare, showPtag, showModal, 
+    isStartOpen, isArrivedOpen, startAddr, arriveAddr, 
+    Close, PatchModal, Patch, FindWay, 
+    openStartCode, handleComplete, openArriveCode, handleComplete2, 
+  } = useCarPoolContents();
 
   return (
     <CommuCon>
@@ -252,4 +255,4 @@ CarPoolContents.propTypes = {
   loading: PropTypes.bool.isRequired,
 };
 
-//export default CarPoolContents;
+export default CarPoolContents;

@@ -8,6 +8,9 @@ function useBusInfo(){
     const [markers, setMarkers] = useState([]);
     const [stayMarker, setStayMarker] = useState([]);
     const [poly, setPoly] = useState("");
+    const [busList, setBusList] = useState([]);
+    const [busStop, setBusStop] = useState([]);
+    const [toggleValue, setToggleValue] = useState("bus");
   
     async function mapLoad() {
       try {
@@ -32,6 +35,15 @@ function useBusInfo(){
     useEffect(() => {
       onChanged();
     }, [busNo]);
+
+    function onToggle(e){
+      // console.log(e.target.value)
+      if(e.target.value != "busStop"){
+        setToggleValue("bus")
+      } else {
+        setToggleValue("busStop")
+      }
+    }
   
     function submit(e) {
       e.preventDefault();
@@ -48,23 +60,19 @@ function useBusInfo(){
       let busNo = data;
   
       //정류장
-      let busStay = await MobilityApi.getBusStay(busNo).catch((error) =>
-        console.log(error)
-      );
+      let busStay = await MobilityApi.getBusStay(busNo).catch((error) =>console.log(error));
       console.log(busStay);
+      setBusStop(busStay);
   
       const array1 = busStay;
-      console.log(array1);
+      //console.log(array1);
   
-      // var iwContent = new iwContent[null];
   
       if (busStay != null) {
         var bound = new kakao.maps.LatLngBounds();
         for (var i = 0; i < array1.length; i++) {
           let busStayMark = new kakao.maps.LatLng(array1[i].y, array1[i].x);
-          console.log(busStayMark);
-          // iwContent[i] = busStay[i].stationName;
-          // console.log(iwContent);
+          //console.log(busStayMark);
   
           const mark = new kakao.maps.Marker({
             position: busStayMark,
@@ -78,15 +86,16 @@ function useBusInfo(){
       }
   
       //버스 번호
-      let busInfo = await MobilityApi.getBusId(busNo).catch((error) =>
-        console.log(error)
-      );
-      let busDetailInfo = await MobilityApi.getBusLineDetail(busInfo).catch(
-        (error) => console.log(error)
-      );
+      let busInfo = await MobilityApi.getBusId(busNo).catch((error) =>console.log(error));
+      let busDetailInfo = await MobilityApi.getBusLineDetail(busInfo).catch((error) => console.log(error));
+      let busStayDetail = await MobilityApi.getBusStayDetail(busInfo).catch((error) => console.log(error));
+      console.log(busStayDetail);
+   
   
       const array = busDetailInfo.result.station;
-      //console.log(array)
+      console.log(array)
+      
+      setBusList(busStayDetail)
   
       const bPoly = await MapApi().drawKakaoBusPolyLine(
         busDetailInfo.result.station
@@ -142,8 +151,8 @@ function useBusInfo(){
     // }, [map]);
 
     return {
-        busNo, 
-        mapLoad, onChanged, submit, busInfo, 
+        busNo, busList, busStop, toggleValue, 
+        mapLoad, onChanged, submit, busInfo, onToggle
     }
 }
 
