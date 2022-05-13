@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
-import { PathApi } from "../../../api/OdsayApi";
-import MapApi from "../../../api/MapApi";
-import { TmapApi } from "../../../api/TmapApi";
+import { useEffect, useState } from 'react';
+import { PathApi } from '../../../api/OdsayApi';
+import MapApi from '../../../api/MapApi';
+import { TmapApi } from '../../../api/TmapApi';
 import useLoading from '../../../hooks/useLoading';
 
-function useInputForm(){
-  const { loading } = useLoading();  
+function useInputForm() {
+  const { loading } = useLoading();
 
   const [map, settingMap] = useState(null);
 
   const [jusoValue, setJusoValue] = useState([]); // 가져온 주소 받아서 띄워줄 배열 state
   const [way, setWay] = useState([]); // input 입력으로 찾은 경로
 
-  const [SPoint, setSPoint] = useState(""); // 출발지 주소창
-  const [APoint, setAPoint] = useState(""); // 도착지 주소창
-  const [insertPoint, setInsertPoint] = useState(""); // 입력에 반응하는 창 state
+  const [SPoint, setSPoint] = useState(''); // 출발지 주소창
+  const [APoint, setAPoint] = useState(''); // 도착지 주소창
+  const [insertPoint, setInsertPoint] = useState(''); // 입력에 반응하는 창 state
 
   const [polyLineData, setPolyLineData] = useState([]); // 경로 그래픽 데이터
   const [markerData, setMarkerData] = useState([]); // 마커 그래픽 데이터
@@ -74,7 +74,7 @@ function useInputForm(){
           return data;
         });
         setJusoValue([...k]);
-      } else return "몬가... 잘못됨..";
+      } else return '몬가... 잘못됨..';
     });
   }
 
@@ -86,25 +86,25 @@ function useInputForm(){
   function getKeywordLatLng(data) {
     const ps = new kakao.maps.services.Places();
 
-    for(var i=0; i<data.length; i++){
-      let idx = data[i].indexOf("(");
+    for (var i = 0; i < data.length; i++) {
+      let idx = data[i].indexOf('(');
       let string = data[i].substr(0, idx - 1);
 
       ps.keywordSearch(string, function (result, status, pagination) {
         if (status === daum.maps.services.Status.OK) {
           let k = result.filter((item) => {
-            return item.place_name === string
+            return item.place_name === string;
           });
-          setWay((cur) => [...cur, k[0]])
-        } else return console.log("몬가... 몬가... 잘못됨..");
-      })
+          setWay((cur) => [...cur, k[0]]);
+        } else return console.log('몬가... 몬가... 잘못됨..');
+      });
     }
   }
 
   function wayFind() {
     try {
       // input창 검색 데이터 초기화
-      setWay([])
+      setWay([]);
 
       // 출발지, 도착지의 위도, 경도 얻음
       getKeywordLatLng([SPoint, APoint]); // 이친구들의 콜백이 끝나야 X, Y 좌표를 얻을 수 있음
@@ -117,7 +117,10 @@ function useInputForm(){
     let walkCoordinate = [];
 
     let startPedestrianPath = await TmapApi.getPedestrianPath(
-      startX, startY, endX, endY
+      startX,
+      startY,
+      endX,
+      endY
     );
 
     for (var i in startPedestrianPath.features) {
@@ -147,8 +150,8 @@ function useInputForm(){
     walkResult.setMap(map);
   };
 
-  async function pathSearch(idx){
-    if(idx == undefined) idx = 0;
+  async function pathSearch(idx) {
+    if (idx == undefined) idx = 0;
 
     // ===== 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 ===== //
     const graphicData = await PathApi.getTransPath({
@@ -157,7 +160,7 @@ function useInputForm(){
       ex: way[1].x,
       ey: way[1].y,
     });
-    // console.log(graphicData)
+    console.log(graphicData);
 
     const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
     sp.setMap(map);
@@ -167,27 +170,28 @@ function useInputForm(){
 
     // graphicData를 얻어와서 polyline을 그리는 단계
     // graphicData -> list -> 사용자의 입력(idx)에 따라 다르게 그리기
-    const dkpl = MapApi().drawKakaoPolyLine(graphicData[idx].lane);
-    console.log(dkpl.polyline)
+    const dkpl = MapApi().drawKakaoPolyLine(
+      graphicData[idx].routeGraphic.result.lane
+    );
+    console.log(dkpl.polyline);
 
     dkpl.polyline.setMap(map);
-    
 
     // console.log(graphicData[0].boundary) // 사용자 입력에 따른 번호 변화
-    if(graphicData[idx].boundary) {
+    if (graphicData[idx].routeGraphic.result.boundary) {
       let points = [
         new kakao.maps.LatLng(way[0].y, way[0].x),
         new kakao.maps.LatLng(way[1].y, way[1].x),
       ];
       // points 실행순서 수정 필요
 
-      for(var i=0; i<dkpl.lineArray.length; i++){
+      for (var i = 0; i < dkpl.lineArray.length; i++) {
         points.push(
           new kakao.maps.LatLng(dkpl.lineArray[i].Ma, dkpl.lineArray[i].La)
         );
       }
       // console.log(points)
-      
+
       // 보행자 경로 생성 및 그리기
       createWalkPath(way[0].x, way[0].y, points[2].La, points[2].Ma);
       createWalkPath(
@@ -206,24 +210,40 @@ function useInputForm(){
   }
 
   useEffect(() => {
-    if(way.length == 2) {
-        // 출발지, 도착지의 위도, 경도를 통한 경로 검색
-      pathSearch()
+    if (way.length == 2) {
+      // 출발지, 도착지의 위도, 경도를 통한 경로 검색
+      pathSearch();
       //setWay([])
     } else return;
-  }, [way])
+  }, [way]);
 
   let jusoOption = jusoValue.map((it) => {
     // console.log(it)
-    return `${it.pN} (${it.aN})`
-  })
+    return `${it.pN} (${it.aN})`;
+  });
 
   return {
-    map, way, polyLineData, markerData, loading, 
-    jusoValue, SPoint, APoint, insertPoint, jusoOption, 
-    mapLoad, onchangeSP, onchangeAP, refreshPoints, switchPoints, 
-    placeSearch, getKeywordLatLng, wayFind, pathSearch, createWalkPath, 
-  }
+    map,
+    way,
+    polyLineData,
+    markerData,
+    loading,
+    jusoValue,
+    SPoint,
+    APoint,
+    insertPoint,
+    jusoOption,
+    mapLoad,
+    onchangeSP,
+    onchangeAP,
+    refreshPoints,
+    switchPoints,
+    placeSearch,
+    getKeywordLatLng,
+    wayFind,
+    pathSearch,
+    createWalkPath,
+  };
 }
 
-export default useInputForm
+export default useInputForm;

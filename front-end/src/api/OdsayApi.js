@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const odsayApi = axios.create({
   baseURL: `https://api.odsay.com/v1/api`,
@@ -10,7 +10,7 @@ export const PathApi = {
   getTransPath: async (data) => {
     const response = await axios
       .get(
-        process.env.REACT_APP_SPRING_API + "/odsay/path",
+        process.env.REACT_APP_SPRING_API + '/odsay/paths',
         { params: data },
         { withCredentials: true }
       )
