@@ -14,4 +14,5 @@ public class Info {
     private String mapObj;
     private int busTransitCount;
     private int subwayTransitCount;
+
 }
