@@ -117,11 +117,13 @@ public class OdsayService {
                 // 처음 경로이고 도보일 때 (퍼스널 모빌리티를 타므로 따로 시간계산)
                 if (i == 0 && subPath.getTrafficType() == 3) {
                     int mobilDistance = (int) subPath.getDistance();
-                    int mobilityTime = (int) Math.round(mobilDistance / 1.1 / 60);
+                    int mobilityTime = (int) Math.round(mobilDistance / 4.16 / 60);
                     pathTotalTime += mobilityTime;
                     mobilityPayment += mobilityCompany.getUnlockFee();
                     mobilityPayment += mobilityTime * mobilityCompany.getMinuteFee();
                     payment += mobilityPayment;
+                    System.out.println("모빌리티를 타는 거리 = " + mobilDistance + "m");
+                    System.out.println("모빌리티를 타는 시간 = " + mobilityTime + "분");
                 }
                 // 처음 경로가 아니거나 도보 경로가 아닐 때는 바로 시간 계산
                 else {
@@ -138,6 +140,11 @@ public class OdsayService {
             map.put("subwayTransitCount", path.getInfo().getSubwayTransitCount());
             map.put("routeGraphic", routeGraphicDTO);
             results.add(map);
+            System.out.println("출발지에서 퍼스널모빌리티까지 도보시간(초) = " + firstWalkTotalTimeSec + "초");
+            System.out.println("출발지에서 퍼스널모빌리티까지 도보시간(분) = " + firstWalkTotalTimeMin + "분");
+            System.out.println("대중교통만 타고가는 시간 = " + (path.getInfo().getTotalTime() + firstWalkTotalTimeMin) + "분");
+            System.out.println("퍼스널모빌리티 활용한 시간 = " + pathTotalTime + "분");
+            System.out.println("퍼스널모빌리티 활용한 총요금 = " + payment + "원");
         }
         return results;
     }
