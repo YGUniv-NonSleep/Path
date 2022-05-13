@@ -1,6 +1,5 @@
 package com.capstone.pathproject.dto.rest.odsay.path;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,7 +10,7 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class TransPathDTO {
+public class TransPathDto {
     Result result;
 
     @Getter

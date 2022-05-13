@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class WalkPathDTO {
+public class WalkPathDto {
     private List<Features> features;
 }

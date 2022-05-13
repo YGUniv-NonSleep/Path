@@ -12,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 public class Geometry {
     private String type;
-    private List coordinates = new ArrayList<>();
+    private final List<Object> coordinates = new ArrayList<>();
 }

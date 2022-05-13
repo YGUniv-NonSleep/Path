@@ -11,4 +11,5 @@ import lombok.ToString;
 public class SubPath {
     private int trafficType;
     private int sectionTime;
+    private double distance;
 }
