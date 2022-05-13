@@ -6,8 +6,10 @@ import com.capstone.pathproject.dto.carpool.CarPostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.carpool.CarPostRepository;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +25,10 @@ public class CarPostService {
 
 //CRUD
     @Transactional
-    public Message<CarPostDTO> create(CarPostDTO carPostDTO, String fileName){
+    public Message<CarPostDTO> create(CarPostDTO carPostDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails){
         CarPostDTO result = CarPostDTO.createCarPostDTO()
                 .id(carPostDTO.getId())
-                .member(carPostDTO.getMember())
+                .member(principalDetails.getMember())
                 .cars(carPostDTO.getCars())
                 .title(carPostDTO.getTitle())
                 .content(carPostDTO.getContent())
@@ -39,6 +41,7 @@ public class CarPostService {
                 .stime(carPostDTO.getStime())
                 .startLongitude(carPostDTO.getStartLongitude())
                 .startLatitude(carPostDTO.getStartLatitude())
+                .local(carPostDTO.getLocal())
                 .build();
         carPostRepository.save(result.toEntity());
         return Message.<CarPostDTO>createMessage()
@@ -48,12 +51,13 @@ public class CarPostService {
     }
 
     @Transactional
-    public Message<CarPostDTO> update(CarPostDTO carPostDTO, String fileName){
+    public Message<CarPostDTO> update(CarPostDTO carPostDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails){
         Optional<CarPost> result = carPostRepository.findById(carPostDTO.getId());
         if(result.isPresent()){
+            if(carPostDTO.getMember().getLoginId().equals(principalDetails.getMember().getLoginId())){
             CarPostDTO updateResult = CarPostDTO.createCarPostDTO()
                     .id(carPostDTO.getId())
-                    .member(carPostDTO.getMember())
+                    .member(principalDetails.getMember())
                     .cars(carPostDTO.getCars())
                     .title(carPostDTO.getTitle())
                     .content(carPostDTO.getContent())
@@ -66,14 +70,20 @@ public class CarPostService {
                     .photoName(fileName)
                     .recruit(carPostDTO.getRecruit())
                     .stime(carPostDTO.getStime())
+                    .local(carPostDTO.getLocal())
                     .build();
-            if(carPostDTO.getMember().getId() == 1){
                 carPostRepository.save(updateResult.toEntity());
+            }else{
+                return Message.<CarPostDTO>createMessage()
+                        .header(StatusEnum.BAD_REQUEST)
+                        .message("작성자가 아닙니다!")
+                        .build();
+            }
                 return Message.<CarPostDTO>createMessage()
                         .header(StatusEnum.OK)
                         .message("업데이트 완료")
                         .body(carPostDTO).build();
-            }
+
         }
         return Message.<CarPostDTO>createMessage()
                 .header(StatusEnum.BAD_REQUEST)
@@ -110,6 +120,16 @@ public class CarPostService {
                 .header(StatusEnum.OK)
                 .message("조회완료")
                 .body(listPDT).build();
+    }
+
+    @Transactional
+    public Message viewParams(Long id){
+        Optional<CarPost> carPost = carPostRepository.findById(id);
+        CarPostDTO carPostDTO = carPost.get().toDTO();
+        return Message.<CarPostDTO>createMessage()
+                .header(StatusEnum.OK)
+                .message("조회 완료")
+                .body(carPostDTO).build();
     }
 
     @Transactional

@@ -1,9 +1,9 @@
 package com.capstone.pathproject.controller;
 
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.domain.member.memberGender;
-import com.capstone.pathproject.dto.member.MemberDTO;
-import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.domain.member.Role;
+import com.capstone.pathproject.domain.member.MemberGender;
+import com.capstone.pathproject.dto.member.MemberDto;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.service.member.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -37,76 +35,68 @@ class MemberApiControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    void signup_null값_경로테스트() throws Exception {
-        //given
-        MemberDTO memberDTO = MemberDTO.createMemberDTO().build();
-        String content = objectMapper.writeValueAsString(memberDTO);
-        //when
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
-    }
-
-    @Test
-    void signup_필수값_경로테스트() throws Exception {
-        //given
-        MemberDTO memberDTO = setAllMemberDTO();
-        String content = objectMapper.writeValueAsString(memberDTO);
-        //when
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    void signup_정상작동() throws Exception {
-        //given
-        MemberDTO memberDTO = setAllMemberDTO();
-        //when
-        Message<String> message = memberService.signup(memberDTO);
-        //then
-        ResponseEntity<Message<String>> response = new ResponseEntity<Message<String>>(message, HttpStatus.OK);
-        System.out.println("header : " + response.getBody().getHeader().toString());
-        System.out.println("message : " + response.getBody().getMessage());
-        System.out.println("body : " + response.getBody().getBody().toString());
-    }
-
-    @Test
-    void id값꺼내기() throws Exception {
-        //given
-        MemberDTO memberDTO = setAllMemberDTO();
-        Member member = memberDTO.toEntity();
-        System.out.println(member);
-        System.out.println("==================================================");
-        Member saveMember = memberRepository.save(member);
-        System.out.println(member);
-        System.out.println("saveMember = " + saveMember);
-
-        //when
-
-        //then
-
-    }
-
-    private MemberDTO setAllMemberDTO() {
-        return MemberDTO.createMemberDTO()
+    private Member createMember(int num) {
+        return Member.createMember()
+                .role(Role.ROLE_MEMBER)
                 .loginId("로그인아이디")
                 .password("패스워드")
                 .mail("member@naver.com")
                 .name("이름")
                 .phone("010-1234-5678")
-                .addr("대구시 동구 산격동")
+                .postId(41111)
+                .addr("대구시 동구 산격로")
                 .addrDetail("1111")
-                .gender(memberGender.MALE)
+                .addrExtra("산격동")
+                .gender(MemberGender.MALE)
                 .birthday(LocalDate.parse("2000-01-01"))
+                .account("계좌")
+                .score(100)
                 .build();
+    }
+
+    private MemberDto setAllMemberDTO() {
+        return MemberDto.createMemberDto()
+                .loginId("로그인아이디")
+                .mail("member@naver.com")
+                .name("이름")
+                .phone("010-1234-5678")
+                .postId(41111)
+                .addr("대구시 동구 산격로")
+                .addrDetail("1111")
+                .addrExtra("산격동")
+                .gender(MemberGender.MALE)
+                .birthday(LocalDate.parse("2000-01-01"))
+                .account("계좌")
+                .score(100)
+                .build();
+    }
+
+    @Test
+    void 회원가입_null값() throws Exception {
+        //given
+        MemberDto memberDTO = MemberDto.createMemberDto().build();
+        String content = objectMapper.writeValueAsString(memberDTO);
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/member")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    void 회원가입() throws Exception {
+        //given
+        MemberDto memberDTO = setAllMemberDTO();
+        String content = objectMapper.writeValueAsString(memberDTO);
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/member")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
     }
 }

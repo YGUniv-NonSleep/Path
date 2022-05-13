@@ -1,6 +1,7 @@
 package com.capstone.pathproject.repository;
 
 import com.capstone.pathproject.domain.company.Company;
+import com.capstone.pathproject.repository.company.CompanyRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,12 @@
 package com.capstone.pathproject.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
+@Component
 public class ClientUtil {
 
     public static String getIp(HttpServletRequest request) {

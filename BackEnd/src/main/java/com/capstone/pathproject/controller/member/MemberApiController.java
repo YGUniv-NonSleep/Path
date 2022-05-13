@@ -1,24 +1,24 @@
 package com.capstone.pathproject.controller.member;
 
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.dto.member.MemberDTO;
+import com.capstone.pathproject.dto.member.*;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.security.auth.jwt.JwtProperties;
 import com.capstone.pathproject.util.CookieUtil;
 import com.capstone.pathproject.service.member.MemberService;
+import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +26,9 @@ import javax.validation.Valid;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final ResponseUtil responseUtil;
     private final CookieUtil cookieUtil;
+
 
     @PostMapping("/token")
     public ResponseEntity<Message<Object>> tokenReissue(@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -38,11 +40,11 @@ public class MemberApiController {
                 .header(StatusEnum.OK)
                 .message("회원이 존재함")
                 .body(username).build();
-        return new ResponseEntity<Message<Object>>(message, HttpStatus.OK);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @DeleteMapping("/token")
-    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Message<Object>> logout(HttpServletResponse response) {
         Cookie refreshTokenCookie = new Cookie(JwtProperties.REFRESH_HEADER_STRING, null);
         refreshTokenCookie.setMaxAge(0);
         refreshTokenCookie.setHttpOnly(true);
@@ -53,49 +55,48 @@ public class MemberApiController {
                 .header(StatusEnum.OK)
                 .message("로그아웃 성공")
                 .build();
-        return new ResponseEntity(message, HttpStatus.OK);
-    }
-
-    @PostMapping("/member")
-    public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO) {
-        System.out.println("memberDTO = " + memberDTO);
-        Message<String> message = memberService.signup(memberDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    @PostMapping("/member")
+    public ResponseEntity<Message<?>> signup(@Valid @RequestBody SignupFormDto signupFormDto) {
+        Message<String> message = memberService.signup(signupFormDto);
+        return responseUtil.createResponseEntity(message);
+    }
+
     @GetMapping("/member/{memberId}")
-    public ResponseEntity getMember(@PathVariable("memberId") Long memberId) {
-        Message<MemberDTO> message = memberService.getMemberInfo(memberId);
-        return new ResponseEntity(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> getMember(@PathVariable("memberId") Long memberId) {
+        Message<MemberDto> message = memberService.getMemberInfo(memberId);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PatchMapping("/member/{memberId}")
-    public ResponseEntity updateMember(@PathVariable("memberId") Long id, @RequestBody MemberDTO memberDTO) {
-        Message<MemberDTO> message = memberService.updateMember(id, memberDTO);
-        return new ResponseEntity(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> updateMember(@PathVariable("memberId") Long id, @RequestBody UpdateMemberDto updateMemberDto) {
+        Message<UpdateMemberDto> message = memberService.updateMember(id, updateMemberDto);
+        return responseUtil.createResponseEntity(message);
     }
 
     @DeleteMapping("/member/{memberId}")
-    public ResponseEntity deleteMember(@PathVariable("memberId") Long id) {
-        Message<MemberDTO> message = memberService.deleteMember(id);
-        return new ResponseEntity(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> deleteMember(@PathVariable("memberId") Long id) {
+        Message<MemberDto> message = memberService.deleteMember(id);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PostMapping("/forgot/loginid")
-    public ResponseEntity forgotLoginId(@RequestBody MemberDTO memberDTO) {
-        Message message = memberService.forgotLoginId(memberDTO);
-        return new ResponseEntity(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> forgotLoginId(@RequestBody @Valid ForgotLoginIdDto forgotLoginIdDto) {
+        Message<Object> message = memberService.forgotLoginId(forgotLoginIdDto);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PostMapping("/forgot/password")
-    public ResponseEntity forgotPassword(@RequestBody MemberDTO memberDTO) {
-        Message message = memberService.forgotPassword(memberDTO);
-        return new ResponseEntity(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> forgotPassword(@RequestBody @Valid ForgotPwDto forgotPwDto) {
+        Message<Object> message = memberService.forgotPassword(forgotPwDto);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PatchMapping("/forgot/password/{memberId}")
-    public ResponseEntity resetPassword(@PathVariable("memberId") Long id, @RequestBody MemberDTO memberDTO) {
-        Message<Object> message = memberService.resetPassword(id, memberDTO);
-        return new ResponseEntity(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> resetPassword(@PathVariable("memberId") Long id, @RequestBody Map<String, String> body) {
+        Message<Object> message = memberService.resetPassword(id, body);
+        return responseUtil.createResponseEntity(message);
     }
 }

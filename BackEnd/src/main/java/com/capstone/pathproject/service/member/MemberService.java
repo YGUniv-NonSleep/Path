@@ -1,8 +1,7 @@
 package com.capstone.pathproject.service.member;
 
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.domain.member.Role;
-import com.capstone.pathproject.dto.member.MemberDTO;
+import com.capstone.pathproject.dto.member.*;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.member.MemberRepository;
@@ -12,36 +11,37 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Optional;
 
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 회원가입
-    public Message<String> signup(MemberDTO memberDTO) {
-        if (isValidateDuplicateMember(memberDTO)) {
+    public Message<String> signup(SignupFormDto signupFormDto) {
+        if (isValidateDuplicateMember(signupFormDto)) {
             return Message.<String>createMessage()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 존재함")
-                    .body(memberDTO.getLoginId()).build();
+                    .body(signupFormDto.getLoginId()).build();
         }
-        memberDTO.changeScore(100);
-        memberDTO.changePassword(encodePassword(memberDTO.getPassword()));
-        memberRepository.save(memberDTO.toEntity());
+        Member member = new Member(signupFormDto);
+        member.updateEncodePassword(encodePassword(member.getPassword()));
+        memberRepository.save(member);
         return Message.<String>createMessage()
                 .header(StatusEnum.OK)
                 .message("회원 가입 성공")
-                .body(memberDTO.getLoginId()).build();
+                .body(signupFormDto.getLoginId()).build();
     }
 
-    private boolean isValidateDuplicateMember(MemberDTO memberDTO) {
-        Optional<Member> findMembers = memberRepository.findByLoginId(memberDTO.getLoginId());
+    private boolean isValidateDuplicateMember(SignupFormDto signupFormDto) {
+        Optional<Member> findMembers = memberRepository.findByLoginId(signupFormDto.getLoginId());
         return findMembers.isPresent();
     }
 
@@ -51,64 +51,64 @@ public class MemberService {
 
     // 회원 조회
     @Transactional(readOnly = true)
-    public Message<MemberDTO> getMemberInfo(Long memberId) {
+    public Message<MemberDto> getMemberInfo(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
-            return Message.<MemberDTO>createMessage()
+            return Message.<MemberDto>createMessage()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 없습니다.").build();
         } else {
-            MemberDTO memberDTO = MemberDTO.createMemberDTO()
-                    .id(memberEntity.getId())
-                    .mail(memberEntity.getMail())
-                    .name((memberEntity.getName()))
-                    .phone(memberEntity.getPhone())
-                    .addr(memberEntity.getAddr())
-                    .addrDetail(memberEntity.getAddrDetail())
-                    .account(memberEntity.getAccount())
-                    .score(memberEntity.getScore()).build();
-            return Message.<MemberDTO>createMessage()
+            System.out.println("memberEntity = " + memberEntity);
+            MemberDto memberDto = new MemberDto(memberEntity);
+            System.out.println("memberDto = " + memberDto);
+            return Message.<MemberDto>createMessage()
                     .header(StatusEnum.OK)
                     .message("회원이 있습니다.")
-                    .body(memberDTO).build();
+                    .body(memberDto).build();
         }
-
     }
 
     // 회원 수정
-    public Message<MemberDTO> updateMember(Long id, MemberDTO memberDTO) {
+    public Message<UpdateMemberDto> updateMember(Long id, UpdateMemberDto updateMemberDto) {
         Optional<Member> member = memberRepository.findById(id);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
-            return Message.<MemberDTO>createMessage()
+            return Message.<UpdateMemberDto>createMessage()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 없습니다.").build();
         } else {
-            if (StringUtils.isNotBlank(memberDTO.getMail())) memberEntity.updateMail(memberDTO.getMail());
-            if (StringUtils.isNotBlank(memberDTO.getPhone())) memberEntity.updatePhone(memberDTO.getPhone());
-            if (StringUtils.isNotBlank(memberDTO.getAddr())) memberEntity.updateAddr(memberDTO.getAddr());
-            if (StringUtils.isNotBlank(memberDTO.getAddrDetail()))
-                memberEntity.updateAddrDetail(memberDTO.getAddrDetail());
-            return Message.<MemberDTO>createMessage()
+            if (StringUtils.isNotBlank(updateMemberDto.getMail()))
+                memberEntity.updateMail(updateMemberDto.getMail());
+            if (StringUtils.isNotBlank(updateMemberDto.getPhone()))
+                memberEntity.updatePhone(updateMemberDto.getPhone());
+            if (StringUtils.isNotBlank(String.valueOf(updateMemberDto.getPostId())))
+                memberEntity.updatePost(updateMemberDto.getPostId());
+            if (StringUtils.isNotBlank(updateMemberDto.getAddr()))
+                memberEntity.updateAddr(updateMemberDto.getAddr());
+            if (StringUtils.isNotBlank(updateMemberDto.getAddrDetail()))
+                memberEntity.updateAddrDetail(updateMemberDto.getAddrDetail());
+            if (StringUtils.isNotBlank(updateMemberDto.getAddrExtra()))
+                memberEntity.updateAddrExtra(updateMemberDto.getAddrExtra());
+
+            return Message.<UpdateMemberDto>createMessage()
                     .header(StatusEnum.OK)
                     .message("회원 수정이 되었습니다.")
-                    .body(memberDTO).build();
+                    .body(updateMemberDto).build();
         }
-
     }
 
     // 회원 탈퇴
-    public Message<MemberDTO> deleteMember(Long id) {
+    public Message<MemberDto> deleteMember(Long id) {
         Optional<Member> member = memberRepository.findById(id);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
-            return Message.<MemberDTO>createMessage()
+            return Message.<MemberDto>createMessage()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 없습니다.").build();
         } else {
             memberRepository.delete(memberEntity);
-            return Message.<MemberDTO>createMessage()
+            return Message.<MemberDto>createMessage()
                     .header(StatusEnum.OK)
                     .message("회원 탈퇴하였습니다.")
                     .build();
@@ -116,47 +116,38 @@ public class MemberService {
     }
 
     // 아이디 찾기
-    public Message forgotLoginId(MemberDTO memberDTO) {
-        if (StringUtils.isBlank(memberDTO.getName()) || StringUtils.isBlank(memberDTO.getMail())) {
-            return Message.<String>createMessage()
-                    .header(StatusEnum.BAD_REQUEST)
-                    .message("이름 또는 이메일을 입력하지 않았습니다.").build();
-        }
-        Optional<Member> member = memberRepository.findByNameAndMail(memberDTO.getName(), memberDTO.getMail());
-        return ValidateOptionalMember(member);
+    public Message<Object> forgotLoginId(ForgotLoginIdDto forgotLoginIdDto) {
+        Optional<Member> findMember = memberRepository.findByNameAndMail(forgotLoginIdDto.getName(), forgotLoginIdDto.getMail());
+        return forgotIdAndPwValidateOptionalMember(findMember);
     }
 
-    public Message ValidateOptionalMember(Optional<Member> member) {
-        Member memberEntity = member.orElse(null);
-        if (memberEntity == null) {
+    // 비밀번호 찾기
+    public Message<Object> forgotPassword(ForgotPwDto forgotPwDto) {
+        Optional<Member> findMember = memberRepository.findByLoginIdAndPhone(forgotPwDto.getLoginId(), forgotPwDto.getPhone());
+        return forgotIdAndPwValidateOptionalMember(findMember);
+    }
+
+    private Message<Object> forgotIdAndPwValidateOptionalMember(Optional<Member> findMember) {
+        Member member = findMember.orElse(null);
+        if (member == null) {
             return Message.createMessage()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 존재하지 않습니다.").build();
         }
-        MemberDTO memberDTO = MemberDTO.createMemberDTO()
-                .id(memberEntity.getId())
-                .loginId(memberEntity.getLoginId())
-                .mail(memberEntity.getMail())
-                .name((memberEntity.getName())).build();
+        MemberDto memberDto = MemberDto.createMemberDto()
+                .id(member.getId())
+                .loginId(member.getLoginId())
+                .mail(member.getMail())
+                .name(member.getName()).build();
+
         return Message.createMessage()
                 .header(StatusEnum.OK)
                 .message("회원이 존재합니다.")
-                .body(memberDTO).build();
-    }
-
-    // 비밀번호 찾기
-    public Message forgotPassword(MemberDTO memberDTO) {
-        if (StringUtils.isBlank(memberDTO.getLoginId()) || StringUtils.isBlank(memberDTO.getPhone())) {
-            return Message.<String>createMessage()
-                    .header(StatusEnum.BAD_REQUEST)
-                    .message("아이디 또는 비밀번호를 입력하지 않았습니다.").build();
-        }
-        Optional<Member> member = memberRepository.findByLoginIdAndPhone(memberDTO.getLoginId(), memberDTO.getPhone());
-        return ValidateOptionalMember(member);
+                .body(memberDto).build();
     }
 
     // 비밀번호 재설정
-    public Message<Object> resetPassword(Long id, MemberDTO memberDTO) {
+    public Message<Object> resetPassword(Long id, Map<String, String> body) {
         Optional<Member> member = memberRepository.findById(id);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
@@ -164,8 +155,14 @@ public class MemberService {
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 없습니다.").build();
         }
-        if (StringUtils.isNotBlank(memberDTO.getPassword()))
-            memberEntity.updateEncodePassword(encodePassword(memberDTO.getPassword()));
+
+        if (StringUtils.isBlank(body.get("password"))) {
+            return Message.createMessage()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("비밀번호를 입력하지 않았습니다.").build();
+        }
+
+        memberEntity.updateEncodePassword(encodePassword(body.get("password")));
         return Message.createMessage()
                 .header(StatusEnum.OK)
                 .message("비밀번호 재설정되었습니다.").build();

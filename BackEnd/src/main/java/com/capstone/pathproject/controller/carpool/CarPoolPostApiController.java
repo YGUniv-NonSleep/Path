@@ -3,6 +3,7 @@ package com.capstone.pathproject.controller.carpool;
 
 import com.capstone.pathproject.dto.carpool.CarPostDTO;
 import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.service.carpool.CarPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
@@ -27,7 +28,10 @@ public class CarPoolPostApiController {
 
     //CRUD
     @PostMapping("/create")
-    public ResponseEntity<Message<CarPostDTO>> create(@Valid @RequestPart(value="key",required = false)CarPostDTO carPostDTO, @RequestPart(value="userfile",required = false) MultipartFile file, HttpServletRequest request){
+    public ResponseEntity<Message<CarPostDTO>> create(@Valid @RequestPart(value="key",required = false)CarPostDTO carPostDTO,
+                                                      @RequestPart(value="userfile",required = false) MultipartFile file,
+                                                      HttpServletRequest request,
+                                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
         String fileName;
         if(file == null){
             fileName = "";
@@ -43,12 +47,15 @@ public class CarPoolPostApiController {
                 e.printStackTrace();
             }
         }
-        Message<CarPostDTO> message = carPostService.create(carPostDTO, fileName);
+        Message<CarPostDTO> message = carPostService.create(carPostDTO, fileName,principalDetails);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<Message<CarPostDTO>> update(@RequestPart(value = "key",required = false)CarPostDTO carPostDTO,@RequestPart(value = "userfile",required = false)MultipartFile file,HttpServletRequest request){
+    public ResponseEntity<Message<CarPostDTO>> update(@RequestPart(value = "key",required = false)CarPostDTO carPostDTO,
+                                                      @RequestPart(value = "userfile",required = false)MultipartFile file,
+                                                      HttpServletRequest request,
+                                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
         String fileName;
         if(file == null){
             fileName = "";
@@ -62,7 +69,7 @@ public class CarPoolPostApiController {
                 e.printStackTrace();
             }
         }
-        Message<CarPostDTO> message = carPostService.update(carPostDTO,fileName);
+        Message<CarPostDTO> message = carPostService.update(carPostDTO,fileName,principalDetails);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
@@ -75,10 +82,17 @@ public class CarPoolPostApiController {
 
     //조회
     @GetMapping("/view")
-    public ResponseEntity getPostList(@PageableDefault(size = 5,sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity getPostList(@PageableDefault(size = 10,sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         Message<List<CarPostDTO>> message = carPostService.getPostList(pageable);
         return new ResponseEntity<>(message,HttpStatus.OK);
 
+    }
+
+
+    @GetMapping("/view/{postId}")
+    public ResponseEntity viewParams(@PathVariable("postId") Long id){
+        Message<List<CarPostDTO>> message = carPostService.viewParams(id);
+        return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
 

@@ -1,5 +1,8 @@
 package com.capstone.pathproject.util;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class StringUtils {
 
     public static boolean isBlank(final CharSequence cs) {

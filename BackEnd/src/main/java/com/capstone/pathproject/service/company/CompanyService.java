@@ -7,15 +7,14 @@ import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.repository.CompMemberRepository;
-import com.capstone.pathproject.repository.CompanyRepository;
+import com.capstone.pathproject.repository.company.CompMemberRepository;
+import com.capstone.pathproject.repository.company.CompanyRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,7 +82,7 @@ public class CompanyService {
     public Message<List<CompanyDTO>> companyDetailByMember(Long memId){
         List<Company> result = companyRepository.findByMemberId(memId);
         ArrayList<CompanyDTO> companyDTOList = new ArrayList<>();
-        result.stream().map(company -> company.toDTO()).forEach(companyDTOList::add);
+        result.stream().map(Company::toDTO).forEach(companyDTOList::add);
         return Message.<List<CompanyDTO>>createMessage()
                 .message("업체 조회 성공")
                 .body(companyDTOList)
@@ -137,6 +136,7 @@ public class CompanyService {
             .body(compMemberDTOList)
             .build();
     }
+
 
 
 }

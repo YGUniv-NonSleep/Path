@@ -138,6 +138,9 @@ const Menubar = () => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response) {
+          console.log(err.response.data);
+        }
       });
   };
 

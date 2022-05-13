@@ -214,7 +214,6 @@ function SignUpMain() {
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    required
                     id="addrDetail"
                     name="addrDetail"
                     label="상세주소"

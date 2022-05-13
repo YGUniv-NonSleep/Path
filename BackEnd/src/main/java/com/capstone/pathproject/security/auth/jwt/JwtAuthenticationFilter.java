@@ -1,17 +1,18 @@
 package com.capstone.pathproject.security.auth.jwt;
 
-import com.capstone.pathproject.dto.member.LoginRequestDTO;
+import com.capstone.pathproject.dto.member.LoginRequestDto;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.util.ClientUtil;
 import com.capstone.pathproject.util.CookieUtil;
 import com.capstone.pathproject.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -40,7 +41,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("로그인 시도 : JwtAuthenticationFilter [{}]", requestURI);
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            LoginRequestDTO loginRequestDTO = objectMapper.readValue(request.getInputStream(), LoginRequestDTO.class);
+            LoginRequestDto loginRequestDTO = objectMapper.readValue(request.getInputStream(), LoginRequestDto.class);
             log.info("UsernamePasswordAuthenticationToken 생성 [{}]", requestURI);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
             System.out.println("authenticationToken = " + authenticationToken);
@@ -54,6 +55,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             e.printStackTrace();
         } catch (BadCredentialsException e) {
             log.error("자격 증명 실패 : attemptAuthentication()", e);
+            request.setAttribute("exception", "password");
+            throw new JwtException("비밀번호가 일치하지 않습니다");
+        } catch (InternalAuthenticationServiceException e) {
+            log.error("인증 요청에 대한 처리 실패 | 아아디 존재하지 않음", e);
+            request.setAttribute("exception", "loginId");
+            throw new JwtException("아이디가 존재하지 않습니다");
         } catch (AuthenticationException e) {
             log.error("인증 예외 발생", e);
         }

@@ -4,6 +4,7 @@ package com.capstone.pathproject.domain.company;
 import com.capstone.pathproject.domain.member.Member;
 
 import com.capstone.pathproject.dto.company.CompanyDTO;
+import com.capstone.pathproject.dto.member.MemberDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -60,7 +61,7 @@ public class Company {
     public Company(){}
 
     @Builder(builderMethodName = "createCompany")
-    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, Member member, String thumbnail) {
+    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, MemberDto member, String thumbnail) {
         this.id = id;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
@@ -71,11 +72,16 @@ public class Company {
         this.latitude = latitude;
         this.longitude = longitude;
         this.thumbnail = thumbnail;
-        this.member = member;
+        this.member = member.toEntity();
 
     }
 
     public CompanyDTO toDTO(){
+        MemberDto memberDTO = MemberDto.createMemberDto()
+                .id(member.getId())
+                .name(member.getName())
+                .loginId(member.getLoginId()).build();
+
         return CompanyDTO.createCompanyDTD()
                 .id(this.id)
                 .companyNumber(this.companyNumber)
@@ -83,7 +89,7 @@ public class Company {
                 .latitude(this.latitude)
                 .longitude(this.longitude)
                 .mail(this.mail)
-                .member(this.member)
+                .member(memberDTO)
                 .name(this.name)
                 .openDate(this.openDate)
                 .phone(this.phone)

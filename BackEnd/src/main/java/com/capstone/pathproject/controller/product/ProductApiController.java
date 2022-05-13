@@ -24,24 +24,9 @@ public class ProductApiController {
     private final ProductService productService;
 
     @PostMapping("/basic")
-    public ResponseEntity<Message<ProdBasicDTO>> createBasic(@RequestPart(value="json") ProdBasicDTO prodBasicDTO,
-                                                             @RequestPart(value = "picture", required = false) MultipartFile file ,
-                                                             HttpServletRequest httpServletRequest){
-        String fileName;
-        if (file != null){
-            fileName = file.getOriginalFilename();
-            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "product\\";
-            try {
-                file.transferTo(new File(filePath + fileName));
+    public ResponseEntity<Message<ProdBasicDTO>> createBasic(@RequestBody ProdBasicDTO prodBasicDTO){
 
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }else{
-            fileName = "";
-        }
-
-        Message<ProdBasicDTO> message = productService.createBasic(prodBasicDTO, fileName);
+        Message<ProdBasicDTO> message = productService.createBasic(prodBasicDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -52,26 +37,9 @@ public class ProductApiController {
     }
 
     @PatchMapping("/basic")
-    public ResponseEntity<Message<ProdBasicDTO>> updateBasic(@RequestPart(value="json") ProdBasicDTO prodBasicDTO,
-                                                             @RequestPart(value = "picture", required = false) MultipartFile file ,
-                                                             HttpServletRequest httpServletRequest){
+    public ResponseEntity<Message<ProdBasicDTO>> updateBasic(@RequestBody ProdBasicDTO prodBasicDTO){
 
-        String fileName;
-        if (file != null){
-            fileName = file.getOriginalFilename();
-            String filePath = httpServletRequest.getSession().getServletContext().getRealPath("")+ "product\\";
-            try {
-                file.transferTo(new File(filePath + fileName));
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }else{
-            fileName = "";
-        }
-
-
-        Message message = productService.updateBasic(prodBasicDTO, fileName);
+        Message message = productService.updateBasic(prodBasicDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 

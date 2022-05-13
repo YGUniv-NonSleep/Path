@@ -7,6 +7,7 @@ import com.capstone.pathproject.util.ClientUtil;
 import com.capstone.pathproject.util.CookieUtil;
 import com.capstone.pathproject.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -33,7 +34,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final StringRedisTemplate redisTemplate;
     private final JwtTokenUtil jwtTokenUtil;
     private final CookieUtil cookieUtil;
-    private static final String[] whiteList = {"/", "/login", "/logout", "/api/signup"};
+    private static final String[] whiteList = {"/", "/login", "/logout", "/odsay/**", "/kakao/**"};
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository, StringRedisTemplate redisTemplate, JwtTokenUtil jwtTokenUtil, CookieUtil cookieUtil) {
         super(authenticationManager);
@@ -98,7 +99,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             if (isValidateCookie(refreshTokenCookie)) {
                 String refreshToken = cookieUtil.exchangeToken(refreshTokenCookie).replace(JwtProperties.TOKEN_PREFIX, "");
                 if (jwtTokenUtil.isRefreshTokenExpireReissueTime(refreshToken)) {
-                    if (isTokenEqualsRedisValue(request, token)) {
+                    if (isTokenEqualsRedisValue(request, response, token)) {
                         reissueRefreshToken(request, response, principalDetails);
                     }
                 }
@@ -120,7 +121,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private void reissueToken(HttpServletRequest request, HttpServletResponse response, String token) {
         // Redis에 키값이 들어있고, 동일한 Ip인가?
         try {
-            if (!isTokenEqualsRedisValue(request, token)) return;
+            if (!isTokenEqualsRedisValue(request, response, token)) return;
         } catch (NullPointerException e) {
             log.error("NullPointerException : isTokenEqualsRedisValue()", e);
             return;
@@ -145,19 +146,21 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         log.info("토큰 재발급 완료 : AccessToken, RefreshToken [{}]", request.getRequestURI());
     }
 
-    private boolean isTokenEqualsRedisValue(HttpServletRequest request, String token) {
+    private boolean isTokenEqualsRedisValue(HttpServletRequest request, HttpServletResponse response, String token) {
         System.out.println("token = " + token);
         Object browserIp = redisTemplate.opsForValue().get(token);
         System.out.println("browserIp = " + browserIp);
         if (browserIp == null) {
             log.error("RefreshToken의 browserIp가 비어있습니다. : isTokenEqualsRedisValue()");
-            return false;
+            cookieUtil.deleteCookie(response, JwtProperties.REFRESH_HEADER_STRING);
+            request.setAttribute("exception", "refreshToken");
+            throw new JwtException("유효하지 않은 토큰");
         }
         boolean checkIp = ClientUtil.getIp(request).equals(browserIp);
-        if(checkIp) {
+        if (checkIp) {
             log.info("RefreshToken의 browserIp가 동일 [{}]", request.getRequestURI());
         } else {
-           log.error("RefreshToken의 browserIp가 동일하지 않음 [{}]", request.getRequestURI());
+            log.error("RefreshToken의 browserIp가 동일하지 않음 [{}]", request.getRequestURI());
             deleteRedisKey(token);
         }
         return checkIp;

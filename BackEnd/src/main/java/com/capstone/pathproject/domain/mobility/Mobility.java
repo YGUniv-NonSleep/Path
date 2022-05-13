@@ -1,5 +1,6 @@
 package com.capstone.pathproject.domain.mobility;
 
+import com.capstone.pathproject.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,11 @@ import javax.persistence.*;
         sequenceName = "MOBILITY_SEQ",
         initialValue = 1, allocationSize = 1)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Mobility {
+@AttributeOverrides({
+        @AttributeOverride(name = "createdDateTime", column = @Column(name = "MOBIL_CREATED_DATETIME")),
+        @AttributeOverride(name = "updatedDateTime", column = @Column(name = "MOBIL_UPDATED_DATETIME"))
+})
+public class Mobility extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBILITY_SEQ_GENERATOR")
@@ -29,10 +34,10 @@ public class Mobility {
     private int battery;
 
     @Column(name = "MOBIL_LONG")
-    private String longitude;
+    private double longitude;
 
     @Column(name = "MOBIL_LAT")
-    private String latitude;
+    private double latitude;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "MOBIL_STATE")
@@ -43,16 +48,13 @@ public class Mobility {
     private MobilityType type;
 
     @Builder(builderMethodName = "createMobility")
-    public Mobility(MobilityCompany mobilityCompany, int battery, String longitude, String latitude, MobilityState state, MobilityType type) {
+    public Mobility(Long id, MobilityCompany mobilityCompany, int battery, double longitude, double latitude, MobilityState state, MobilityType type) {
+        this.id = id;
         this.mobilityCompany = mobilityCompany;
         this.battery = battery;
         this.longitude = longitude;
         this.latitude = latitude;
         this.state = state;
         this.type = type;
-    }
-
-    public void addMobilityCompany(MobilityCompany mobilityCompany) {
-        this.mobilityCompany = mobilityCompany;
     }
 }

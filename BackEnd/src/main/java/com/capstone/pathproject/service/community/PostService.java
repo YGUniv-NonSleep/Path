@@ -2,12 +2,12 @@ package com.capstone.pathproject.service.community;
 
 
 import com.capstone.pathproject.domain.community.Post;
+import com.capstone.pathproject.domain.community.PostType;
 import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.dto.community.PostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.community.PostRepository;
-import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +25,10 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
 
-
     @Transactional
-    public Message<List<PostDTO>> getPostList(Pageable pageable) {
-        List<Post> result = postRepository.findAll(pageable).getContent();
+    public Message<List<PostDTO>> getPostList(PostType type, Pageable pageable) {
+//      List<Post> result = postRepository.findAll(pageable).getContent();
+        List<Post> result = postRepository.findByParentIsNullAndType(type,pageable);
         ArrayList<PostDTO> listPDT = new ArrayList<PostDTO>();
         result.stream().map(post -> post.toDTO()).forEach(postDTO -> listPDT.add(postDTO));
         return Message.<List<PostDTO>>createMessage()
@@ -37,12 +37,24 @@ public class PostService {
                 .body(listPDT).build();
     }
 
+    @Transactional
+        public Message<PostDTO> getReplyList(Long id){
+            Optional<Post> result = postRepository.findByParentId(id);
+            PostDTO postDTO = result.get().toDTO();
+
+            return Message.<PostDTO>createMessage()
+                .header(StatusEnum.OK)
+                .message("조회완료")
+                .body(postDTO).build();
+
+    }
+
+
 
     @Transactional
     public Message<List<PostDTO>> search(String keyword, Pageable pageable) {
         List<Post> postList = postRepository.findByTitleContaining(keyword, pageable);
         ArrayList<PostDTO> listPDT = new ArrayList<PostDTO>();
-
         postList.stream().map(post -> post.toDTO()).forEach(postDTO -> listPDT.add(postDTO));
         return Message.<List<PostDTO>>createMessage()
                 .header(StatusEnum.OK)
@@ -67,7 +79,7 @@ public class PostService {
         if(principalDetails != null){
             PostDTO result = PostDTO.createPostDTO()
                     .id(postDTO.getId())
-                    .member(postDTO.getMember())
+                    .member(principalDetails.getMember())
                     .parent(postDTO.getParent())
                     .view(postDTO.getView())
                     .writeDate(postDTO.getWriteDate())
@@ -96,10 +108,12 @@ public class PostService {
 
         Optional<Post> result = postRepository.findById(postDTO.getId());
         if (result.isPresent()) {
+            System.out.println(postDTO.getMember().getLoginId());
+            System.out.println(principalDetails.getMember().getLoginId());
             if(postDTO.getMember().getLoginId().equals(principalDetails.getMember().getLoginId())){
                 PostDTO updateResult = PostDTO.createPostDTO()
                         .id(postDTO.getId())
-                        .member(postDTO.getMember())
+                        .member(principalDetails.getMember())
                         .parent(postDTO.getParent())
                         .view(postDTO.getView())
                         .writeDate(postDTO.getWriteDate())
@@ -151,7 +165,7 @@ public class PostService {
                     .id(postDTO.getId())
                     .type(postDTO.getType())
                     .view(postDTO.getView())
-                    .member(postDTO.getMember())
+                    .member(principalDetails.getMember())
                     .writeDate(postDTO.getWriteDate())
                     .content(postDTO.getContent())
                     .title(postDTO.getTitle())
@@ -178,7 +192,7 @@ public class PostService {
           if(principalDetails.getMember().getRole().equals(Role.ROLE_ADMIN)){
               PostDTO updateResult = PostDTO.createPostDTO()
                       .id(postDTO.getId())
-                      .member(postDTO.getMember())
+                      .member(principalDetails.getMember())
                       .parent(postDTO.getParent())
                       .view(postDTO.getView())
                       .writeDate(postDTO.getWriteDate())
