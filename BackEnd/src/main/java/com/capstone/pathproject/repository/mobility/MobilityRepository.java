@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MobilityRepository extends JpaRepository<Mobility, Long> {
 
@@ -16,5 +17,8 @@ public interface MobilityRepository extends JpaRepository<Mobility, Long> {
             "where (m.longitude between :x - 0.0055 and :x + 0.0055) " +
             "and (m.latitude between :y - 0.00475 and :y + 0.00475) " +
             "and (m.state = 'READY')")
-    List<Mobility> getLocationMobility(@Param("x") double x, @Param("y") double y);
+    List<Mobility> findLocationMobilities(@Param("x") double x, @Param("y") double y);
+
+    @Query("select m from Mobility m left join fetch m.mobilityCompany where m.id = :id")
+    Optional<Mobility> findMobility(@Param("id") Long id);
 }

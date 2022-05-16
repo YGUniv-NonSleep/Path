@@ -25,12 +25,12 @@ public class OdsayApiController {
         return odsayService.transPaths(sx, sy, ex, ey);
     }
 
-    @GetMapping("/paths-mobil")
+    @GetMapping("/paths/mobilities")
     public List<Map<String, Object>> getPathsWithMobility(@RequestParam String sx,
                                                           @RequestParam String sy,
                                                           @RequestParam String ex,
                                                           @RequestParam String ey,
-                                                          @RequestParam Long firstMobilityId) throws JsonProcessingException {
-        return odsayService.transPathsWithMobility(sx, sy, ex, ey, firstMobilityId);
+                                                          @RequestParam Long mobilityId) throws JsonProcessingException {
+        return odsayService.transPathsWithMobility(sx, sy, ex, ey, mobilityId);
     }
 }
