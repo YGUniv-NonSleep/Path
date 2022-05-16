@@ -41,7 +41,11 @@ public class CarPostService {
                 .stime(carPostDTO.getStime())
                 .startLongitude(carPostDTO.getStartLongitude())
                 .startLatitude(carPostDTO.getStartLatitude())
-                .local(carPostDTO.getLocal())
+                .startLocal1(carPostDTO.getStartLocal1())
+                .startLocal2(carPostDTO.getStartLocal2())
+                .arriveLocal1(carPostDTO.getArriveLocal1())
+                .arriveLocal2(carPostDTO.getArriveLocal2())
+                .price(carPostDTO.getPrice())
                 .build();
         carPostRepository.save(result.toEntity());
         return Message.<CarPostDTO>createMessage()
@@ -70,7 +74,11 @@ public class CarPostService {
                     .photoName(fileName)
                     .recruit(carPostDTO.getRecruit())
                     .stime(carPostDTO.getStime())
-                    .local(carPostDTO.getLocal())
+                    .startLocal1(carPostDTO.getStartLocal1())
+                    .startLocal2(carPostDTO.getStartLocal2())
+                    .arriveLocal1(carPostDTO.getArriveLocal1())
+                    .arriveLocal2(carPostDTO.getArriveLocal2())
+                    .price(carPostDTO.getPrice())
                     .build();
                 carPostRepository.save(updateResult.toEntity());
             }else{
@@ -133,14 +141,28 @@ public class CarPostService {
     }
 
     @Transactional
-    public Message<List<CarPostDTO>> search(String keyword, Pageable pageable){
-        List<CarPost> carpostList = carPostRepository.findByTitleContaining(keyword,pageable);
-        ArrayList<CarPostDTO> listPDT = new ArrayList<CarPostDTO>();
-        carpostList.stream().map(carPost -> carPost.toDTO()).forEach(carPostDTO -> listPDT.add(carPostDTO));
-        return Message.<List<CarPostDTO>>createMessage()
-                .header(StatusEnum.OK)
-                .message("검색완료")
-                .body(listPDT).build();
+    public Message<List<CarPostDTO>> search(String keyword,String option ,Pageable pageable){
+        System.out.println(keyword);
+        System.out.println(option.getClass());
+        if(option.equals("1")){
+            List<CarPost> carpostList = carPostRepository.findByStartLocal1Containing(keyword,pageable);
+
+            ArrayList<CarPostDTO> listPDT = new ArrayList<CarPostDTO>();
+            carpostList.stream().map(carPost -> carPost.toDTO()).forEach(carPostDTO -> listPDT.add(carPostDTO));
+            return Message.<List<CarPostDTO>>createMessage()
+                    .header(StatusEnum.OK)
+                    .message("검색완료")
+                    .body(listPDT).build();
+        }else{
+            List<CarPost> carpostList = carPostRepository.findByStartLocal2Containing(keyword,pageable);
+            ArrayList<CarPostDTO> listPDT = new ArrayList<CarPostDTO>();
+            carpostList.stream().map(carPost -> carPost.toDTO()).forEach(carPostDTO -> listPDT.add(carPostDTO));
+            return Message.<List<CarPostDTO>>createMessage()
+                    .header(StatusEnum.OK)
+                    .message("검색완료")
+                    .body(listPDT).build();
+        }
+
     }
 
 }

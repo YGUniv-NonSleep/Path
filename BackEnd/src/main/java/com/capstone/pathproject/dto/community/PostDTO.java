@@ -3,6 +3,7 @@ package com.capstone.pathproject.dto.community;
 import com.capstone.pathproject.domain.community.Post;
 import com.capstone.pathproject.domain.community.PostType;
 import com.capstone.pathproject.domain.member.Member;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostDTO {
     private Long id; //pk
     private Member member; //글쓴이

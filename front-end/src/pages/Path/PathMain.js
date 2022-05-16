@@ -39,6 +39,7 @@ const SearchArea = styled.div`
 const DirectionSummaryList = styled.div`
   position: relative;
   height: 75%;
+  overflow: auto;
 `;
 
 const SwitchButton = styled.button`
@@ -57,7 +58,7 @@ const SwitchButton = styled.button`
 function PathMain() {
   const { 
     SPoint, APoint, jusoOption, loading, 
-    onchangeSP, onchangeAP, refreshPoints, switchPoints, wayFind
+    onchangeSP, onchangeAP, refreshPoints, switchPoints, wayFind, pathDrawing
   } = useInputForm()
 
   return (
@@ -88,10 +89,10 @@ function PathMain() {
               <Grid>
                 <Button
                   variant="outlined"
-                  sx={{ width: 80, height: 35, marginRight: "10px" }}
+                  sx={{ width: 80, height: 35, marginRight: "10px", paddingRight: "8px" }}
                   startIcon={<AutorenewIcon sx={{ marginLeft: -1 }} />}
                   onClick={refreshPoints}
-                ><Typography variant="inherit" sx={{ width: 40, fontSize: 10 }}>
+                ><Typography variant="inherit" sx={{ marginLeft: -0.5, fontSize: 10 }}>
                   다시입력
                   </Typography>
                 </Button>
@@ -107,11 +108,11 @@ function PathMain() {
               <Grid>
                 <Button
                   variant="contained"
-                  sx={{ width: 80, height: 35, marginLeft: "84px" }}
-                  endIcon={<ChevronRightIcon sx={{ marginRight: -1 }} />}
+                  sx={{ width: 80, height: 35, marginLeft: "84px", paddingLeft: "13px" }}
+                  endIcon={<ChevronRightIcon sx={{ marginRight: -2 }} />}
                   onClick={wayFind}
-                ><Typography variant="inherit" align="left" sx={{ fontSize: 11 }}>
-                  길 찾기
+                ><Typography variant="inherit" align="left" sx={{ fontSize: 12 }}>
+                  길찾기
                  </Typography>
                 </Button>
               </Grid>
@@ -119,8 +120,8 @@ function PathMain() {
           </Box>
         </SearchArea>
         <DirectionSummaryList>
-          {/* <button onClick={() => pathSearch(0)}>0</button> */}
-          <PathList></PathList>
+          <button onClick={() => pathDrawing(0)}>0</button>
+          
         </DirectionSummaryList>
       </SideNav>
       <Map />

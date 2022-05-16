@@ -16,6 +16,7 @@ function useInputForm() {
   const [APoint, setAPoint] = useState(''); // 도착지 주소창
   const [insertPoint, setInsertPoint] = useState(''); // 입력에 반응하는 창 state
 
+  const [pathList, setPathList] = useState([]); // 
   const [polyLineData, setPolyLineData] = useState([]); // 경로 그래픽 데이터
   const [markerData, setMarkerData] = useState([]); // 마커 그래픽 데이터
 
@@ -117,10 +118,8 @@ function useInputForm() {
     let walkCoordinate = [];
 
     let startPedestrianPath = await TmapApi.getPedestrianPath(
-      startX,
-      startY,
-      endX,
-      endY
+      startX, startY, 
+      endX, endY
     );
 
     for (var i in startPedestrianPath.features) {
@@ -150,35 +149,39 @@ function useInputForm() {
     walkResult.setMap(map);
   };
 
-  async function pathSearch(idx) {
-    if (idx == undefined) idx = 0;
-
+  async function pathSearch(){
     // ===== 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 ===== //
-    const graphicData = await PathApi.getTransPath({
-      sx: way[0].x,
-      sy: way[0].y,
-      ex: way[1].x,
-      ey: way[1].y,
+    const pathData = await PathApi.getTransPath({
+      sx: way[0].x, sy: way[0].y,
+      ex: way[1].x, ey: way[1].y,
     });
-    console.log(graphicData);
-
+    // console.log(pathData);
+    // 여기서부터 작업
+    setPathList(prev => [...prev, pathData])
+  }
+console.log(pathList)
+  async function pathDrawing(idx) {
+    if (idx == undefined) idx = 0;
+    
+    // 나중에 pathList 출발지, 도착지 x, y 좌표 받아야겠다.
     const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
     sp.setMap(map);
 
     const ap = await MapApi().drawKakaoMarker(way[1].x, way[1].y);
     ap.setMap(map);
 
-    // graphicData를 얻어와서 polyline을 그리는 단계
-    // graphicData -> list -> 사용자의 입력(idx)에 따라 다르게 그리기
+    // pathList 얻어와서 polyline을 그리는 단계
+    // pathList -> list -> 사용자의 입력(idx)에 따라 다르게 그리기
+    if(pathList.length == 0) return;
     const dkpl = MapApi().drawKakaoPolyLine(
-      graphicData[idx].routeGraphic.result.lane
+      pathList[idx].routeGraphic.result.lane
     );
-    console.log(dkpl.polyline);
+    // console.log(dkpl);
 
     dkpl.polyline.setMap(map);
 
-    // console.log(graphicData[0].boundary) // 사용자 입력에 따른 번호 변화
-    if (graphicData[idx].routeGraphic.result.boundary) {
+    // console.log(pathList[0].boundary) // 사용자 입력에 따른 번호 변화
+    if (pathList[idx].routeGraphic.result.boundary) {
       let points = [
         new kakao.maps.LatLng(way[0].y, way[0].x),
         new kakao.maps.LatLng(way[1].y, way[1].x),
@@ -242,6 +245,7 @@ function useInputForm() {
     getKeywordLatLng,
     wayFind,
     pathSearch,
+    pathDrawing, 
     createWalkPath,
   };
 }

@@ -4,14 +4,16 @@ import { useEffect, useState } from "react";
 
 function useBoardHook() {
   const [formInfo, setFormInfo] = useState(null);
+
   const [board, setBoard] = useState(null);
+  const [boardState, setBoardState] = useState(true);
+  const [category, setCategory] = useState("");
 
   const { postId } = useParams();
+  // console.log(postId)
 
   const [keyword, setKeyword] = useState(null);
   const [searched, setSearched] = useState(false);
-
-  const [boardState, setBoardState] = useState(true);
 
   const [paging, setPaging] = useState(null);
   const [pageState, setPageState] = useState(false);
@@ -130,11 +132,14 @@ function useBoardHook() {
       )
       .then((res) => {
         console.log(res.data.body);
+        setPaging(res.data.body);
+        
         setPageState(true);
         setPageState2(false);
         setPageState3(false);
         setPageState4(false);
-        setPaging(res.data.body);
+        
+        setSearched(false)
         setNoticeState(false);
         setComState(false);
         setQNAState(false);
@@ -248,24 +253,28 @@ function useBoardHook() {
       });
   };
 
-  const NOTICE = (e) => {
+  const categoryType = (e) => {
     e.preventDefault();
-    var data = {
+
+    let data = {
       type: e.target.value,
     };
     console.log(data.type);
+
     axios
       .get(
         process.env.REACT_APP_SPRING_API + "/api/post/view?type=" + data.type
       )
       .then((res) => {
         console.log(res);
-        setNotice(res.data);
-        setComState(false);
-        setQNAState(false);
-        setNoticeState(true);
-        setFaqState(false);
+        if(data.type == "NOTICE") setNotice(res.data);
+        if(data.type == "QNA") setQNA(res.data);
+        if(data.type == "COMPLAINT") setComplaint(res.data);
+        if(data.type == "FAQ") setFAQ(res.data);
+        
+        setCategory(data.type + "")
 
+        setSearched(false)
         setPageState(false);
         setPageState2(false);
         setPageState3(false);
@@ -274,115 +283,58 @@ function useBoardHook() {
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const QnA = (e) => {
-    e.preventDefault();
-    var data = {
-      type: e.target.value,
-    };
-    console.log(data.type);
-    axios
-      .get(
-        process.env.REACT_APP_SPRING_API + "/api/post/view?type=" + data.type
-      )
-      .then((res) => {
-        console.log(res);
-        setQNA(res.data);
-        setQNAState(true);
-        setNoticeState(false);
-        setComState(false);
-        setFaqState(false);
-
-        setPageState(false);
-        setPageState2(false);
-        setPageState3(false);
-        setPageState4(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const COMPLAINT = (e) => {
-    e.preventDefault();
-    var data = {
-      type: e.target.value,
-    };
-    console.log(data.type);
-    axios
-      .get(
-        process.env.REACT_APP_SPRING_API + "/api/post/view?type=" + data.type
-      )
-      .then((res) => {
-        console.log(res);
-        setComplaint(res.data);
-        setComState(true);
-        setQNAState(false);
-        setNoticeState(false);
-        setFaqState(false);
-
-        setPageState(false);
-        setPageState2(false);
-        setPageState3(false);
-        setPageState4(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const FaQ = (e) => {
-    e.preventDefault();
-    var data = {
-      type: e.target.value,
-    };
-    console.log(data.type);
-    axios
-      .get(
-        process.env.REACT_APP_SPRING_API + "/api/post/view?type=" + data.type
-      )
-      .then((res) => {
-        console.log(res);
-        setFAQ(res.data);
-        setFaqState(true);
-        setComState(false);
-        setQNAState(false);
-        setNoticeState(false);
-
-        setPageState(false);
-        setPageState2(false);
-        setPageState3(false);
-        setPageState4(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  }
 
   useEffect(() => {
-    // console.log(formInfo);
-    axios
-      .get(process.env.REACT_APP_SPRING_API + "/api/post/view")
-      .then((response) => {
-        console.log(response.data);
-        setBoard(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [formInfo]);
+    if(category==="NOTICE"){
+      setNoticeState(true);
+      setFaqState(false);
+      setComState(false);
+      setQNAState(false);
+    } 
+    if(category==="QNA"){
+      setQNAState(true);
+      setFaqState(false);
+      setComState(false);
+      setNoticeState(false);
+    } 
+    if(category==="COMPLAINT"){
+      setComState(true);
+      setFaqState(false);
+      setQNAState(false);
+      setNoticeState(false);
+    } 
+    if(category==="FAQ"){
+      setFaqState(true);
+      setComState(false);
+      setQNAState(false);
+      setNoticeState(false);
+    }
+  }, [category])
+
+  // useEffect(() => {
+  //   // console.log(formInfo);
+  //   axios
+  //     .get(process.env.REACT_APP_SPRING_API + "/api/post/view")
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       setBoard(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [formInfo]);
 
   return { 
-    formInfo, board, keyword, searched, boardState, paging, pageState, 
+    formInfo, board, keyword, searched, paging, pageState, 
     paging2, pageState2, paging3, pageState3, paging4, pageState4, 
     numbering, notice, noticeState, QNA, qnaState, 
-    complaint, comState, FAQ, faqState, buttonState,
-    keywordSubmit, commuSubmit,
+    complaint, comState, FAQ, faqState, buttonState, category, 
+    keywordSubmit, commuSubmit, categoryType, 
     noticePaging, QnAPaging, ComplaintPaging, FaQPaging, 
-    NOTICE, QnA, COMPLAINT, FaQ,
+    setBoard, setBoardState, setNumbering, setButtonState, 
     postId 
-}
+  }
 }
 
 export default useBoardHook;
