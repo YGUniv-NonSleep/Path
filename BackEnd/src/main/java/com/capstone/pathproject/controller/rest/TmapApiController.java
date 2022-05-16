@@ -1,9 +1,12 @@
 package com.capstone.pathproject.controller.rest;
 
 import com.capstone.pathproject.service.rest.TmapService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @Slf4j
@@ -19,6 +22,15 @@ public class TmapApiController {
                            @RequestParam String sy,
                            @RequestParam String ex,
                            @RequestParam String ey) {
-        return tmapService.walkPath(sx, sy, ex, ey);
+        return tmapService.walkPath(sx, sy, ex, ey, 4);
+    }
+
+    @GetMapping("/path-middle-mobility")
+    public Map<String, Object> walkToMobilPath(@RequestParam String sx,
+                                               @RequestParam String sy,
+                                               @RequestParam String ex,
+                                               @RequestParam String ey,
+                                               @RequestParam Long mobilityId) throws JsonProcessingException {
+        return tmapService.walkToMobilPath(sx, sy, ex, ey, mobilityId);
     }
 }
