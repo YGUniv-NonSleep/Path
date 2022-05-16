@@ -39,14 +39,53 @@ public class OdsayService {
         Collections.sort(paths);
         List<Map<String, Object>> results = new ArrayList<>();
         for (Path path : paths) {
+            String firstStartStation = path.getInfo().getFirstStartStation();
+            String lastEndStation = path.getInfo().getLastEndStation();
+            double startX = 0;
+            double startY = 0;
+            double endX = 0;
+            double endY = 0;
+            List<SubPath> subPaths = path.getSubPath();
+            for (SubPath subPath : subPaths) {
+                String startStation = subPath.getStartName();
+                if (startStation != null) {
+                    if (startStation.equals(firstStartStation)) {
+                        startX = subPath.getStartX();
+                        startY = subPath.getStartY();
+                    }
+                }
+                String endStation = subPath.getEndName();
+                if (endStation != null) {
+                    if (endStation.equals(lastEndStation)) {
+                        endX = subPath.getEndX();
+                        endY = subPath.getEndY();
+                    }
+                }
+            }
             Map<String, Object> map = new LinkedHashMap<>();
             String jsonRouteGraphic = routeGraphicData(path.getInfo().getMapObj());
             RouteGraphicDTO routeGraphicDTO = mapper.readValue(jsonRouteGraphic, RouteGraphicDTO.class);
+            Map<String, Object> startPos = new HashMap<>();
+            startPos.put("x", Double.parseDouble(sx));
+            startPos.put("y", Double.parseDouble(sy));
+            Map<String, Object> endPos = new HashMap<>();
+            endPos.put("x", Double.parseDouble(ex));
+            endPos.put("y", Double.parseDouble(ey));
+            Map<String, Object> startStation = new HashMap<>();
+            startStation.put("firstStartStation", firstStartStation);
+            startStation.put("x", startX);
+            startStation.put("y", startY);
+            Map<String, Object> endStation = new HashMap<>();
+            endStation.put("lastEndStation", lastEndStation);
+            endStation.put("x", endX);
+            endStation.put("y", endY);
             map.put("pathType", path.getPathType());
             map.put("totalTime", path.getInfo().getTotalTime());
             map.put("payment", path.getInfo().getPayment());
-            map.put("startPos", sx + ", " + sy);
-            map.put("endPos", ex + ", " + ey);
+            map.put("startPos", startPos);
+            map.put("endPos", endPos);
+            map.put("startStation", startStation);
+            map.put("endStation", endStation);
             map.put("busTransitCount", path.getInfo().getBusTransitCount());
             map.put("subwayTransitCount", path.getInfo().getSubwayTransitCount());
             map.put("routeGraphic", routeGraphicDTO);
@@ -104,7 +143,6 @@ public class OdsayService {
         String jsonTransPath = findTransPath(mobilX, mobilY, ex, ey);
         TransPathDto transPathDto = mapper.readValue(jsonTransPath, TransPathDto.class);
         List<Path> paths = transPathDto.getResult().getPath();
-        String endStation = null;
         for (Path path : paths) {
             Map<String, Object> map = new LinkedHashMap<>();
             int pathTotalTime = firstWalkTimeMin;
@@ -148,7 +186,7 @@ public class OdsayService {
                 else {
                     pathTotalTime += subPath.getSectionTime();
                 }
-                endStation = subPath.getEndName();
+                String endStation = subPath.getEndName();
                 if (endStation != null)
                     if (endStation.equals(lastEndStation)) {
                         endX = subPath.getEndX();
