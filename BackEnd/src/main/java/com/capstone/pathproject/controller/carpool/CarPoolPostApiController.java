@@ -97,8 +97,9 @@ public class CarPoolPostApiController {
 
 
     @GetMapping("/view/search")
-    public ResponseEntity search(String keyword, @PageableDefault(size = 10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
-        Message<List<CarPostDTO>> message = carPostService.search(keyword,pageable);
+    public ResponseEntity search(@RequestParam("keyword") String keyword,@RequestParam("option") String option ,@PageableDefault(size = 10,sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
+        Message<List<CarPostDTO>> message = carPostService.search(keyword,option,pageable);
+        System.out.println(option+keyword);
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
