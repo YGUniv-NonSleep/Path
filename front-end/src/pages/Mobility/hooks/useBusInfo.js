@@ -40,8 +40,12 @@ function useBusInfo(){
       // console.log(e.target.value)
       if(e.target.value != "busStop"){
         setToggleValue("bus")
+        setBusNo("")
+        setBusStop([])
       } else {
         setToggleValue("busStop")
+        setBusNo("")
+        setBusList([])
       }
     }
   
@@ -136,7 +140,7 @@ function useBusInfo(){
       }
   
       function removeGraphics() {
-        console.log(poly);
+        // console.log(poly);
         poly.setMap(null);
         setPoly("");
       }

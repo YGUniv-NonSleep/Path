@@ -16,7 +16,7 @@ function useCompStore(){
         console.log(err);
       });
   }
-  console.log(myStore)
+  
   useEffect(() => {
     getMyStore();
     return () => {
