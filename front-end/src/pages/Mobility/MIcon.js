@@ -13,10 +13,10 @@ import styled from "styled-components";
 // http://www.tcpschool.com/css/css3_transform_2Dtransform
 
 const Ul = styled.ul`
-  position: fixed;
+  position: absolute;
   z-index:10;
   top: 10px;
-  left: 100px;
+  left: 10px;
   display: grid;
   grid-template-columns: 90px 90px 90px 90px;
 `;

@@ -17,19 +17,10 @@ const ItemBasicSubCon = styled.div`
 function ItemBasicMain() {
   const { loading } = useLoading();
   const {
-    basicItems, updateItem, 
-    handleChange, registProductBasic, patchProductBasic, deleteProductBasic 
+    basicItems, updateItem, open, 
+    handleChange, registProductBasic, patchProductBasic, deleteProductBasic,
+    handleOpen, handleClose, 
   } = useItemBasic();
-  
-  //== 모달 창 제어 ==//
-  const [open, setOpen] = useState(false);
-  const handleOpen = (e) => {
-    setOpen(true);
-    setUpdateItem(basicItems[e.target.value]);
-  };
-  const handleClose = () => {
-    if (open === true) return setOpen(false);
-  };
 
   return (
     <ItemBasicCon>
