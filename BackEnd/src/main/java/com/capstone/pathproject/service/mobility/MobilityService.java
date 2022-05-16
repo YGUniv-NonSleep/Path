@@ -23,7 +23,7 @@ public class MobilityService {
     @Transactional(readOnly = true) // 경도, 위도
     public Message<List<LocationMobilityDto>> getLocationMobility(double x, double y) {
         List<LocationMobilityDto> locationMobilityDtos = new ArrayList<>();
-        List<Mobility> mobilities = mobilityRepository.getLocationMobility(x, y);
+        List<Mobility> mobilities = mobilityRepository.findLocationMobilities(x, y);
         String message;
         if (mobilities.size() == 0) {
             message = "근처에 퍼스널 모빌리티가 없습니다.";

@@ -15,6 +15,9 @@ import java.util.Map;
 public class TmapService {
 
     private final WebClient tmapWebClient;
+    private final WebClient tmapWebClient2;
+
+    public static int count = 0;
 
     public String walkPath(String sx, String sy, String ex, String ey) {
         Map<String, String> map = new HashMap<>();
@@ -25,12 +28,30 @@ public class TmapService {
         map.put("startName", "출발지");
         map.put("endName", "목적지");
         map.put("speed", "4");
-        Mono<String> mono = tmapWebClient.post()
+
+        if (count < 3) {
+            count++;
+            return getWalkPath(map).block();
+        }
+        count = 0;
+        return getWalkPath2(map).block();
+    }
+
+    private Mono<String> getWalkPath(Map<String, String> map) {
+        return tmapWebClient.post()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/routes/pedestrian")
                         .queryParam("version", 1)
                         .build())
                 .bodyValue(map)
                 .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
-        return mono.block();
+    }
+
+    private Mono<String> getWalkPath2(Map<String, String> map) {
+        return tmapWebClient2.post()
+                .uri(uriBuilder -> uriBuilder.path("/tmap/routes/pedestrian")
+                        .queryParam("version", 1)
+                        .build())
+                .bodyValue(map)
+                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
     }
 }

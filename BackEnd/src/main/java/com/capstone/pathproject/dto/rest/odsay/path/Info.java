@@ -1,6 +1,5 @@
 package com.capstone.pathproject.dto.rest.odsay.path;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,5 +13,5 @@ public class Info {
     private String mapObj;
     private int busTransitCount;
     private int subwayTransitCount;
-
+    private String lastEndStation;
 }
