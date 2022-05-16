@@ -31,41 +31,35 @@ const MousePointer = styled.button`
 function CommunityMain() {
   const { loading } = useLoading();
   const { 
-    keyword, searched, paging, pageState, 
-    paging2, pageState2, paging3, pageState3, paging4, pageState4, 
-    numbering, notice, noticeState, QNA, qnaState, 
-    complaint, comState, FAQ, faqState, buttonState
-  } = useBoardHook();
-  const { 
-    keywordSubmit, commuSubmit,
+    keyword, searched, numbering, 
+    paging, pageState, paging2, pageState2, 
+    paging3, pageState3, paging4, pageState4, 
+    notice, QNA, complaint, FAQ, 
+    noticeState, qnaState, comState, faqState,
+    keywordSubmit, categoryType,
     noticePaging, QnAPaging, ComplaintPaging, FaQPaging, 
-    NOTICE, QnA, COMPLAINT, FaQ
+    setBoardState, setNumbering, setButtonState
   } = useBoardHook();
-  const postId = useBoardHook();
 
   return (
     <div className="Community">
       <CommuCon>
         <CommuSubCon>
           {loading ? <h2>고객센터입니다</h2> : <h2>로드 중...</h2>}
-          {buttonState ? (
-            <>
-              <button onClick={NOTICE} value="NOTICE">
-                공지사항
-              </button>
-              <button onClick={QnA} value="QNA">
-                QNA
-              </button>
-              <button onClick={COMPLAINT} value="COMPLAINT">
-                불만접수
-              </button>
-              <button onClick={FaQ} value="FAQ">
-                FAQ
-              </button>
-            </>
-          ) : (
-            ""
-          )}
+          <>
+            <button onClick={categoryType} value="NOTICE">
+              공지사항
+            </button>
+            <button onClick={categoryType} value="QNA">
+              QNA
+            </button>
+            <button onClick={categoryType} value="COMPLAINT">
+              불만접수
+            </button>
+            <button onClick={categoryType} value="FAQ">
+              FAQ
+            </button>
+          </>
           <form onSubmit={keywordSubmit} align="right">
             <input
               type="text"
@@ -751,9 +745,9 @@ function CommunityMain() {
                 className="post-view-go-list-btn"
                 onClick={() => {
                   setBoardState(true),
-                    setSearched(false),
-                    setNumbering(true),
-                    setButtonState(true);
+                  setSearched(false),
+                  setNumbering(true),
+                  setButtonState(true);
                 }}
               >
                 목록으로 돌아가기
