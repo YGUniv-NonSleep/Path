@@ -116,7 +116,6 @@ public class TmapService {
                 }
             }
         }
-        System.out.println("노선그래픽데이터 갯수 = " + tmapGraphPos.size());
     }
 
     public ObjectMapper getObjectMapper() {
