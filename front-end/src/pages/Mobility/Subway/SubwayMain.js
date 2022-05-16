@@ -149,13 +149,60 @@ top: 395px;
 left: 80px;
 `;
 
+const Text = styled.p`
+  position: absolute;
+  top: 200px;
+  left: 15px;
+  font-size: 13px;
+  font-weight: bold;
+`;
+
+const Line1 = styled.hr`
+  position: absolute;
+  top: 220px;
+  left: 15px;
+  width: 350px;
+  height: 1px;
+  border: none;
+  background-color: rgb(211, 211, 211);
+`;
+
+const Text1 = styled.p`
+  position: absolute;
+  top: 370px;
+  left: 15px;
+  font-size: 13px;
+  font-weight: bold;
+`;
+
+const Line2 = styled.hr`
+  position: absolute;
+  top: 390px;
+  left: 15px;
+  width: 350px;
+  height: 1px;
+  border: none;
+  background-color: rgb(211, 211, 211);
+`;
+
+const ExitInfo = styled.div`
+
+`;
+
+const ExitBox = styled.div`
+position: absolute;
+top: 250px;
+left: 10px;
+`;
+
 function SubwayMain() {
   const [map, settingMap] = useState(null);
   const [loading, setLoading] = useState(false);
   const [subName, setSubName] = useState("");
   const [markers, setMarkers] = useState([]);
   const [staInfo, setStaInfo] = useState([]);
-  const [subTime, setSubTime] =useState([]);
+  const [subTime, setSubTime] = useState([]);
+  const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
 
   async function mapLoad() {
@@ -207,7 +254,7 @@ function SubwayMain() {
 
     let subInfo = await SubwayApi.getSubInfo(stationInfo.stationID).catch((error) => console.log(error));
     console.log(subInfo)
-
+    setSubExit(subInfo.exitInfo.gate)
     setStaInfo(subInfo)
 
     let subTime = await SubwayApi.getSubTime(stationInfo.stationID);
@@ -303,7 +350,6 @@ function SubwayMain() {
                 <NewAddressBox>지번</NewAddressBox>
                 {staInfo.defaultInfo.new_address}
                 </NewAddress>
-
                 <CallNum>{staInfo.defaultInfo.tel}</CallNum>
                 <Line></Line>
                 <Btn onClick={onToggle} value="time">시간표</Btn>
@@ -346,9 +392,35 @@ function SubwayMain() {
                   <CompareArrowsIcon fontSize="small"/>
                 </InfoIcon>
             </>
+          ) : toggleValue == "time" && staInfo != undefined && staInfo.length !=0 ? (
+            <>
+             <Btn onClick={onToggle} value="time">시간표</Btn>
+             <Btn1 onClick={onToggle} value="exit">출구정보</Btn1>
+
+            </>
+          ) : toggleValue == "exit" && staInfo != undefined && staInfo.length !=0 ?(
+            <>
+             <Btn onClick={onToggle} value="time">시간표</Btn>
+             <Btn1 onClick={onToggle} value="exit">출구정보</Btn1>
+             <ExitBox>
+             { subExit.map((item)=> {
+                    return (
+                      <div>
+                        <ExitInfo>{item.gateLink}</ExitInfo>
+                        
+                      </div>
+                    );
+                  })
+                }
+             </ExitBox>
+            
+            </>
           ) : 
           <>
-            
+            <Text>최근 검색</Text>
+              <Line1></Line1>
+              <Text1>즐겨찾기한 목록</Text1>
+              <Line2></Line2>
           </> 
           
         }
