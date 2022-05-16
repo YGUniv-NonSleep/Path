@@ -17,6 +17,9 @@ const NullCommuBoard = styled.td`
   border: 1px solid black;
   text-align: center;
 `;
+const OptionBar = styled.option`
+    text-align : center;
+`;
 
 
 function CarPoolPresenter(props) {
@@ -36,14 +39,42 @@ function CarPoolPresenter(props) {
     },[])
 
 
+    const findKeyword = (e) =>{
+        e.preventDefault();
+
+        var data = {
+            keyword : e.target.keyword.value,
+            option : document.getElementById('selectValue').value
+        }
+        axios.get(process.env.REACT_APP_SPRING_API + `/api/carpost/view/?keyword=${data.keyword}&option=${data.option}`)
+        .then((res)=>{
+            console.log(res);
+        })
+        .catch((err)=>{ 
+            console.log(err.data);
+        })
+    }
+
     return (
         <div className="CarPool">
            <CommuSubCon>
+               <div style={{float : 'right'}}>
+                   <form onSubmit={findKeyword}>
+                    <select id="selectValue">
+                        <OptionBar>========선택========</OptionBar>
+                        <OptionBar name="option" value="1">시,군,구 검색</OptionBar>
+                        <OptionBar name="option" value="2">읍,면,동 검색</OptionBar>
+                    </select>
+                   <input type="text" placeholder="검색어를 입력하세요" name="keyword"></input>
+                   <button type="submit">검색</button>
+                   </form>
+               </div>
                <table>
                     <tr>
                         <CommuBoard>게시글번호</CommuBoard>
                         <CommuBoard>제목</CommuBoard>
-                        <CommuBoard>지역</CommuBoard>
+                        <CommuBoard>출발지역</CommuBoard>
+                        <CommuBoard>도착지역</CommuBoard>
                         <CommuBoard>탑승인원</CommuBoard>
                     </tr>
                        {viewset == null | viewset == '' ? 
@@ -58,7 +89,8 @@ function CarPoolPresenter(props) {
                                             to={{pathname : `/carpool/${result.id}`}}>
                                             {result.title}</Link>
                                     </CommuBoard2>
-                                     <CommuBoard2>{result.local}</CommuBoard2>
+                                     <CommuBoard2>{result.startLocal}</CommuBoard2>
+                                     <CommuBoard2>{result.arriveLocal}</CommuBoard2>
                                      <CommuBoard2>{result.recruit}</CommuBoard2>  
                                    </tr>
                                );

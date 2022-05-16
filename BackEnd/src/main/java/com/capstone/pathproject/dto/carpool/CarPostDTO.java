@@ -27,11 +27,16 @@ public class CarPostDTO{
     private String arriveLatitude;
     private Time stime;
     private String photoName;
-    private String local;
+    private String startLocal1;
+    private String startLocal2;
+    private String arriveLocal1;
+    private String arriveLocal2;
+    private int price;
 
     @Builder(builderMethodName = "createCarPostDTO")
     public CarPostDTO(Long id, Member member, Cars cars ,String title, String content, LocalDate sdate, LocalDate edate, int recruit,
-                      String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, Time stime, String photoName, String local){
+                      String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, Time stime, String photoName,
+                      String startLocal1,String startLocal2,String arriveLocal1, String arriveLocal2, int price){
 
         this.id = id;
         this.member = member;
@@ -47,7 +52,11 @@ public class CarPostDTO{
         this.arriveLatitude = arriveLatitude;
         this.stime = stime;
         this.photoName = photoName;
-        this.local = local;
+        this.startLocal1 = startLocal1;
+        this.startLocal2 = startLocal2;
+        this.arriveLocal1 = arriveLocal1;
+        this.arriveLocal2 = arriveLocal2;
+        this.price = price;
     }
     public CarPost toEntity(){
         return CarPost.createCarPost()
@@ -65,7 +74,11 @@ public class CarPostDTO{
                 .arriveLatitude(arriveLatitude)
                 .stime(stime)
                 .photoName(photoName)
-                .local(local)
+                .startLocal1(startLocal1)
+                .startLocal2(startLocal2)
+                .arriveLocal1(arriveLocal1)
+                .arriveLocal2(arriveLocal2)
+                .price(price)
                 .build();
 
     }

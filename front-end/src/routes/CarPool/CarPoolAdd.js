@@ -19,12 +19,14 @@ function CarPoolAdd(){
     const [isStartOpen, setIsStartOpen] = useState(false);
     const [startX, setStartX] = useState(null);
     const [startY, setStartY] = useState(null);
-    const [startLocal, setStartLocal] =useState(null);
+    const [startLocal1, setStartLocal1] = useState(null);
+    const [startLocal2, setStartLocal2] = useState(null);
 
     const [isArrivedOpen, setIsArrivedOpen] = useState(false);
     const [arriveX, setArriveX] = useState(null);
     const [arriveY, setArriveY] = useState(null);
-    const [arriveLocal,setArriveLocal] = useState(null);
+    const [arriveLocal1,setArriveLocal1] = useState(null);
+    const [arriveLocal2,setArriveLocal2] = useState(null);
     const [dataset, setDataSet] = useState(null);
 
     const [startAddr, setStartAddr] = useState(null);
@@ -66,33 +68,8 @@ function CarPoolAdd(){
     const handleComplete = (data) => {
         
         let fullAddress = data.address;
-        let extraAddress = "";
-    
-        if (data.addressType === "R") {
-          if (data.bname !== "") {
-            extraAddress += data.bname;
-          }
-          if (data.buildingName !== "") {
-            extraAddress +=
-              extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
-          }
-          fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
-        }
-      
-        setStartLocal(data.sido)
-        setStartAddr(fullAddress)
-        getCoords(fullAddress);
-      };
-
-
-
-      const openArrivedCode = (e) =>{
-        setIsStartOpen(false);
-        setIsArrivedOpen(true);
-      }
-
-      const handleComplete2 = (data) =>{
-        let fullAddress = data.address;
+        let sigungu = data.sigungu;
+        let bname = data.bname;
         let extraAddress = "";
     
         if (data.addressType === "R") {
@@ -107,7 +84,41 @@ function CarPoolAdd(){
         }
       
         
-        setArriveLocal(data.sido)
+        setStartLocal1(sigungu)
+        setStartLocal2(bname)
+        console.log(sigungu)
+        console.log(bname)
+        setStartAddr(fullAddress)
+        getCoords(fullAddress);
+      };
+
+
+
+      const openArrivedCode = (e) =>{
+        setIsStartOpen(false);
+        setIsArrivedOpen(true);
+      }
+
+      const handleComplete2 = (data) =>{
+        let fullAddress = data.address;
+        let sigungu = data.sigungu;
+        let bname = data.bname;
+        let extraAddress = "";
+    
+        if (data.addressType === "R") {
+          if (data.bname !== "") {
+            extraAddress += data.bname;
+          }
+          if (data.buildingName !== "") {
+            extraAddress +=
+              extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+          }
+          fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+        }
+      
+        
+        setArriveLocal1(sigungu);
+        setArriveLocal2(bname);
         setArriveAddr(fullAddress);
         getArrivedCoords(fullAddress);
       };
@@ -125,7 +136,11 @@ function CarPoolAdd(){
           startLongitude : startY,
           arriveLatitude : arriveX,
           arriveLongitude : arriveY,
-          local : arriveLocal,
+          startLocal1 : startLocal1,
+          startLocal2 : startLocal2,
+          arriveLocal1 : arriveLocal1,
+          arriveLocal2 :arriveLocal2,
+          price : e.target.price.value,
           cars : {
             id : 1
           }
@@ -167,6 +182,7 @@ function CarPoolAdd(){
                     시작날짜 : <input type="date" name="sdate"></input><br></br>
                     종료날짜 : <input type="date" name="edate"></input><br></br>
                     출발시간 : <input type="time" name="stime"></input><br></br>
+                    희망금액 : <input type="number" name="price"></input><br></br>
                     <button type="button" onClick={openStartCode}>출발지 검색</button>
                     <p>{startAddr}</p>
                     <button type="button" onClick={openArrivedCode}>도착지 검색</button>

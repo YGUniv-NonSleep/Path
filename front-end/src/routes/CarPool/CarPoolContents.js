@@ -55,26 +55,63 @@ const [showModal, setShowModal] = useState(false);
 const [isStartOpen, setIsStartOpen] = useState(false);
 const [startX, setStartX] = useState(null);
 const [startY, setStartY] = useState(null);
-const [startLocal, setStartLocal] =useState(null);
+const [startLocal1, setStartLocal1] = useState(null);
+const [startLocal2, setStartLocal2] = useState(null);
 const [isArrivedOpen, setIsArrivedOpen] = useState(false);
 const [arriveX, setArriveX] = useState(null);
 const [arriveY, setArriveY] = useState(null);
-const [arriveLocal,setArriveLocal] = useState(null);
+const [arriveLocal1,setArriveLocal1] = useState(null);
+const [arriveLocal2,setArriveLocal2] = useState(null);
 const [startAddr, setStartAddr] = useState(null);
 const [arriveAddr, setArriveAddr] = useState(null);
 
-const setLocal = () =>{
-    if(arriveLocal == null){
+const setLocalArrived1 = () =>{
+    if(arriveLocal1 == null){
         return(
-            effectState.local
+            effectState.arriveLocal1
         )
-    }else if(arriveLocal != null){
+    }else if(arriveLocal1 != null){
         return(
-            arriveLocal
+            arriveLocal1
         )
     }
 }
 
+const setLocalArrived2 = () =>{
+    if(arriveLocal2 == null){
+        return (
+            effectState.arriveLocal2
+        )
+    }else if(arriveLocal2 != null){
+        return(
+            arriveLocal2
+        ) 
+    }
+}
+
+const setLocalStarted1 = () =>{
+    if(startLocal1 == null) {
+        return(
+            effectState.startLocal1
+        )
+    }else if(startLocal1 != null){
+        return(
+            startLocal1
+        )
+    }
+} 
+
+const setLocalStarted2 = () =>{
+    if(startLocal2 == null){
+        return(
+            effectState.startLocal2
+        )
+    }else if(startLocal2 != null){
+        return (
+            startLocal2
+        )
+    }
+}
 
 var geocoder = new kakao.maps.services.Geocoder();
 var map;
@@ -163,12 +200,16 @@ function getArrivedCoords(data){
          sdate : e.target.sdate.value,
          edate : e.target.edate.value,
          stime : e.target.stime.value+":00",
-         local : setLocal(),
+         startLocal1 : setLocalStarted1(),
+         startLocal2 : setLocalStarted2(),
+         arriveLocal1 : setLocalArrived1(),
+         arriveLocal2 : setLocalArrived2(),
          startLongitude :  effectState.arriveLongitude, 
          startLatitude : effectState.startLatitude,
          arriveLongitude : effectState.arriveLongitude ,
          arriveLatitude : effectState.arriveLatitude, 
          member : effectState.member,
+         price : e.target.price.value,
          cars : {
             id : 1
           }
@@ -204,6 +245,8 @@ function getArrivedCoords(data){
  
  const handleComplete = (data) =>{
     let fullAddress = data.address;
+    let sigungu = data.sigungu;
+    let bname = data.bname;
     let extraAddress = "";
 
     if (data.addressType === "R") {
@@ -216,7 +259,8 @@ function getArrivedCoords(data){
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    setStartLocal(data.sido)
+    setStartLocal1(sigungu);
+    setStartLocal2(bname);
     setStartAddr(fullAddress);
     getCoords(fullAddress);
  }
@@ -228,6 +272,8 @@ function getArrivedCoords(data){
 
  const handleComplete2 = (data) =>{
     let fullAddress = data.address;
+    let sigungu = data.sigungu;
+    let bname = data.bname;
     let extraAddress = "";
 
     if (data.addressType === "R") {
@@ -240,7 +286,8 @@ function getArrivedCoords(data){
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    setArriveLocal(data.sido)
+    setArriveLocal1(sigungu);
+    setArriveLocal2(bname);
     setArriveAddr(fullAddress);
     getArrivedCoords(fullAddress);
   };
@@ -639,11 +686,15 @@ function resettingMap() {
                     </div>
                     <div className="post-view-row">
                          <label>탑승인원 : </label>
-                        <div>{effectState.recruit}</div>
+                        <div>{effectState.recruit}명</div>
                     </div>
                     <div className="post-view-row">
-                         <label>지역 : </label>
-                        <div>{effectState.local}</div>
+                        <label>출발지역 : </label>
+                        <div>{effectState.startLocal1},{effectState.startLocal2}</div>
+                    </div>
+                    <div className="post-view-row">
+                         <label>도착지역 : </label>
+                        <div>{effectState.arriveLocal1},{effectState.arriveLocal2}</div>
                     </div>
                     <div className="post-view-row">
                          <label>시작날짜 : </label>
@@ -656,6 +707,10 @@ function resettingMap() {
                     <div className="post-view-row">
                          <label>출발시간 : </label>
                         <div>{effectState.stime.substring(0,5)}</div>
+                    </div>
+                    <div className="post-view-row">
+                        <label>희망금액 : </label>
+                        <div>{effectState.price}</div>
                     </div>
                     <div className="post-view-row">
                         <label>차량정보 : </label><br></br>
@@ -702,10 +757,12 @@ function resettingMap() {
                     제목 : <input type="text"  name="title" defaultValue={effectState.title} /><br></br>
                     내용 : <input type="text"  name="content" defaultValue={effectState.content}  /><br></br>
                     탑승인원 :<input type="number" name="recruit" defaultValue={effectState.recruit}  /><br></br>
-                    지역 : <input type="text" name="local" defaultValue={effectState.local}  /><br></br>
+                    출발지역 : <input type="text" name="startLocal" defaultValue={effectState.startLocal} /><br></br>
+                    도착지역 : <input type="text" name="arriveLocal" defaultValue={effectState.arriveLocal}  /><br></br>
                     시작날짜 : <input type="date"  name="sdate" defaultValue={effectState.sdate} ></input><br></br>
                     종료날짜 : <input type="date"  name="edate" defaultValue={effectState.edate} ></input><br></br>
                     출발시간 : <input type="time"  name="stime" defaultValue={effectState.stime.substring(0,5)} ></input><br></br>
+                    희망금액 : <input type="number" name="price" defaultValue={effectState.price} /><br></br>
                     <button type="button" onClick={openStartCode}>출발지 수정</button>
                     <p>{startAddr}</p>
                     <button type="button" onClick={openArriveCode}>도착지 수정</button>

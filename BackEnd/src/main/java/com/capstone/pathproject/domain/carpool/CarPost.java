@@ -68,12 +68,25 @@ public class CarPost {
     @Column(name = "CARPOST_PHOTO_NAME")
     private String photoName;
 
-    @Column(name = "CARPOST_LOCAL")
-    private String local;
+    @Column(name = "CARPOST_STARTLOCAL1")
+    private String startLocal1;
+
+    @Column(name = "CARPOST_STARTLOCAL2")
+    private String startLocal2;
+
+    @Column(name = "CARPOST_ARRIVELOCAL1")
+    private String arriveLocal1;
+
+    @Column(name = "CARPOST_ARRIVELOCAL2")
+    private String arriveLocal2;
+
+    @Column(name = "CARPOST_PRICE")
+    private int price;
 
     @Builder(builderMethodName = "createCarPost")
     public CarPost(Long id, Member member,Cars cars ,String title, String content, LocalDate sdate, LocalDate edate,
-                   int recruit, String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, Time stime, String photoName,String local){
+                   int recruit, String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, Time stime, String photoName,
+                   String startLocal1,String startLocal2,String arriveLocal1,String arriveLocal2, int price){
 
         this.id = id;
         this.member = member;
@@ -89,7 +102,11 @@ public class CarPost {
         this.arriveLatitude = arriveLatitude;
         this.stime = stime;
         this.photoName = photoName;
-        this.local = local;
+        this.startLocal1 = startLocal1;
+        this.startLocal2 = startLocal2;
+        this.arriveLocal1 = arriveLocal1;
+        this.arriveLocal2 = arriveLocal2;
+        this.price = price;
     }
 
     public CarPostDTO toDTO(){
@@ -108,7 +125,11 @@ public class CarPost {
                 .arriveLatitude(this.arriveLatitude)
                 .stime(this.stime)
                 .photoName(this.photoName)
-                .local(this.local)
+                .startLocal1(this.startLocal1)
+                .startLocal2(this.startLocal2)
+                .arriveLocal1(this.arriveLocal1)
+                .arriveLocal2(this.arriveLocal2)
+                .price(this.price)
                 .build();
     }
 
