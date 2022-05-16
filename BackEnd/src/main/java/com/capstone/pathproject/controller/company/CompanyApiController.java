@@ -3,27 +3,19 @@ package com.capstone.pathproject.controller.company;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
+import com.capstone.pathproject.dto.member.MemberDto;
 import com.capstone.pathproject.dto.response.Message;
-import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.service.company.CompanyService;
 import com.capstone.pathproject.util.FileUtil;
 import com.capstone.pathproject.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartException;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.List;
 
 
@@ -51,15 +43,12 @@ public class CompanyApiController {
     }
 
 
-
-
-
     @PostMapping("/")
     public ResponseEntity createCom(@Valid @RequestBody CompanyDTO companyDTO,
                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-
-        companyDTO.addMember(principalDetails.getMember().toDTO());
+        Member member = principalDetails.getMember();
+        MemberDto memberDto = new MemberDto(member);
+        companyDTO.addMember(memberDto);
         Message<CompanyDTO> message = companyService.createCompany(companyDTO);
 
 //        try {
@@ -83,9 +72,9 @@ public class CompanyApiController {
     @PatchMapping("/")
     public ResponseEntity<Message<CompanyDTO>> updateCompany(@Valid @RequestBody CompanyDTO companyDTO,
                                                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-
-        companyDTO.addMember(principalDetails.getMember().toDTO());
+        Member member = principalDetails.getMember();
+        MemberDto memberDto = new MemberDto(member);
+        companyDTO.addMember(memberDto);
         Message<CompanyDTO> message = companyService.updateCompany(companyDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }

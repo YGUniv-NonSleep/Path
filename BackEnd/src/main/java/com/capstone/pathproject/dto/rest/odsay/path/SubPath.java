@@ -1,9 +1,6 @@
 package com.capstone.pathproject.dto.rest.odsay.path;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @ToString
@@ -11,4 +8,8 @@ import lombok.ToString;
 public class SubPath {
     private int trafficType;
     private int sectionTime;
+    private double distance;
+    private String endName;
+    private Double endX;
+    private Double endY;
 }

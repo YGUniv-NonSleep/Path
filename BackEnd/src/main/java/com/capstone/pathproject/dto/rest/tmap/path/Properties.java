@@ -9,4 +9,5 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Properties {
     private int totalTime;
+    private String totalDistance;
 }
