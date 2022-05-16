@@ -1,11 +1,8 @@
 import axios from 'axios';
-
 const odsayApi = axios.create({
   baseURL: `https://api.odsay.com/v1/api`,
 });
-
 const key = process.env.REACT_APP_ODSAY_API;
-
 export const PathApi = {
   getTransPath: async (data) => {
     const response = await axios
@@ -19,7 +16,6 @@ export const PathApi = {
     return response.data;
   },
 };
-
 export const MobilityApi = {
   getBusId: async (data) => {
     // console.log(data)
@@ -29,7 +25,6 @@ export const MobilityApi = {
     console.log(response.data.result.lane[0].busID);
     return response.data.result.lane[0].busID;
   },
-
   getBusStay: async (data) => {
     // console.log(data)
     const response = await odsayApi
@@ -40,7 +35,6 @@ export const MobilityApi = {
     //console.log(response.data.result.station);
     return response.data.result.station;
   },
-
   getBusLineDetail: async (busID) => {
     // console.log(busID)
     const response = await odsayApi
@@ -48,7 +42,6 @@ export const MobilityApi = {
       .catch((error) => console.log(error));
     return response.data;
   },
-
   getBusStayDetail: async (busID) => {
     const response = await odsayApi
       .get(`/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`)
@@ -57,7 +50,6 @@ export const MobilityApi = {
     return response.data.result;
   },
 };
-
 export const SubwayApi = {
   getSubName: async (data) => {
     // console.log(data)
@@ -69,7 +61,6 @@ export const SubwayApi = {
     //console.log(response.data.result.station[0].stationID);
     return response.data.result.station[0];
   },
-
   getSubTime: async (subTime) => {
     const response = await odsayApi
       .get(`/subwayTimeTable?lang=0&stationID=${subTime}&apiKey=${key}`)
@@ -77,7 +68,6 @@ export const SubwayApi = {
     //console.log(response.data.result);
     return response.data.result;
   },
-
   getSubInfo: async (subInfo) => {
     const response = await odsayApi
       .get(`/subwayStationInfo?lang=0&stationID=${subInfo}&apiKey=${key}`)
@@ -86,5 +76,4 @@ export const SubwayApi = {
     return response.data.result;
   },
 };
-
 export default odsayApi;

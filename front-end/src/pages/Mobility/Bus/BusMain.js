@@ -133,18 +133,43 @@ const BusStopBtn = styled.button`
   left: 195px;
   width: 180px;
   height: 40px;
+ 
 `;
 
 const BusStopList = styled.div`
   position: absolute;
   top: 350px;
   left: 30px;
-  width: 390px;
+  width: 350px;
   height: 600px;
+  border: none;
   overflow: scroll;
+`;
+const BusListBtn = styled.button`
+width: 300px;
+height: 70px;
+border: 0;
+border-bottom: 1px solid rgb(184, 184, 184);
+font-size: 15px;
+text-align: left;
+background-color: white;
+&:hover {
+  background-color: rgb(240, 251, 255, 0.842);
+}
 `;
 
 const BusStayList = styled.div`
+position: absolute;
+top: 250px;
+left: 20px;
+width: 350px;
+height: 600px;
+border: none;
+overflow: scroll;
+`;
+
+const BusStayList1 = styled.button`
+
 `;
 
 function BusMain() {
@@ -209,19 +234,26 @@ function BusMain() {
                 { 
                   busList.station.map((item)=>{
                     // console.log(item)
-                    return <div>{item.stationName}</div>
+                    return(
+                      <div>
+                      <BusListBtn>{item.stationName}</BusListBtn>
+                      {/* <BusStopLine/> */}
+                      </div>
+                    ) 
                   })
                 }
               </BusStopList>
             </>
-          ) : toggleValue == "busStop" &&
-            busStop != undefined &&
-            busStop.length != 0 ? (
+          ) : toggleValue == "busStop" && busStop != undefined && busStop.length != 0 ? (
             <>
               <BusStayList>
                 {
                   busStop.map((item)=> {
-                    return <div>{item.stationName}</div>
+                    return (
+                      <div>
+                        {item.stationName}
+                      </div>
+                    );
                   })
                 }
               </BusStayList>
