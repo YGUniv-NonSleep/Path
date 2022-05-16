@@ -92,7 +92,11 @@ public class Product {
 
     public List<Option> toEntityList(List<OptionDTO> dtoList ){
 
-        ArrayList<Option> optionList = null;
+        for (OptionDTO a  : dtoList ) {
+            System.out.println(a.toString());
+        }
+
+        ArrayList<Option> optionList = new ArrayList<>();
 
         dtoList.stream().map(optionDTO -> optionDTO.toEntity()).forEach(option -> optionList.add(option));
 
@@ -101,7 +105,7 @@ public class Product {
 
     public List<OptionDTO> toDtoList(List<Option> entityList){
 
-        ArrayList<OptionDTO> optionList = null;
+        ArrayList<OptionDTO> optionList = new ArrayList<>();
         entityList.stream().map(option -> option.toDTO()).forEach(optionDTO -> optionList.add(optionDTO));
         return optionList;
     }

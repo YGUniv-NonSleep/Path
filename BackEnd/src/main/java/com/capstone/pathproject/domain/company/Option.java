@@ -58,7 +58,13 @@ public class Option {
 //    }
 
     private List<DetailOption> toEntityList(List<DetailOptionDTO> dtoList){
-        ArrayList<DetailOption> detailOptionList = null;
+        ArrayList<DetailOption> detailOptionList = new ArrayList<>();
+
+        System.out.println("DetailOptionDtoList");
+        for (DetailOptionDTO a: dtoList
+             ) {
+            System.out.println(a.toString());
+        }
 
         dtoList.stream().map(detailOptionDTO -> detailOptionDTO.toEntity()).forEach(detailOption -> detailOptionList.add(detailOption));
 
@@ -66,7 +72,7 @@ public class Option {
     }
 
     private List<DetailOptionDTO> toDtoList(List<DetailOption> entityList){
-        ArrayList<DetailOptionDTO> detailOptionList = null;
+        ArrayList<DetailOptionDTO> detailOptionList = new ArrayList<>();
 
         entityList.stream().map(detailOption -> detailOption.toDTO()).forEach(detailOptionDTO -> detailOptionList.add(detailOptionDTO));
 

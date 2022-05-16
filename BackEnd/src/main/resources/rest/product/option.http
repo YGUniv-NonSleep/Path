@@ -1,9 +1,11 @@
-POST https://localhost:8080/api/product/createOption
+
+POST https://localhost:8080/api/product/option
 Content-Type: application/json
 
 {
-  "name": "sad",
-  "proId": 3
+  "name": "323",
+  "proId": 2,
+  "detailOptionList": []
 }
 
 ###
@@ -17,4 +19,15 @@ Content-Type: application/json
 }
 ###
 
-DELETE https://localhost:8080/api/product/deleteOption/17
+DELETE https://localhost:8080/api/product/option/5
+
+###
+PATCH https://localhost:8080/api/product/option
+Content-Type: application/json
+
+{
+  "id": 6,
+  "name": "2232",
+  "proId": 2,
+  "detailOptionList": []
+}

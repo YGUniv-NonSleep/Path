@@ -72,7 +72,7 @@ public class Company {
         this.latitude = latitude;
         this.longitude = longitude;
         this.thumbnail = thumbnail;
-        this.member = member.toEntity();
+//        this.member = member.toEntity();
 
     }
 
