@@ -42,9 +42,11 @@ public class OdsayService {
             Map<String, Object> map = new LinkedHashMap<>();
             String jsonRouteGraphic = routeGraphicData(path.getInfo().getMapObj());
             RouteGraphicDTO routeGraphicDTO = mapper.readValue(jsonRouteGraphic, RouteGraphicDTO.class);
+            map.put("pathType", path.getPathType());
             map.put("totalTime", path.getInfo().getTotalTime());
             map.put("payment", path.getInfo().getPayment());
-            map.put("pathType", path.getPathType());
+            map.put("startPos", sx + ", " + sy);
+            map.put("endPos", ex + ", " + ey);
             map.put("busTransitCount", path.getInfo().getBusTransitCount());
             map.put("subwayTransitCount", path.getInfo().getSubwayTransitCount());
             map.put("routeGraphic", routeGraphicDTO);
@@ -161,6 +163,8 @@ public class OdsayService {
             map.put("payment", payment);
             map.put("predictTotalTime", predictPathTotalTime);
             map.put("predictPayment", predictPayment);
+            map.put("startPos", sx + ", " + sy);
+            map.put("endPos", ex + ", " + ey);
             map.put("lastEndStation", lastEndStation);
             map.put("lastEndStationX", endX);
             map.put("lastEndStationY", endY);
