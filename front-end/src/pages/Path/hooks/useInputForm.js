@@ -6,7 +6,6 @@ import useLoading from '../../../hooks/useLoading';
 
 function useInputForm() {
   const { loading } = useLoading();
-
   const [map, settingMap] = useState(null);
 
   const [jusoValue, setJusoValue] = useState([]); // 가져온 주소 받아서 띄워줄 배열 state
@@ -34,6 +33,7 @@ function useInputForm() {
 
   // 처음 접속시 세팅 Effect Hook
   useEffect(() => {
+    console.log(map)
     mapLoad();
   }, []);
 
@@ -150,37 +150,40 @@ function useInputForm() {
   };
 
   async function pathSearch(){
-    // ===== 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 ===== //
+    // === 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 === //
     const pathData = await PathApi.getTransPath({
       sx: way[0].x, sy: way[0].y,
       ex: way[1].x, ey: way[1].y,
     });
     // console.log(pathData);
-    // 여기서부터 작업
-    setPathList(prev => [...prev, pathData])
+    setPathList(pathData)
   }
-console.log(pathList)
+
   async function pathDrawing(idx) {
     if (idx == undefined) idx = 0;
-    
+    if(markerData.length != 0) removeMarkers();    
+    if(polyLineData != "") removeGraphics();
+
     // 나중에 pathList 출발지, 도착지 x, y 좌표 받아야겠다.
     const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
     sp.setMap(map);
+    setMarkerData((current) => [...current, sp])
 
     const ap = await MapApi().drawKakaoMarker(way[1].x, way[1].y);
     ap.setMap(map);
+    setMarkerData((current) => [...current, ap])
 
     // pathList 얻어와서 polyline을 그리는 단계
-    // pathList -> list -> 사용자의 입력(idx)에 따라 다르게 그리기
-    if(pathList.length == 0) return;
+    // 사용자의 입력(idx)에 따라 다른 polyline 드로잉
     const dkpl = MapApi().drawKakaoPolyLine(
       pathList[idx].routeGraphic.result.lane
     );
     // console.log(dkpl);
 
     dkpl.polyline.setMap(map);
+    setPolyLineData(dkpl.polyline)
 
-    // console.log(pathList[0].boundary) // 사용자 입력에 따른 번호 변화
+    // console.log(pathList[0].boundary) // 사용자의 입력(idx)에 따른 boundary 변화
     if (pathList[idx].routeGraphic.result.boundary) {
       let points = [
         new kakao.maps.LatLng(way[0].y, way[0].x),
@@ -205,20 +208,43 @@ console.log(pathList)
       );
 
       let bounds = new kakao.maps.LatLngBounds();
+      
       for (var i = 0; i < points.length; i++) {
         bounds.extend(points[i]);
       }
+
       map.setBounds(bounds);
     }
+
+    function removeMarkers() {
+      for (var i = 0; i < markerData.length; i++) {
+        markerData[i].setMap(null);
+      }
+      setMarkerData([]);
+    }
+
+    function removeGraphics() {
+      polyLineData.setMap(null);
+      setPolyLineData("");
+    }
+
   }
 
   useEffect(() => {
-    if (way.length == 2) {
+    if(way.length == 2){
       // 출발지, 도착지의 위도, 경도를 통한 경로 검색
-      pathSearch();
-      //setWay([])
+      pathSearch()
+      .catch(err => console.log("경로 검색에 문제가 발생하였습니다.\n") + err)
     } else return;
   }, [way]);
+
+  useEffect(() => {
+    if(pathList.length != 0){
+      // 검색된 경로 리스트를 토대로 경로를 드로잉
+      pathDrawing()
+      .catch(err => console.log("경로 리스트를 받아오는데 문제가 발생하였습니다.\n" + err))
+    } else return;
+  }, [pathList])
 
   let jusoOption = jusoValue.map((it) => {
     // console.log(it)
