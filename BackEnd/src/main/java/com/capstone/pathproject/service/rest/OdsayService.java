@@ -39,7 +39,7 @@ public class OdsayService {
         Collections.sort(paths);
         List<Map<String, Object>> results = new ArrayList<>();
         for (Path path : paths) {
-            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> map = new LinkedHashMap<>();
             String jsonRouteGraphic = routeGraphicData(path.getInfo().getMapObj());
             RouteGraphicDTO routeGraphicDTO = mapper.readValue(jsonRouteGraphic, RouteGraphicDTO.class);
             map.put("totalTime", path.getInfo().getTotalTime());
@@ -94,7 +94,7 @@ public class OdsayService {
         String mobilY = String.valueOf(mobility.getLatitude());
         MobilityCompany mobilityCompany = mobility.getMobilityCompany();
         ObjectMapper mapper = getObjectMapper();
-        String jsonFirstWalkPath = tmapService.walkPath(sx, sy, mobilX, mobilY);
+        String jsonFirstWalkPath = tmapService.walkPath(sx, sy, mobilX, mobilY, 15);
         WalkPathDto firstWalkPathDto = mapper.readValue(jsonFirstWalkPath, WalkPathDto.class);
         int firstWalkTimeSec = firstWalkPathDto.getFeatures().get(0).getProperties().getTotalTime();
         // 출발지 -> 퍼스널 모빌리티 위치까지 도보 시간
