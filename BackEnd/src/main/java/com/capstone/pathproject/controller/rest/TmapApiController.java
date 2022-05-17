@@ -18,19 +18,19 @@ public class TmapApiController {
     private final TmapService tmapService;
 
     @GetMapping("/path")
-    public String walkPath(@RequestParam String sx,
-                           @RequestParam String sy,
-                           @RequestParam String ex,
-                           @RequestParam String ey,
+    public String walkPath(@RequestParam double sx,
+                           @RequestParam double sy,
+                           @RequestParam double ex,
+                           @RequestParam double ey,
                            @RequestParam int speed) {
         return tmapService.walkPath(sx, sy, ex, ey, speed);
     }
 
     @GetMapping("/path-middle-mobility")
-    public Map<String, Object> walkToMobilPath(@RequestParam String sx,
-                                               @RequestParam String sy,
-                                               @RequestParam String ex,
-                                               @RequestParam String ey,
+    public Map<String, Object> walkToMobilPath(@RequestParam double sx,
+                                               @RequestParam double sy,
+                                               @RequestParam double ex,
+                                               @RequestParam double ey,
                                                @RequestParam Long mobilityId) throws JsonProcessingException {
         return tmapService.walkToMobilPath(sx, sy, ex, ey, mobilityId);
     }
