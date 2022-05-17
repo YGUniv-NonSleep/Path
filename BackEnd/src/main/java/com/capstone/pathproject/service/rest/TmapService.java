@@ -34,7 +34,7 @@ public class TmapService {
         map.put("endY", ey);
         map.put("startName", "출발지");
         map.put("endName", "목적지");
-        map.put("speed", "4");
+        map.put("speed", String.valueOf(speed));
 
         if (count < 3) {
             count++;

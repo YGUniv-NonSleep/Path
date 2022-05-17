@@ -32,9 +32,10 @@ public class OdsayService {
     @Value("${api.odsay}")
     private String apiKey;
 
-    public List<Map<String, Object>> transPaths(String sx, String sy, String ex, String ey) throws JsonProcessingException {
+    public List<Map<String, Object>> transPaths(String sx, String sy, String ex, String ey, int searchPathType) throws JsonProcessingException {
         ObjectMapper mapper = getObjectMapper();
-        TransPathDto transPathDto = mapper.readValue(findTransPath(sx, sy, ex, ey), TransPathDto.class);
+        String jsonTransPath = findTransPath(sx, sy, ex, ey, searchPathType);
+        TransPathDto transPathDto = mapper.readValue(jsonTransPath, TransPathDto.class);
         List<Path> paths = transPathDto.getResult().getPath();
         Collections.sort(paths);
         List<Map<String, Object>> results = new ArrayList<>();
@@ -100,7 +101,7 @@ public class OdsayService {
         return mapper;
     }
 
-    public String findTransPath(String sx, String sy, String ex, String ey) {
+    public String findTransPath(String sx, String sy, String ex, String ey, int searchPathType) {
         Mono<String> mono = odsayWebClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/v1/api/searchPubTransPathT")
                         .queryParam("apiKey", apiKey)
@@ -108,6 +109,7 @@ public class OdsayService {
                         .queryParam("SY", sy)
                         .queryParam("EX", ex)
                         .queryParam("EY", ey)
+                        .queryParam("SearchPathType", searchPathType)
                         .build())
                 .exchangeToMono(clientResponse -> {
                     return clientResponse.bodyToMono(String.class);
@@ -140,7 +142,7 @@ public class OdsayService {
         int firstWalkTimeSec = firstWalkPathDto.getFeatures().get(0).getProperties().getTotalTime();
         // 출발지 -> 퍼스널 모빌리티 위치까지 도보 시간
         int firstWalkTimeMin = (int) Math.round(firstWalkTimeSec / 60.0);
-        String jsonTransPath = findTransPath(mobilX, mobilY, ex, ey);
+        String jsonTransPath = findTransPath(mobilX, mobilY, ex, ey, 0);
         TransPathDto transPathDto = mapper.readValue(jsonTransPath, TransPathDto.class);
         List<Path> paths = transPathDto.getResult().getPath();
         for (Path path : paths) {

@@ -21,8 +21,9 @@ public class OdsayApiController {
     public List<Map<String, Object>> getPaths(@RequestParam String sx,
                                               @RequestParam String sy,
                                               @RequestParam String ex,
-                                              @RequestParam String ey) throws JsonProcessingException {
-        return odsayService.transPaths(sx, sy, ex, ey);
+                                              @RequestParam String ey,
+                                              @RequestParam int searchPathType) throws JsonProcessingException {
+        return odsayService.transPaths(sx, sy, ex, ey, searchPathType);
     }
 
     @GetMapping("/paths/mobilities")
