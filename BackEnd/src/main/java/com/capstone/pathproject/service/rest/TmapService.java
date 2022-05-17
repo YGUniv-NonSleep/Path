@@ -26,8 +26,8 @@ public class TmapService {
 
     public static int count = 0;
 
-    public String walkPath(String sx, String sy, String ex, String ey, int speed) {
-        Map<String, String> map = new HashMap<>();
+    public String walkPath(double sx, double sy, double ex, double ey, int speed) {
+        Map<String, Object> map = new HashMap<>();
         map.put("startX", sx);
         map.put("startY", sy);
         map.put("endX", ex);
@@ -44,7 +44,7 @@ public class TmapService {
         return getWalkPath2(map).block();
     }
 
-    private Mono<String> getWalkPath(Map<String, String> map) {
+    private Mono<String> getWalkPath(Map<String, Object> map) {
         return tmapWebClient.post()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/routes/pedestrian")
                         .queryParam("version", 1)
@@ -53,7 +53,7 @@ public class TmapService {
                 .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
     }
 
-    private Mono<String> getWalkPath2(Map<String, String> map) {
+    private Mono<String> getWalkPath2(Map<String, Object> map) {
         return tmapWebClient2.post()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/routes/pedestrian")
                         .queryParam("version", 1)
@@ -62,7 +62,7 @@ public class TmapService {
                 .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
     }
 
-    public Map<String, Object> walkToMobilPath(String sx, String sy, String ex, String ey, Long mobilityId) throws JsonProcessingException {
+    public Map<String, Object> walkToMobilPath(double sx, double sy, double ex, double ey, Long mobilityId) throws JsonProcessingException {
         Map<String, Object> map = new LinkedHashMap<>();
         ObjectMapper mapper = getObjectMapper();
         // 퍼스널 모빌리티 정보 조회
@@ -72,7 +72,7 @@ public class TmapService {
         double mobilX = mobility.getLongitude();
         double mobilY = mobility.getLatitude();
         // 출발지 -> 퍼스널 모빌리티 경로 조회
-        String jsonFirstWalkPath = walkPath(sx, sy, String.valueOf(mobilX), String.valueOf(mobilY), 4);
+        String jsonFirstWalkPath = walkPath(sx, sy, mobilX, mobilY, 4);
         WalkPathDto firstWalkPathDto = mapper.readValue(jsonFirstWalkPath, WalkPathDto.class);
         int firstWalkTimeMin = changeTimeSecToMin(firstWalkPathDto.getFeatures().get(0).getProperties().getTotalTime());
         int totalTime = firstWalkTimeMin;
@@ -81,7 +81,7 @@ public class TmapService {
         List<Double[]> tmapGraphPos = new ArrayList<>();
         addGraphPos(mapper, tmapGraphPos, firstWalkPathDto);
         // 퍼스널 모빌리티 -> 목적지 경로 조회
-        String jsonLastWalkPath = walkPath(String.valueOf(mobilX), String.valueOf(mobilY), ex, ey, 15);
+        String jsonLastWalkPath = walkPath(mobilX, mobilY, ex, ey, 15);
         WalkPathDto lastWalkPathDto = mapper.readValue(jsonLastWalkPath, WalkPathDto.class);
         int lastWalkTimeMin = changeTimeSecToMin(lastWalkPathDto.getFeatures().get(0).getProperties().getTotalTime());
         int payment = mobility.getMobilityCompany().getUnlockFee() + (lastWalkTimeMin * mobility.getMobilityCompany().getMinuteFee());

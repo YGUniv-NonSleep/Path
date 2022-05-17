@@ -32,7 +32,7 @@ public class OdsayService {
     @Value("${api.odsay}")
     private String apiKey;
 
-    public List<Map<String, Object>> transPaths(String sx, String sy, String ex, String ey, int searchPathType) throws JsonProcessingException {
+    public List<Map<String, Object>> transPaths(double sx, double sy, double ex, double ey, int searchPathType) throws JsonProcessingException {
         ObjectMapper mapper = getObjectMapper();
         String jsonTransPath = findTransPath(sx, sy, ex, ey, searchPathType);
         TransPathDto transPathDto = mapper.readValue(jsonTransPath, TransPathDto.class);
@@ -67,11 +67,11 @@ public class OdsayService {
             String jsonRouteGraphic = routeGraphicData(path.getInfo().getMapObj());
             RouteGraphicDTO routeGraphicDTO = mapper.readValue(jsonRouteGraphic, RouteGraphicDTO.class);
             Map<String, Object> startPos = new HashMap<>();
-            startPos.put("x", Double.parseDouble(sx));
-            startPos.put("y", Double.parseDouble(sy));
+            startPos.put("x", sx);
+            startPos.put("y", sy);
             Map<String, Object> endPos = new HashMap<>();
-            endPos.put("x", Double.parseDouble(ex));
-            endPos.put("y", Double.parseDouble(ey));
+            endPos.put("x", ex);
+            endPos.put("y", ey);
             Map<String, Object> startStation = new HashMap<>();
             startStation.put("firstStartStation", firstStartStation);
             startStation.put("x", startX);
@@ -101,7 +101,7 @@ public class OdsayService {
         return mapper;
     }
 
-    public String findTransPath(String sx, String sy, String ex, String ey, int searchPathType) {
+    public String findTransPath(double sx, double sy, double ex, double ey, int searchPathType) {
         Mono<String> mono = odsayWebClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/v1/api/searchPubTransPathT")
                         .queryParam("apiKey", apiKey)
@@ -128,13 +128,13 @@ public class OdsayService {
         return mono.block();
     }
 
-    public List<Map<String, Object>> transPathsWithMobility(String sx, String sy, String ex, String ey, Long mobilityId) throws JsonProcessingException {
+    public List<Map<String, Object>> transPathsWithMobility(double sx, double sy, double ex, double ey, Long mobilityId) throws JsonProcessingException {
         List<Map<String, Object>> results = new ArrayList<>();
         Optional<Mobility> findMobility = mobilityRepository.findMobility(mobilityId);
         Mobility mobility = findMobility.orElse(null);
         if (mobility == null) return results;
-        String mobilX = String.valueOf(mobility.getLongitude());
-        String mobilY = String.valueOf(mobility.getLatitude());
+        double mobilX = mobility.getLongitude();
+        double mobilY = mobility.getLatitude();
         MobilityCompany mobilityCompany = mobility.getMobilityCompany();
         ObjectMapper mapper = getObjectMapper();
         String jsonFirstWalkPath = tmapService.walkPath(sx, sy, mobilX, mobilY, 15);
