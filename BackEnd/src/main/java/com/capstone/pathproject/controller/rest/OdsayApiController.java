@@ -17,6 +17,7 @@ public class OdsayApiController {
 
     private final OdsayService odsayService;
 
+    // 대중교통 길찾기 - 0(지하철+버스), 1(지하철), 2(버스)
     @GetMapping("/paths")
     public List<Map<String, Object>> getPaths(@RequestParam double sx,
                                               @RequestParam double sy,

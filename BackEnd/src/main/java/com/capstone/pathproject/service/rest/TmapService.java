@@ -28,21 +28,21 @@ public class TmapService {
     public static int count = 0;
 
     public String walkPath(double sx, double sy, double ex, double ey, int speed) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("startX", sx);
-        map.put("startY", sy);
-        map.put("endX", ex);
-        map.put("endY", ey);
-        map.put("startName", "출발지");
-        map.put("endName", "목적지");
-        map.put("speed", speed);
+        Map<String, Object> data = new HashMap<>();
+        data.put("startX", sx);
+        data.put("startY", sy);
+        data.put("endX", ex);
+        data.put("endY", ey);
+        data.put("startName", "출발지");
+        data.put("endName", "목적지");
+        data.put("speed", speed);
 
         if (count < 3) {
             count++;
-            return getWalkPath(map).block();
+            return getWalkPath(data).block();
         }
         count = 0;
-        return getWalkPath2(map).block();
+        return getWalkPath2(data).block();
     }
 
     private Mono<String> getWalkPath(Map<String, Object> map) {
@@ -154,5 +154,22 @@ public class TmapService {
         result.put("payment", payment);
         result.put("graphPos", graphPos);
         return result;
+    }
+
+    public String carPath(double sx, double sy, double ex, double ey) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("startX", sx);
+        data.put("startY", sy);
+        data.put("endX", ex);
+        data.put("endY", ey);
+        data.put("speed", 50);
+
+        Mono<String> mono = tmapWebClient.post()
+                .uri(uriBuilder -> uriBuilder.path("/tmap/routes")
+                        .queryParam("version", 1)
+                        .build())
+                .bodyValue(data)
+                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
+        return mono.block();
     }
 }
