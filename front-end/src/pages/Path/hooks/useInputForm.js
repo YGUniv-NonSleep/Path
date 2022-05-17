@@ -16,7 +16,8 @@ function useInputForm() {
   const [insertPoint, setInsertPoint] = useState(''); // 입력에 반응하는 창 state
 
   const [pathList, setPathList] = useState([]); // 
-  const [polyLineData, setPolyLineData] = useState([]); // 경로 그래픽 데이터
+  const [polyLineData, setPolyLineData] = useState([]); // 이동수단 경로 그래픽 데이터
+  const [walkLineData, setWalkLineData] = useState([]); // 도보 경로 그래픽 데이터
   const [markerData, setMarkerData] = useState([]); // 마커 그래픽 데이터
 
   // 카카오 지도를 불러오는 함수
@@ -33,7 +34,7 @@ function useInputForm() {
 
   // 처음 접속시 세팅 Effect Hook
   useEffect(() => {
-    console.log(map)
+    // console.log(map)
     mapLoad();
   }, []);
 
@@ -52,6 +53,10 @@ function useInputForm() {
     setInsertPoint('');
     setSPoint('');
     setAPoint('');
+    setPathList([]);
+    removeMarkers();
+    removeGraphics();
+    removeWalkGraphics();
   };
   // 출발지 도착지 전환하는 함수
   const switchPoints = () => {
@@ -147,7 +152,31 @@ function useInputForm() {
     // 보행자 경로 그리기
     const walkResult = await MapApi().drawKakaoWalkPolyLine(walkCoordinate);
     walkResult.setMap(map);
+    setWalkLineData((prev) => [...prev, walkResult]);
   };
+
+  console.log(walkLineData)
+  
+  function removeMarkers() {
+    for (var i = 0; i < markerData.length; i++) {
+      markerData[i].setMap(null);
+    }
+    setMarkerData([]);
+  }
+
+  function removeGraphics() {
+    polyLineData.setMap(null);
+    setPolyLineData([]);
+  }
+
+  function removeWalkGraphics() {
+    console.log(walkLineData.length)
+    for(let i=0; i<walkLineData.length; i++){
+      walkLineData[i].setMap(null);
+    }
+    // walkLineData.setMap(null);
+    setWalkLineData([]);
+  }
 
   async function pathSearch(){
     // === 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 === //
@@ -155,7 +184,7 @@ function useInputForm() {
       sx: way[0].x, sy: way[0].y,
       ex: way[1].x, ey: way[1].y,
     });
-    // console.log(pathData);
+     console.log(pathData);
     // 여기서부터 화면 구성
     setPathList(pathData)
   }
@@ -164,6 +193,7 @@ function useInputForm() {
     if (idx == undefined) idx = 0;
     if(markerData.length != 0) removeMarkers();    
     if(polyLineData != "") removeGraphics();
+    if(walkLineData != "") removeWalkGraphics();
 
     // 나중에 pathList 출발지, 도착지 x, y 좌표 받아야겠다.
     const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
@@ -216,19 +246,6 @@ function useInputForm() {
 
       map.setBounds(bounds);
     }
-
-    function removeMarkers() {
-      for (var i = 0; i < markerData.length; i++) {
-        markerData[i].setMap(null);
-      }
-      setMarkerData([]);
-    }
-
-    function removeGraphics() {
-      polyLineData.setMap(null);
-      setPolyLineData("");
-    }
-
   }
 
   useEffect(() => {
@@ -263,6 +280,7 @@ function useInputForm() {
     APoint,
     insertPoint,
     jusoOption,
+    pathList, 
     mapLoad,
     onchangeSP,
     onchangeAP,
@@ -274,6 +292,9 @@ function useInputForm() {
     pathSearch,
     pathDrawing, 
     createWalkPath,
+    removeMarkers, 
+    removeGraphics, 
+    removeWalkGraphics, 
   };
 }
 
