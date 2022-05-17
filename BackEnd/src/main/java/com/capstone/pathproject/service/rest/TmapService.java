@@ -141,7 +141,7 @@ public class TmapService {
         List<Double[]> firstGraphPos = new ArrayList<>();
         addGraphPos(mapper, firstGraphPos, walkPathDto);
         int walkTimeSec = walkPathDto.getFeatures().get(0).getProperties().getTotalTime();
-        int walkTimeMin = (int) Math.round(walkTimeSec / 60.0);
+        int walkTimeMin = changeTimeSecToMin(walkTimeSec);
         int walkDistance = Integer.parseInt(walkPathDto.getFeatures().get(0).getProperties().getTotalDistance());
         Map<String, Object> firstResult = getStringObjectMap(walkTimeMin, walkDistance, 0, firstGraphPos);
 
@@ -151,7 +151,7 @@ public class TmapService {
         List<Double[]> lastGraphPos = new ArrayList<>();
         addGraphPos(mapper, lastGraphPos, walkPathDto);
         int mobilTimeSec = mobilPathDto.getFeatures().get(0).getProperties().getTotalTime();
-        int mobilTimeMin = (int) Math.round(mobilTimeSec / 60.0);
+        int mobilTimeMin = changeTimeSecToMin(mobilTimeSec);
         int payment = unlockFee + (mobilTimeMin * minuteFee);
         int mobilDistance = Integer.parseInt(mobilPathDto.getFeatures().get(0).getProperties().getTotalDistance());
         Map<String, Object> lastResult = getStringObjectMap(mobilTimeMin, mobilDistance, payment, lastGraphPos);
