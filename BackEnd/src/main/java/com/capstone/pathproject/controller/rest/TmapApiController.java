@@ -21,8 +21,9 @@ public class TmapApiController {
     public String walkPath(@RequestParam String sx,
                            @RequestParam String sy,
                            @RequestParam String ex,
-                           @RequestParam String ey) {
-        return tmapService.walkPath(sx, sy, ex, ey, 4);
+                           @RequestParam String ey,
+                           @RequestParam int speed) {
+        return tmapService.walkPath(sx, sy, ex, ey, speed);
     }
 
     @GetMapping("/path-middle-mobility")
