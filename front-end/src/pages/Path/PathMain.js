@@ -83,13 +83,18 @@ const PathInserted = styled.li`
   margin: 0;
   padding: 0;
   list-style: none;
-
-  border: 0;
-  border-bottom: 1px solid rgb(184, 184, 184);
+  &:after {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    height: 1px;
+    background: rgba(0,0,0,.1);
+    content: "";
+  }
   &:hover {
     background-color: rgb(240, 251, 255, 0.842);
   }
-`; // text-align: left; font-size: 15px; background-color: white;
+`; // display: block;
 
 const DirectionSummaryItemTransit = styled.div`
   font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
@@ -115,7 +120,8 @@ const SwitchButton = styled.button`
 function PathMain() {
   const { 
     SPoint, APoint, jusoOption, loading, 
-    onchangeSP, onchangeAP, refreshPoints, switchPoints, wayFind, pathDrawing
+    onchangeSP, onchangeAP, refreshPoints, switchPoints, 
+    wayFind, pathDrawing 
   } = useInputForm()
 
   return (

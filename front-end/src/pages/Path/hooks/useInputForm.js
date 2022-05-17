@@ -156,6 +156,7 @@ function useInputForm() {
       ex: way[1].x, ey: way[1].y,
     });
     // console.log(pathData);
+    // 여기서부터 화면 구성
     setPathList(pathData)
   }
 
