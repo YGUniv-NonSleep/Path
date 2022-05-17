@@ -1,6 +1,7 @@
 package com.capstone.pathproject.service.rest;
 
 import com.capstone.pathproject.domain.mobility.Mobility;
+import com.capstone.pathproject.dto.mobility.LocationMobilityDto;
 import com.capstone.pathproject.dto.rest.tmap.path.Features;
 import com.capstone.pathproject.dto.rest.tmap.path.WalkPathDto;
 import com.capstone.pathproject.repository.mobility.MobilityRepository;
@@ -34,7 +35,7 @@ public class TmapService {
         map.put("endY", ey);
         map.put("startName", "출발지");
         map.put("endName", "목적지");
-        map.put("speed", String.valueOf(speed));
+        map.put("speed", speed);
 
         if (count < 3) {
             count++;
@@ -122,5 +123,69 @@ public class TmapService {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper;
+    }
+
+    public Map<String, Object> mobilityPath(double sx, double sy, double ex, double ey, Long mobilityId) throws JsonProcessingException {
+        ObjectMapper mapper = getObjectMapper();
+        // 퍼스널 모빌리티 정보 조회
+        Optional<Mobility> findMobility = mobilityRepository.findMobility(mobilityId);
+        Mobility mobility = findMobility.orElse(null);
+        if (mobility == null) return null;
+        LocationMobilityDto mobilityDto = new LocationMobilityDto(mobility);
+        int unlockFee = mobilityDto.getLocationMobilityCompanyDto().getUnlockFee();
+        int minuteFee = mobilityDto.getLocationMobilityCompanyDto().getMinuteFee();
+
+        // 출발지 -> 퍼스널 모빌리티 조회
+        String jsonWalkPath = walkPath(sx, sy, mobilityDto.getLongitude(), mobilityDto.getLatitude(), 4);
+        WalkPathDto walkPathDto = mapper.readValue(jsonWalkPath, WalkPathDto.class);
+        List<Double[]> firstGraphPos = new ArrayList<>();
+        addGraphPos(mapper, firstGraphPos, walkPathDto);
+        int walkTimeSec = walkPathDto.getFeatures().get(0).getProperties().getTotalTime();
+        int walkTimeMin = (int) Math.round(walkTimeSec / 60.0);
+        int walkDistance = Integer.parseInt(walkPathDto.getFeatures().get(0).getProperties().getTotalDistance());
+        Map<String, Object> firstResult = getStringObjectMap(walkTimeMin, walkDistance, 0, firstGraphPos);
+
+        // 퍼스널 모빌리티 -> 목적지 조회
+        String jsonMobilPath = walkPath(mobilityDto.getLongitude(), mobilityDto.getLatitude(), ex, ey, 15);
+        WalkPathDto mobilPathDto = mapper.readValue(jsonMobilPath, WalkPathDto.class);
+        List<Double[]> lastGraphPos = new ArrayList<>();
+        addGraphPos(mapper, lastGraphPos, walkPathDto);
+        int mobilTimeSec = mobilPathDto.getFeatures().get(0).getProperties().getTotalTime();
+        int mobilTimeMin = (int) Math.round(mobilTimeSec / 60.0);
+        int payment = unlockFee + (mobilTimeMin * minuteFee);
+        int mobilDistance = Integer.parseInt(mobilPathDto.getFeatures().get(0).getProperties().getTotalDistance());
+        Map<String, Object> lastResult = getStringObjectMap(mobilTimeMin, mobilDistance, payment, lastGraphPos);
+
+        Map<String, Double> startPos = createPos(sx, sy);
+        Map<String, Double> mobilPos = createPos(mobilityDto.getLongitude(), mobilityDto.getLatitude());
+        Map<String, Double> endPos = createPos(ex, ey);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("totalTime", walkTimeMin + mobilTimeMin);
+        result.put("totalDistance", walkDistance + mobilDistance);
+        result.put("payment", payment);
+        result.put("startPos", startPos);
+        result.put("mobilPos", mobilPos);
+        result.put("endPos", endPos);
+        result.put("mobility", mobilityDto);
+        result.put("firstPath", firstResult);
+        result.put("lastPath", lastResult);
+        return result;
+    }
+
+    private Map<String, Double> createPos(double x, double y) {
+        Map<String, Double> map = new HashMap<>();
+        map.put("x", x);
+        map.put("y", y);
+        return map;
+    }
+
+    private Map<String, Object> getStringObjectMap(int mobilTimeMin, int mobilDistance, int payment, List<Double[]> graphPos) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("totalTime", mobilTimeMin);
+        result.put("totalDistance", mobilDistance);
+        result.put("payment", payment);
+        result.put("graphPos", graphPos);
+        return result;
     }
 }
