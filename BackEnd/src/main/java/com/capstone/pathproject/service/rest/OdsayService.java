@@ -46,6 +46,7 @@ public class OdsayService {
             double startY = 0;
             double endX = 0;
             double endY = 0;
+            List<String> stationNames = new ArrayList<>();
             List<SubPath> subPaths = path.getSubPath();
             for (SubPath subPath : subPaths) {
                 String startStation = subPath.getStartName();
@@ -62,6 +63,14 @@ public class OdsayService {
                         endY = subPath.getEndY();
                     }
                 }
+
+                if (subPath.getStationCount() != 0) {
+                    List<SubPath.PassStopList.Stations> stations = subPath.getPassStopList().getStations();
+                    for (SubPath.PassStopList.Stations station : stations) {
+                        stationNames.add(station.getStationName());
+                    }
+                }
+
             }
             Map<String, Object> map = new LinkedHashMap<>();
             String jsonRouteGraphic = routeGraphicData(path.getInfo().getMapObj());
@@ -87,6 +96,7 @@ public class OdsayService {
             map.put("endPos", endPos);
             map.put("startStation", startStation);
             map.put("endStation", endStation);
+            map.put("stationNames", stationNames);
             map.put("busTransitCount", path.getInfo().getBusTransitCount());
             map.put("subwayTransitCount", path.getInfo().getSubwayTransitCount());
             map.put("routeGraphic", routeGraphicDTO);
