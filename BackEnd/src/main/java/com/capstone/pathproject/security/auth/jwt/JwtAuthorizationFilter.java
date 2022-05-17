@@ -133,6 +133,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String loginId = refreshClaims.get("sub").toString();
         // 시큐리티 세션에 저장하기
         Authentication authentication = getAuthentication(loginId);
+        if (authentication == null) {
+            cookieUtil.deleteCookie(response, JwtProperties.REFRESH_HEADER_STRING);
+            request.setAttribute("exception", "loginId");
+            throw new JwtException("아이디가 존재하지 않습니다");
+        }
         setAuthentication(authentication);
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         // AccessToken 생성 및 추가

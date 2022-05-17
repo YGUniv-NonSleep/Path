@@ -45,13 +45,10 @@ function Copyright(props) {
 const theme = createTheme();
 
 function LoginMain() {
-  const {
-    errorList, 
-    handleInput, handleSubmit
-  } = useLogin();
-  
+  const { handleInput, handleSubmit } = useLogin();
+
   // valid check -> loginId, password
-  
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -87,10 +84,8 @@ function LoginMain() {
                     name="loginId"
                     label="아이디"
                     onChange={handleInput}
-                    error={errorList.loginIdError !== '' || false}
                   />
                 </Grid>
-                <FormHelperTexts>{errorList.loginIdError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -100,10 +95,8 @@ function LoginMain() {
                     name="password"
                     label="비밀번호"
                     onChange={handleInput}
-                    error={errorList.passwordError !== '' || false}
                   />
                 </Grid>
-                <FormHelperTexts>{errorList.passwordError}</FormHelperTexts>
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
