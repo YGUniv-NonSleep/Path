@@ -15,6 +15,8 @@ import WcIcon from '@mui/icons-material/Wc';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import RoomIcon from '@mui/icons-material/Room';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { style } from "@mui/system";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -39,22 +41,41 @@ const Ul = styled.ul`
   left: 110px;
 `;
 
-const Btn = styled.button`
+const TimeBtn = styled.button`
   position: absolute;
-  top: 160px;
+  top: 140px;
   left: 10px;
   width: 182px;
   height: 40px;
   font-size: 12px;
 `;
 
-const Btn1 = styled.button`
+const ExitBtn1 = styled.button`
   position: absolute;
-  top: 160px;
+  top: 140px;
   left: 200px;
   width: 180px;
   height: 40px;
   font-size: 12px;
+`;
+
+const BackBtn = styled.button`
+  position: absolute;
+  top: 150px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  cursor:pointer;
+  background-color:white;
+`;
+
+const SubwayName = styled.div`
+position: absolute;
+top: 159px;
+left 50px;
+font-size: 21px;
+font-weight:bold;
 `;
 
 const LocationIcon = styled.div`
@@ -113,6 +134,16 @@ const Line = styled.hr`
   top: 320px;
   left: 10px;
   width: 370px;
+  height: 1px;
+  border: none;
+  background-color: rgb(211, 211, 211);
+`;
+
+const HeadLine = styled.hr`
+  position: absolute;
+  top: 190px;
+  left: 0px;
+  width: 390px;
   height: 1px;
   border: none;
   background-color: rgb(211, 211, 211);
@@ -185,14 +216,61 @@ const Line2 = styled.hr`
   background-color: rgb(211, 211, 211);
 `;
 
-const ExitInfo = styled.div`
+const ExitGateInfo = styled.div`
+position: absolute;
+  top: 210px;
+  left: 20px;
+  font-size: 13px;
+  font-weight:bold;
+  color: rgb(73, 73, 73);
+  
+`;
+
+const ExitNum = styled.div`
+margin-top: 5px;
+width: 20px;
+height: 100px;
+border-bottom: 1px solid rgb(184, 184, 184);
+`;
+
+const ExitGate = styled.div`
+margin-left: 20px;
+margin-top: -16px;
+width: 300px;
+height: 100px;
+border-bottom: 1px solid rgb(184, 184, 184);
 
 `;
 
 const ExitBox = styled.div`
 position: absolute;
-top: 250px;
+top: 240px;
 left: 10px;
+width: 375px;
+height: 720px;
+overflow:scroll;
+`;
+
+const PrevStop = styled.div`
+position:absolute;
+top:200px;
+left:10px;
+width:185px;
+height:750px;
+background-color: rgb(240, 251, 255, 0.842);
+border-right: 1px solid rgb(184, 184, 184);
+border-top: 1px solid rgb(184, 184, 184);
+`;
+
+const NextStop = styled.div`
+position:absolute;
+top:200px;
+left:195px;
+width:185px;
+height:750px;
+background-color: rgb(240, 251, 255, 0.842);
+border-left: 1px solid rgb(184, 184, 184);
+border-top: 1px solid rgb(184, 184, 184);
 `;
 
 function SubwayMain() {
@@ -204,6 +282,7 @@ function SubwayMain() {
   const [subTime, setSubTime] = useState([]);
   const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
+  const [clickValue, setClickValue] = useState(null);
 
   async function mapLoad() {
     try {
@@ -238,6 +317,12 @@ function SubwayMain() {
    }
   }
 
+  function BackClick(e){
+    if(e.target.value == "Back"){
+      setClickValue("back")
+    }
+  }
+
   function submit(e) {
     e.preventDefault();
   //검색한 지하철역 이름  console.log(subName);
@@ -254,11 +339,23 @@ function SubwayMain() {
 
     let subInfo = await SubwayApi.getSubInfo(stationInfo.stationID).catch((error) => console.log(error));
     console.log(subInfo)
+    
+    let result = subInfo.exitInfo.gate.sort((a, b) => {
+      let valueA = parseInt(a.gateNo)
+      let valueB = parseInt(b.gateNo)
+      return valueA - valueB;
+
+    }) 
+    console.log(result)
+    
     setSubExit(subInfo.exitInfo.gate)
     setStaInfo(subInfo)
 
+
+
     let subTime = await SubwayApi.getSubTime(stationInfo.stationID);
     console.log(subTime)
+    setSubTime(subTime.OrdList)
 
     //setSubTime(subTime)
 
@@ -352,8 +449,8 @@ function SubwayMain() {
                 </NewAddress>
                 <CallNum>{staInfo.defaultInfo.tel}</CallNum>
                 <Line></Line>
-                <Btn onClick={onToggle} value="time">시간표</Btn>
-                <Btn1 onClick={onToggle} value="exit">출구정보</Btn1>
+                <TimeBtn onClick={onToggle} value="time">시간표</TimeBtn>
+                <ExitBtn1 onClick={onToggle} value="exit">출구정보</ExitBtn1>
                 <SubInfo>시설 정보</SubInfo>
                 <Info>정보</Info>
                 <DetailInfo>
@@ -394,26 +491,39 @@ function SubwayMain() {
             </>
           ) : toggleValue == "time" && staInfo != undefined && staInfo.length !=0 ? (
             <>
-             <Btn onClick={onToggle} value="time">시간표</Btn>
-             <Btn1 onClick={onToggle} value="exit">출구정보</Btn1>
+             <TimeBtn onClick={onToggle} value="time">시간표</TimeBtn>
+             <ExitBtn1 onClick={onToggle} value="exit">출구정보</ExitBtn1>
+             <PrevStop>
+
+             </PrevStop>
+             <NextStop>
+
+             </NextStop>
 
             </>
           ) : toggleValue == "exit" && staInfo != undefined && staInfo.length !=0 ?(
             <>
-             <Btn onClick={onToggle} value="time">시간표</Btn>
-             <Btn1 onClick={onToggle} value="exit">출구정보</Btn1>
+             <BackBtn onClick={BackClick} value="back"><ArrowBackIosNewIcon/></BackBtn>
+             <SubwayName>{staInfo.stationName}역 {staInfo.laneName}</SubwayName>
+             <HeadLine/>
+             <ExitGateInfo>출구·연계버스</ExitGateInfo>
              <ExitBox>
-             { subExit.map((item)=> {
+             { subExit.map((item) => {
                     return (
                       <div>
-                        <ExitInfo>{item.gateLink}</ExitInfo>
+                        <ExitNum>{item.gateNo}
+                        <ExitGate> {item.gateLink} </ExitGate>
+                        </ExitNum>
                         
                       </div>
                     );
                   })
                 }
              </ExitBox>
-            
+            {/* {clickValue == "back" ? <>
+            <TimeBtn onClick={onToggle} value="time">시간표</TimeBtn>
+             <ExitBtn1 onClick={onToggle} value="exit">출구정보</ExitBtn1>
+            </> : <></>} */}
             </>
           ) : 
           <>
