@@ -1,14 +1,33 @@
 import CssBaseline from '@mui/material/CssBaseline';
+import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
 import MuiLink from '@mui/material/Link';
 import {
-  Avatar, Button, TextField, FormControlLabel, Checkbox, Grid, Box, FormHelperText,
-  FormControl, Typography, Container, AdapterDateFns, LocalizationProvider, MenuItem,
-  DatePicker, InputLabel, Radio, RadioGroup, FormLabel, Select
+  Avatar,
+  Button,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Box,
+  FormHelperText,
+  FormControl,
+  Typography,
+  Container,
+  AdapterDateFns,
+  LocalizationProvider,
+  MenuItem,
+  DatePicker,
+  InputLabel,
+  Radio,
+  RadioGroup,
+  FormLabel,
+  Select,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import useUpdateMem from '../hooks/useUpdateMem';
+import useSignUp from '../hooks/useSignUp';
 
 function Copyright(props) {
   return (
@@ -39,9 +58,13 @@ const theme = createTheme();
 
 function UpdateMemMain() {
   const {
-    errorList, 
-    goBackPage, handleInput, handleSubmit
-  } = useUpdateMem()
+    errorList,
+    goBackPage,
+    handleInput,
+    handleAddrInput,
+    handleSubmit,
+    daumAddrApi,
+  } = useUpdateMem();
 
   // valid check -> email, phone, addr, addrDetail
 
@@ -71,7 +94,6 @@ function UpdateMemMain() {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                    required
                     fullWidth
                     type="email"
                     id="email"
@@ -84,7 +106,6 @@ function UpdateMemMain() {
                 <FormHelperTexts>{errorList.emailError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
-                    required
                     fullWidth
                     id="phone"
                     name="phone"
@@ -96,20 +117,35 @@ function UpdateMemMain() {
                 <FormHelperTexts>{errorList.phoneError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
-                    required
-                    fullWidth
-                    id="addr"
-                    name="addr"
-                    label="주소"
-                    onChange={handleInput}
-                    error={errorList.addrError !== '' || false}
+                    sx={{ mr: 2, verticalAlign: 'middle' }}
+                    id="postId"
+                    name="postId"
+                    label="우편번호"
+                    disabled
+                    defaultValue={' '}
                   />
+                  <Button
+                    type="button"
+                    variant="contained"
+                    onClick={async () => daumAddrApi()}
+                    endIcon={<LocalPostOfficeIcon />}
+                  >
+                    주소찾기
+                  </Button>
                 </Grid>
-                <FormHelperTexts>{errorList.addrError}</FormHelperTexts>
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    required
+                    disabled
+                    id="addr"
+                    name="addr"
+                    label="주소"
+                    defaultValue={' '}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
                     id="addrDetail"
                     name="addrDetail"
                     label="상세주소"
@@ -118,6 +154,16 @@ function UpdateMemMain() {
                   />
                 </Grid>
                 <FormHelperTexts>{errorList.addrDetailError}</FormHelperTexts>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="addrExtra"
+                    name="addrExtra"
+                    label="참고항목"
+                    disabled
+                    defaultValue={' '}
+                  />
+                </Grid>
               </Grid>
               <Button
                 type="submit"
