@@ -36,6 +36,7 @@ public class Payment extends BaseTimeEntity {
     @Column(name = "PAY_METHOD")
     private String method;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "PAY_STATE")
     private OrderState state;
 

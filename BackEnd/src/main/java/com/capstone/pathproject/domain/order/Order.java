@@ -3,24 +3,23 @@ package com.capstone.pathproject.domain.order;
 
 import com.capstone.pathproject.domain.BaseTimeEntity;
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.dto.member.MemberDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "MEM_ORDER")
 @SequenceGenerator(
         name = "ORDER_SEQ_GENERATOR",
         sequenceName = "ORDER_SEQ",
-        initialValue = 1,
-        allocationSize = 1
+        initialValue = 1, allocationSize = 1
 )
 @AttributeOverrides({
         @AttributeOverride(name = "createdDateTime", column = @Column(name = "ORDER_CREATED_DATETIME")),
+        @AttributeOverride(name = "updatedDateTime", column = @Column(name = "MEM_UPDATED_DATETIME"))
 })
 public class Order extends BaseTimeEntity {
     @Id
@@ -31,6 +30,7 @@ public class Order extends BaseTimeEntity {
     @Column(name = "ORDER_PRICE")
     private int price;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "ORDER_STATE")
     private OrderState state;
 
@@ -40,11 +40,12 @@ public class Order extends BaseTimeEntity {
 
 
     @Builder(builderMethodName = "createOrder")
-    public Order(Long id, int price, OrderState state, MemberDto member){
+    public Order(Long id, int price, OrderState state, Member member){
         this.id = id;
-        this.member = member.toEntity();
+        this.member = member;
         this.price = price;
         this.state = state;
+
     }
 
 }

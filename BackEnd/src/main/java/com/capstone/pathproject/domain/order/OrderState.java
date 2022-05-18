@@ -1,5 +1,5 @@
 package com.capstone.pathproject.domain.order;
 
 public enum OrderState {
-    ACCEPTED, CANCELLED, COMPLETED
+    CHECKING, ACCEPTED, REJECTED, CANCELLED, REFUNDED, COMPLETED
 }

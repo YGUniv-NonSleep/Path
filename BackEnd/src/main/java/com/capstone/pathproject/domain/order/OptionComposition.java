@@ -2,6 +2,7 @@ package com.capstone.pathproject.domain.order;
 
 
 import com.capstone.pathproject.domain.company.DetailOption;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +19,7 @@ import javax.persistence.*;
 )
 public class OptionComposition {
     @Id
-    @SequenceGenerator(name = "ORDER_OPTION_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "ORDER_OPTION_SEQ_GENERATOR")
     @Column(name = "COMP_OPT_ID")
     private Long id;
 
@@ -29,6 +30,14 @@ public class OptionComposition {
     @ManyToOne
     @JoinColumn(name = "DETAIL_OPTION_ID")
     private DetailOption detailOption;
+
+    @Builder(builderMethodName = "createOptionComposition")
+    public OptionComposition(Long id, Composition composition, DetailOption detailOption){
+        this.composition = composition;
+        this.id = id;
+        this.detailOption = detailOption;
+
+    }
 
 
 

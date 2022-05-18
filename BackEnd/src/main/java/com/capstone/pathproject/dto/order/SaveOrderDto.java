@@ -8,14 +8,16 @@ import java.util.List;
 
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Setter
-public class OrderProductDto {
+public class SaveOrderDto {
     private int totalAmount;
     private int suppliedAmount;
+    private String paymentKey;
+    private String tossOrderId;
     private String method;
     private Long memberId;
-    private List<ProductDTO> productList;
+    private List<SaveOrderCompositionDto> orderCompositionList;
 
 
 }

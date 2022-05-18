@@ -2,26 +2,23 @@ package com.capstone.pathproject.domain.order;
 
 
 import com.capstone.pathproject.domain.company.Product;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
+@ToString
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
         name = "COMPOSITION_SEQ_GENERATOR",
         sequenceName = "COMPOSITION_SEQ",
-        initialValue = 1,
-        allocationSize = 1
+        initialValue = 1, allocationSize = 1
 )
 public class Composition {
 
     @Id
-    @SequenceGenerator(name = "COMPOSITION_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator ="COMPOSITION_SEQ_GENERATOR")
     @Column(name = "COMPOSITION_ID")
     private Long id;
 
@@ -40,13 +37,13 @@ public class Composition {
     private Order order;
 
 
-//    @Builder(builderMethodName = "createComposition")
-//    public Composition(Long id, int price, int quantity, Product product, Order order){
-//        this.id = id;
-//        this.order = order;
-//        this.price = price;
-//        this.product = product;
-//        this.quantity = quantity;
-//    }
+    @Builder(builderMethodName = "createComposition")
+    public Composition(Long id, int price, int quantity, Product product, Order order){
+        this.id = id;
+        this.order = order;
+        this.price = price;
+        this.product = product;
+        this.quantity = quantity;
+    }
 
 }

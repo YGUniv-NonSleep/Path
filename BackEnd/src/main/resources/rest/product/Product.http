@@ -17,7 +17,7 @@ Content-Type: application/json
   "created": "2011-11-11",
   "stock": 1,
   "company": {
-    "id": 2
+    "id": 1
   },
   "prodBasic": {
     "id": 2
