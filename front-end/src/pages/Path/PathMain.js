@@ -30,23 +30,85 @@ const SideNav = styled.nav`
 `;
 
 const SearchArea = styled.div`
+  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
   position: relative;
   height: 25%;
-  margin-left: 20px;
-  margin-top: 5px;
+  padding: 10px 20px 15px;
+  border-bottom: 1px solid rgb(184, 184, 184);
+  z-index: 30;
 `;
 
-const DirectionSummaryList = styled.div`
+{/* 경로 검색 전 component */}
+const ScrollArea = styled.div`
   position: relative;
-  height: 75%;
-  overflow: auto;
+  height: 100%;
+  max-width: 390px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+`;
+
+{/* 경로 검색 후 component */}
+const DirectionSummaryList = styled.div`
+  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
+  position: relative; 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  width: 390px;
+`;
+
+const DirectionSummarySpace = styled.div`
+  scrollbar-width: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  height: 100%;
+`;
+
+const ScrollInner = styled.div`
+  width: 390px;
+`;
+
+const SearchResultList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+  padding-top: 1px;
+  transition: .2s;
+`;
+
+const PathInserted = styled.li`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  &:after {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    height: 1px;
+    background: rgba(0,0,0,.1);
+    content: "";
+  }
+  &:hover {
+    background-color: rgb(240, 251, 255, 0.842);
+  }
+`; // display: block;
+
+const DirectionSummaryItemTransit = styled.div`
+  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
+  list-style: none;
+  position: relative;
+  padding: 18px 20px 15px;
+  display: block;
 `;
 
 const SwitchButton = styled.button`
   z-index: 5;
   position: absolute;
-  left: 280px;
-  top: 103px;
+  left: 300px;
+  top: 113px;
   border: 1px solid #9E9E9E;
   cursor:pointer; cursor:hand;
   background-color: white;
@@ -58,7 +120,8 @@ const SwitchButton = styled.button`
 function PathMain() {
   const { 
     SPoint, APoint, jusoOption, loading, 
-    onchangeSP, onchangeAP, refreshPoints, switchPoints, wayFind, pathDrawing
+    onchangeSP, onchangeAP, refreshPoints, switchPoints, 
+    wayFind, pathDrawing 
   } = useInputForm()
 
   return (
@@ -120,8 +183,28 @@ function PathMain() {
           </Box>
         </SearchArea>
         <DirectionSummaryList>
-          <button onClick={() => pathDrawing(0)}>0</button>
-          
+          <DirectionSummarySpace>
+            <ScrollInner>
+              <SearchResultList>
+                {/* results */}
+                <PathInserted>
+                  <DirectionSummaryItemTransit>
+                    <button onClick={() => pathDrawing(0)}>0</button>    
+                  </DirectionSummaryItemTransit>
+                </PathInserted>
+                <PathInserted>
+                  <DirectionSummaryItemTransit>
+                    <button onClick={() => pathDrawing(1)}>1</button>    
+                  </DirectionSummaryItemTransit>
+                </PathInserted>
+                <PathInserted>
+                  <DirectionSummaryItemTransit>
+                    <button onClick={() => pathDrawing(2)}>2</button>    
+                  </DirectionSummaryItemTransit>
+                </PathInserted>
+              </SearchResultList>
+            </ScrollInner>
+          </DirectionSummarySpace>
         </DirectionSummaryList>
       </SideNav>
       <Map />

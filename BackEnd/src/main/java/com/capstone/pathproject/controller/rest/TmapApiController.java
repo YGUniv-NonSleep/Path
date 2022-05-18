@@ -17,20 +17,32 @@ public class TmapApiController {
 
     private final TmapService tmapService;
 
+    // 도보 경로 길찾기 (속력 지정 가능)
     @GetMapping("/path")
-    public String walkPath(@RequestParam String sx,
-                           @RequestParam String sy,
-                           @RequestParam String ex,
-                           @RequestParam String ey) {
-        return tmapService.walkPath(sx, sy, ex, ey, 4);
+    public String walkPath(@RequestParam double sx,
+                           @RequestParam double sy,
+                           @RequestParam double ex,
+                           @RequestParam double ey,
+                           @RequestParam int speed) {
+        return tmapService.walkPath(sx, sy, ex, ey, speed);
     }
 
-    @GetMapping("/path-middle-mobility")
-    public Map<String, Object> walkToMobilPath(@RequestParam String sx,
-                                               @RequestParam String sy,
-                                               @RequestParam String ex,
-                                               @RequestParam String ey,
-                                               @RequestParam Long mobilityId) throws JsonProcessingException {
-        return tmapService.walkToMobilPath(sx, sy, ex, ey, mobilityId);
+    // 모빌리티만 사용하는 경로 길찾기
+    @GetMapping("/path/mobility")
+    public Map<String, Object> mobilityPath(@RequestParam double sx,
+                                            @RequestParam double sy,
+                                            @RequestParam double ex,
+                                            @RequestParam double ey,
+                                            @RequestParam Long mobilityId) throws JsonProcessingException {
+        return tmapService.mobilityPath(sx, sy, ex, ey, mobilityId);
+    }
+
+    // 자동차 경로
+    @GetMapping("/path/car")
+    public String carPath(@RequestParam double sx,
+                          @RequestParam double sy,
+                          @RequestParam double ex,
+                          @RequestParam double ey) {
+        return tmapService.carPath(sx, sy, ex, ey);
     }
 }
