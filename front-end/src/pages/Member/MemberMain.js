@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import CssBaseline from "@mui/material/CssBaseline";
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import CssBaseline from '@mui/material/CssBaseline';
 import {
   Box,
   List,
@@ -11,19 +11,19 @@ import {
   Container,
   Grid,
   Paper,
-} from "@mui/material";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import MuiLink from "@mui/material/Link";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import MenuIcon from "@mui/icons-material/Menu";
+} from '@mui/material';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import MuiLink from '@mui/material/Link';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import MenuIcon from '@mui/icons-material/Menu';
 import useLoading from '../../hooks/useLoading';
-import useMemberMain from "./hooks/useMemberMain";
+import useMemberMain from './hooks/useMemberMain';
 
-import { MainListItems, SecondaryListItems } from "./MyPage/listItems";
-import Chart from "./MyPage/Chart";
-import Deposits from "./MyPage/Deposits";
-import Orders from "./MyPage/Orders";
+import { MainListItems, SecondaryListItems } from './MyPage/listItems';
+import Chart from './MyPage/Chart';
+import Deposits from './MyPage/Deposits';
+import Orders from './MyPage/Orders';
 
 const drawerWidth = 240;
 
@@ -35,36 +35,36 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © "}
+      {'Copyright © '}
       <MuiLink color="inherit" href="https://mui.com/">
         Your Website
-      </MuiLink>{" "}
+      </MuiLink>{' '}
       {new Date().getFullYear()}
-      {"."}
+      {'.'}
     </Typography>
   );
 }
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    whiteSpace: "nowrap",
+  '& .MuiDrawer-paper': {
+    position: 'relative',
+    whiteSpace: 'nowrap',
     width: drawerWidth,
-    transition: theme.transitions.create("width", {
+    transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    boxSizing: "border-box",
+    boxSizing: 'border-box',
     ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
+      overflowX: 'hidden',
+      transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
       width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up('sm')]: {
         width: theme.spacing(9),
       },
     }),
@@ -75,23 +75,20 @@ const mdTheme = createTheme();
 
 function MemberMain() {
   const { loading } = useLoading();
-  const {
-    open, 
-    toggleDrawer, deleteMember, 
-  } = useMemberMain();
+  const { open, toggleDrawer, deleteMember } = useMemberMain();
 
   // valid check -> email, phone, addr, addrDetail
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex", ml: 12 }}>
+      <Box sx={{ display: 'flex', ml: 12 }}>
         <CssBaseline />
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
             }}
           >
             <IconButton onClick={toggleDrawer}>
@@ -102,21 +99,19 @@ function MemberMain() {
           <List component="nav">
             <MainListItems></MainListItems>
             <Divider sx={{ my: 1 }} />
-            <SecondaryListItems
-              onClick={deleteMember}
-            ></SecondaryListItems>
+            <SecondaryListItems onClick={deleteMember}></SecondaryListItems>
           </List>
         </Drawer>
         <Box
           component="main"
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode === "light"
+              theme.palette.mode === 'light'
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
+            height: '100vh',
+            overflow: 'auto',
           }}
         >
           <Toolbar />
@@ -130,8 +125,8 @@ function MemberMain() {
                 <Paper
                   sx={{
                     p: 2,
-                    display: "flex",
-                    flexDirection: "column",
+                    display: 'flex',
+                    flexDirection: 'column',
                     height: 240,
                   }}
                 >
@@ -143,8 +138,8 @@ function MemberMain() {
                 <Paper
                   sx={{
                     p: 2,
-                    display: "flex",
-                    flexDirection: "column",
+                    display: 'flex',
+                    flexDirection: 'column',
                     height: 240,
                   }}
                 >
@@ -153,7 +148,7 @@ function MemberMain() {
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   <Orders />
                 </Paper>
               </Grid>
