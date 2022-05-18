@@ -13,12 +13,12 @@ import java.util.List;
 public class OptionDTO {
     private Long id;
     private String name;
-    private Product product;
-    private List<DetailOption> detailOptionList;
+    private ProductDTO product;
+    private List<DetailOptionDTO> detailOptionList;
     private Long proId;
 
     @Builder(builderMethodName ="createOptionDTO")
-    public OptionDTO(Long id,String name,Product product,List<DetailOption> detailOptionList,Long proId){
+    public OptionDTO(Long id,String name,ProductDTO product, List<DetailOptionDTO> detailOptionList,Long proId){
         this.id = id;
         this.name = name;
         this.product = product;
@@ -34,4 +34,7 @@ public class OptionDTO {
                 .proId(proId)
                 .build();
     }
+
+
+
 }

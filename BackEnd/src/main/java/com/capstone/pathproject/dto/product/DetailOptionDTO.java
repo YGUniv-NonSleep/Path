@@ -4,6 +4,9 @@ package com.capstone.pathproject.dto.product;
 import com.capstone.pathproject.domain.company.DetailOption;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -29,4 +32,13 @@ public class DetailOptionDTO {
                 .optionId(optionId)
                 .build();
     }
+
+    public List<DetailOption> toEntityList(List<DetailOptionDTO> dtoList){
+        ArrayList<DetailOption> detailOptionList = null;
+
+        dtoList.stream().map(detailOptionDTO -> detailOptionDTO.toEntity()).forEach(detailOption -> detailOptionList.add(detailOption));
+
+        return detailOptionList;
+    }
+
 }

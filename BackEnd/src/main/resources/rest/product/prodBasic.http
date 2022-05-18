@@ -1,4 +1,4 @@
-POST https://localhost:8080/api/product/createBasic
+POST https://localhost:8080/api/product/basic
 Content-Type: application/json
 
 {
@@ -9,3 +9,27 @@ Content-Type: application/json
 }
 
 ###
+
+PATCH https://localhost:8080/api/product/basic
+Content-Type: application/json
+
+{
+  "id" : 3,
+  "name": "아메리카노",
+  "detail": "String",
+  "brand": "String",
+  "category": "String"
+}
+
+###
+
+DELETE https://localhost:8080/api/product/basic/1
+
+###
+
+GET https://localhost:8080/api/product/basic/2
+
+###
+
+GET https://localhost:8080/api/product/basic?name=카노&brand=String
+

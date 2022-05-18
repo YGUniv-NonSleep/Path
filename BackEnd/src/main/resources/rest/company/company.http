@@ -1,7 +1,7 @@
 POST https://localhost:8080/api/company
-Content-Type: multipart/form-data
+Content-Type: application/json
 
- "json":"{
+{
   "companyNumber":"123123",
   "openDate":"2022-12-12",
   "category":"MART",
@@ -11,4 +11,4 @@ Content-Type: multipart/form-data
   "member":{
     "id":1
   }
-}"
+}
