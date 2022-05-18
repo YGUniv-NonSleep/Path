@@ -15,18 +15,22 @@ import { CarPool, CarPoolContents, CarPoolAdd } from '../pages/CarPool';
 import { Company, CompStore, CompDetail, CompCreate, ItemBasic } from '../pages/Company';
 import { CompManage, CompEdit, ItemEdit, Items, Resign } from '../pages/Company/CompManage';
 import { Member, Login, SignUp, UpdateMem, SearchId, SearchPw } from '../pages/Member';
-
+import TossPayments from '../pages/TosspaymentsTest'
 // https://kyung-a.tistory.com/36
 
 function Router() {
   return (
     <BrowserRouter>
       <Menubar></Menubar>
-      
+
       <Routes>
         {/* 속성을 component 대신에 element */}
         <Route path="/" element={<Path />} />
         <Route path="/walk" element={<WalkPath />} />
+
+      </Routes>
+        <Routes>
+            <Route path="/pay" element={<TossPayments />} />
 
         {/* 404 rounte */}
         {/* <Route path="/*" element={<PageNotFound />} /> */}
@@ -59,6 +63,7 @@ function Router() {
         <Route path="/oder" element={<Oder />} />
       </Routes>
       <Routes>
+        {/* <Route path="/mobility" element={<Mobility />} /> */}
         <Route path="/mobility/bus" element={<Bus />} />
         <Route path="/mobility/subway" element={<Subway />} />
         <Route path="/mobility/scooter" element={<Scooter />} />
@@ -73,6 +78,7 @@ function Router() {
         <Route path="/carpool" element={<CarPool />} />
         <Route path="/carpool/:postId" element={<CarPoolContents/>} />
         <Route path="/carpool/add" element={<CarPoolAdd/>} />
+        <Route path="/carpool/:postId" element={<CarPoolContents/>} />
       </Routes>
     </BrowserRouter>
   );

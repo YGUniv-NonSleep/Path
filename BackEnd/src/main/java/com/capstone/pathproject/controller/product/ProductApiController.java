@@ -61,6 +61,7 @@ public class ProductApiController {
 
     @PostMapping("/")
     public ResponseEntity<Message<ProductDTO>> createProduct(@RequestBody ProductDTO productDTO){
+        System.out.println(productDTO.toString());
         Message<ProductDTO> message = productService.createProduct(productDTO);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
