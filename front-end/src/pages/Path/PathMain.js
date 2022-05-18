@@ -29,6 +29,7 @@ function PathMain() {
   const { 
     SPoint, APoint, jusoOption, loading, pathList, 
     onchangeSP, onchangeAP, refreshPoints, switchPoints, 
+    savePathFindingHistory, deletePathFindingHistory, 
     wayFind, pathDrawing 
   } = useInputForm()
 
@@ -128,12 +129,21 @@ function PathMain() {
                     </TitleBox>
                     <SearchStandby>
                       <InstantBox>
-                        {/* display: block -> listplace */}
-                        
+                        <HistoryList>
+                          <InstantBox>
+                            <HistoryListPlace>
+                              {/* 최근 검색 데이터 */}
+                              <div>리스트 데이터 없음</div>
+                              <button onClick={savePathFindingHistory}>추가</button>
+                              <button onClick={deletePathFindingHistory}>삭제</button>
+                            </HistoryListPlace>
+                            {/* 더보기 btn */}
+
+                          </InstantBox>
+                        </HistoryList>
                       </InstantBox>
                     </SearchStandby>
                   </InstantBox>
-                  <div>리스트 데이터 없음</div>
                 </SearchResultList>
                 <DirectionIndexFavorites>
                   <InstantBox>

@@ -154,8 +154,6 @@ function useInputForm() {
     walkResult.setMap(map);
     setWalkLineData((prev) => [...prev, walkResult]);
   };
-
-  console.log(walkLineData)
   
   function removeMarkers() {
     for (var i = 0; i < markerData.length; i++) {
@@ -180,11 +178,13 @@ function useInputForm() {
 
   async function pathSearch(){
     // === 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 === //
+    console.log(way)
     const pathData = await PathApi.getTransPath({
       sx: way[0].x, sy: way[0].y,
       ex: way[1].x, ey: way[1].y,
     });
      console.log(pathData);
+
     // 여기서부터 화면 구성
     setPathList(pathData)
   }
@@ -253,6 +253,14 @@ function useInputForm() {
       // 출발지, 도착지의 위도, 경도를 통한 경로 검색
       pathSearch()
       .catch(err => console.log("경로 검색에 문제가 발생하였습니다.\n") + err)
+
+      let data = {
+        start: way[0],
+        end: way[1],
+        // type: ?? // 나중에 이동수단 종류 정해지면 넣음.
+      }
+      savePathFindingHistory(data)
+      
     } else return;
   }, [way]);
 
@@ -268,6 +276,59 @@ function useInputForm() {
     // console.log(it)
     return `${it.pN} (${it.aN})`;
   });
+
+  // SearchHistoryList -> 특정 장소 검색 키워드을 LocalStorage에 저장  
+  // SUBWAY_STATION(type) -> address, type, name, latitude: 37.~, longitude: 127.~
+  // BUS(type) -> cityName, type, name
+
+  // PathFindingHistoryList -> 검색한 경로 키워드를 LocalStorage에 저장
+  // type -> ROUTE_TRANSIT, ROUTE_CAR, ROUTE_WALK, ROUTE_BICYCLE
+  // goalLat, goalLng, goalName, startLat, startLng, startName, type
+
+  function savePathFindingHistory(data){
+    let history = getPathFindingHistory();
+    
+    let info = { 
+      // type: , 
+      startId: data.start.id, 
+      startLat: data.start.y, 
+      startLng: data.start.x, 
+      startName: data.start.place_name, 
+      goalId: data.end.id, 
+      goalLat: data.end.y, 
+      goalLng: data.end.x, 
+      goalName: data.end.place_name,
+    }
+    // info 정보와 localHistory의 정보 중 type, startName, goalName 일치하면 제거하고 다시 저장
+    history.push(info)
+    window.localStorage.setItem('PathFindingHistoryList', JSON.stringify(history))
+  }
+  
+  function getPathFindingHistory(){
+    const history = window.localStorage.getItem('PathFindingHistoryList'); // 읽기(key 정보)
+    // console.log(history)
+    if(history == null) return []
+    else return JSON.parse(history)
+  }
+
+  function deletePathFindingHistory(){
+    if(window.localStorage.PathFindingHistoryList==undefined) return;
+    // localStorage
+    let historyList = getPathFindingHistory();
+    // JSON.parse(localStorage.PathFindingHistoryList)
+     console.log(historyList)
+
+    for(let i = 0; i < historyList.length; i++) {
+      // type, startId, goalId 비교
+       console.log(historyList[i])
+      if(historyList[i].startId == '8438335' && historyList[i].goalId == '7842981') {
+        let idx = historyList.indexOf(historyList[i])
+        historyList.splice(idx)
+      }
+    }
+    console.log(historyList)
+    //window.localStorage.setItem('PathFindingHistoryList', JSON.stringify(historyList));
+  }
 
   return {
     map,
@@ -295,6 +356,9 @@ function useInputForm() {
     removeMarkers, 
     removeGraphics, 
     removeWalkGraphics, 
+    savePathFindingHistory, 
+    getPathFindingHistory, 
+    deletePathFindingHistory
   };
 }
 
