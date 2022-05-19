@@ -82,7 +82,7 @@ function UpdateMemMain() {
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
           <Typography component="h1" variant="h4">
-            회원가입
+            회원수정
           </Typography>
           <Box
             component="form"
