@@ -45,12 +45,7 @@ public class MemberApiController {
 
     @DeleteMapping("/token")
     public ResponseEntity<Message<Object>> logout(HttpServletResponse response) {
-        Cookie refreshTokenCookie = new Cookie(JwtProperties.REFRESH_HEADER_STRING, null);
-        refreshTokenCookie.setMaxAge(0);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
-        response.addCookie(refreshTokenCookie);
-        cookieUtil.addSameSite(response, "None");
+        cookieUtil.deleteCookie(response, JwtProperties.REFRESH_HEADER_STRING);
         Message<Object> message = Message.createMessage()
                 .header(StatusEnum.OK)
                 .message("로그아웃 성공")
@@ -72,7 +67,7 @@ public class MemberApiController {
 
     @PatchMapping("/member/{memberId}")
     public ResponseEntity<Message<?>> updateMember(@PathVariable("memberId") Long id, @RequestBody UpdateMemberDto updateMemberDto) {
-        Message<UpdateMemberDto> message = memberService.updateMember(id, updateMemberDto);
+        Message<String> message = memberService.updateMember(id, updateMemberDto);
         return responseUtil.createResponseEntity(message);
     }
 

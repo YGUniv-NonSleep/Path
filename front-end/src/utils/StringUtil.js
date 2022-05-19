@@ -7,3 +7,9 @@ export const isEmpty = (str) => {
   if (typeof str == 'undefined' || str == null || str == '') return true;
   else return false;
 };
+
+export const isBlank = (str) => {
+  if (typeof str == 'undefined' || str == null || str == '' || str == ' ')
+    return true;
+  else return false;
+};

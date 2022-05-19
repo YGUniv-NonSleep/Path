@@ -10,7 +10,7 @@ import lombok.ToString;
 public class UpdateMemberDto {
     private String mail;
     private String phone;
-    private int postId;
+    private String postId;
     private String addr;
     private String addrDetail;
     private String addrExtra;

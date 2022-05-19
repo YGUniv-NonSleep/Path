@@ -70,31 +70,34 @@ public class MemberService {
     }
 
     // 회원 수정
-    public Message<UpdateMemberDto> updateMember(Long id, UpdateMemberDto updateMemberDto) {
+    public Message<String> updateMember(Long id, UpdateMemberDto updateMemberDto) {
         Optional<Member> member = memberRepository.findById(id);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
-            return Message.<UpdateMemberDto>createMessage()
+            return Message.<String>createMessage()
                     .header(StatusEnum.BAD_REQUEST)
-                    .message("회원이 없습니다.").build();
+                    .message("회원이 없습니다.")
+                    .body("").build();
         } else {
             if (StringUtils.isNotBlank(updateMemberDto.getMail()))
                 memberEntity.updateMail(updateMemberDto.getMail());
             if (StringUtils.isNotBlank(updateMemberDto.getPhone()))
                 memberEntity.updatePhone(updateMemberDto.getPhone());
-            if (StringUtils.isNotBlank(String.valueOf(updateMemberDto.getPostId())))
-                memberEntity.updatePost(updateMemberDto.getPostId());
+            if (StringUtils.isNotBlank(updateMemberDto.getPostId()))
+                memberEntity.updatePost(Integer.parseInt(updateMemberDto.getPostId()));
             if (StringUtils.isNotBlank(updateMemberDto.getAddr()))
                 memberEntity.updateAddr(updateMemberDto.getAddr());
             if (StringUtils.isNotBlank(updateMemberDto.getAddrDetail()))
                 memberEntity.updateAddrDetail(updateMemberDto.getAddrDetail());
-            if (StringUtils.isNotBlank(updateMemberDto.getAddrExtra()))
-                memberEntity.updateAddrExtra(updateMemberDto.getAddrExtra());
+            if (StringUtils.isNotBlank(updateMemberDto.getAddrExtra())) {
+                if (updateMemberDto.getAddrExtra().equals("없음")) memberEntity.updateAddrExtra("");
+                else memberEntity.updateAddrExtra(updateMemberDto.getAddrExtra());
+            }
 
-            return Message.<UpdateMemberDto>createMessage()
+            return Message.<String>createMessage()
                     .header(StatusEnum.OK)
                     .message("회원 수정이 되었습니다.")
-                    .body(updateMemberDto).build();
+                    .body("").build();
         }
     }
 
