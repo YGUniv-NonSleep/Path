@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "MEM_ORDER")
+@Table(name = "ORDERS")
 @SequenceGenerator(
         name = "ORDER_SEQ_GENERATOR",
         sequenceName = "ORDER_SEQ",
@@ -19,7 +19,7 @@ import javax.persistence.*;
 )
 @AttributeOverrides({
         @AttributeOverride(name = "createdDateTime", column = @Column(name = "ORDER_CREATED_DATETIME")),
-        @AttributeOverride(name = "updatedDateTime", column = @Column(name = "MEM_UPDATED_DATETIME"))
+        @AttributeOverride(name = "updatedDateTime", column = @Column(name = "ORDER_UPDATED_DATETIME"))
 })
 public class Order extends BaseTimeEntity {
     @Id

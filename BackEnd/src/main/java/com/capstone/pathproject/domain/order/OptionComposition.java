@@ -27,7 +27,7 @@ public class OptionComposition {
     @JoinColumn(name = "COMPOSITION_ID")
     private Composition composition;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DETAIL_OPTION_ID")
     private DetailOption detailOption;
 

@@ -4,6 +4,7 @@ import com.capstone.pathproject.dto.order.SaveOrderDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ public class OrderController {
         Message<SaveOrderDto> message = orderService.orderProduct(saveOrderDto);
 
 
-        return null;
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 

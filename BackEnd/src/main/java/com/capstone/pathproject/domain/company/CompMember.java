@@ -21,11 +21,11 @@ public class CompMember {
     @Column(name = "COM_MEMBER_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COM_ID")
     private Company company;
 

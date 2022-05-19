@@ -61,7 +61,7 @@ public class Company {
     public Company(){}
 
     @Builder(builderMethodName = "createCompany")
-    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, MemberDto member, String thumbnail) {
+    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, Member member, String thumbnail) {
         this.id = id;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
@@ -72,7 +72,7 @@ public class Company {
         this.latitude = latitude;
         this.longitude = longitude;
         this.thumbnail = thumbnail;
-//        this.member = member.toEntity();
+        this.member = member;
 
     }
 
