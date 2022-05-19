@@ -100,19 +100,6 @@ function useUpdateMem() {
       } else setAddrDetailError('');
     } else setAddrDetailError('');
 
-    console.log(isEmpty(email));
-    console.log(isEmpty(phone));
-    console.log(isEmpty(addrDetail));
-    console.log(isBlank(postId));
-    console.log(isBlank(addr));
-    console.log(isBlank(addrExtra));
-    console.log(email);
-    console.log(phone);
-    console.log(addrDetail);
-    console.log(postId);
-    console.log(addr);
-    console.log(addrExtra);
-
     if (
       isEmpty(email) &&
       isEmpty(phone) &&
@@ -152,6 +139,7 @@ function useUpdateMem() {
       .then((res) => {
         console.log(res);
         alert(res.data.message);
+        goBackPage();
       })
       .catch((err) => {
         console.log(err);
