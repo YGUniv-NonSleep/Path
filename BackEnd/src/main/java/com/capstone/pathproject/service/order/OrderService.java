@@ -10,6 +10,7 @@ import com.capstone.pathproject.domain.order.OrderState;
 import com.capstone.pathproject.dto.order.SaveOrderCompositionDto;
 import com.capstone.pathproject.dto.order.SaveOrderDto;
 import com.capstone.pathproject.dto.response.Message;
+import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.repository.order.CompositionRepository;
 import com.capstone.pathproject.repository.order.OptionCompositionRepository;
@@ -73,8 +74,10 @@ public class OrderService {
         }
 
 
-
-
-        return null;
+        return Message.<SaveOrderDto>createMessage()
+                .message("OrderSuccess")
+                .header(StatusEnum.OK)
+                .body(saveOrderDto)
+                .build();
     }
 }

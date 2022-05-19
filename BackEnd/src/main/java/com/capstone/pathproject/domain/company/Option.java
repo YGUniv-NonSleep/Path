@@ -25,7 +25,7 @@ public class Option {
     @Column(name = "OPTION_NAME")
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "OPTION_ID")
     private List<DetailOption> detailOptionList;
 

@@ -42,18 +42,17 @@ public class Product {
     @Column(name = "PRO_PICTURE")
     private String picture;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COM_ID")
     private Company company;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BASIC_ID")
     private ProdBasic prodBasic;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "PRO_ID")
     private List<Option> optionList;
-
 
     @Builder(builderMethodName = "createProduct")
     public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasicDTO prodBasic, String picture, List<OptionDTO> optionList){
