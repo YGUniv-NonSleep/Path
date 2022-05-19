@@ -104,7 +104,7 @@ function PathMain() {
                   <SearchResultList>
                     {
                       pathList.map((item, idx)=>{
-                        console.log(item)
+                        //console.log(item)
                         return (
                           <PathInserted>
                             <DirectionSummaryItemTransit>
