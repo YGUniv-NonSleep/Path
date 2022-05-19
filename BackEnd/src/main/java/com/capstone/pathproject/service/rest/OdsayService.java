@@ -3,9 +3,7 @@ package com.capstone.pathproject.service.rest;
 import com.capstone.pathproject.domain.mobility.Mobility;
 import com.capstone.pathproject.domain.mobility.MobilityCompany;
 import com.capstone.pathproject.dto.rest.odsay.graph.RouteGraphicDTO;
-import com.capstone.pathproject.dto.rest.odsay.path.Path;
-import com.capstone.pathproject.dto.rest.odsay.path.SubPath;
-import com.capstone.pathproject.dto.rest.odsay.path.TransPathDto;
+import com.capstone.pathproject.dto.rest.odsay.path.*;
 import com.capstone.pathproject.dto.rest.tmap.path.WalkPathDto;
 import com.capstone.pathproject.repository.mobility.MobilityRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -47,8 +45,10 @@ public class OdsayService {
             double endX = 0;
             double endY = 0;
             List<String> stationNames = new ArrayList<>();
+            List<Map<String, Object>> routeSection = new ArrayList<>();
             List<SubPath> subPaths = path.getSubPath();
             for (SubPath subPath : subPaths) {
+                Map<String, Object> sectionInfo = new LinkedHashMap<>();
                 String startStation = subPath.getStartName();
                 if (startStation != null) {
                     if (startStation.equals(firstStartStation)) {
@@ -63,29 +63,46 @@ public class OdsayService {
                         endY = subPath.getEndY();
                     }
                 }
-
                 if (subPath.getStationCount() != 0) {
-                    List<SubPath.PassStopList.Stations> stations = subPath.getPassStopList().getStations();
-                    for (SubPath.PassStopList.Stations station : stations) {
+                    List<Stations> stations = subPath.getPassStopList().getStations();
+                    for (Stations station : stations) {
                         stationNames.add(station.getStationName());
                     }
                 }
-
+                int trafficType = subPath.getTrafficType();
+                int sectionTime = subPath.getSectionTime();
+                sectionInfo.put("type", trafficType);
+                sectionInfo.put("sectionTime", sectionTime);
+                List<String> stationName = new ArrayList<>();
+                if (trafficType == 2) {
+                    List<Lane> lanes = subPath.getLane();
+                    for (Lane lane : lanes) {
+                        stationName.add(lane.getBusNo());
+                    }
+                    sectionInfo.put("busNo", stationName);
+                } else if (trafficType == 1) {
+                    List<Lane> lanes = subPath.getLane();
+                    for (Lane lane : lanes) {
+                        stationName.add(lane.getName());
+                    }
+                    sectionInfo.put("subwayName", stationName);
+                }
+                routeSection.add(sectionInfo);
             }
             Map<String, Object> map = new LinkedHashMap<>();
             String jsonRouteGraphic = routeGraphicData(path.getInfo().getMapObj());
             RouteGraphicDTO routeGraphicDTO = mapper.readValue(jsonRouteGraphic, RouteGraphicDTO.class);
-            Map<String, Object> startPos = new HashMap<>();
+            Map<String, Object> startPos = new LinkedHashMap<>();
             startPos.put("x", sx);
             startPos.put("y", sy);
-            Map<String, Object> endPos = new HashMap<>();
+            Map<String, Object> endPos = new LinkedHashMap<>();
             endPos.put("x", ex);
             endPos.put("y", ey);
-            Map<String, Object> startStation = new HashMap<>();
+            Map<String, Object> startStation = new LinkedHashMap<>();
             startStation.put("firstStartStation", firstStartStation);
             startStation.put("x", startX);
             startStation.put("y", startY);
-            Map<String, Object> endStation = new HashMap<>();
+            Map<String, Object> endStation = new LinkedHashMap<>();
             endStation.put("lastEndStation", lastEndStation);
             endStation.put("x", endX);
             endStation.put("y", endY);
@@ -99,6 +116,7 @@ public class OdsayService {
             map.put("stationNames", stationNames);
             map.put("busTransitCount", path.getInfo().getBusTransitCount());
             map.put("subwayTransitCount", path.getInfo().getSubwayTransitCount());
+            map.put("routeSection", routeSection);
             map.put("routeGraphic", routeGraphicDTO);
             results.add(map);
         }
