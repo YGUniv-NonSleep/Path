@@ -36,16 +36,11 @@ public class TmapService {
         data.put("startName", "출발지");
         data.put("endName", "목적지");
         data.put("speed", speed);
-
-        if (count < 3) {
-            count++;
-            return getWalkPath(data).block();
-        }
-        count = 0;
-        return getWalkPath2(data).block();
+        return count < 3 ? getWalkPath(data).block() : getWalkPath2(data).block();
     }
 
     private Mono<String> getWalkPath(Map<String, Object> map) {
+        count++;
         return tmapWebClient.post()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/routes/pedestrian")
                         .queryParam("version", 1)
@@ -55,6 +50,7 @@ public class TmapService {
     }
 
     private Mono<String> getWalkPath2(Map<String, Object> map) {
+        count = 0;
         return tmapWebClient2.post()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/routes/pedestrian")
                         .queryParam("version", 1)
@@ -72,6 +68,7 @@ public class TmapService {
         LocationMobilityDto mobilityDto = new LocationMobilityDto(mobility);
         int unlockFee = mobilityDto.getLocationMobilityCompanyDto().getUnlockFee();
         int minuteFee = mobilityDto.getLocationMobilityCompanyDto().getMinuteFee();
+        List<Map<String, Object>> routeSection = new ArrayList<>();
 
         // 출발지 -> 퍼스널 모빌리티 조회
         String jsonWalkPath = walkPath(sx, sy, mobilityDto.getLongitude(), mobilityDto.getLatitude(), 4);
@@ -82,6 +79,10 @@ public class TmapService {
         int walkTimeMin = changeTimeSecToMin(walkTimeSec);
         int walkDistance = Integer.parseInt(walkPathDto.getFeatures().get(0).getProperties().getTotalDistance());
         Map<String, Object> firstResult = createPathInfo(walkTimeMin, walkDistance, 0, firstGraphPos);
+        Map<String, Object> firstrouteSection = new LinkedHashMap<>();
+        firstrouteSection.put("type", 3);
+        firstrouteSection.put("sectionTime", walkTimeMin);
+        routeSection.add(firstrouteSection);
 
         // 퍼스널 모빌리티 -> 목적지 조회
         String jsonMobilPath = walkPath(mobilityDto.getLongitude(), mobilityDto.getLatitude(), ex, ey, 15);
@@ -93,6 +94,10 @@ public class TmapService {
         int payment = unlockFee + (mobilTimeMin * minuteFee);
         int mobilDistance = Integer.parseInt(mobilPathDto.getFeatures().get(0).getProperties().getTotalDistance());
         Map<String, Object> lastResult = createPathInfo(mobilTimeMin, mobilDistance, payment, lastGraphPos);
+        Map<String, Object> lastrouteSection = new LinkedHashMap<>();
+        lastrouteSection.put("type", 4);
+        lastrouteSection.put("sectionTime", mobilTimeMin);
+        routeSection.add(lastrouteSection);
 
         Map<String, Double> startPos = createPos(sx, sy);
         Map<String, Double> mobilPos = createPos(mobilityDto.getLongitude(), mobilityDto.getLatitude());
@@ -105,6 +110,7 @@ public class TmapService {
         result.put("startPos", startPos);
         result.put("mobilPos", mobilPos);
         result.put("endPos", endPos);
+        result.put("routeSection", routeSection);
         result.put("mobility", mobilityDto);
         result.put("firstPath", firstResult);
         result.put("lastPath", lastResult);
@@ -163,13 +169,26 @@ public class TmapService {
         data.put("endX", ex);
         data.put("endY", ey);
         data.put("speed", 50);
+        return count < 3 ? getCarPath(data).block() : getCarPath2(data).block();
+    }
 
-        Mono<String> mono = tmapWebClient.post()
+    private Mono<String> getCarPath(Map<String, Object> map) {
+        count++;
+        return tmapWebClient.post()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/routes")
                         .queryParam("version", 1)
                         .build())
-                .bodyValue(data)
+                .bodyValue(map)
                 .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
-        return mono.block();
+    }
+
+    private Mono<String> getCarPath2(Map<String, Object> map) {
+        count = 0;
+        return tmapWebClient2.post()
+                .uri(uriBuilder -> uriBuilder.path("/tmap/routes")
+                        .queryParam("version", 1)
+                        .build())
+                .bodyValue(map)
+                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
     }
 }
