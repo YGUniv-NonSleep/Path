@@ -17,22 +17,22 @@ import Stack from "@mui/material/Stack";
 import Icon from "../../components/Icon";
 import { 
   SideNav, SearchArea, 
-  ScrollArea, ScrollAreaInner, DirectionIndexSearchHistory, InstantBox, TitleBox, InstantTitle, 
-  SearchStandby, HistoryList, HistoryListPlace, HistoryItemPlace, LinkPlace, IconBox, PlaceBox, PlaceText, IconRoute, 
+  ScrollArea, DirectionIndexSearchHistory, InstantBox, TitleBox, InstantTitle, 
+  SearchStandby, NoResultText, HistoryList, HistoryListPlace, HistoryItemPlace, 
+  LinkPlace, IconBox, PlaceBox, PlaceTextBox, PlaceText, IconRoute, 
   DirectionIndexFavorites, EmptyBox, FavoritesText, LinkLogin, 
   DirectionSummaryList, DirectionSummarySpace, ScrollInner, SearchResultList, PathInserted, DirectionSummaryItemTransit, 
-  SwitchButton,  
+  RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo, 
+  SwitchButton, DeleteBtn
 } from "./styles/PathStyles";
 import useInputForm from "./hooks/useInputForm";
 
 function PathMain() {
   const { 
-    SPoint, APoint, jusoOption, loading, pathList, 
+    SPoint, APoint, jusoOption, loading, pathList, historyList, 
     onchangeSP, onchangeAP, refreshPoints, switchPoints, 
-    savePathFindingHistory, deletePathFindingHistory, 
-    wayFind, pathDrawing 
+    deletePathFindingHistory, wayFind, pathDrawing 
   } = useInputForm()
-
   console.log(pathList)
 
   return (
@@ -100,13 +100,39 @@ function PathMain() {
                   {/* results */}
                   <SearchResultList>
                     {
-                      pathList.map((item)=>{
-                        // console.log(item)
+                      pathList.map((item, idx)=>{
+                        console.log(item)
                         return (
                           <PathInserted>
                             <DirectionSummaryItemTransit>
-                              <div>{item.totalTime}</div>
-                              <button onClick={() => pathDrawing(1)}>0</button> 
+                              {/* RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo,  */}
+                              <RouteSummaryBox>
+                                { idx == 0 ? (
+                                    <RouteType>
+                                    {/* 최적, 최소 시간, 환승, 도보 표시 컴포넌트 */}
+                                      최적
+                                    </RouteType>
+                                  ) : (
+                                    null
+                                )}
+                                <RouteSummaryInfoArea>
+                                  <DurationTime>
+                                    <ReadableDuration>
+                                      <TimeValue>
+                                        {item.totalTime}
+                                      </TimeValue>
+                                      <UnitValue>
+                                        분
+                                      </UnitValue>
+                                    </ReadableDuration>
+                                    <SummaryInfo>
+                                      {item.payment}
+                                    </SummaryInfo>
+                                  </DurationTime>
+                                </RouteSummaryInfoArea>
+                              </RouteSummaryBox>
+                              
+                              {/* <button onClick={() => pathDrawing(1)}>0</button>  */}
                             </DirectionSummaryItemTransit>
                           </PathInserted>
                         )
@@ -128,20 +154,55 @@ function PathMain() {
                       </InstantTitle>
                     </TitleBox>
                     <SearchStandby>
-                      <InstantBox>
-                        <HistoryList>
+                      {
+                        historyList.length != 0 ? (
                           <InstantBox>
-                            <HistoryListPlace>
-                              {/* 최근 검색 데이터 */}
-                              <div>리스트 데이터 없음</div>
-                              <button onClick={savePathFindingHistory}>추가</button>
-                              <button onClick={deletePathFindingHistory}>삭제</button>
-                            </HistoryListPlace>
-                            {/* 더보기 btn */}
+                            <HistoryList>
+                              <InstantBox>
+                                <HistoryListPlace>
+                                  {/* 최근 검색 데이터 */}
+                                  {
+                                    historyList.map((item, key)=>{
+                                      return (
+                                        <HistoryItemPlace key={key}>
+                                          <LinkPlace>
+                                            <IconBox>
+                                              {/* type에 맞는 아이콘 설정 */}
 
+                                            </IconBox>
+                                            <PlaceBox>
+                                              <PlaceTextBox>
+                                                <PlaceText>
+                                                  {item.startName}
+                                                </PlaceText>
+                                                <IconRoute>→</IconRoute>
+                                                <PlaceText>
+                                                  {item.goalName}
+                                                </PlaceText>
+                                              </PlaceTextBox>
+                                            </PlaceBox>
+                                          </LinkPlace>
+                                          <DeleteBtn onClick={deletePathFindingHistory}>
+                                            삭제
+                                          </DeleteBtn>
+                                        </HistoryItemPlace>
+                                      )
+                                    })
+                                  }
+                                  {/* <button onClick={deletePathFindingHistory}>삭제</button> */}
+                                </HistoryListPlace>
+                                {/* 더보기 btn */}
+
+                              </InstantBox>
+                            </HistoryList>
                           </InstantBox>
-                        </HistoryList>
-                      </InstantBox>
+                        ) : (
+                        <EmptyBox>
+                          <NoResultText>
+                            검색 기록이 없습니다
+                          </NoResultText>
+                        </EmptyBox>
+                      )}
                     </SearchStandby>
                   </InstantBox>
                 </SearchResultList>

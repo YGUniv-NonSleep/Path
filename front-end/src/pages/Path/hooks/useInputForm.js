@@ -15,7 +15,8 @@ function useInputForm() {
   const [APoint, setAPoint] = useState(''); // 도착지 주소창
   const [insertPoint, setInsertPoint] = useState(''); // 입력에 반응하는 창 state
 
-  const [pathList, setPathList] = useState([]); // 
+  const [pathList, setPathList] = useState([]); // 검색된 경로 정보들
+  const [historyList, setHistoryList] = useState([]); // 최근 검색 기록
   const [polyLineData, setPolyLineData] = useState([]); // 이동수단 경로 그래픽 데이터
   const [walkLineData, setWalkLineData] = useState([]); // 도보 경로 그래픽 데이터
   const [markerData, setMarkerData] = useState([]); // 마커 그래픽 데이터
@@ -34,8 +35,10 @@ function useInputForm() {
 
   // 처음 접속시 세팅 Effect Hook
   useEffect(() => {
-    // console.log(map)
-    mapLoad();
+    if(map==null){
+      mapLoad();
+      getPathFindingHistory();
+    }
   }, []);
 
   // 출발지를 저장하는 함수
@@ -53,6 +56,7 @@ function useInputForm() {
     setInsertPoint('');
     setSPoint('');
     setAPoint('');
+    setWay([]);
     setPathList([]);
     removeMarkers();
     removeGraphics();
@@ -301,33 +305,34 @@ function useInputForm() {
     }
     // info 정보와 localHistory의 정보 중 type, startName, goalName 일치하면 제거하고 다시 저장
     history.push(info)
-    window.localStorage.setItem('PathFindingHistoryList', JSON.stringify(history))
+    localStorage.setItem('PathFindingHistoryList', JSON.stringify(history))
   }
   
   function getPathFindingHistory(){
-    const history = window.localStorage.getItem('PathFindingHistoryList'); // 읽기(key 정보)
+    const history = localStorage.getItem('PathFindingHistoryList'); // 읽기(key 정보)
     // console.log(history)
-    if(history == null) return []
-    else return JSON.parse(history)
+    if(history == null) {
+      // setHistoryList([])
+      return []
+    } else {
+      setHistoryList(JSON.parse(history))
+      return JSON.parse(history)
+    }
   }
 
   function deletePathFindingHistory(){
-    if(window.localStorage.PathFindingHistoryList==undefined) return;
-    // localStorage
-    let historyList = getPathFindingHistory();
-    // JSON.parse(localStorage.PathFindingHistoryList)
-     console.log(historyList)
+    if(localStorage.PathFindingHistoryList==undefined) return;
 
-    for(let i = 0; i < historyList.length; i++) {
-      // type, startId, goalId 비교
-       console.log(historyList[i])
-      if(historyList[i].startId == '8438335' && historyList[i].goalId == '7842981') {
-        let idx = historyList.indexOf(historyList[i])
-        historyList.splice(idx)
+    let history = getPathFindingHistory();
+
+    for(let i = 0; i < history.length; i++) {
+      // type, startId, goalId 비교 예정
+      if(history[i].startId == '1553330656' && history[i].goalId == '10258787'){
+        let idx = history.indexOf(history[i])
+        history.splice(idx)
       }
     }
-    console.log(historyList)
-    //window.localStorage.setItem('PathFindingHistoryList', JSON.stringify(historyList));
+    // localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
   }
 
   return {
@@ -342,6 +347,7 @@ function useInputForm() {
     insertPoint,
     jusoOption,
     pathList, 
+    historyList, 
     mapLoad,
     onchangeSP,
     onchangeAP,
