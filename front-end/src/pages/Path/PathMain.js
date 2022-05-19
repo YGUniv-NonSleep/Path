@@ -23,7 +23,9 @@ import {
   DirectionIndexFavorites, EmptyBox, FavoritesText, LinkLogin, 
   DirectionSummaryList, DirectionSummarySpace, ScrollInner, SearchResultList, PathInserted, DirectionSummaryItemTransit, 
   RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo, 
-  SwitchButton, DeleteBtn
+  StepInfoWrap, StepInfoList, StepInfoItem, IconWrap, IconArea, IconSpan, 
+  VehicleTypeArea, VehicleTypeLabel, StepInfoArea, StepTitleArea, StepTitle, AppendixBtnArea, 
+  SwitchButton, DeleteBtn, 
 } from "./styles/PathStyles";
 import useInputForm from "./hooks/useInputForm";
 
@@ -34,6 +36,7 @@ function PathMain() {
     deletePathFindingHistory, wayFind, pathDrawing 
   } = useInputForm()
   console.log(pathList)
+  // (int) 1-지하철, 2-버스, 3-버스+지하철, 4 퍼스널 모빌리티(예정)
 
   return (
     <div className="Path">
@@ -126,11 +129,40 @@ function PathMain() {
                                       </UnitValue>
                                     </ReadableDuration>
                                     <SummaryInfo>
-                                      {item.payment}
+                                      {item.payment}원
                                     </SummaryInfo>
                                   </DurationTime>
                                 </RouteSummaryInfoArea>
                               </RouteSummaryBox>
+                              <StepInfoWrap>
+                                <StepInfoList>
+                                  {/* 리스트 */}
+                                  <StepInfoItem>
+                                    <IconWrap>
+                                      <IconArea>
+                                        <IconSpan>
+                                          icon
+                                        </IconSpan>
+                                      </IconArea>
+                                      <VehicleTypeArea>
+                                        <VehicleTypeLabel>
+                                          번호들
+                                        </VehicleTypeLabel>
+                                      </VehicleTypeArea>
+                                    </IconWrap>
+                                    <StepInfoArea>
+                                      <StepTitleArea>
+                                        <StepTitle>
+                                          동대구역
+                                        </StepTitle>
+                                        <AppendixBtnArea>
+                                          {/* 공간 채우기 */}
+                                        </AppendixBtnArea>
+                                      </StepTitleArea>
+                                    </StepInfoArea>
+                                  </StepInfoItem>
+                                </StepInfoList>
+                              </StepInfoWrap>
                               
                               {/* <button onClick={() => pathDrawing(1)}>0</button>  */}
                             </DirectionSummaryItemTransit>

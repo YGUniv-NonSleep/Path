@@ -332,6 +332,7 @@ const DurationTime = styled.strong`
 `;
 
 const ReadableDuration = styled.div`
+  display: inline-block;
   list-style: none;
   font-weight: 500;
   color: #242424;
@@ -553,5 +554,7 @@ export {
   DirectionIndexFavorites, EmptyBox, FavoritesText, LinkLogin, 
   DirectionSummaryList, DirectionSummarySpace, ScrollInner, SearchResultList, PathInserted, DirectionSummaryItemTransit, 
   RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo, 
+  StepInfoWrap, StepInfoList, StepInfoItem, IconWrap, IconArea, IconSpan, 
+  VehicleTypeArea, VehicleTypeLabel, StepInfoArea, StepTitleArea, StepTitle, AppendixBtnArea, 
   SwitchButton, DeleteBtn
 }
