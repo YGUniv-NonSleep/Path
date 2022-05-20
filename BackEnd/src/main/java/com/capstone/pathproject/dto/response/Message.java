@@ -10,7 +10,7 @@ public class Message<T> {
     private String message;
     private T body;
 
-    @Builder(builderMethodName = "createMessage")
+    @Builder
     public Message(StatusEnum header, String message, T body) {
         this.header = header;
         this.message = message;

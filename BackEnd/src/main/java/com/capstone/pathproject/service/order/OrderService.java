@@ -74,7 +74,7 @@ public class OrderService {
         }
 
 
-        return Message.<SaveOrderDto>createMessage()
+        return Message.<SaveOrderDto>builder()
                 .message("OrderSuccess")
                 .header(StatusEnum.OK)
                 .body(saveOrderDto)

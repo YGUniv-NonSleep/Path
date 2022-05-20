@@ -36,7 +36,7 @@ public class MemberApiController {
         System.out.println("member = " + member.toString());
         String username = member.getName();
         System.out.println("username = " + username);
-        Message<Object> message = Message.createMessage()
+        Message<Object> message = Message.builder()
                 .header(StatusEnum.OK)
                 .message("회원이 존재함")
                 .body(username).build();
@@ -46,7 +46,7 @@ public class MemberApiController {
     @DeleteMapping("/token")
     public ResponseEntity<Message<Object>> logout(HttpServletResponse response) {
         cookieUtil.deleteCookie(response, JwtProperties.REFRESH_HEADER_STRING);
-        Message<Object> message = Message.createMessage()
+        Message<Object> message = Message.builder()
                 .header(StatusEnum.OK)
                 .message("로그아웃 성공")
                 .build();
