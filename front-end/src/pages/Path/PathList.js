@@ -1,4 +1,3 @@
-import React from "react";
 import {
   PathInserted,
   DirectionSummaryItemTransit,
@@ -24,13 +23,13 @@ import {
   AppendixBtnArea,
 } from "./styles/PathStyles";
 
-function PathList({ list }) {
+function PathList({ list, click }) {
   const transitCount = (item, idx) => {
     let temp = [];
     let count = item.busTransitCount + item.subwayTransitCount;
     // item.startStation, item.endStation
-    console.log(item.startStation)
-    console.log(item.routeSection)
+    // console.log(item)
+    // console.log(item.routeSection)
     for (let i = 0; i <= count; i++) {
       temp.push(
         <StepInfoItem key={`${idx}step${i}`}>
@@ -39,7 +38,15 @@ function PathList({ list }) {
               <IconSpan>icon</IconSpan>
             </IconArea>
             <VehicleTypeArea>
-              <VehicleTypeLabel>번호들</VehicleTypeLabel>
+              <VehicleTypeLabel>
+                  {/* {item.routeSection.map((isTrans)=>{
+                    isTrans.filter((isTrans) => {
+                        // if(isTrans.busNo != undefined) return isTrans.busNo
+                        // if(isTrans.subwayName != undefined) return isTrans.subwayName
+                        // if(isTrans.busNo == undefined && isTrans.subwayName == undefined) return 하차
+                    })
+                  })} */}
+              </VehicleTypeLabel>
             </VehicleTypeArea>
           </IconWrap>
           <StepInfoArea>
@@ -58,7 +65,7 @@ function PathList({ list }) {
     <>
       {list.map((item, idx) => (
         <PathInserted key={`list${idx}`}>
-          <DirectionSummaryItemTransit>
+          <DirectionSummaryItemTransit onClick={()=>click(idx)}>
             <RouteSummaryBox>
               {idx == 0 ? (
                 <RouteType>
