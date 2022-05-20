@@ -36,7 +36,6 @@ class CardRepositoryTest {
     private Card createCard(int num, Member member) {
         return Card.builder()
                 .number("카드번호"+num)
-                .createTime(LocalDateTime.now())
                 .cardCompany("카드회사"+num)
                 .billingKey("토스접근키"+num)
                 .member(member)
