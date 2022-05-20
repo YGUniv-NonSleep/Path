@@ -9,7 +9,7 @@ import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
 @Configuration
-public class OdsayConfiguration {
+public class OdsayConfig {
 
     @Bean
     public WebClient odsayWebClient() {
