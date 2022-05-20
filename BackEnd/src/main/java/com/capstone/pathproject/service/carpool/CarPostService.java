@@ -48,7 +48,7 @@ public class CarPostService {
                 .price(carPostDTO.getPrice())
                 .build();
         carPostRepository.save(result.toEntity());
-        return Message.<CarPostDTO>createMessage()
+        return Message.<CarPostDTO>builder()
                 .header(StatusEnum.OK)
                 .message("등록완료")
                 .body(result).build();
@@ -82,18 +82,18 @@ public class CarPostService {
                     .build();
                 carPostRepository.save(updateResult.toEntity());
             }else{
-                return Message.<CarPostDTO>createMessage()
+                return Message.<CarPostDTO>builder()
                         .header(StatusEnum.BAD_REQUEST)
                         .message("작성자가 아닙니다!")
                         .build();
             }
-                return Message.<CarPostDTO>createMessage()
+                return Message.<CarPostDTO>builder()
                         .header(StatusEnum.OK)
                         .message("업데이트 완료")
                         .body(carPostDTO).build();
 
         }
-        return Message.<CarPostDTO>createMessage()
+        return Message.<CarPostDTO>builder()
                 .header(StatusEnum.BAD_REQUEST)
                 .message("작성자가 아닙니다")
                 .build();
@@ -106,13 +106,13 @@ public class CarPostService {
         if(result.isPresent()){
             if(result.get().getMember().getId() == 1){
                 carPostRepository.deleteById(rs);
-                return Message.<CarPostDTO>createMessage()
+                return Message.<CarPostDTO>builder()
                         .header(StatusEnum.OK)
                         .message("삭제완료")
                         .build();
             }
         }
-        return Message.<CarPostDTO>createMessage()
+        return Message.<CarPostDTO>builder()
                 .header(StatusEnum.BAD_REQUEST)
                 .message("작성자가 아닙니다!")
                 .build();
@@ -124,7 +124,7 @@ public class CarPostService {
         List<CarPost> result = carPostRepository.findAll(pageable).getContent();
         ArrayList<CarPostDTO> listPDT = new ArrayList<CarPostDTO>();
         result.stream().map(carPost -> carPost.toDTO()).forEach(carPostDTO -> listPDT.add(carPostDTO));
-        return Message.<List<CarPostDTO>>createMessage()
+        return Message.<List<CarPostDTO>>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")
                 .body(listPDT).build();
@@ -134,7 +134,7 @@ public class CarPostService {
     public Message viewParams(Long id){
         Optional<CarPost> carPost = carPostRepository.findById(id);
         CarPostDTO carPostDTO = carPost.get().toDTO();
-        return Message.<CarPostDTO>createMessage()
+        return Message.<CarPostDTO>builder()
                 .header(StatusEnum.OK)
                 .message("조회 완료")
                 .body(carPostDTO).build();
@@ -149,7 +149,7 @@ public class CarPostService {
 
             ArrayList<CarPostDTO> listPDT = new ArrayList<CarPostDTO>();
             carpostList.stream().map(carPost -> carPost.toDTO()).forEach(carPostDTO -> listPDT.add(carPostDTO));
-            return Message.<List<CarPostDTO>>createMessage()
+            return Message.<List<CarPostDTO>>builder()
                     .header(StatusEnum.OK)
                     .message("검색완료")
                     .body(listPDT).build();
@@ -157,7 +157,7 @@ public class CarPostService {
             List<CarPost> carpostList = carPostRepository.findByStartLocal2Containing(keyword,pageable);
             ArrayList<CarPostDTO> listPDT = new ArrayList<CarPostDTO>();
             carpostList.stream().map(carPost -> carPost.toDTO()).forEach(carPostDTO -> listPDT.add(carPostDTO));
-            return Message.<List<CarPostDTO>>createMessage()
+            return Message.<List<CarPostDTO>>builder()
                     .header(StatusEnum.OK)
                     .message("검색완료")
                     .body(listPDT).build();

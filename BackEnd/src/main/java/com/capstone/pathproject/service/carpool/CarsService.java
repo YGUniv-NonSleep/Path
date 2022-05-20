@@ -34,7 +34,7 @@ public class CarsService {
                 .photoName(fileName)
                 .build();
         carsRepository.save(result.toEntity());
-        return Message.<CarsDTO>createMessage()
+        return Message.<CarsDTO>builder()
                 .header(StatusEnum.OK)
                 .message("등록완료")
                 .body(result).build();
@@ -54,13 +54,13 @@ public class CarsService {
                     .build();
             if (carsDTO.getMember().getId() == 1) {
                 carsRepository.save(updateResult.toEntity());
-                return Message.<CarsDTO>createMessage()
+                return Message.<CarsDTO>builder()
                         .header(StatusEnum.OK)
                         .message("업데이트 완료")
                         .body(carsDTO).build();
             }
         }
-        return Message.<CarsDTO>createMessage()
+        return Message.<CarsDTO>builder()
                 .header(StatusEnum.BAD_REQUEST)
                 .message("작성자가 아닙니다")
                 .build();
@@ -73,7 +73,7 @@ public class CarsService {
         if (result.isPresent()) {
             carsRepository.deleteById(rs);
         }
-        return Message.<CarsDTO>createMessage()
+        return Message.<CarsDTO>builder()
                 .header(StatusEnum.OK)
                 .message("삭제완료")
                 .build();
@@ -86,7 +86,7 @@ public class CarsService {
         List<Cars> result = carsRepository.findAll(pageable).getContent();
         ArrayList<CarsDTO> listDTO = new ArrayList<CarsDTO>();
         result.stream().map(cars -> cars.toDTO()).forEach(carsDTO -> listDTO.add(carsDTO));
-        return Message.<List<CarsDTO>>createMessage()
+        return Message.<List<CarsDTO>>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")
                 .body(listDTO).build();
@@ -98,7 +98,7 @@ public class CarsService {
         List<Cars> carsList = carsRepository.findByCarKindContaining(keyword,pageable);
         ArrayList<CarsDTO> listDTO = new ArrayList<CarsDTO>();
         carsList.stream().map(cars -> cars.toDTO()).forEach(carsDTO -> listDTO.add(carsDTO));
-        return Message.<List<CarsDTO>>createMessage()
+        return Message.<List<CarsDTO>>builder()
                 .header(StatusEnum.OK)
                 .message("검색완료")
                 .body(listDTO).build();

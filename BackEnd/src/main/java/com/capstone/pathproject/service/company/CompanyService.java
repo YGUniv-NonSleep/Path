@@ -34,7 +34,7 @@ public class CompanyService {
 
 
         companyRepository.save(companyDTO.toEntity());
-        return Message.<CompanyDTO>createMessage()
+        return Message.<CompanyDTO>builder()
                 .header(StatusEnum.OK)
                 .message("Create Success")
                 .body(companyDTO)
@@ -43,7 +43,7 @@ public class CompanyService {
 
     public Message deleteCompany(Long comId){
         companyRepository.deleteById(comId);
-        return Message.createMessage()
+        return Message.builder()
                 .header(StatusEnum.OK)
                 .message("Delete Success")
                 .build();
@@ -52,7 +52,7 @@ public class CompanyService {
     public Message<CompanyDTO> updateCompany(CompanyDTO companyDTO) {
         companyRepository.save(companyDTO.toEntity());
 
-        return Message.<CompanyDTO>createMessage()
+        return Message.<CompanyDTO>builder()
                 .header(StatusEnum.OK)
                 .message("Update Success")
                 .body(companyDTO)
@@ -66,13 +66,13 @@ public class CompanyService {
             Company result = findCompany.get();
             CompanyDTO companyDTO = result.toDTO();
 
-            return Message.<CompanyDTO>createMessage()
+            return Message.<CompanyDTO>builder()
                     .header(StatusEnum.OK)
                     .message("find Success")
                     .body(companyDTO)
                     .build();
         }else{
-            return Message.<CompanyDTO>createMessage()
+            return Message.<CompanyDTO>builder()
                     .header(StatusEnum.NOT_FOUND)
                     .message("업체가 없음")
                     .build();
@@ -83,7 +83,7 @@ public class CompanyService {
         List<Company> result = companyRepository.findByMemberId(memId);
         ArrayList<CompanyDTO> companyDTOList = new ArrayList<>();
         result.stream().map(Company::toDTO).forEach(companyDTOList::add);
-        return Message.<List<CompanyDTO>>createMessage()
+        return Message.<List<CompanyDTO>>builder()
                 .message("업체 조회 성공")
                 .body(companyDTOList)
                 .header(StatusEnum.OK)
@@ -104,14 +104,14 @@ public class CompanyService {
             CompMemberDTO compMemberDTO = compMember.toDTO();
             compMemberRepository.save(compMember);
 
-            return Message.createMessage()
+            return Message.builder()
                     .message("업체회원 추가 완료")
                     .body(compMemberDTO)
                     .header(StatusEnum.OK)
                     .build();
         }else{
             System.out.println("없어!!!");
-            return Message.createMessage()
+            return Message.builder()
                     .message("업체회원 추가 실패")
                     .body(null)
                     .header(StatusEnum.NOT_FOUND)
@@ -130,7 +130,7 @@ public class CompanyService {
             System.out.println( s.toString() );
         }
 
-    return Message.<List<CompMemberDTO>>createMessage()
+    return Message.<List<CompMemberDTO>>builder()
             .message("조회 완료")
             .header(StatusEnum.OK)
             .body(compMemberDTOList)
