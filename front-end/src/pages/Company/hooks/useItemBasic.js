@@ -122,6 +122,7 @@ function useItemBasic() {
           alert("성공적으로 수정되었습니다.");
           // 수정된 상품만 재랜더링하도록 수정
           getProductBasic();
+          handleClose();
         });
       })
       .catch((err) => {
