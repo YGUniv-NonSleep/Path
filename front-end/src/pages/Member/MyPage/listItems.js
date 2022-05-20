@@ -20,12 +20,7 @@ function MainListItems(props) {
         </ListItemIcon>
         <ListItemText primary="마이페이지" />
       </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="내 정보" />
-      </ListItemButton>
+
       <ListItemButton>
         <ListItemIcon>
           <ShoppingCartIcon />
@@ -40,9 +35,15 @@ function MainListItems(props) {
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="예약내역" />
+      </ListItemButton>
+      <ListItemButton>
+        <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText primary="이용금액 차트" />
+        <ListItemText primary="이용금액" />
       </ListItemButton>
     </React.Fragment>
   );
@@ -58,13 +59,9 @@ function SecondaryListItems(props) {
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="정보 수정"
-          component={Link}
-          to="/member/update"
-        />
+        <ListItemText primary="정보 수정" />
       </ListItemButton>
-      <ListItemButton>
+      <ListItemButton component={Link} to="/member/card">
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
