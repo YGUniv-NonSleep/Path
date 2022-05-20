@@ -114,6 +114,7 @@ function useCarPoolAdd() {
         id: 1,
       },
     };
+    console.log(typeof data.sdate)
     console.log(data);
 
     var formData = new FormData();
