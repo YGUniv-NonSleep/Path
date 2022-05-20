@@ -1,8 +1,6 @@
 import Map from "../../components/Map";
-import PathList from "./PathList";
 
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 import {
   TextField,
@@ -16,113 +14,29 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import AddIcon from "@mui/icons-material/Add";
 import Stack from "@mui/material/Stack";
-import Icon from "../../components/Icon"
+import Icon from "../../components/Icon";
+import { 
+  SideNav, SearchArea, 
+  ScrollArea, DirectionIndexSearchHistory, InstantBox, TitleBox, InstantTitle, 
+  SearchStandby, NoResultText, HistoryList, HistoryListPlace, HistoryItemPlace, 
+  LinkPlace, IconBox, PlaceBox, PlaceTextBox, PlaceText, IconRoute, 
+  DirectionIndexFavorites, EmptyBox, FavoritesText, LinkLogin, 
+  DirectionSummaryList, DirectionSummarySpace, ScrollInner, SearchResultList, PathInserted, DirectionSummaryItemTransit, 
+  RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo, 
+  StepInfoWrap, StepInfoList, StepInfoItem, IconWrap, IconArea, IconSpan, 
+  VehicleTypeArea, VehicleTypeLabel, StepInfoArea, StepTitleArea, StepTitle, AppendixBtnArea, 
+  SwitchButton, DeleteBtn, 
+} from "./styles/PathStyles";
 import useInputForm from "./hooks/useInputForm";
-
-const SideNav = styled.nav`
-  position: fixed;
-  left: 95px;
-  z-index: 5;
-  background-color: white;
-  box-shadow: 3px 3px 3px gray;
-  width: 390px;
-  height: 100%;
-`;
-
-const SearchArea = styled.div`
-  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  position: relative;
-  height: 25%;
-  padding: 10px 20px 15px;
-  border-bottom: 1px solid rgb(184, 184, 184);
-  z-index: 30;
-`;
-
-{/* 경로 검색 전 component */}
-const ScrollArea = styled.div`
-  position: relative;
-  height: 100%;
-  max-width: 390px;
-  overflow-x: hidden;
-  overflow-y: hidden;
-`;
-
-{/* 경로 검색 후 component */}
-const DirectionSummaryList = styled.div`
-  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  position: relative; 
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  height: 100%;
-  width: 390px;
-`;
-
-const DirectionSummarySpace = styled.div`
-  scrollbar-width: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-  height: 100%;
-`;
-
-const ScrollInner = styled.div`
-  width: 390px;
-`;
-
-const SearchResultList = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  position: relative;
-  padding-top: 1px;
-  transition: .2s;
-`;
-
-const PathInserted = styled.li`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  &:after {
-    position: absolute;
-    left: 18px;
-    right: 18px;
-    height: 1px;
-    background: rgba(0,0,0,.1);
-    content: "";
-  }
-  &:hover {
-    background-color: rgb(240, 251, 255, 0.842);
-  }
-`; // display: block;
-
-const DirectionSummaryItemTransit = styled.div`
-  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  list-style: none;
-  position: relative;
-  padding: 18px 20px 15px;
-  display: block;
-`;
-
-const SwitchButton = styled.button`
-  z-index: 5;
-  position: absolute;
-  left: 300px;
-  top: 113px;
-  border: 1px solid #9E9E9E;
-  cursor:pointer; cursor:hand;
-  background-color: white;
-  width: 30px;
-  height: 30px;
-  -webkit-border-radius: 30px;
-`;
 
 function PathMain() {
   const { 
-    SPoint, APoint, jusoOption, loading, 
+    SPoint, APoint, jusoOption, loading, pathList, historyList, 
     onchangeSP, onchangeAP, refreshPoints, switchPoints, 
-    wayFind, pathDrawing 
+    deletePathFindingHistory, wayFind, pathDrawing 
   } = useInputForm()
+  console.log(pathList)
+  // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
 
   return (
     <div className="Path">
@@ -182,30 +96,170 @@ function PathMain() {
             </Stack>
           </Box>
         </SearchArea>
-        <DirectionSummaryList>
-          <DirectionSummarySpace>
-            <ScrollInner>
-              <SearchResultList>
-                {/* results */}
-                <PathInserted>
-                  <DirectionSummaryItemTransit>
-                    <button onClick={() => pathDrawing(0)}>0</button>    
-                  </DirectionSummaryItemTransit>
-                </PathInserted>
-                <PathInserted>
-                  <DirectionSummaryItemTransit>
-                    <button onClick={() => pathDrawing(1)}>1</button>    
-                  </DirectionSummaryItemTransit>
-                </PathInserted>
-                <PathInserted>
-                  <DirectionSummaryItemTransit>
-                    <button onClick={() => pathDrawing(2)}>2</button>    
-                  </DirectionSummaryItemTransit>
-                </PathInserted>
-              </SearchResultList>
-            </ScrollInner>
-          </DirectionSummarySpace>
-        </DirectionSummaryList>
+        { pathList != undefined && pathList.length != 0 ? (
+            <DirectionSummaryList>
+              <DirectionSummarySpace>
+                <ScrollInner>
+                  {/* results */}
+                  <SearchResultList>
+                    {
+                      pathList.map((item, idx)=>{
+                        //console.log(item)
+                        return (
+                          <PathInserted>
+                            <DirectionSummaryItemTransit>
+                              {/* RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo,  */}
+                              <RouteSummaryBox>
+                                { idx == 0 ? (
+                                    <RouteType>
+                                    {/* 최적, 최소 시간, 환승, 도보 표시 컴포넌트 */}
+                                      최적
+                                    </RouteType>
+                                  ) : (
+                                    null
+                                )}
+                                <RouteSummaryInfoArea>
+                                  <DurationTime>
+                                    <ReadableDuration>
+                                      <TimeValue>
+                                        {item.totalTime}
+                                      </TimeValue>
+                                      <UnitValue>
+                                        분
+                                      </UnitValue>
+                                    </ReadableDuration>
+                                    <SummaryInfo>
+                                      {item.payment}원
+                                    </SummaryInfo>
+                                  </DurationTime>
+                                </RouteSummaryInfoArea>
+                              </RouteSummaryBox>
+                              <StepInfoWrap>
+                                <StepInfoList>
+                                  {/* 리스트 */}
+                                  <StepInfoItem>
+                                    <IconWrap>
+                                      <IconArea>
+                                        <IconSpan>
+                                          icon
+                                        </IconSpan>
+                                      </IconArea>
+                                      <VehicleTypeArea>
+                                        <VehicleTypeLabel>
+                                          번호들
+                                        </VehicleTypeLabel>
+                                      </VehicleTypeArea>
+                                    </IconWrap>
+                                    <StepInfoArea>
+                                      <StepTitleArea>
+                                        <StepTitle>
+                                          동대구역
+                                        </StepTitle>
+                                        <AppendixBtnArea>
+                                          {/* 공간 채우기 */}
+                                        </AppendixBtnArea>
+                                      </StepTitleArea>
+                                    </StepInfoArea>
+                                  </StepInfoItem>
+                                </StepInfoList>
+                              </StepInfoWrap>
+                              
+                              {/* <button onClick={() => pathDrawing(1)}>0</button>  */}
+                            </DirectionSummaryItemTransit>
+                          </PathInserted>
+                        )
+                      })
+                    }
+                  </SearchResultList>
+                </ScrollInner>
+                {/* bookmark -> favorites 기능, 요약 정보 컴포넌트 */}
+              </DirectionSummarySpace>
+            </DirectionSummaryList>
+          ) : (
+            <ScrollArea>
+              <ScrollInner>
+                <SearchResultList>
+                  <InstantBox>
+                    <TitleBox>
+                      <InstantTitle>
+                        최근 검색
+                      </InstantTitle>
+                    </TitleBox>
+                    <SearchStandby>
+                      {
+                        historyList.length != 0 ? (
+                          <InstantBox>
+                            <HistoryList>
+                              <InstantBox>
+                                <HistoryListPlace>
+                                  {/* 최근 검색 데이터 */}
+                                  {
+                                    historyList.map((item, key)=>{
+                                      return (
+                                        <HistoryItemPlace key={key}>
+                                          <LinkPlace>
+                                            <IconBox>
+                                              {/* type에 맞는 아이콘 설정 */}
+
+                                            </IconBox>
+                                            <PlaceBox>
+                                              <PlaceTextBox>
+                                                <PlaceText>
+                                                  {item.startName}
+                                                </PlaceText>
+                                                <IconRoute>→</IconRoute>
+                                                <PlaceText>
+                                                  {item.goalName}
+                                                </PlaceText>
+                                              </PlaceTextBox>
+                                            </PlaceBox>
+                                          </LinkPlace>
+                                          <DeleteBtn onClick={deletePathFindingHistory}>
+                                            삭제
+                                          </DeleteBtn>
+                                        </HistoryItemPlace>
+                                      )
+                                    })
+                                  }
+                                  {/* <button onClick={deletePathFindingHistory}>삭제</button> */}
+                                </HistoryListPlace>
+                                {/* 더보기 btn */}
+
+                              </InstantBox>
+                            </HistoryList>
+                          </InstantBox>
+                        ) : (
+                        <EmptyBox>
+                          <NoResultText>
+                            검색 기록이 없습니다
+                          </NoResultText>
+                        </EmptyBox>
+                      )}
+                    </SearchStandby>
+                  </InstantBox>
+                </SearchResultList>
+                <DirectionIndexFavorites>
+                  <InstantBox>
+                    <TitleBox>
+                      <InstantTitle>
+                        즐겨찾기
+                      </InstantTitle>
+                    </TitleBox>
+                    <EmptyBox>
+                      <FavoritesText>
+                        로그인 하면 즐겨찾기한 경로를 빠르게 확인할 수 있습니다
+                      </FavoritesText>
+                      <Link to="/login">
+                        <LinkLogin>
+                          로그인
+                        </LinkLogin>
+                      </Link>
+                    </EmptyBox>
+                  </InstantBox>
+                </DirectionIndexFavorites>
+              </ScrollInner>
+            </ScrollArea>
+        )}
       </SideNav>
       <Map />
     </div>
