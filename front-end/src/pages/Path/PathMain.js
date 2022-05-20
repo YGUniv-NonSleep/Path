@@ -21,13 +21,11 @@ import {
   SearchStandby, NoResultText, HistoryList, HistoryListPlace, HistoryItemPlace, 
   LinkPlace, IconBox, PlaceBox, PlaceTextBox, PlaceText, IconRoute, 
   DirectionIndexFavorites, EmptyBox, FavoritesText, LinkLogin, 
-  DirectionSummaryList, DirectionSummarySpace, ScrollInner, SearchResultList, PathInserted, DirectionSummaryItemTransit, 
-  RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo, 
-  StepInfoWrap, StepInfoList, StepInfoItem, IconWrap, IconArea, IconSpan, 
-  VehicleTypeArea, VehicleTypeLabel, StepInfoArea, StepTitleArea, StepTitle, AppendixBtnArea, 
+  DirectionSummaryList, DirectionSummarySpace, ScrollInner, SearchResultList,
   SwitchButton, DeleteBtn, 
 } from "./styles/PathStyles";
 import useInputForm from "./hooks/useInputForm";
+import PathList from "./PathList";
 
 function PathMain() {
   const { 
@@ -102,74 +100,7 @@ function PathMain() {
                 <ScrollInner>
                   {/* results */}
                   <SearchResultList>
-                    {
-                      pathList.map((item, idx)=>{
-                        //console.log(item)
-                        return (
-                          <PathInserted key={idx}>
-                            <DirectionSummaryItemTransit>
-                              {/* RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo,  */}
-                              <RouteSummaryBox>
-                                { idx == 0 ? (
-                                    <RouteType>
-                                    {/* 최적, 최소 시간, 환승, 도보 표시 컴포넌트 */}
-                                      최적
-                                    </RouteType>
-                                  ) : (
-                                    null
-                                )}
-                                <RouteSummaryInfoArea>
-                                  <DurationTime>
-                                    <ReadableDuration>
-                                      <TimeValue>
-                                        {item.totalTime}
-                                      </TimeValue>
-                                      <UnitValue>
-                                        분
-                                      </UnitValue>
-                                    </ReadableDuration>
-                                    <SummaryInfo>
-                                      {item.payment}원
-                                    </SummaryInfo>
-                                  </DurationTime>
-                                </RouteSummaryInfoArea>
-                              </RouteSummaryBox>
-                              <StepInfoWrap>
-                                <StepInfoList>
-                                  {/* 리스트 */}
-                                  <StepInfoItem>
-                                    <IconWrap>
-                                      <IconArea>
-                                        <IconSpan>
-                                          icon
-                                        </IconSpan>
-                                      </IconArea>
-                                      <VehicleTypeArea>
-                                        <VehicleTypeLabel>
-                                          번호들
-                                        </VehicleTypeLabel>
-                                      </VehicleTypeArea>
-                                    </IconWrap>
-                                    <StepInfoArea>
-                                      <StepTitleArea>
-                                        <StepTitle>
-                                          동대구역
-                                        </StepTitle>
-                                        <AppendixBtnArea>
-                                          {/* 공간 채우기 */}
-                                        </AppendixBtnArea>
-                                      </StepTitleArea>
-                                    </StepInfoArea>
-                                  </StepInfoItem>
-                                </StepInfoList>
-                              </StepInfoWrap>
-                              
-                              {/* <button onClick={() => pathDrawing(1)}>0</button>  */}
-                            </DirectionSummaryItemTransit>
-                          </PathInserted>
-                        )
-                      })
-                    }
+                    <PathList list={pathList}></PathList>
                   </SearchResultList>
                 </ScrollInner>
                 {/* bookmark -> favorites 기능, 요약 정보 컴포넌트 */}

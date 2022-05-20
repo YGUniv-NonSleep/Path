@@ -1,8 +1,11 @@
 import axios from 'axios';
+
 const odsayApi = axios.create({
   baseURL: `https://api.odsay.com/v1/api`,
 });
+
 const key = process.env.REACT_APP_ODSAY_API;
+
 export const PathApi = {
   getTransPath: async (data) => {
     const response = await axios
@@ -17,6 +20,7 @@ export const PathApi = {
     return response.data;
   },
 };
+
 export const MobilityApi = {
   getBusId: async (data) => {
     // console.log(data)
@@ -51,6 +55,7 @@ export const MobilityApi = {
     return response.data.result;
   },
 };
+
 export const SubwayApi = {
   getSubName: async (data) => {
     // console.log(data)
@@ -77,4 +82,5 @@ export const SubwayApi = {
     return response.data.result;
   },
 };
+
 export default odsayApi;

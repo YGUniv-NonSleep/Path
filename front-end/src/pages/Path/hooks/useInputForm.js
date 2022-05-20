@@ -186,6 +186,8 @@ function useInputForm() {
     const pathData = await PathApi.getTransPath({
       sx: way[0].x, sy: way[0].y,
       ex: way[1].x, ey: way[1].y,
+      searchPathType: 0
+      // 0(지하철+버스), 1(지하철), 2(버스)
     });
      console.log(pathData);
 
