@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import useTokenReissue from "../../../hooks/useTokenReissue";
 
 function useBoardHook() {
   const [formInfo, setFormInfo] = useState(null);
@@ -42,6 +43,9 @@ function useBoardHook() {
   const [faqState, setFaqState] = useState(false);
 
   const [buttonState, setButtonState] = useState(true);
+ 
+
+  const token = useTokenReissue();
 
   const keywordSubmit = (e) => {
     e.preventDefault();
@@ -78,41 +82,6 @@ function useBoardHook() {
       });
   };
 
-  function commuSubmit(e) {
-    e.preventDefault();
-
-    var data = {
-      title: e.target.title.value,
-      content: e.target.content.value,
-      type: e.target.type.value,
-      member: {
-        id: 1,
-      },
-    };
-
-    var formData = new FormData();
-    formData.append("userfile", e.target.userfile.files[0]);
-    formData.append(
-      "key",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-
-    axios
-      .post(process.env.REACT_APP_SPRING_API + "/api/post/create", formData, {
-        //withCredentials: true,
-        headers: {
-          "Content-Type": `multipart/form-data`,
-        },
-      })
-      .then((res) => {
-        // console.log(res);
-        console.log(res.data.body);
-        setFormInfo(res.data.body);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
   const noticePaging = (e) => {
     e.preventDefault();
@@ -329,8 +298,8 @@ function useBoardHook() {
     formInfo, board, keyword, searched, paging, pageState, 
     paging2, pageState2, paging3, pageState3, paging4, pageState4, 
     numbering, notice, noticeState, QNA, qnaState, 
-    complaint, comState, FAQ, faqState, buttonState, category, 
-    keywordSubmit, commuSubmit, categoryType, 
+    complaint, comState, FAQ, faqState, buttonState, category,token,
+    keywordSubmit, categoryType, 
     noticePaging, QnAPaging, ComplaintPaging, FaQPaging, 
     setBoard, setBoardState, setNumbering, setButtonState, 
     postId 

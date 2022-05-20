@@ -2,6 +2,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
+import useTokenReissue from "../../../hooks/useTokenReissue";
 
 function useBoardContents() {
   let navigate = useNavigate();
@@ -9,7 +10,8 @@ function useBoardContents() {
   const [content, setContent] = useState(null);
   const [del, setDelCont] = useState(null);
   const [repDel, setRepDel] = useState(null);
-  const [form, setForm] = useState(false);
+  const [postUpdateForm, setUpdateForm] = useState(0);
+  const [ab,setAB] = useState(false);
   const [update, setUpdate] = useState(null);
   const [reply, setReply] = useState(null);
   const [createState, setCreateState] = useState(false);
@@ -18,9 +20,9 @@ function useBoardContents() {
   const [subUpdate, setSubUpdate] = useState(null);
   const [userRole, setRole] = useState("");
   const [buttonReact, setButtonReact] = useState(true);
-
+ 
   const [username, setUsername] = useState("");
-
+  const token = useTokenReissue();
   // === AccessToken 재발급 == //
   const tokenReissue = () => {
     axios
@@ -99,10 +101,13 @@ function useBoardContents() {
       });
   };
 
-  const PostUpdate = (e) => {
-    e.preventDefault();
-    setForm(true);
+  
+  const PostUpdate = (e) =>{
+      e.preventDefault();
+      setUpdateForm(1);
+      console.log(postUpdateForm)
   };
+  
 
   const commuSubmit = (e) => {
     e.preventDefault();
@@ -241,9 +246,9 @@ function useBoardContents() {
   };
 
   return {
-    content, del, repDel, form, update, reply, createState, 
+    content, del, repDel, postUpdateForm, update, reply, createState, 
     subAdd, updateState, subUpdate, userRole, buttonReact,
-    username, postId, 
+    username, postId,token,ab,
     navigate, getPostId, PostDelete, PostUpdate, commuSubmit, 
     RepCreateState, RepUpdateState, RepCreate, RepUpdate, RepDelete, 
     tokenReissue, tokenDecode

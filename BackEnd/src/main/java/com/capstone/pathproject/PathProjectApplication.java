@@ -22,7 +22,7 @@ public class PathProjectApplication {
     @Bean
     public AuditorAware<String> auditorProvider() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || !authentication.isAuthenticated()) return null;
+        if (authentication == null || !authentication.isAuthenticated()) return null;
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return () -> Optional.of(principalDetails.getMember().getLoginId());
     }

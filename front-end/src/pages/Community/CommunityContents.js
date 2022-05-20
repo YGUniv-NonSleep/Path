@@ -12,32 +12,58 @@ const CommuSubCon = styled.div`
 const CommuBoard = styled.th`
   border: 1px solid black;
 `;
+const Background = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+`;
+
+const ModalContainer = styled.div`
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 80%;
+  width: 20rem;
+  height: 80%;
+  padding: 16px;
+  background: rgb(25, 31, 44);
+  border-radius: 10px;
+  text-align: center;
+`;
+
+const MousePointer = styled.div`
+  cursor: pointer;
+  :hover {
+    color: white;
+  }
+`;
 
 const CommunityContents = () => {
+ 
   const {
-    content, del, repDel, form, update, reply, createState, 
-    subAdd, updateState, subUpdate, userRole, buttonReact,
+    content, del, repDel, postUpdateForm, update, reply, createState, 
+    subAdd, updateState, subUpdate, userRole, buttonReact,token,ab,
     username
   } = useBoardContents();
-
   const {
     navigate, getPostId, PostDelete, PostUpdate, commuSubmit, 
     RepCreateState, RepUpdateState, RepCreate, RepUpdate, RepDelete,
   } = useBoardContents();
-
+  if(postUpdateForm == 1){
+    return ab=true;
+    console.log(postUpdateForm)
+    console.log(ab);
+  }
   return (
     <CommuCon>
       <CommuSubCon>
         <h2 align="center">게시글 상세정보</h2>
-        <div className="post-view-wrapper">
-          {/* {content.content} */}
-          {content ? (
-            <>
-              <div className="post-view-row">
-                <label>게시글 번호 : </label>
-                <label name="id">{content.id}</label>
-              </div>
-              <button
+        <button
                 onClick={PostDelete}
                 style={{ position: "absolute", right: 0 }}
               >
@@ -49,6 +75,14 @@ const CommunityContents = () => {
               >
                 수정하기
               </button>
+        <div className="post-view-wrapper">
+          {/* {content.content} */}
+          {content ? (
+            <>
+              <div className="post-view-row">
+                <label>게시글 번호 : </label>
+                <label name="id">{content.id}</label>
+              </div>
               <br></br>
               <div className="post-view-row">
                 <label>제목 : </label>
@@ -56,7 +90,7 @@ const CommunityContents = () => {
               </div>
               <div className="post-view-row">
                 <label>작성자 : </label>
-                <label>{content.member.name}</label>
+                <label>{token.token.name}</label>
               </div>
               <div className="post-view-row">
                 <label>조회수 : </label>
@@ -75,8 +109,60 @@ const CommunityContents = () => {
                 <div>{content.content}</div>
                 <br></br>
               </div>
-              <div className="post-view-row"></div>
-
+              <div className="post-view-row"></div> 
+              {ab ?
+                <Background>
+                  <ModalContainer>
+                  <MousePointer
+                    style={{ color: "white", float: "right" }}
+                    onClick={Close}>
+                X
+              </MousePointer>
+              <div style={{ color: "white", float: "center" }}>수정하기</div>
+                  </ModalContainer>
+                </Background>
+              :''}
+             {/* {postUpdateForm ? (
+              <div>
+                <form encType="multipart/form-data">
+                  <input
+                    type="text"
+                    name="id"
+                    defaultValue={content.id}
+                    disabled={true}
+                  ></input>
+                  <br></br>
+                  제목
+                  <input
+                    type="text"
+                    name="title"
+                    defaultValue={content.title}
+                  ></input>
+                  <br></br>
+                  내용
+                  <input
+                    type="text"
+                    name="content"
+                    defaultValue={content.content}
+                  ></input>
+                  <br></br>
+                  타입
+                  <select type="text" name="type" defaultValue={content.type}>
+                    <option>NOTICE</option>
+                    <option>FAQ</option>
+                    <option>COMPLAINT</option>
+                    <option>QNA</option>
+                  </select>
+                  <input type="file" name="userfile" multiple="multiple"></input>
+                  <p>작성자 : {token.token.name}</p>
+                  <p>조회수 : {content.view}</p>
+                  <p>작성일 : {content.createdDateTime}</p>
+                  <button type="submit">수정하기</button>
+                </form>
+              </div>
+            ) : (
+              ""
+            )} */}
               {createState ? (
                 <>
                   <form
@@ -113,47 +199,10 @@ const CommunityContents = () => {
             "해당 게시글을 찾을 수 없습니다."
           )}
         </div>
-        {form ? (
-          <div>
-            <form onSubmit={commuSubmit} encType="multipart/form-data">
-              <input
-                type="text"
-                name="id"
-                defaultValue={content.id}
-                disabled={true}
-              ></input>
-              <br></br>
-              제목
-              <input
-                type="text"
-                name="title"
-                defaultValue={content.title}
-              ></input>
-              <br></br>
-              내용
-              <input
-                type="text"
-                name="content"
-                defaultValue={content.content}
-              ></input>
-              <br></br>
-              타입
-              <select type="text" name="type" defaultValue={content.type}>
-                <option>NOTICE</option>
-                <option>FAQ</option>
-                <option>COMPLAINT</option>
-                <option>QNA</option>
-              </select>
-              <input type="file" name="userfile" multiple="multiple"></input>
-              <p>작성자 : {content.member.name}</p>
-              <p>조회수 : {content.view}</p>
-              <p>작성일 : {content.writeDate}</p>
-              <button type="submit">수정하기</button>
-            </form>
-          </div>
-        ) : (
-          ""
-        )}
+
+
+
+       
         {reply ? (
           <>
             <hr></hr>
@@ -169,7 +218,7 @@ const CommunityContents = () => {
               )}
               {reply.content}
               <br></br>
-              {reply.member.name}
+              {token.token.name}
               <br></br>
             </div>
           </>

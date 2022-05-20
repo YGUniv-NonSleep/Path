@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
+import axios from 'axios';
 
 function useTokenReissue() {
   // redux로 손봐야할 듯?

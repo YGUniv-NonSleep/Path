@@ -4,6 +4,8 @@ import styled from "styled-components";
 import useLoading from '../../hooks/useLoading'
 import useBoardHook from "./hooks/useBoardHook";
 
+
+
 const CommuCon = styled.div`
   width: 390px;
   height: 100%;
@@ -29,12 +31,13 @@ const MousePointer = styled.button`
 `;
 
 function CommunityMain() {
+
   const { loading } = useLoading();
   const { 
     keyword, searched, numbering, 
     paging, pageState, paging2, pageState2, 
     paging3, pageState3, paging4, pageState4, 
-    notice, QNA, complaint, FAQ, 
+    notice, QNA, complaint, FAQ,token,
     noticeState, qnaState, comState, faqState,
     keywordSubmit, categoryType,
     noticePaging, QnAPaging, ComplaintPaging, FaQPaging, 
@@ -99,7 +102,7 @@ function CommunityMain() {
                             {post.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{post.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{post.view}</CommuBoard2>
                         <CommuBoard2>{post.writeDate}</CommuBoard2>
                         <CommuBoard2>{post.type}</CommuBoard2>
@@ -178,7 +181,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{result.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
@@ -257,7 +260,7 @@ function CommunityMain() {
                             {post.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{post.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{post.view}</CommuBoard2>
                         <CommuBoard2>{post.writeDate}</CommuBoard2>
                         <CommuBoard2>{post.type}</CommuBoard2>
@@ -336,7 +339,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{result.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
@@ -415,7 +418,7 @@ function CommunityMain() {
                             {post.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{post.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{post.view}</CommuBoard2>
                         <CommuBoard2>{post.writeDate}</CommuBoard2>
                         <CommuBoard2>{post.type}</CommuBoard2>
@@ -494,7 +497,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{result.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
@@ -573,7 +576,7 @@ function CommunityMain() {
                             {post.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{post.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{post.view}</CommuBoard2>
                         <CommuBoard2>{post.writeDate}</CommuBoard2>
                         <CommuBoard2>{post.type}</CommuBoard2>
@@ -652,7 +655,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{result.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
@@ -732,7 +735,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{result.member.name}</CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
