@@ -35,7 +35,7 @@ function PathMain() {
     onchangeSP, onchangeAP, refreshPoints, switchPoints, 
     deletePathFindingHistory, wayFind, pathDrawing 
   } = useInputForm()
-  console.log(pathList)
+  // console.log(pathList)
   // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
 
   return (
@@ -106,7 +106,7 @@ function PathMain() {
                       pathList.map((item, idx)=>{
                         //console.log(item)
                         return (
-                          <PathInserted>
+                          <PathInserted key={idx}>
                             <DirectionSummaryItemTransit>
                               {/* RouteSummaryBox, RouteType, RouteSummaryInfoArea, DurationTime, ReadableDuration, TimeValue, UnitValue, SummaryInfo,  */}
                               <RouteSummaryBox>
@@ -194,9 +194,9 @@ function PathMain() {
                                 <HistoryListPlace>
                                   {/* 최근 검색 데이터 */}
                                   {
-                                    historyList.map((item, key)=>{
+                                    historyList.map((item, idx)=>{
                                       return (
-                                        <HistoryItemPlace key={key}>
+                                        <HistoryItemPlace key={idx}>
                                           <LinkPlace>
                                             <IconBox>
                                               {/* type에 맞는 아이콘 설정 */}

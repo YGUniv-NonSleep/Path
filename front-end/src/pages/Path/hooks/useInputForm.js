@@ -150,7 +150,7 @@ function useInputForm() {
         );
       }
     }
-    console.log(walkCoordinate);
+    // console.log(walkCoordinate);
     console.log('보행자 경로 좌표 생성 완료');
 
     // 보행자 경로 그리기
@@ -191,6 +191,8 @@ function useInputForm() {
 
     // 여기서부터 화면 구성
     setPathList(pathData)
+    // 검색 후 setWay([]) 해주기 -> 불필요한 추가 동작 방지
+    // 그러기 위해서 Drawing에서 x, y좌표는 pathList에서 받아서 쓰기
   }
 
   async function pathDrawing(idx) {
@@ -199,7 +201,7 @@ function useInputForm() {
     if(polyLineData != "") removeGraphics();
     if(walkLineData != "") removeWalkGraphics();
 
-    // 나중에 pathList 출발지, 도착지 x, y 좌표 받아야겠다.
+    // 나중에 pathList에서 출발지, 도착지 x, y 좌표 받아서 쓰기
     const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
     sp.setMap(map);
     setMarkerData((current) => [...current, sp])
