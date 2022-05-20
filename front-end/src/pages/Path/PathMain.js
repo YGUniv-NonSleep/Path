@@ -36,7 +36,7 @@ function PathMain() {
     deletePathFindingHistory, wayFind, pathDrawing 
   } = useInputForm()
   console.log(pathList)
-  // (int) 1-지하철, 2-버스, 3-버스+지하철, 4 퍼스널 모빌리티(예정)
+  // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
 
   return (
     <div className="Path">
