@@ -12,7 +12,7 @@ export const PathApi = {
         { withCredentials: true }
       )
       .catch((err) => console.log(err));
-      // (int) 1-지하철, 2-버스, 3-버스+지하철, 4 퍼스널 모빌리티(예정)
+      // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
       // console.log(response)
     return response.data;
   },

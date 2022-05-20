@@ -14,16 +14,7 @@ import java.util.Optional;
 @EnableJpaAuditing
 @SpringBootApplication
 public class PathProjectApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(PathProjectApplication.class, args);
-    }
-
-    @Bean
-    public AuditorAware<String> auditorProvider() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) return null;
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        return () -> Optional.of(principalDetails.getMember().getLoginId());
     }
 }

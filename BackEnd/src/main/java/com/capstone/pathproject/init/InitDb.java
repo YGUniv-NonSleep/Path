@@ -12,11 +12,13 @@ public class InitDb {
     private final InitMemberService initMemberService;
     private final InitMobilityService initMobilityService;
     private final InitMobilityCompanyService initMobilityCompanyService;
+    private final InitCompanyService initCompanyService;
 
     @PostConstruct
     public void init() {
         initMemberService.dbInitMember();
         initMobilityCompanyService.dbInitMobilityCompany();
         initMobilityService.dbInitMobility();
+        initCompanyService.dbInitCompany();
     }
 }

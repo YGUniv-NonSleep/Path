@@ -20,20 +20,5 @@ public class SubPath {
     private Double endX;
     private Double endY;
     private PassStopList passStopList;
-
-    @Getter
-    @ToString
-    @NoArgsConstructor
-    public static class PassStopList {
-        private final List<Stations> stations = new ArrayList<>();
-
-        @Getter
-        @ToString
-        @NoArgsConstructor
-        public static class Stations {
-            private String stationName;
-        }
-    }
-
-
+    private final List<Lane> lane = new ArrayList<>();
 }

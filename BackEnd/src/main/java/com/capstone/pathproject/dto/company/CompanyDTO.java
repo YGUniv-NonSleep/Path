@@ -64,7 +64,7 @@ public class CompanyDTO {
                 .name(name)
                 .openDate(openDate)
                 .phone(phone)
-                .member(member)
+                .member(member.toEntity())
                 .thumbnail(thumbnail)
                 .latitude(latitude)
                 .longitude(longitude)

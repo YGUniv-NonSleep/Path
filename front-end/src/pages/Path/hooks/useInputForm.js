@@ -15,8 +15,10 @@ function useInputForm() {
   const [APoint, setAPoint] = useState(''); // 도착지 주소창
   const [insertPoint, setInsertPoint] = useState(''); // 입력에 반응하는 창 state
 
-  const [pathList, setPathList] = useState([]); // 
-  const [polyLineData, setPolyLineData] = useState([]); // 경로 그래픽 데이터
+  const [pathList, setPathList] = useState([]); // 검색된 경로 정보들
+  const [historyList, setHistoryList] = useState([]); // 최근 검색 기록
+  const [polyLineData, setPolyLineData] = useState([]); // 이동수단 경로 그래픽 데이터
+  const [walkLineData, setWalkLineData] = useState([]); // 도보 경로 그래픽 데이터
   const [markerData, setMarkerData] = useState([]); // 마커 그래픽 데이터
 
   // 카카오 지도를 불러오는 함수
@@ -33,8 +35,10 @@ function useInputForm() {
 
   // 처음 접속시 세팅 Effect Hook
   useEffect(() => {
-    console.log(map)
-    mapLoad();
+    if(map==null){
+      mapLoad();
+      getPathFindingHistory();
+    }
   }, []);
 
   // 출발지를 저장하는 함수
@@ -52,6 +56,11 @@ function useInputForm() {
     setInsertPoint('');
     setSPoint('');
     setAPoint('');
+    setWay([]);
+    setPathList([]);
+    removeMarkers();
+    removeGraphics();
+    removeWalkGraphics();
   };
   // 출발지 도착지 전환하는 함수
   const switchPoints = () => {
@@ -141,31 +150,58 @@ function useInputForm() {
         );
       }
     }
-    console.log(walkCoordinate);
+    // console.log(walkCoordinate);
     console.log('보행자 경로 좌표 생성 완료');
 
     // 보행자 경로 그리기
     const walkResult = await MapApi().drawKakaoWalkPolyLine(walkCoordinate);
     walkResult.setMap(map);
+    setWalkLineData((prev) => [...prev, walkResult]);
   };
+  
+  function removeMarkers() {
+    for (var i = 0; i < markerData.length; i++) {
+      markerData[i].setMap(null);
+    }
+    setMarkerData([]);
+  }
+
+  function removeGraphics() {
+    polyLineData.setMap(null);
+    setPolyLineData([]);
+  }
+
+  function removeWalkGraphics() {
+    console.log(walkLineData.length)
+    for(let i=0; i<walkLineData.length; i++){
+      walkLineData[i].setMap(null);
+    }
+    // walkLineData.setMap(null);
+    setWalkLineData([]);
+  }
 
   async function pathSearch(){
     // === 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 === //
+    console.log(way)
     const pathData = await PathApi.getTransPath({
       sx: way[0].x, sy: way[0].y,
       ex: way[1].x, ey: way[1].y,
     });
-    // console.log(pathData);
+     console.log(pathData);
+
     // 여기서부터 화면 구성
     setPathList(pathData)
+    // 검색 후 setWay([]) 해주기 -> 불필요한 추가 동작 방지
+    // 그러기 위해서 Drawing에서 x, y좌표는 pathList에서 받아서 쓰기
   }
 
   async function pathDrawing(idx) {
     if (idx == undefined) idx = 0;
     if(markerData.length != 0) removeMarkers();    
     if(polyLineData != "") removeGraphics();
+    if(walkLineData != "") removeWalkGraphics();
 
-    // 나중에 pathList 출발지, 도착지 x, y 좌표 받아야겠다.
+    // 나중에 pathList에서 출발지, 도착지 x, y 좌표 받아서 쓰기
     const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
     sp.setMap(map);
     setMarkerData((current) => [...current, sp])
@@ -216,19 +252,6 @@ function useInputForm() {
 
       map.setBounds(bounds);
     }
-
-    function removeMarkers() {
-      for (var i = 0; i < markerData.length; i++) {
-        markerData[i].setMap(null);
-      }
-      setMarkerData([]);
-    }
-
-    function removeGraphics() {
-      polyLineData.setMap(null);
-      setPolyLineData("");
-    }
-
   }
 
   useEffect(() => {
@@ -236,6 +259,14 @@ function useInputForm() {
       // 출발지, 도착지의 위도, 경도를 통한 경로 검색
       pathSearch()
       .catch(err => console.log("경로 검색에 문제가 발생하였습니다.\n") + err)
+
+      let data = {
+        start: way[0],
+        end: way[1],
+        // type: ?? // 나중에 이동수단 종류 정해지면 넣음.
+      }
+      savePathFindingHistory(data)
+      
     } else return;
   }, [way]);
 
@@ -252,6 +283,60 @@ function useInputForm() {
     return `${it.pN} (${it.aN})`;
   });
 
+  // SearchHistoryList -> 특정 장소 검색 키워드을 LocalStorage에 저장  
+  // SUBWAY_STATION(type) -> address, type, name, latitude: 37.~, longitude: 127.~
+  // BUS(type) -> cityName, type, name
+
+  // PathFindingHistoryList -> 검색한 경로 키워드를 LocalStorage에 저장
+  // type -> ROUTE_TRANSIT, ROUTE_CAR, ROUTE_WALK, ROUTE_BICYCLE
+  // goalLat, goalLng, goalName, startLat, startLng, startName, type
+
+  function savePathFindingHistory(data){
+    let history = getPathFindingHistory();
+    
+    let info = { 
+      // type: , 
+      startId: data.start.id, 
+      startLat: data.start.y, 
+      startLng: data.start.x, 
+      startName: data.start.place_name, 
+      goalId: data.end.id, 
+      goalLat: data.end.y, 
+      goalLng: data.end.x, 
+      goalName: data.end.place_name,
+    }
+    // info 정보와 localHistory의 정보 중 type, startName, goalName 일치하면 제거하고 다시 저장
+    history.push(info)
+    localStorage.setItem('PathFindingHistoryList', JSON.stringify(history))
+  }
+  
+  function getPathFindingHistory(){
+    const history = localStorage.getItem('PathFindingHistoryList'); // 읽기(key 정보)
+    // console.log(history)
+    if(history == null) {
+      // setHistoryList([])
+      return []
+    } else {
+      setHistoryList(JSON.parse(history))
+      return JSON.parse(history)
+    }
+  }
+
+  function deletePathFindingHistory(){
+    if(localStorage.PathFindingHistoryList==undefined) return;
+
+    let history = getPathFindingHistory();
+
+    for(let i = 0; i < history.length; i++) {
+      // type, startId, goalId 비교 예정
+      if(history[i].startId == '1553330656' && history[i].goalId == '10258787'){
+        let idx = history.indexOf(history[i])
+        history.splice(idx)
+      }
+    }
+    // localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
+  }
+
   return {
     map,
     way,
@@ -263,6 +348,8 @@ function useInputForm() {
     APoint,
     insertPoint,
     jusoOption,
+    pathList, 
+    historyList, 
     mapLoad,
     onchangeSP,
     onchangeAP,
@@ -274,6 +361,12 @@ function useInputForm() {
     pathSearch,
     pathDrawing, 
     createWalkPath,
+    removeMarkers, 
+    removeGraphics, 
+    removeWalkGraphics, 
+    savePathFindingHistory, 
+    getPathFindingHistory, 
+    deletePathFindingHistory
   };
 }
 
