@@ -19,8 +19,6 @@ public class InitDb {
         initMemberService.dbInitMember();
         initMobilityCompanyService.dbInitMobilityCompany();
         initMobilityService.dbInitMobility();
-
         initCompanyService.dbInitCompany();
-
     }
 }
