@@ -2,6 +2,7 @@ package com.capstone.pathproject.service.member;
 
 import com.capstone.pathproject.domain.member.Card;
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.dto.member.CardDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.dto.rest.toss.billingKey.BillingKeyDto;
@@ -11,13 +12,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -72,5 +73,13 @@ public class CardService {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper;
+    }
+
+    public Message<List<CardDto>> getAllMemberCards(Long memberId) {
+        List<CardDto> cardDtos = cardRepository.findAllMemberCardDtos(memberId);
+        return Message.<List<CardDto>>builder()
+                .header(StatusEnum.OK)
+                .message("카드가 전부 조회되었습니다.")
+                .body(cardDtos).build();
     }
 }

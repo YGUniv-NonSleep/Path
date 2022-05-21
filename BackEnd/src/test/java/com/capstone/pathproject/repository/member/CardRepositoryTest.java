@@ -4,7 +4,7 @@ import com.capstone.pathproject.domain.member.Card;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.domain.member.MemberGender;
-import com.capstone.pathproject.dto.member.CardDTO;
+import com.capstone.pathproject.dto.member.CardDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -140,16 +139,17 @@ class CardRepositoryTest {
         cardRepository.save(card1);
         cardRepository.save(card2);
 
+        em.flush();
+        em.clear();
         //when
-        List<CardDTO> cardDTOs = cardRepository.findMemberCardDTO(member1);
-        for (CardDTO dto : cardDTOs) {
+        List<CardDto> cardDtos = cardRepository.findAllMemberCardDtos(member1.getId());
+        for (CardDto dto : cardDtos) {
             System.out.println("dto = " + dto);
         }
-        CardDTO findCardDTO = cardDTOs.get(0);
+        CardDto findCardDto = cardDtos.get(0);
         //then
-        assertThat(findCardDTO.getId()).isEqualTo(card1.getId());
-        assertThat(findCardDTO.getNumber()).isEqualTo(card1.getNumber());
-        assertThat(findCardDTO.getCardCompany()).isEqualTo(card1.getCardCompany());
+        assertThat(findCardDto.getId()).isEqualTo(card1.getId());
+        assertThat(findCardDto.getNumber()).isEqualTo(card1.getNumber());
+        assertThat(findCardDto.getCardCompany()).isEqualTo(card1.getCardCompany());
     }
-
 }
