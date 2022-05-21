@@ -1,5 +1,6 @@
 package com.capstone.pathproject.controller.member;
 
+import com.capstone.pathproject.dto.member.CardDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.dto.rest.toss.billingKey.BillingKeyDto;
@@ -18,10 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
@@ -30,6 +28,7 @@ import reactor.netty.transport.logging.AdvancedByteBufFormat;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,8 +39,12 @@ public class CardApiController {
     private final CardService cardService;
     private final ResponseUtil responseUtil;
 
-    // 카드 등록
     // 카드 조회
+    @GetMapping("/cards")
+    public ResponseEntity getAllCard(@RequestParam Long memberId) {
+        Message<List<CardDto>> message = cardService.getAllMemberCards(memberId);
+        return responseUtil.createResponseEntity(message);
+    }
     // 카드 삭제
     // 카드 수정
 
