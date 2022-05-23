@@ -30,43 +30,43 @@ public class ProductService {
     private final OptionRepository optionRepository;
     private final DetailOptionRepository detailOptionRepository;
 
-    //ProdBasic create
+
     public Message<ProdBasicDTO> createBasic(ProdBasicDTO prodBasicDTO) {
 
         prodBasicRepository.save(prodBasicDTO.toEntity());
 
-        return Message.<ProdBasicDTO>createMessage()
+        return Message.<ProdBasicDTO>builder()
                 .header(StatusEnum.OK)
                 .message("ProdBasic Create Success")
                 .body(prodBasicDTO)
                 .build();
     }
-    //ProdBasic delete
+
     public Message deleteBasic(Long prodBasicId){
         prodBasicRepository.deleteById(prodBasicId);
-        return Message.createMessage()
+        return Message.builder()
                 .header(StatusEnum.OK)
                 .message("ProdBasic delete success")
                 .build();
     }
-    //ProdBasic updete
+
     public Message<ProdBasicDTO> updateBasic(ProdBasicDTO prodBasicDTO){
 
         prodBasicRepository.save(prodBasicDTO.toEntity());
 
-        return Message.<ProdBasicDTO>createMessage()
+        return Message.<ProdBasicDTO>builder()
                 .header(StatusEnum.OK)
                 .message("ProdBasic updeate Success")
                 .body(prodBasicDTO)
                 .build();
     }
-    //ProdBasic
+
     public Message<ProdBasicDTO> basicDetail(Long prodBasicId) {
 
         Optional<ProdBasic> result = prodBasicRepository.findById(prodBasicId);
         ProdBasicDTO prodBasicDTO = result.get().toDTO();
 
-        return Message.<ProdBasicDTO>createMessage()
+        return Message.<ProdBasicDTO>builder()
                 .header(StatusEnum.OK)
                 .message("find Success")
                 .body(prodBasicDTO)
@@ -84,7 +84,7 @@ public class ProductService {
 
         System.out.println(prodBasicList);
 
-        return Message.<List<ProdBasicDTO>>createMessage()
+        return Message.<List<ProdBasicDTO>>builder()
                 .header(StatusEnum.OK)
                 .body(prodBasicDTOList)
                 .message("조회 성공!")
@@ -94,7 +94,7 @@ public class ProductService {
     public Message<ProductDTO> createProduct(ProductDTO productDTO){
         productRepository.save(productDTO.toEntity());
 
-        return Message.<ProductDTO>createMessage()
+        return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
                 .message("Product Create Success")
                 .body(productDTO)
@@ -104,7 +104,7 @@ public class ProductService {
     public Message deleteProduct(Long productId){
         productRepository.deleteById(productId);
 
-        return Message.createMessage()
+        return Message.builder()
                 .header(StatusEnum.OK)
                 .message("Product Delete Success")
                 .build();
@@ -113,7 +113,7 @@ public class ProductService {
     public Message<ProductDTO> updateProduct(ProductDTO productDTO){
         productRepository.save(productDTO.toEntity());
 
-        return Message.<ProductDTO>createMessage()
+        return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
                 .message("Product Update Success")
                 .body(productDTO)
@@ -143,7 +143,7 @@ public class ProductService {
 
         System.out.println(productDTO.getOptionList());
 
-        return Message.<ProductDTO>createMessage()
+        return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
                 .message("Product find Success")
                 .body(productDTO)
@@ -159,16 +159,16 @@ public class ProductService {
                 .map(product -> product.toDTO())
                 .forEach(productDTO -> productDTOList.add(productDTO));
 
-        for (ProductDTO p : productDTOList){
-            for (Option o : p.getOptionList()) {
-                for (DetailOption d: o.getDetailOptionList()
-                     ) {
-                    System.out.println(d.toString());
-                }
-            }
-        }
+//        for (ProductDTO p : productDTOList){
+//            for (Option o : p.getOptionList()) {
+//                for (DetailOption d: o.getDetailOptionList()
+//                     ) {
+//                    System.out.println(d.toString());
+//                }
+//            }
+//        }
 
-        return Message.<List<ProductDTO>>createMessage()
+        return Message.<List<ProductDTO>>builder()
                 .message("상품 조회 성공")
                 .body(productDTOList)
                 .header(StatusEnum.OK)
@@ -181,7 +181,7 @@ public class ProductService {
 
         optionRepository.save(optionDTO.toEntity());
 
-        return Message.<OptionDTO>createMessage()
+        return Message.<OptionDTO>builder()
                 .header(StatusEnum.OK)
                 .message("Option Create Success")
                 .body(optionDTO)
@@ -192,7 +192,7 @@ public class ProductService {
 
         optionRepository.deleteById(optionId);
 
-        return Message.createMessage()
+        return Message.builder()
                 .header(StatusEnum.OK)
                 .message("Option Delete Success")
                 .build();
@@ -202,7 +202,7 @@ public class ProductService {
 
         optionRepository.save(optionDTO.toEntity());
 
-        return Message.<OptionDTO>createMessage()
+        return Message.<OptionDTO>builder()
                 .header(StatusEnum.OK)
                 .message("Option Update Success")
                 .body(optionDTO)
@@ -218,7 +218,7 @@ public class ProductService {
                 .name(rs.getName())
                 .build();
 
-        return Message.<OptionDTO>createMessage()
+        return Message.<OptionDTO>builder()
                 .header(StatusEnum.OK)
                 .message("Option Select Success")
                 .body(result)
@@ -229,7 +229,7 @@ public class ProductService {
 
         detailOptionRepository.save(detailOptionDTO.toEntity());
 
-        return Message.<DetailOptionDTO>createMessage()
+        return Message.<DetailOptionDTO>builder()
                 .header(StatusEnum.OK)
                 .message("DetailOption Create Success")
                 .body(detailOptionDTO)
@@ -240,7 +240,7 @@ public class ProductService {
 
         detailOptionRepository.deleteById(detailOptionId);
 
-        return Message.createMessage()
+        return Message.builder()
                 .header(StatusEnum.OK)
                 .message("DetailOption Delete Success")
                 .build();
@@ -250,7 +250,7 @@ public class ProductService {
 
         detailOptionRepository.save(detailOptionDTO.toEntity());
 
-        return Message.<DetailOptionDTO>createMessage()
+        return Message.<DetailOptionDTO>builder()
                 .header(StatusEnum.OK)
                 .message("DetailOption Update Success")
                 .body(detailOptionDTO)

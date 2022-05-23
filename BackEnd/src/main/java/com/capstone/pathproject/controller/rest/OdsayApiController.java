@@ -17,20 +17,13 @@ public class OdsayApiController {
 
     private final OdsayService odsayService;
 
+    // 대중교통 길찾기 - 0(지하철+버스), 1(지하철), 2(버스)
     @GetMapping("/paths")
-    public List<Map<String, Object>> getPaths(@RequestParam String sx,
-                                              @RequestParam String sy,
-                                              @RequestParam String ex,
-                                              @RequestParam String ey) throws JsonProcessingException {
-        return odsayService.transPaths(sx, sy, ex, ey);
-    }
-
-    @GetMapping("/paths/mobilities")
-    public List<Map<String, Object>> getPathsWithMobility(@RequestParam String sx,
-                                                          @RequestParam String sy,
-                                                          @RequestParam String ex,
-                                                          @RequestParam String ey,
-                                                          @RequestParam Long mobilityId) throws JsonProcessingException {
-        return odsayService.transPathsWithMobility(sx, sy, ex, ey, mobilityId);
+    public List<Map<String, Object>> getPaths(@RequestParam double sx,
+                                              @RequestParam double sy,
+                                              @RequestParam double ex,
+                                              @RequestParam double ey,
+                                              @RequestParam int searchPathType) throws JsonProcessingException {
+        return odsayService.transPaths(sx, sy, ex, ey, searchPathType);
     }
 }

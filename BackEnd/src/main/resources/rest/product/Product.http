@@ -20,7 +20,7 @@ Content-Type: application/json
     "id": 1
   },
   "prodBasic": {
-    "id": 1
+    "id": 2
   },
   "optionList": [
     {
@@ -56,28 +56,32 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:8080/api/product/7
+GET https://localhost:8080/api/product/2
 
 ###
-PATCH http://localhost:8080/api/product/updateProduct
+PATCH https://localhost:8080/api/product/
 Content-Type: application/json
 
 {
-  "id": 1,
-  "price": 2222,
+  "id": 2,
+  "price": 13,
   "exposure": true,
   "discount": 123,
   "created": "2011-11-11",
   "stock": 1,
   "company": {
-    "id": 4
-  },
-  "prodbasic": {
     "id": 1
-  }
+  },
+  "prodBasic": {
+    "id": 2
+  },
+  "optionList": []
 }
 
 
 ###
-DELETE https://localhost:8080/api/product/deleteProduct/3
+DELETE https://localhost:8080/api/product/1
+
+###
+GET https://localhost:8080/api/product/comp/2
 

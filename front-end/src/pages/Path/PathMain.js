@@ -1,8 +1,6 @@
 import Map from "../../components/Map";
-import PathList from "./PathList";
 
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 import {
   TextField,
@@ -16,50 +14,27 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import AddIcon from "@mui/icons-material/Add";
 import Stack from "@mui/material/Stack";
-import Icon from "../../components/Icon"
+import Icon from "../../components/Icon";
+import { 
+  SideNav, SearchArea, 
+  ScrollArea, DirectionIndexSearchHistory, InstantBox, TitleBox, InstantTitle, 
+  SearchStandby, NoResultText, HistoryList, HistoryListPlace, HistoryItemPlace, 
+  LinkPlace, IconBox, PlaceBox, PlaceTextBox, PlaceText, IconRoute, 
+  DirectionIndexFavorites, EmptyBox, FavoritesText, LinkLogin, 
+  DirectionSummaryList, DirectionSummarySpace, ScrollInner, SearchResultList,
+  SwitchButton, DeleteBtn, 
+} from "./styles/PathStyles";
 import useInputForm from "./hooks/useInputForm";
-
-const SideNav = styled.nav`
-  position: fixed;
-  left: 95px;
-  z-index: 5;
-  background-color: white;
-  box-shadow: 3px 3px 3px gray;
-  width: 390px;
-  height: 100%;
-`;
-
-const SearchArea = styled.div`
-  position: relative;
-  height: 25%;
-  margin-left: 20px;
-  margin-top: 5px;
-`;
-
-const DirectionSummaryList = styled.div`
-  position: relative;
-  height: 75%;
-  overflow: auto;
-`;
-
-const SwitchButton = styled.button`
-  z-index: 5;
-  position: absolute;
-  left: 280px;
-  top: 103px;
-  border: 1px solid #9E9E9E;
-  cursor:pointer; cursor:hand;
-  background-color: white;
-  width: 30px;
-  height: 30px;
-  -webkit-border-radius: 30px;
-`;
+import PathList from "./PathList";
 
 function PathMain() {
   const { 
-    SPoint, APoint, jusoOption, loading, 
-    onchangeSP, onchangeAP, refreshPoints, switchPoints, wayFind, pathDrawing
+    SPoint, APoint, jusoOption, loading, pathList, historyList, 
+    onchangeSP, onchangeAP, refreshPoints, switchPoints, 
+    deletePathFindingHistory, wayFind, pathDrawing 
   } = useInputForm()
+  // console.log(pathList)
+  // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
 
   return (
     <div className="Path">
@@ -119,10 +94,103 @@ function PathMain() {
             </Stack>
           </Box>
         </SearchArea>
-        <DirectionSummaryList>
-          <button onClick={() => pathDrawing(0)}>0</button>
-          
-        </DirectionSummaryList>
+        { pathList != undefined && pathList.length != 0 ? (
+            <DirectionSummaryList>
+              <DirectionSummarySpace>
+                <ScrollInner>
+                  {/* results */}
+                  <SearchResultList>
+                    <PathList list={pathList}></PathList>
+                  </SearchResultList>
+                </ScrollInner>
+                {/* bookmark -> favorites 기능, 요약 정보 컴포넌트 */}
+              </DirectionSummarySpace>
+            </DirectionSummaryList>
+          ) : (
+            <ScrollArea>
+              <ScrollInner>
+                <SearchResultList>
+                  <InstantBox>
+                    <TitleBox>
+                      <InstantTitle>
+                        최근 검색
+                      </InstantTitle>
+                    </TitleBox>
+                    <SearchStandby>
+                      {
+                        historyList.length != 0 ? (
+                          <InstantBox>
+                            <HistoryList>
+                              <InstantBox>
+                                <HistoryListPlace>
+                                  {/* 최근 검색 데이터 */}
+                                  {
+                                    historyList.map((item, idx)=>{
+                                      return (
+                                        <HistoryItemPlace key={idx}>
+                                          <LinkPlace>
+                                            <IconBox>
+                                              {/* type에 맞는 아이콘 설정 */}
+
+                                            </IconBox>
+                                            <PlaceBox>
+                                              <PlaceTextBox>
+                                                <PlaceText>
+                                                  {item.startName}
+                                                </PlaceText>
+                                                <IconRoute>→</IconRoute>
+                                                <PlaceText>
+                                                  {item.goalName}
+                                                </PlaceText>
+                                              </PlaceTextBox>
+                                            </PlaceBox>
+                                          </LinkPlace>
+                                          <DeleteBtn onClick={deletePathFindingHistory}>
+                                            삭제
+                                          </DeleteBtn>
+                                        </HistoryItemPlace>
+                                      )
+                                    })
+                                  }
+                                  {/* <button onClick={deletePathFindingHistory}>삭제</button> */}
+                                </HistoryListPlace>
+                                {/* 더보기 btn */}
+
+                              </InstantBox>
+                            </HistoryList>
+                          </InstantBox>
+                        ) : (
+                        <EmptyBox>
+                          <NoResultText>
+                            검색 기록이 없습니다
+                          </NoResultText>
+                        </EmptyBox>
+                      )}
+                    </SearchStandby>
+                  </InstantBox>
+                </SearchResultList>
+                <DirectionIndexFavorites>
+                  <InstantBox>
+                    <TitleBox>
+                      <InstantTitle>
+                        즐겨찾기
+                      </InstantTitle>
+                    </TitleBox>
+                    <EmptyBox>
+                      <FavoritesText>
+                        로그인 하면 즐겨찾기한 경로를 빠르게 확인할 수 있습니다
+                      </FavoritesText>
+                      <Link to="/login">
+                        <LinkLogin>
+                          로그인
+                        </LinkLogin>
+                      </Link>
+                    </EmptyBox>
+                  </InstantBox>
+                </DirectionIndexFavorites>
+              </ScrollInner>
+            </ScrollArea>
+        )}
       </SideNav>
       <Map />
     </div>

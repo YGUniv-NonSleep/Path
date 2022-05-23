@@ -26,7 +26,7 @@ public class MemberService {
     // 회원가입
     public Message<String> signup(SignupFormDto signupFormDto) {
         if (isValidateDuplicateMember(signupFormDto)) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 존재함")
                     .body(signupFormDto.getLoginId()).build();
@@ -34,7 +34,7 @@ public class MemberService {
         Member member = new Member(signupFormDto);
         member.updateEncodePassword(encodePassword(member.getPassword()));
         memberRepository.save(member);
-        return Message.<String>createMessage()
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("회원 가입 성공")
                 .body(signupFormDto.getLoginId()).build();
@@ -55,14 +55,14 @@ public class MemberService {
         Optional<Member> member = memberRepository.findById(memberId);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
-            return Message.<MemberDto>createMessage()
+            return Message.<MemberDto>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 없습니다.").build();
         } else {
             System.out.println("memberEntity = " + memberEntity);
             MemberDto memberDto = new MemberDto(memberEntity);
             System.out.println("memberDto = " + memberDto);
-            return Message.<MemberDto>createMessage()
+            return Message.<MemberDto>builder()
                     .header(StatusEnum.OK)
                     .message("회원이 있습니다.")
                     .body(memberDto).build();
@@ -70,31 +70,34 @@ public class MemberService {
     }
 
     // 회원 수정
-    public Message<UpdateMemberDto> updateMember(Long id, UpdateMemberDto updateMemberDto) {
+    public Message<String> updateMember(Long id, UpdateMemberDto updateMemberDto) {
         Optional<Member> member = memberRepository.findById(id);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
-            return Message.<UpdateMemberDto>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
-                    .message("회원이 없습니다.").build();
+                    .message("회원이 없습니다.")
+                    .body("").build();
         } else {
             if (StringUtils.isNotBlank(updateMemberDto.getMail()))
                 memberEntity.updateMail(updateMemberDto.getMail());
             if (StringUtils.isNotBlank(updateMemberDto.getPhone()))
                 memberEntity.updatePhone(updateMemberDto.getPhone());
-            if (StringUtils.isNotBlank(String.valueOf(updateMemberDto.getPostId())))
-                memberEntity.updatePost(updateMemberDto.getPostId());
+            if (StringUtils.isNotBlank(updateMemberDto.getPostId()))
+                memberEntity.updatePost(Integer.parseInt(updateMemberDto.getPostId()));
             if (StringUtils.isNotBlank(updateMemberDto.getAddr()))
                 memberEntity.updateAddr(updateMemberDto.getAddr());
             if (StringUtils.isNotBlank(updateMemberDto.getAddrDetail()))
                 memberEntity.updateAddrDetail(updateMemberDto.getAddrDetail());
-            if (StringUtils.isNotBlank(updateMemberDto.getAddrExtra()))
-                memberEntity.updateAddrExtra(updateMemberDto.getAddrExtra());
+            if (StringUtils.isNotBlank(updateMemberDto.getAddrExtra())) {
+                if (updateMemberDto.getAddrExtra().equals("없음")) memberEntity.updateAddrExtra("");
+                else memberEntity.updateAddrExtra(updateMemberDto.getAddrExtra());
+            }
 
-            return Message.<UpdateMemberDto>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.OK)
                     .message("회원 수정이 되었습니다.")
-                    .body(updateMemberDto).build();
+                    .body("").build();
         }
     }
 
@@ -103,12 +106,12 @@ public class MemberService {
         Optional<Member> member = memberRepository.findById(id);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
-            return Message.<MemberDto>createMessage()
+            return Message.<MemberDto>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 없습니다.").build();
         } else {
             memberRepository.delete(memberEntity);
-            return Message.<MemberDto>createMessage()
+            return Message.<MemberDto>builder()
                     .header(StatusEnum.OK)
                     .message("회원 탈퇴하였습니다.")
                     .build();
@@ -130,7 +133,7 @@ public class MemberService {
     private Message<Object> forgotIdAndPwValidateOptionalMember(Optional<Member> findMember) {
         Member member = findMember.orElse(null);
         if (member == null) {
-            return Message.createMessage()
+            return Message.builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 존재하지 않습니다.").build();
         }
@@ -140,7 +143,7 @@ public class MemberService {
                 .mail(member.getMail())
                 .name(member.getName()).build();
 
-        return Message.createMessage()
+        return Message.builder()
                 .header(StatusEnum.OK)
                 .message("회원이 존재합니다.")
                 .body(memberDto).build();
@@ -151,19 +154,19 @@ public class MemberService {
         Optional<Member> member = memberRepository.findById(id);
         Member memberEntity = member.orElse(null);
         if (memberEntity == null) {
-            return Message.createMessage()
+            return Message.builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 없습니다.").build();
         }
 
         if (StringUtils.isBlank(body.get("password"))) {
-            return Message.createMessage()
+            return Message.builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("비밀번호를 입력하지 않았습니다.").build();
         }
 
         memberEntity.updateEncodePassword(encodePassword(body.get("password")));
-        return Message.createMessage()
+        return Message.builder()
                 .header(StatusEnum.OK)
                 .message("비밀번호 재설정되었습니다.").build();
     }

@@ -31,7 +31,7 @@ public class MobilityService {
             message = "근처에 퍼스널 모빌리티가 있습니다.";
             mobilities.stream().map(LocationMobilityDto::new).forEach(locationMobilityDtos::add);
         }
-        return Message.<List<LocationMobilityDto>>createMessage()
+        return Message.<List<LocationMobilityDto>>builder()
                 .header(StatusEnum.OK)
                 .message(message)
                 .body(locationMobilityDtos).build();

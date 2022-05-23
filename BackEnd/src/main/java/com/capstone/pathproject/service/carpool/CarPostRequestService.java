@@ -32,7 +32,7 @@ public class CarPostRequestService {
                 .approval(carPostRequestDTO.getApproval())
                 .build();
         carPostRequestRepository.save(result.toEntity());
-        return Message.<CarPostRequestDTO>createMessage()
+        return Message.<CarPostRequestDTO>builder()
                 .header(StatusEnum.OK)
                 .message("등록완료")
                 .build();

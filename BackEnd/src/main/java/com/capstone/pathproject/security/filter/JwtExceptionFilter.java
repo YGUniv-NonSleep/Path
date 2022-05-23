@@ -1,5 +1,6 @@
 package com.capstone.pathproject.security.filter;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -21,9 +22,10 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         try {
             log.info("JwtExceptionFilter 실행");
             filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            response.sendRedirect("/exception/expired");
         } catch (JwtException e) {
             String exception = (String) request.getAttribute("exception");
-
             if (exception.equals("password"))
                 response.sendRedirect("/exception/password");
             else if (exception.equals("loginId"))
