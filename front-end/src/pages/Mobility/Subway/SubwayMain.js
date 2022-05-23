@@ -15,6 +15,9 @@ import WcIcon from '@mui/icons-material/Wc';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import RoomIcon from '@mui/icons-material/Room';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { style } from "@mui/system";
+import { NoBackpackSharp } from "@mui/icons-material";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -39,22 +42,52 @@ const Ul = styled.ul`
   left: 110px;
 `;
 
-const Btn = styled.button`
+const TimeBtn = styled.button`
   position: absolute;
-  top: 160px;
+  top: 140px;
   left: 10px;
   width: 182px;
   height: 40px;
   font-size: 12px;
 `;
 
-const Btn1 = styled.button`
+const ExitBtn1 = styled.button`
   position: absolute;
-  top: 160px;
+  top: 140px;
   left: 200px;
   width: 180px;
   height: 40px;
   font-size: 12px;
+`;
+
+const BackBtn = styled.button`
+  position: absolute;
+  top: 150px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  cursor:pointer;
+  background-color:white;
+`;
+
+const BackBtn1 = styled.button`
+position: absolute;
+  top: 190px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  cursor:pointer;
+  background-color:white;
+`;
+
+const SubwayName = styled.div`
+position: absolute;
+top: 159px;
+left 50px;
+font-size: 21px;
+font-weight:bold;
 `;
 
 const LocationIcon = styled.div`
@@ -118,6 +151,16 @@ const Line = styled.hr`
   background-color: rgb(211, 211, 211);
 `;
 
+const HeadLine = styled.hr`
+  position: absolute;
+  top: 190px;
+  left: 0px;
+  width: 390px;
+  height: 1px;
+  border: none;
+  background-color: rgb(211, 211, 211);
+`;
+
 const SubInfo = styled.div`
   position: absolute;
   top: 360px;
@@ -149,14 +192,190 @@ top: 395px;
 left: 80px;
 `;
 
+const Text = styled.p`
+  position: absolute;
+  top: 200px;
+  left: 15px;
+  font-size: 13px;
+  font-weight: bold;
+`;
+
+const Line1 = styled.hr`
+  position: absolute;
+  top: 220px;
+  left: 15px;
+  width: 350px;
+  height: 1px;
+  border: none;
+  background-color: rgb(211, 211, 211);
+`;
+
+const Text1 = styled.p`
+  position: absolute;
+  top: 370px;
+  left: 15px;
+  font-size: 13px;
+  font-weight: bold;
+`;
+
+const Line2 = styled.hr`
+  position: absolute;
+  top: 390px;
+  left: 15px;
+  width: 350px;
+  height: 1px;
+  border: none;
+  background-color: rgb(211, 211, 211);
+`;
+
+const ExitGateInfo = styled.div`
+position: absolute;
+  top: 210px;
+  left: 20px;
+  font-size: 13px;
+  font-weight:bold;
+  color: rgb(73, 73, 73);
+  
+`;
+
+const ExitNum = styled.div`
+margin-top: 5px;
+width: 20px;
+height: 100px;
+border-bottom: 1px solid rgb(184, 184, 184);
+`;
+
+const ExitGate = styled.div`
+margin-left: 20px;
+margin-top: -16px;
+width: 300px;
+height: 100px;
+border-bottom: 1px solid rgb(184, 184, 184);
+
+`;
+
+const ExitBox = styled.div`
+position: absolute;
+top: 240px;
+left: 10px;
+width: 375px;
+height: 720px;
+overflow:scroll;
+`;
+
+const PrevStop = styled.div`
+position:absolute;
+top:-1px;
+left:-1px;
+width:185px;
+height:70px;
+text-align: center;
+line-height: 70px;
+font-weight:bold;
+font-size: 14px;
+background-color: rgb(240, 251, 255, 0.842);
+border-right: 1px solid rgb(184, 184, 184);
+border-top: 1px solid rgb(184, 184, 184);
+border-bottom: 1px solid rgb(184, 184, 184);
+`;
+
+const NextStop = styled.div`
+position:absolute;
+top:-1px;
+left:184px;
+width:185px;
+height:70px;
+text-align: center;
+line-height: 70px;
+font-size: 14px;
+font-weight:bold;
+background-color: rgb(240, 251, 255, 0.842);
+border-left: 1px solid rgb(184, 184, 184);
+border-top: 1px solid rgb(184, 184, 184);
+border-bottom: 1px solid rgb(184, 184, 184);
+
+`;
+
+const SubwayTimeName = styled.div`
+position: absolute;
+top: 200px;
+left: 50px;
+font-size: 20px;
+font-weight:bold;
+
+`;
+
+const StopObj = styled.div`
+position:absolute;
+top: 250px;
+left: 10px;
+width: 370px;
+height: 720px;
+overflow:scroll;
+border-top: 1px solid rgb(184, 184, 184);
+
+`;
+
+const TimeListDown = styled.div`
+margin-top: 20px;
+margin-left: 20px;
+width: 20px;
+height:30px;
+
+`;
+
+const MinutesListDown = styled.div`
+margin-left: 50px;
+margin-top: -30px;
+width: auto;
+height: auto;
+font-size: 14px;
+`;
+
+const TimetableBox = styled.div`
+position:absolute;
+top: 70px;
+width: 120px;
+`;
+
+const TimetableBox1 = styled.div`
+position:absolute;
+left: 140px;
+top: 70px;
+width: 120px;
+background-color: gray;
+`;
+
+// const TimeListUp = styled.div`
+// margin-top: 20px;
+// margin-left: 50px;
+// width: 20px;
+// height:30px;
+// background-color:gray
+// `;
+
+// const MinutesListUp = styled.div`
+// margin-left: 50px;
+// margin-top: -30px;
+// width: auto;
+// height: auto;
+// font-size: 14px;
+// `;
+
+
+
+
 function SubwayMain() {
   const [map, settingMap] = useState(null);
   const [loading, setLoading] = useState(false);
   const [subName, setSubName] = useState("");
   const [markers, setMarkers] = useState([]);
   const [staInfo, setStaInfo] = useState([]);
-  const [subTime, setSubTime] =useState([]);
+  const [subTime, setSubTime] = useState([]);
+  const [subTime1, setSubTime1] =useState([]);
+  const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
+  const [clickValue, setClickValue] = useState(null);
 
   async function mapLoad() {
     try {
@@ -191,6 +410,12 @@ function SubwayMain() {
    }
   }
 
+  function BackClick(e){
+    if(e.target.value == "Back"){
+      setClickValue("back")
+    }
+  }
+
   function submit(e) {
     e.preventDefault();
   //검색한 지하철역 이름  console.log(subName);
@@ -207,13 +432,24 @@ function SubwayMain() {
 
     let subInfo = await SubwayApi.getSubInfo(stationInfo.stationID).catch((error) => console.log(error));
     console.log(subInfo)
+    
+    let result = subInfo.exitInfo.gate.sort((a, b) => {
+      let valueA = parseInt(a.gateNo)
+      let valueB = parseInt(b.gateNo)
+      return valueA - valueB;
 
+    }) 
+    console.log(result)
+    
+    setSubExit(subInfo.exitInfo.gate)
     setStaInfo(subInfo)
+  
+
 
     let subTime = await SubwayApi.getSubTime(stationInfo.stationID);
     console.log(subTime)
-
-    //setSubTime(subTime)
+    setSubTime(subTime.OrdList.up.time)
+    setSubTime1(subTime.OrdList.down.time)
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
     let bounds = new kakao.maps.LatLngBounds();
@@ -303,11 +539,10 @@ function SubwayMain() {
                 <NewAddressBox>지번</NewAddressBox>
                 {staInfo.defaultInfo.new_address}
                 </NewAddress>
-
                 <CallNum>{staInfo.defaultInfo.tel}</CallNum>
                 <Line></Line>
-                <Btn onClick={onToggle} value="time">시간표</Btn>
-                <Btn1 onClick={onToggle} value="exit">출구정보</Btn1>
+                <TimeBtn onClick={onToggle} value="time">시간표</TimeBtn>
+                <ExitBtn1 onClick={onToggle} value="exit">출구정보</ExitBtn1>
                 <SubInfo>시설 정보</SubInfo>
                 <Info>정보</Info>
                 <DetailInfo>
@@ -346,9 +581,82 @@ function SubwayMain() {
                   <CompareArrowsIcon fontSize="small"/>
                 </InfoIcon>
             </>
+          ) : toggleValue == "time" && staInfo != undefined && staInfo.length !=0 ? (
+            <>
+             <TimeBtn onClick={onToggle} value="time">시간표</TimeBtn>
+             <ExitBtn1 onClick={onToggle} value="exit">출구정보</ExitBtn1>
+             <BackBtn1 onClick={BackClick} value="back"><ArrowBackIosNewIcon/></BackBtn1>
+             <SubwayTimeName>{staInfo.stationName} {staInfo.laneName} (시간표)</SubwayTimeName>
+             <StopObj>
+             <PrevStop> {staInfo.prevOBJ.station[0].stationName} 방향 
+             </PrevStop>
+             <NextStop> {staInfo.nextOBJ.station[0].stationName} 방향 
+             </NextStop>
+             <TimetableBox>
+             {
+               subTime.map((item) => {
+                 return (
+                   <div>
+                     <TimeListDown>{item.Idx}</TimeListDown>
+                     <MinutesListDown>{item.list}</MinutesListDown>
+                   </div>
+                 )
+               })
+             }
+             </TimetableBox>
+             <TimetableBox1>
+               {
+                 subTime1.map((item) => {
+                   <div>
+                     {/* <TimeListUp>{item.Idx}</TimeListUp>
+                     <MinutesListUp>{item.list}</MinutesListUp> */}
+                   </div>
+                 })
+               }
+             </TimetableBox1>
+             </StopObj>
+             
+
+            </>
+          ) : toggleValue == "exit" && staInfo != undefined && staInfo.length !=0 ?(
+            <>
+             <BackBtn onClick={BackClick} value="back"><ArrowBackIosNewIcon/></BackBtn>
+             <SubwayName>{staInfo.stationName}역 {staInfo.laneName}</SubwayName>
+             <HeadLine/>
+             <ExitGateInfo>출구·연계버스</ExitGateInfo>
+             <ExitBox>
+             { subExit.map((item) => {
+               const arr = () => {
+                 let temp = "";
+                if(item.gateLink.length!=0){
+                  for(var i=0; i<item.gateLink.length; i++){
+                    if(i==item.gateLink.length-1) temp += `${item.gateLink[i]}`
+                    else temp += `${item.gateLink[i]}, `
+                  }
+                  return temp
+                }
+                else return;
+               }
+                    return (
+                        <ExitNum>{item.gateNo}
+                          <ExitGate>
+                            {
+                              arr()
+                            }
+                          </ExitGate>
+                        </ExitNum>
+                    );
+                  })
+                }
+             </ExitBox>
+             <></>
+            </>
           ) : 
           <>
-            
+            <Text>최근 검색</Text>
+              <Line1></Line1>
+              <Text1>즐겨찾기한 목록</Text1>
+              <Line2></Line2>
           </> 
           
         }
