@@ -3,6 +3,7 @@ package com.capstone.pathproject.dto.community;
 
 import com.capstone.pathproject.domain.community.Post;
 import com.capstone.pathproject.domain.community.PostType;
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.member.MemberDto;
 import lombok.*;
 
@@ -19,8 +20,9 @@ public class PostDto {
     private String photoName;
 
 
+
     @Builder(builderMethodName = "createPostDto")
-    public PostDto(Long id, PostType type, String title,String content, int view, String photoName){
+    public PostDto(Long id, PostType type, String title, String content, int view, String photoName){
         this.id = id;
         this.type = type;
         this.title = title;

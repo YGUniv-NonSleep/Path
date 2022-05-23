@@ -10,8 +10,8 @@ function useBoardContents() {
   const [content, setContent] = useState(null);
   const [del, setDelCont] = useState(null);
   const [repDel, setRepDel] = useState(null);
-  const [postUpdateForm, setUpdateForm] = useState(0);
-  const [ab,setAB] = useState(false);
+  const [postUpdateForm, setUpdateForm] = useState(false);
+  const [ab,setAB] = useState("");
   const [update, setUpdate] = useState(null);
   const [reply, setReply] = useState(null);
   const [createState, setCreateState] = useState(false);
@@ -102,12 +102,18 @@ function useBoardContents() {
   };
 
   
-  const PostUpdate = (e) =>{
-      e.preventDefault();
-      setUpdateForm(1);
-      console.log(postUpdateForm)
-  };
-  
+  // const PostUpdate = (e) =>{
+  //   //e.preventDefault();
+  //   // setUpdateForm(true);
+  //   // setAB("update")
+  // };
+
+  // useEffect(()=>{
+  //   //return setUpdateForm(false);
+  //   if(postUpdateForm=="update") setUpdateForm(true);
+  //   if(postUpdateForm=="delete") console.log("DELETE")
+  //   return setUpdateForm("s");
+  // }, [postUpdateForm])
 
   const commuSubmit = (e) => {
     e.preventDefault();
@@ -249,9 +255,9 @@ function useBoardContents() {
     content, del, repDel, postUpdateForm, update, reply, createState, 
     subAdd, updateState, subUpdate, userRole, buttonReact,
     username, postId,token,ab,
-    navigate, getPostId, PostDelete, PostUpdate, commuSubmit, 
+    navigate, getPostId, PostDelete, commuSubmit, 
     RepCreateState, RepUpdateState, RepCreate, RepUpdate, RepDelete, 
-    tokenReissue, tokenDecode
+    tokenReissue, tokenDecode, setUpdateForm
   };
 }
 

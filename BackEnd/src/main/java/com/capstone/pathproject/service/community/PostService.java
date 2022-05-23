@@ -32,10 +32,18 @@ public class PostService {
 
 
     public Message<List<PostDto>> getPostList(PostType type, Pageable pageable) {
+        
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember(); // 로그인한 사람 찾아오기
+
+        Optional<Member> findMember = memberRepository.findById(member.getId());
+
+
         List<Post> findPost = postRepository.findByParentIsNullAndType(type,pageable);
         ArrayList<PostDto> listPost = new ArrayList<PostDto>();
         findPost.stream().map(post -> post.toDTO()).forEach(postDto -> listPost.add(postDto));
-        return Message.<List<PostDto>>builder()
+      
+        return Message.<List<PostDto>>createMessage()
                 .header(StatusEnum.OK)
                 .message("조회완료")
                 .body(listPost).build();
@@ -94,14 +102,25 @@ public class PostService {
 
 
     public Message<String> create(CreatePostDto postDTO, String fileName) {
-        Optional<Member> findMember = memberRepository.findById(postDTO.getMemberId());
-        Member member = findMember.orElse(null);
+
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember(); // 로그인한 사람 찾아오기
+        Optional<Member> findMember = memberRepository.findById(member.getId());
+
         if(findMember == null){
-            return Message.<String>builder()
-                    .header(StatusEnum.OK)
-                    .message("없음")
+            return Message.<String>createMessage()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("사용자 없음")
                     .body("").build();
         }
+//        Optional<Member> findMember = memberRepository.findById(postDTO.getMemberId());
+//        Member member = findMember.orElse(null);
+//        if(findMember == null){
+//            return Message.<String>createMessage()
+//                    .header(StatusEnum.OK)
+//                    .message("없음")
+//                    .body("").build();
+//        }
         Post post = Post.createPost()
                 .member(member)
                 .view(0)

@@ -2,6 +2,7 @@ package com.capstone.pathproject.controller.post;
 
 
 import com.capstone.pathproject.domain.community.PostType;
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.community.*;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
@@ -14,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,8 +37,8 @@ public class PostApiController {
     @PostMapping("")
     public ResponseEntity<Message<?>> create(@Valid @RequestPart(value = "key", required = false) CreatePostDto postDto,
                                                   @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                                  HttpServletRequest request
-    ) {
+                                                  HttpServletRequest request)
+    {
         String fileName;
         if (file == null) {
             fileName = "";
