@@ -14,7 +14,7 @@ function useBoardContents() {
   const [ab,setAB] = useState("");
   const [update, setUpdate] = useState(null);
   const [reply, setReply] = useState(null);
-  const [createState, setCreateState] = useState(false);
+ 
   const [subAdd, setSub] = useState(null);
   const [updateState, setUpdateState] = useState(false);
   const [subUpdate, setSubUpdate] = useState(null);
@@ -23,7 +23,12 @@ function useBoardContents() {
  
   const [username, setUsername] = useState("");
   const token = useTokenReissue();
-  // === AccessToken 재발급 == //
+  
+  useEffect(()=>{
+    tokenReissue();
+  },[])
+
+  //=== AccessToken 재발급 == //
   const tokenReissue = () => {
     axios
       .post(process.env.REACT_APP_SPRING_API + "/api/token", "", {
@@ -34,7 +39,6 @@ function useBoardContents() {
         const authorization = res.headers.authorization;
         // 이후 모든 axios 요청 헤더에 access token값 붙여서 보냄.
         axios.defaults.headers.common["authorization"] = authorization;
-        console.log("AccessToken 발급 완료");
         const decoded = tokenDecode(authorization);
         // tokenReissue에서 decoded 받은걸로 userName, role 등록해주면될듯
         setUsername(decoded.name);
@@ -48,13 +52,9 @@ function useBoardContents() {
   // === AccessToken 값 디코딩 === //
   const tokenDecode = (authorization) => {
     var decoded = jwt_decode(authorization);
-    console.log(decoded);
     return decoded;
   };
 
-  useEffect(() => {
-    tokenReissue();
-  }, []);
 
   // 주소 파라미터 받을때 수행할 hook
   const getPostId = () => {
@@ -64,11 +64,12 @@ function useBoardContents() {
           process.env.REACT_APP_SPRING_API + `/api/post/view/${postId}`
         ),
         axios.get(
-          process.env.REACT_APP_SPRING_API + "/api/post/reply/view?id=" + postId
+          process.env.REACT_APP_SPRING_API + `/api/post/reply/${postId}`
         ),
       ])
       .then(
         axios.spread((res1, res2) => {
+
           console.log(res1.data.body);
           setContent(res1.data.body);
 
@@ -80,6 +81,7 @@ function useBoardContents() {
         console.log(err);
       });
   };
+ 
 
   useEffect(() => {
     getPostId()
@@ -89,7 +91,7 @@ function useBoardContents() {
     e.preventDefault();
     var id = content.id;
     axios
-      .delete(process.env.REACT_APP_SPRING_API + "/api/post/delete/" + id)
+      .delete(process.env.REACT_APP_SPRING_API + `/api/post/${id}`)
       .then((res) => {
         console.log(res.data);
         setDelCont(res.data);
@@ -101,29 +103,47 @@ function useBoardContents() {
       });
   };
 
-  
-  // const PostUpdate = (e) =>{
-  //   //e.preventDefault();
-  //   // setUpdateForm(true);
-  //   // setAB("update")
-  // };
-
-  // useEffect(()=>{
-  //   //return setUpdateForm(false);
-  //   if(postUpdateForm=="update") setUpdateForm(true);
-  //   if(postUpdateForm=="delete") console.log("DELETE")
-  //   return setUpdateForm("s");
-  // }, [postUpdateForm])
-
-  const commuSubmit = (e) => {
+  const PatchPostContents = (e) => {
     e.preventDefault();
     var data = {
-      id: e.target.id.defaultValue,
+      title : e.target.title.value,
+      content : e.target.content.value,
+      type : e.target.type.value,
+    }
+    console.log(data);
+    var formData = new FormData();
+    formData.append("userfile", e.target.userfile.files[0]);
+    formData.append(
+      "key",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
+    axios.patch(process.env.REACT_APP_SPRING_API + `/api/post/${content.id}`,formData,
+    {
+      headers : {
+        "Content-Type": `multipart/form-data`,
+      },
+    })
+    .then((res)=>{
+      console.log(res.data) ;
+      setUpdate(res.data.body);
+      alert(res.data.message);
+      // window.location.reload();
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+
+  }
+
+  const RepCreate = (e) => {
+    e.preventDefault();
+    var data = {
+      postId : content.id,
       title: e.target.title.value,
       content: e.target.content.value,
       type: e.target.type.value,
-      member: content.member,
     };
+
     console.log(data);
     var formData = new FormData();
     formData.append("userfile", e.target.userfile.files[0]);
@@ -132,54 +152,10 @@ function useBoardContents() {
       new Blob([JSON.stringify(data)], { type: "application/json" })
     );
     axios
-      .patch(process.env.REACT_APP_SPRING_API + "/api/post/update", formData, {
-        headers: {
-          "Content-Type": `multipart/form-data`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data.body);
-        setUpdate(res.data.body);
-        alert(res.data.message);
-        navigate(-1);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const RepCreateState = (e) => {
-    e.preventDefault();
-    setButtonReact(false);
-    setCreateState(true);
-  };
-
-  const RepUpdateState = (e) => {
-    e.preventDefault();
-    setUpdateState(true);
-  };
-
-  const RepCreate = (e) => {
-    let data = {
-      parent: { id: content.id },
-      title: e.target.title.value,
-      content: e.target.content.value,
-      type: e.target.type.value,
-    };
-
-    let formData = new FormData();
-    formData.append("userfile", e.target.userfile.files[0]);
-    formData.append(
-      "key",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-
-    axios
       .post(
-        process.env.REACT_APP_SPRING_API + "/api/post/reply/create",
+        process.env.REACT_APP_SPRING_API + "/api/post/reply",
         formData,
         {
-          //withCredentials: true,
           headers: {
             "Content-Type": `multipart/form-data`,
           },
@@ -189,21 +165,22 @@ function useBoardContents() {
         console.log(res.data);
         setSub(res.data.body);
         alert(res.data.message);
-        navigate(-1);
       })
       .catch((err) => {
         console.log(err);
+        alert(err.data.message)
       });
   };
 
   const RepUpdate = (e) => {
+    e.preventDefault();
     var data = {
-      id: e.target.id.defaultValue,
-      parent: { id: content.id },
       title: e.target.title.value,
       content: e.target.content.value,
       type: e.target.type.value,
     };
+    console.log(data);
+
     var formData = new FormData();
     formData.append("userfile", e.target.userfile.files[0]);
     formData.append(
@@ -212,7 +189,7 @@ function useBoardContents() {
     );
     axios
       .patch(
-        process.env.REACT_APP_SPRING_API + "/api/post/reply/update",
+        process.env.REACT_APP_SPRING_API + `/api/post/reply/${postId}`,
         formData,
         {
           //withCredentials: true,
@@ -233,18 +210,13 @@ function useBoardContents() {
   };
 
   const RepDelete = (e) => {
+    e.preventDefault();
     axios
-      .delete(
-        process.env.REACT_APP_SPRING_API +
-          "/api/post/reply/delete?postId=" +
-          reply.id
-      )
+      .delete(process.env.REACT_APP_SPRING_API +`/api/post/reply/${reply.id}`)
       .then((res) => {
         alert("답글을 삭제합니다");
-        console.log(res.data);
-        setRepDel(res.data);
+        console.log(res);
         alert(res.data.message);
-        navigate(-1);
       })
       .catch((err) => {
         console.log(err);
@@ -252,12 +224,12 @@ function useBoardContents() {
   };
 
   return {
-    content, del, repDel, postUpdateForm, update, reply, createState, 
-    subAdd, updateState, subUpdate, userRole, buttonReact,
+    content, del, repDel, postUpdateForm, update, reply, 
+    subAdd, subUpdate, userRole, buttonReact,
     username, postId,token,ab,
-    navigate, getPostId, PostDelete, commuSubmit, 
-    RepCreateState, RepUpdateState, RepCreate, RepUpdate, RepDelete, 
-    tokenReissue, tokenDecode, setUpdateForm
+    navigate, getPostId, PostDelete, tokenReissue,tokenDecode,
+    RepCreate, RepUpdate, RepDelete, 
+    setUpdateForm,PatchPostContents
   };
 }
 

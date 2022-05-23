@@ -20,6 +20,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findByParentIsNullAndType(PostType type, Pageable pageable);
     List<Post> findByParentIsNotNull(Pageable pageable);
     Optional<Post> findByParentId(Long id);
+    //Optional<Post> findByCreatedBy(String memLoginId);
     @Modifying
     @Query("update Post p set p.view = p.view + 1 where p.id = :id")
     int updateView(Long id);
