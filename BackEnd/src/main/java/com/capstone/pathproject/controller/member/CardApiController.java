@@ -28,7 +28,14 @@ public class CardApiController {
         Message<List<CardDto>> message = cardService.getMemberCards(memberId);
         return responseUtil.createResponseEntity(message);
     }
+
     // 카드 삭제
+    @DeleteMapping("/cards/{cardId}")
+    public ResponseEntity<Message<?>> deleteCard(@PathVariable Long cardId) {
+        Message<String> message = cardService.deleteCard(cardId);
+        return responseUtil.createResponseEntity(message);
+    }
+
     // 카드 수정
 
     //토스 카드 등록 성공 url
