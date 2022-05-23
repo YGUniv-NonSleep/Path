@@ -94,8 +94,8 @@ public class PostApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/reply/view")
-    public ResponseEntity<Message<?>> getReplyList(@RequestParam("id") Long postId) {
+    @GetMapping("/reply/{postId}")
+    public ResponseEntity<Message<?>> getReplyList(@PathVariable("postId") Long postId) {
         Message<PostDto> message = postService.getReplyList(postId);
         return responseUtil.createResponseEntity(message);
     }

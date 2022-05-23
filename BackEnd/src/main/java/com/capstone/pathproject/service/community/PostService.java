@@ -32,17 +32,11 @@ public class PostService {
 
 
     public Message<List<PostDto>> getPostList(PostType type, Pageable pageable) {
-        
-        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member member = principalDetails.getMember(); // 로그인한 사람 찾아오기
-
-        Optional<Member> findMember = memberRepository.findById(member.getId());
-
 
         List<Post> findPost = postRepository.findByParentIsNullAndType(type,pageable);
         ArrayList<PostDto> listPost = new ArrayList<PostDto>();
-        findPost.stream().map(post -> post.toDTO()).forEach(postDto -> listPost.add(postDto));
-      
+        findPost.stream().map(post -> new PostDto(post)).forEach(postDto -> listPost.add(postDto));
+
         return Message.<List<PostDto>>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")
@@ -50,9 +44,18 @@ public class PostService {
     }
 
 
+
     public Message<PostDto> getReplyList(Long id) {
         Optional<Post> findPost = postRepository.findByParentId(id);
+        System.out.println(findPost.toString());
         Post post = findPost.orElse(null);
+
+        if (post == null) {
+            return Message.<PostDto>builder()
+                    .header(StatusEnum.OK)
+                    .message("답글이 없습니다.")
+                    .build();
+        }
 
         PostDto postDto = PostDto.createPostDto()
                 .id(post.getId())
@@ -61,14 +64,10 @@ public class PostService {
                 .photoName(post.getPhotoName())
                 .type(post.getType())
                 .title(post.getTitle())
+                .loginId(post.getCreatedBy())
                 .build();
 
-        if (post == null) {
-            return Message.<PostDto>builder()
-                    .header(StatusEnum.BAD_REQUEST)
-                    .message("답글이 없습니다.")
-                    .build();
-        }
+
         //보여줘야함
         return Message.<PostDto>builder()
                 .header(StatusEnum.OK)
@@ -93,7 +92,15 @@ public class PostService {
     public Message viewParams(Long id) {
         postRepository.updateView(id);
         Optional<Post> post = postRepository.findById(id);
-        PostDto postDTO = post.get().toDTO();
+        PostDto postDTO = PostDto.createPostDto()
+                .loginId(post.get().getCreatedBy())
+                .id(post.get().getId())
+                .view(post.get().getView())
+                .type(post.get().getType())
+                .photoName(post.get().getPhotoName())
+                .content(post.get().getContent())
+                .title(post.get().getTitle())
+                .build();
         return Message.<PostDto>builder()
                 .header(StatusEnum.OK)
                 .message("조회수 증가성공")
@@ -113,14 +120,6 @@ public class PostService {
                     .message("사용자 없음")
                     .body("").build();
         }
-//        Optional<Member> findMember = memberRepository.findById(postDTO.getMemberId());
-//        Member member = findMember.orElse(null);
-//        if(findMember == null){
-//            return Message.<String>createMessage()
-//                    .header(StatusEnum.OK)
-//                    .message("없음")
-//                    .body("").build();
-//        }
         Post post = Post.createPost()
                 .member(member)
                 .view(0)
@@ -166,15 +165,19 @@ public class PostService {
         }
         post.updateType(postDto.getType());
 
+
         return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("수정이 완료되었습니다.")
                 .body("").build();
     }
 
+
+
     private boolean validatePostMember(String loginId) {
-        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
+
         if (loginId.equals(member.getLoginId())) {
             return true;
         } else {
@@ -209,7 +212,7 @@ public class PostService {
 
     public Message<String> repcreate(ReplyCreatePostDto postDTO, String fileName) {
 
-        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
         if (member.getRole() != Role.ROLE_ADMIN) {
@@ -220,6 +223,8 @@ public class PostService {
         }
 
         Optional<Post> findPost = postRepository.findById(postDTO.getPostId());
+        System.out.println("============================");
+        System.out.println(findPost.toString());
         Post post = findPost.orElse(null);
         if (post == null) {
             return Message.<String>builder()
@@ -227,6 +232,7 @@ public class PostService {
                     .message("게시글이 존재하지 않습니다.")
                     .build();
         }
+
         Post reply = Post.createPost()
                 .type(postDTO.getType())
                 .member(member)
@@ -235,6 +241,8 @@ public class PostService {
                 .parent(post)
                 .photoName(fileName)
                 .build();
+
+
 
         postRepository.save(reply);
         return Message.<String>builder()
@@ -247,7 +255,7 @@ public class PostService {
 
 
     public Message<String> repupdate(Long postId, ReplyUpdatePostDto postDto, String fileName) {
-        Optional<Post> findPost = postRepository.findById(postId);
+        Optional<Post> findPost = postRepository.findByParentId(postId);
         Post post = findPost.orElse(null);
         if (post == null) {
             return Message.<String>builder()
@@ -255,7 +263,7 @@ public class PostService {
                     .message("수정할 게시글이 없습니다.")
                     .body("").build();
         }
-        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
         if (member.getRole() != Role.ROLE_ADMIN) {
@@ -291,7 +299,7 @@ public class PostService {
                     .message("게시글이 존재하지 않습니다.")
                     .build();
         }
-        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
         if (member.getRole() != Role.ROLE_ADMIN) {
             return Message.<String>builder()

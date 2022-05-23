@@ -102,7 +102,7 @@ function CommunityMain() {
                             {post.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{post.loginId}</CommuBoard2>
                         <CommuBoard2>{post.view}</CommuBoard2>
                         <CommuBoard2>{post.writeDate}</CommuBoard2>
                         <CommuBoard2>{post.type}</CommuBoard2>
@@ -181,7 +181,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{result.loginId}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
@@ -260,7 +260,7 @@ function CommunityMain() {
                             {post.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{post.loginId}</CommuBoard2>
                         <CommuBoard2>{post.view}</CommuBoard2>
                         <CommuBoard2>{post.writeDate}</CommuBoard2>
                         <CommuBoard2>{post.type}</CommuBoard2>
@@ -339,7 +339,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{result.loginId}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
@@ -418,7 +418,7 @@ function CommunityMain() {
                             {post.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{post.loginId}</CommuBoard2>
                         <CommuBoard2>{post.view}</CommuBoard2>
                         <CommuBoard2>{post.writeDate}</CommuBoard2>
                         <CommuBoard2>{post.type}</CommuBoard2>
@@ -497,7 +497,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{result.loginId}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
@@ -576,7 +576,7 @@ function CommunityMain() {
                             {post.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{post.loginId}</CommuBoard2>
                         <CommuBoard2>{post.view}</CommuBoard2>
                         <CommuBoard2>{post.writeDate}</CommuBoard2>
                         <CommuBoard2>{post.type}</CommuBoard2>
@@ -735,7 +735,7 @@ function CommunityMain() {
                             {result.title}
                           </Link>
                         </CommuBoard2>
-                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{result.loginId}</CommuBoard2>
                         <CommuBoard2>{result.view}</CommuBoard2>
                         <CommuBoard2>{result.writeDate}</CommuBoard2>
                         <CommuBoard2>{result.type}</CommuBoard2>
