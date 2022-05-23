@@ -154,7 +154,7 @@ font-size: 15px;
 text-align: left;
 background-color: white;
 &:hover {
-  background-color: rgb(240, 251, 255, 0.842);
+  background-color: rgb(248, 252, 255, 0.925);
 }
 `;
 
@@ -169,7 +169,16 @@ overflow: scroll;
 `;
 
 const BusStayList1 = styled.button`
-
+width: 300px;
+height: 70px;
+border: 0;
+border-bottom: 1px solid rgb(184, 184, 184);
+font-size: 15px;
+text-align: left;
+background-color: white;
+&:hover {
+  background-color: rgb(240, 251, 255, 0.842);
+}
 `;
 
 function BusMain() {
@@ -210,7 +219,6 @@ function BusMain() {
               }}
             />
           </Box>
-
           {toggleValue == "bus" &&
           busList != undefined &&
           busList.length != 0 ? (
@@ -231,13 +239,11 @@ function BusMain() {
               <Line2 />
               
               <BusStopList>
-                { 
-                  busList.station.map((item)=>{
+                { busList.station.map((item)=>{
                     // console.log(item)
                     return(
                       <div>
                       <BusListBtn>{item.stationName}</BusListBtn>
-                      {/* <BusStopLine/> */}
                       </div>
                     ) 
                   })
@@ -247,11 +253,10 @@ function BusMain() {
           ) : toggleValue == "busStop" && busStop != undefined && busStop.length != 0 ? (
             <>
               <BusStayList>
-                {
-                  busStop.map((item)=> {
+                { busStop.map((item)=> {
                     return (
                       <div>
-                        {item.stationName}
+                        <BusStayList1>{item.stationName}</BusStayList1>
                       </div>
                     );
                   })
@@ -276,7 +281,7 @@ function BusMain() {
       </SideNav>
       <Map />
 
-
+      
     </div>
   );
 }

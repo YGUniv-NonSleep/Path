@@ -23,7 +23,7 @@ public class ApiControllerAdvice {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors()
                 .forEach(c -> errors.put(((FieldError) c).getField(), c.getDefaultMessage()));
-        Message<Object> message = Message.createMessage()
+        Message<Object> message = Message.builder()
                 .header(StatusEnum.BAD_REQUEST)
                 .message("유효성 검사 실패")
                 .body(errors).build();
@@ -34,7 +34,7 @@ public class ApiControllerAdvice {
     public ResponseEntity<Message<Object>> handleBadCredentialsException(BadCredentialsException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("exception", "BadCredentialsException");
-        Message<Object> message = Message.createMessage()
+        Message<Object> message = Message.builder()
                 .header(StatusEnum.UNAUTHORIZED)
                 .message(ex.getMessage())
                 .body(errors).build();
@@ -45,7 +45,7 @@ public class ApiControllerAdvice {
     public ResponseEntity<Message<Object>> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("exception", "InternalAuthenticationServiceException");
-        Message<Object> message = Message.createMessage()
+        Message<Object> message = Message.builder()
                 .header(StatusEnum.UNAUTHORIZED)
                 .message(ex.getMessage())
                 .body(errors).build();
@@ -56,7 +56,7 @@ public class ApiControllerAdvice {
     public ResponseEntity<Message<Object>> handleRefreshTokenValidException(AccountExpiredException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("exception", "AccountExpiredException");
-        Message<Object> message = Message.createMessage()
+        Message<Object> message = Message.builder()
                 .header(StatusEnum.UNAUTHORIZED)
                 .message(ex.getMessage())
                 .body(errors).build();

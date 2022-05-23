@@ -30,6 +30,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
 
+
     public Message<List<PostDto>> getPostList(PostType type, Pageable pageable) {
         
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -41,8 +42,7 @@ public class PostService {
         List<Post> findPost = postRepository.findByParentIsNullAndType(type,pageable);
         ArrayList<PostDto> listPost = new ArrayList<PostDto>();
         findPost.stream().map(post -> post.toDTO()).forEach(postDto -> listPost.add(postDto));
-
-
+      
         return Message.<List<PostDto>>createMessage()
                 .header(StatusEnum.OK)
                 .message("조회완료")
@@ -64,13 +64,13 @@ public class PostService {
                 .build();
 
         if (post == null) {
-            return Message.<PostDto>createMessage()
+            return Message.<PostDto>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("답글이 없습니다.")
                     .build();
         }
         //보여줘야함
-        return Message.<PostDto>createMessage()
+        return Message.<PostDto>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")
                 .body(postDto).build();
@@ -83,7 +83,7 @@ public class PostService {
         List<Post> postList = postRepository.findByTitleContaining(keyword, pageable);
         ArrayList<PostDto> listPDT = new ArrayList<PostDto>();
         postList.stream().map(post -> post.toDTO()).forEach(postDTO -> listPDT.add(postDTO));
-        return Message.<List<PostDto>>createMessage()
+        return Message.<List<PostDto>>builder()
                 .header(StatusEnum.OK)
                 .message("검색완료")
                 .body(listPDT).build();
@@ -94,7 +94,7 @@ public class PostService {
         postRepository.updateView(id);
         Optional<Post> post = postRepository.findById(id);
         PostDto postDTO = post.get().toDTO();
-        return Message.<PostDto>createMessage()
+        return Message.<PostDto>builder()
                 .header(StatusEnum.OK)
                 .message("조회수 증가성공")
                 .body(postDTO).build();
@@ -130,8 +130,7 @@ public class PostService {
                 .title(postDTO.getTitle())
                 .build();
         postRepository.save(post);
-
-        return Message.<String>createMessage()
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("등록완료")
                 .body("").build();
@@ -143,14 +142,14 @@ public class PostService {
         Optional<Post> findPost = postRepository.findById(postId);
         Post post = findPost.orElse(null);
         if (post == null) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("수정할 게시글이 없습니다.")
                     .body("").build();
         }
         // 작성자 검증하기
         if (!validatePostMember(post.getMember().getLoginId())) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("현재 사용자가 게시글 작성자가 아닙니다.")
                     .body("").build();
@@ -167,7 +166,7 @@ public class PostService {
         }
         post.updateType(postDto.getType());
 
-        return Message.<String>createMessage()
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("수정이 완료되었습니다.")
                 .body("").build();
@@ -188,19 +187,19 @@ public class PostService {
         Optional<Post> findPost = postRepository.findById(postId);
         Post post = findPost.orElse(null);
         if (post == null) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("게시글이 존재하지 않습니다.")
                     .build();
         }
         if (!validatePostMember(post.getMember().getLoginId())) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("현재 사용자가 게시글 작성자가 아닙니다.")
                     .body("").build();
         }
         postRepository.deleteById(postId);
-        return Message.<String>createMessage()
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("삭제완료")
                 .body("")
@@ -214,7 +213,7 @@ public class PostService {
         Member member = principalDetails.getMember();
 
         if (member.getRole() != Role.ROLE_ADMIN) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("관리자만 등록할 수 있습니다.")
                     .build();
@@ -223,7 +222,7 @@ public class PostService {
         Optional<Post> findPost = postRepository.findById(postDTO.getPostId());
         Post post = findPost.orElse(null);
         if (post == null) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("게시글이 존재하지 않습니다.")
                     .build();
@@ -238,7 +237,7 @@ public class PostService {
                 .build();
 
         postRepository.save(reply);
-        return Message.<String>createMessage()
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("등록완료")
                 .body("").build();
@@ -251,7 +250,7 @@ public class PostService {
         Optional<Post> findPost = postRepository.findById(postId);
         Post post = findPost.orElse(null);
         if (post == null) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("수정할 게시글이 없습니다.")
                     .body("").build();
@@ -260,7 +259,7 @@ public class PostService {
         Member member = principalDetails.getMember();
 
         if (member.getRole() != Role.ROLE_ADMIN) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("관리자만 등록할 수 있습니다.")
                     .build();
@@ -276,7 +275,7 @@ public class PostService {
         }
         post.updateType(postDto.getType());
 
-        return Message.<String>createMessage()
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("수정이 완료되었습니다.")
                 .body("").build();
@@ -287,7 +286,7 @@ public class PostService {
         Optional<Post> findPost = postRepository.findById(postId);
         Post post = findPost.orElse(null);
         if (post == null) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("게시글이 존재하지 않습니다.")
                     .build();
@@ -295,13 +294,13 @@ public class PostService {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication();
         Member member = principalDetails.getMember();
         if (member.getRole() != Role.ROLE_ADMIN) {
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("관리자만 삭제할 수 있습니다.")
                     .build();
         }
         postRepository.deleteById(postId);
-        return Message.<String>createMessage()
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("삭제완료")
                 .body("")

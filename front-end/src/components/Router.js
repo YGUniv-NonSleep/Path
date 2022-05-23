@@ -12,10 +12,30 @@ import { Oder } from '../pages/Oder';
 import { Bus, Subway, Scooter, Bike } from '../pages/Mobility';
 import { Community, CommunityContents, CommunityAdd } from '../pages/Community';
 import { CarPool, CarPoolContents, CarPoolAdd } from '../pages/CarPool';
-import { Company, CompStore, CompDetail, CompCreate, ItemBasic } from '../pages/Company';
-import { CompManage, CompEdit, ItemEdit, Items, Resign } from '../pages/Company/CompManage';
-import { Member, Login, SignUp, UpdateMem, SearchId, SearchPw } from '../pages/Member';
-import TossPayments from '../pages/TosspaymentsTest'
+import {
+  Company,
+  CompStore,
+  CompDetail,
+  CompCreate,
+  ItemBasic,
+} from '../pages/Company';
+import {
+  CompManage,
+  CompEdit,
+  ItemEdit,
+  Items,
+  Resign,
+} from '../pages/Company/CompManage';
+import {
+  Member,
+  Card,
+  Login,
+  SignUp,
+  UpdateMem,
+  SearchId,
+  SearchPw,
+} from '../pages/Member';
+import TossPayments from '../pages/TosspaymentsTest';
 // https://kyung-a.tistory.com/36
 
 function Router() {
@@ -27,10 +47,9 @@ function Router() {
         {/* 속성을 component 대신에 element */}
         <Route path="/" element={<Path />} />
         <Route path="/walk" element={<WalkPath />} />
-
       </Routes>
-        <Routes>
-            <Route path="/pay" element={<TossPayments />} />
+      <Routes>
+        <Route path="/pay" element={<TossPayments />} />
 
         {/* 404 rounte */}
         {/* <Route path="/*" element={<PageNotFound />} /> */}
@@ -42,6 +61,7 @@ function Router() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/member" element={<Member />} />
         <Route path="/member/update" element={<UpdateMem />} />
+        <Route path="/member/card" element={<Card />} />
       </Routes>
       <Routes>
         <Route path="/company" element={<Company />} />
@@ -76,9 +96,9 @@ function Router() {
       </Routes>
       <Routes>
         <Route path="/carpool" element={<CarPool />} />
-        <Route path="/carpool/:postId" element={<CarPoolContents/>} />
-        <Route path="/carpool/add" element={<CarPoolAdd/>} />
-        <Route path="/carpool/:postId" element={<CarPoolContents/>} />
+        <Route path="/carpool/:postId" element={<CarPoolContents />} />
+        <Route path="/carpool/add" element={<CarPoolAdd />} />
+        <Route path="/carpool/:postId" element={<CarPoolContents />} />
       </Routes>
     </BrowserRouter>
   );
