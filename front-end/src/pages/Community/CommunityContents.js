@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import useBoardContents from "./hooks/useBoardContents";
+import { useState } from "react";
 
 const CommuCon = styled.div`
   width: 390px;
@@ -46,19 +47,17 @@ const MousePointer = styled.div`
 const CommunityContents = () => {
  
   const {
-    content, del, repDel, postUpdateForm, update, reply, createState, 
-    subAdd, updateState, subUpdate, userRole, buttonReact,token,ab,
+    content, del, repDel, update,reply, createState, 
+    subAdd, updateState, subUpdate, userRole, buttonReact,token,
     username
   } = useBoardContents();
   const {
-    navigate, getPostId, PostDelete, PostUpdate, commuSubmit, 
+    navigate, getPostId, PostDelete, commuSubmit, 
     RepCreateState, RepUpdateState, RepCreate, RepUpdate, RepDelete,
   } = useBoardContents();
-  if(postUpdateForm == 1){
-    return ab=true;
-    console.log(postUpdateForm)
-    console.log(ab);
-  }
+
+  const [postUpdateForm,setUpdateForm] = useState(false);
+
   return (
     <CommuCon>
       <CommuSubCon>
@@ -70,7 +69,7 @@ const CommunityContents = () => {
                 삭제하기
               </button>
               <button
-                onClick={PostUpdate}
+                onClick={() => setUpdateForm((data)=>!data)}
                 style={{ position: "absolute", right: 70 }}
               >
                 수정하기
@@ -90,7 +89,7 @@ const CommunityContents = () => {
               </div>
               <div className="post-view-row">
                 <label>작성자 : </label>
-                <label>{token.token.name}</label>
+                <label>{content.createdBy}</label>
               </div>
               <div className="post-view-row">
                 <label>조회수 : </label>
@@ -110,18 +109,19 @@ const CommunityContents = () => {
                 <br></br>
               </div>
               <div className="post-view-row"></div> 
-              {ab ?
-                <Background>
-                  <ModalContainer>
-                  <MousePointer
-                    style={{ color: "white", float: "right" }}
-                    onClick={Close}>
-                X
-              </MousePointer>
-              <div style={{ color: "white", float: "center" }}>수정하기</div>
-                  </ModalContainer>
-                </Background>
-              :''}
+              {postUpdateForm ?(
+                 <Background>
+                 <ModalContainer>
+                 <MousePointer
+                   style={{ color: "white", float: "right" }}
+                   //onClick={Close}
+                   >
+               X
+             </MousePointer>
+             <div style={{ color: "white", float: "center" }}>수정하기</div>
+                 </ModalContainer>
+               </Background>
+              ):('')}
              {/* {postUpdateForm ? (
               <div>
                 <form encType="multipart/form-data">
