@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-public class KakaoConfig {
+public class KakaoConfiguration {
 
     @Value("${api.kakao}")
     private String apiKey;
