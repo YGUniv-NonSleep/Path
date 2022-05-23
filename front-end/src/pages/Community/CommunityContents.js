@@ -47,18 +47,16 @@ const MousePointer = styled.div`
 const CommunityContents = () => {
  
   const {
-    content, del, repDel, update,reply, 
-    subAdd, subUpdate, userRole, buttonReact,token,
+    content, del, repDel, update,reply, createState, 
+    subAdd, updateState, subUpdate, userRole, buttonReact,token,
     username
   } = useBoardContents();
   const {
     navigate, getPostId, PostDelete, commuSubmit, 
-    RepUpdateState, RepCreate, RepUpdate, RepDelete,PatchPostContents
+    RepCreateState, RepUpdateState, RepCreate, RepUpdate, RepDelete,
   } = useBoardContents();
 
   const [postUpdateForm,setUpdateForm] = useState(false);
-  const [createState, setCreateState] = useState(false);
-  const [updateState, setUpdateState] = useState(false);
 
   return (
     <CommuCon>
@@ -91,7 +89,7 @@ const CommunityContents = () => {
               </div>
               <div className="post-view-row">
                 <label>작성자 : </label>
-                <label>{content.loginId}</label>
+                <label>{content.createdBy}</label>
               </div>
               <div className="post-view-row">
                 <label>조회수 : </label>
@@ -118,89 +116,81 @@ const CommunityContents = () => {
                    style={{ color: "white", float: "right" }}
                    //onClick={Close}
                    >
-                   X
-               </MousePointer>
-               <div style={{ color: "white", float: "center" }}>수정하기</div>
-               <div style={{ color : "white"}}>
-                 <form encType="multipart/form-data" onSubmit={PatchPostContents}>
-                    제목
-                    <input
-                      type="text"
-                      name="title"
-                      defaultValue={content.title}
-                      ></input>
-                      <br></br>
-                      내용
-                      <textarea style={{width : "300px",height : "350px"}}
-                        type="text"
-                        name="content"
-                        defaultValue={content.content}
-                        ></textarea>
-                        <br></br>
-                        타입
-                        <select type="text" name="type" defaultValue={content.type}>
-                          <option>NOTICE</option>
-                          <option>QNA</option>
-                          <option>COMPLAINT</option>
-                          <option>FAQ</option>
-                        </select>
-                        <input type="file" name="userfile" multiple="multiple"></input>
-                        <p>작성자 : {content.loginId}</p>
-                        <p>조회수 : {content.view}</p>
-                        <p>작성일 : {content.createdDateTime}</p>
-                        <button type="submit">수정하기</button>
-                 </form>
-               </div>
-           
+               X
+             </MousePointer>
+             <div style={{ color: "white", float: "center" }}>수정하기</div>
                  </ModalContainer>
                </Background>
               ):('')}
-            
+             {/* {postUpdateForm ? (
+              <div>
+                <form encType="multipart/form-data">
+                  <input
+                    type="text"
+                    name="id"
+                    defaultValue={content.id}
+                    disabled={true}
+                  ></input>
+                  <br></br>
+                  제목
+                  <input
+                    type="text"
+                    name="title"
+                    defaultValue={content.title}
+                  ></input>
+                  <br></br>
+                  내용
+                  <input
+                    type="text"
+                    name="content"
+                    defaultValue={content.content}
+                  ></input>
+                  <br></br>
+                  타입
+                  <select type="text" name="type" defaultValue={content.type}>
+                    <option>NOTICE</option>
+                    <option>FAQ</option>
+                    <option>COMPLAINT</option>
+                    <option>QNA</option>
+                  </select>
+                  <input type="file" name="userfile" multiple="multiple"></input>
+                  <p>작성자 : {token.token.name}</p>
+                  <p>조회수 : {content.view}</p>
+                  <p>작성일 : {content.createdDateTime}</p>
+                  <button type="submit">수정하기</button>
+                </form>
+              </div>
+            ) : (
+              ""
+            )} */}
               {createState ? (
-                <Background>
-                <ModalContainer>
-                <MousePointer
-                  style={{ color: "white", float: "right" }}
-                  //onClick={Close}
-                  >
-                  X
-              </MousePointer>
-              <div style={{ color: "white", float: "center" }}>수정하기</div>
-              <div  style={{ color : "white"}}>
+                <>
                   <form
                     id="myForm"
                     name="myForm"
                     onSubmit={RepCreate}
                     encType="multipart/form-data"
                   >
-                    제목
                     <input
                       type="text"
                       placeholder="제목을 입력하세요"
                       name="title"
                     />
-                    <br></br>
-                    내용
-                    <textarea style={{width:"300px",height : "350px"}}
+                    <input
                       type="text"
                       placeholder="내용을 입력하세요"
                       name="content"
                     />
-                    <br></br>
                     <select type="text" defaultValue={content.type} name="type">
                       <option>NOTICE</option>
                       <option>FAQ</option>
                       <option>COMPLAINT</option>
                       <option>QNA</option>
                     </select>
-                    <br></br>
                     <input type="file" name="userfile" multiple="multiple" />
-                    <br></br>
-                    <button type="submit">답글등록</button>
+                    <button type="submit">submit</button>
                   </form>
-                  </div>
-                  </ModalContainer>
-               </Background>
+                </>
               ) : (
                 ""
               )}
@@ -214,13 +204,13 @@ const CommunityContents = () => {
 
        
         {reply ? (
-          <div>
+          <>
             <hr></hr>
             <h2>답글</h2>
             <div>
               {userRole.role == "ROLE_ADMIN" ? (
                 <div>
-                  <button onClick={() => setUpdateState((data)=>!data)}>수정</button>
+                  <button onClick={RepUpdateState}>수정</button>
                   <button onClick={RepDelete}>삭제</button>
                 </div>
               ) : (
@@ -228,57 +218,17 @@ const CommunityContents = () => {
               )}
               {reply.content}
               <br></br>
-              {}
+              {token.token.name}
               <br></br>
             </div>
-            {updateState ? (
-             <Background>
-             <ModalContainer>
-             <MousePointer
-               style={{ color: "white", float: "right" }}
-               //onClick={Close}
-               >
-               X
-           </MousePointer>
-           <div style={{ color: "white", float: "center" }}>수정하기</div>
-           <div  style={{ color : "white"}}>
-            <form onSubmit={RepUpdate} encType="multipart/form-data">
-              <input
-                type="text"
-                defaultValue={reply.id}
-                name="id"
-                hidden={true}
-              />
-              <br></br>
-              <input type="text" defaultValue={reply.title} name="title" />
-              <br></br>
-              <input type="text" defaultValue={reply.content} name="content" />
-              <br></br>
-              <select type="text" defaultValue={reply.type} name="type">
-                <option>NOTICE</option>
-                <option>FAQ</option>
-                <option>COMPLAINT</option>
-                <option>QNA</option>
-              </select>
-              <br></br>
-              <input type="file" name="userfile" multiple="multiple" />
-              <br></br>
-              <button type="submit">submit</button>
-            </form>
-            </div>
-              </ModalContainer>
-          </Background>
-        ) : (
-          ""
-        )}
-          </div>
+          </>
         ) : (
           <div>
             {userRole.role == "ROLE_ADMIN" ? (
               <div>
                 {buttonReact ? (
                   <div>
-                    <button onClick={() => setCreateState((data)=>!data)}>답글등록</button>
+                    <button onClick={RepCreateState}>답글등록</button>
                     <br></br>
                   </div>
                 ) : (
@@ -291,6 +241,30 @@ const CommunityContents = () => {
           </div>
         )}
 
+        {updateState ? (
+          <>
+            <form onSubmit={RepUpdate} encType="multipart/form-data">
+              <input
+                type="text"
+                defaultValue={reply.id}
+                name="id"
+                hidden={true}
+              />
+              <input type="text" defaultValue={reply.title} name="title" />
+              <input type="text" defaultValue={reply.content} name="content" />
+              <select type="text" defaultValue={reply.type} name="type">
+                <option>NOTICE</option>
+                <option>FAQ</option>
+                <option>COMPLAINT</option>
+                <option>QNA</option>
+              </select>
+              <input type="file" name="userfile" multiple="multiple" />
+              <button type="submit">submit</button>
+            </form>
+          </>
+        ) : (
+          ""
+        )}
 
         <button className="post-view-go-list-btn" onClick={() => navigate(-1)}>
           목록으로 돌아가기

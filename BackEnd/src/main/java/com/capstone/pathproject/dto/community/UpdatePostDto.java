@@ -2,8 +2,10 @@ package com.capstone.pathproject.dto.community;
 
 import com.capstone.pathproject.domain.community.PostType;
 import com.capstone.pathproject.dto.member.MemberDto;
-import lombok.*;
-import org.hibernate.sql.Update;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -18,6 +20,4 @@ public class UpdatePostDto {
     private String title;
     private String content;
     private String photoName;
-    private String updateId;
-
 }
