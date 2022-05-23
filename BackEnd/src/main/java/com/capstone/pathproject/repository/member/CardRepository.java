@@ -12,7 +12,4 @@ import java.util.List;
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     List<Card> findByMember(Member member);
-
-    @Query("select new com.capstone.pathproject.dto.member.CardDto(c.id, c.number, c.cardCompany, c.type, c.createdDateTime) from Card c where c.member.id = :memberId")
-    List<CardDto> findAllMemberCardDtos(@Param("memberId") Long memberId);
 }

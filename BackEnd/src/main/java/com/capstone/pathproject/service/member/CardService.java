@@ -7,6 +7,7 @@ import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.dto.rest.toss.billingKey.BillingKeyDto;
 import com.capstone.pathproject.repository.member.CardRepository;
+import com.capstone.pathproject.repository.member.query.CardQueryRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -28,6 +29,7 @@ public class CardService {
 
     private final WebClient tossWebClient;
     private final CardRepository cardRepository;
+    private final CardQueryRepository cardQueryRepository;
 
     public Message<Object> addCard(String customerKey, String authKey) throws JsonProcessingException {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -75,8 +77,8 @@ public class CardService {
         return mapper;
     }
 
-    public Message<List<CardDto>> getAllMemberCards(Long memberId) {
-        List<CardDto> cardDtos = cardRepository.findAllMemberCardDtos(memberId);
+    public Message<List<CardDto>> getMemberCards(Long memberId) {
+        List<CardDto> cardDtos = cardQueryRepository.findMemberCardDtos(memberId);
         return Message.<List<CardDto>>builder()
                 .header(StatusEnum.OK)
                 .message("카드가 전부 조회되었습니다.")
