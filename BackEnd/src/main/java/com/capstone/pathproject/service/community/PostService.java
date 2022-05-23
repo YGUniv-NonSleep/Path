@@ -43,7 +43,7 @@ public class PostService {
         ArrayList<PostDto> listPost = new ArrayList<PostDto>();
         findPost.stream().map(post -> post.toDTO()).forEach(postDto -> listPost.add(postDto));
       
-        return Message.<List<PostDto>>createMessage()
+        return Message.<List<PostDto>>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")
                 .body(listPost).build();
@@ -108,7 +108,7 @@ public class PostService {
         Optional<Member> findMember = memberRepository.findById(member.getId());
 
         if(findMember == null){
-            return Message.<String>createMessage()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("사용자 없음")
                     .body("").build();
