@@ -160,7 +160,7 @@ background-color: white;
 
 const BusStayList = styled.div`
 position: absolute;
-top: 250px;
+top: 240px;
 left: 20px;
 width: 350px;
 height: 600px;

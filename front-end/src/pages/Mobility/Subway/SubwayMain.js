@@ -307,7 +307,7 @@ font-weight:bold;
 
 const StopObj = styled.div`
 position:absolute;
-top: 250px;
+top: 240px;
 left: 10px;
 width: 370px;
 height: 720px;
@@ -316,52 +316,48 @@ border-top: 1px solid rgb(184, 184, 184);
 
 `;
 
-const TimeListDown = styled.div`
+const TimeListUpBox = styled.div`
 margin-top: 20px;
-margin-left: 20px;
-width: 20px;
-height:30px;
+width: 175px;
+
+`;
+
+const TimeListUp = styled.div`
+
+`;
+
+const MinutesListUp = styled.div`
+
+`;
+
+const TimeListDownBox = styled.div`
+margin-top: 20px;
+width: 175px;
+
+`;
+
+const TimeListDown = styled.div`
 
 `;
 
 const MinutesListDown = styled.div`
-margin-left: 50px;
-margin-top: -30px;
-width: auto;
-height: auto;
-font-size: 14px;
+
+
 `;
 
 const TimetableBox = styled.div`
 position:absolute;
-top: 70px;
-width: 120px;
+top: 65px;
+padding-right: 9px;
+border-right: 1px solid rgb(184, 184, 184);
 `;
 
 const TimetableBox1 = styled.div`
 position:absolute;
-left: 140px;
-top: 70px;
-width: 120px;
-background-color: gray;
+left: 190px;
+top: 65px;
+
 `;
-
-// const TimeListUp = styled.div`
-// margin-top: 20px;
-// margin-left: 50px;
-// width: 20px;
-// height:30px;
-// background-color:gray
-// `;
-
-// const MinutesListUp = styled.div`
-// margin-left: 50px;
-// margin-top: -30px;
-// width: auto;
-// height: auto;
-// font-size: 14px;
-// `;
-
 
 
 
@@ -372,7 +368,7 @@ function SubwayMain() {
   const [markers, setMarkers] = useState([]);
   const [staInfo, setStaInfo] = useState([]);
   const [subTime, setSubTime] = useState([]);
-  const [subTime1, setSubTime1] =useState([]);
+  const [subTimeDown, setSubTimeDown] =useState([]);
   const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
   const [clickValue, setClickValue] = useState(null);
@@ -449,7 +445,7 @@ function SubwayMain() {
     let subTime = await SubwayApi.getSubTime(stationInfo.stationID);
     console.log(subTime)
     setSubTime(subTime.OrdList.up.time)
-    setSubTime1(subTime.OrdList.down.time)
+    setSubTimeDown(subTime.OrdList.down.time)
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
     let bounds = new kakao.maps.LatLngBounds();
@@ -596,21 +592,24 @@ function SubwayMain() {
              {
                subTime.map((item) => {
                  return (
-                   <div>
-                     <TimeListDown>{item.Idx}</TimeListDown>
-                     <MinutesListDown>{item.list}</MinutesListDown>
-                   </div>
+                     <TimeListUpBox>
+                     <TimeListUp>{item.Idx}</TimeListUp>
+                     <MinutesListUp>{item.list}</MinutesListUp>
+                     </TimeListUpBox>
+
                  )
                })
              }
              </TimetableBox>
-             <TimetableBox1>
+             <TimetableBox1> 
                {
-                 subTime1.map((item) => {
-                   <div>
-                     {/* <TimeListUp>{item.Idx}</TimeListUp>
-                     <MinutesListUp>{item.list}</MinutesListUp> */}
-                   </div>
+                 subTimeDown.map((item) => {
+                   return (
+                    <TimeListDownBox>
+                    <TimeListDown>{item.Idx}</TimeListDown>
+                    <MinutesListDown>{item.list}</MinutesListDown>
+                    </TimeListDownBox>
+                   )
                  })
                }
              </TimetableBox1>
