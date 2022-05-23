@@ -21,6 +21,4 @@ public class CreatePostDto {
     @NotBlank
     private String content;
     private String photoName;
-    @NotNull
-    private Long memberId;
 }

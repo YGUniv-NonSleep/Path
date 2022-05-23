@@ -1,5 +1,6 @@
 package com.capstone.pathproject.dto.member;
 
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.MemberGender;
 import com.capstone.pathproject.domain.member.Role;
 import lombok.Getter;
@@ -51,4 +52,22 @@ public class SignupFormDto {
     @Past
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+
+    public Member toEntity() {
+        return Member.builder()
+                .role(role)
+                .loginId(loginId)
+                .password(password)
+                .mail(mail)
+                .name(name)
+                .phone(phone)
+                .postId(postId)
+                .addr(addr)
+                .addrDetail(addrDetail)
+                .addrExtra(addrExtra)
+                .gender(gender)
+                .birthday(birthday)
+                .score(100)
+                .build();
+    }
 }

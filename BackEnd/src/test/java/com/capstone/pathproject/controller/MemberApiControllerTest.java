@@ -36,7 +36,7 @@ class MemberApiControllerTest {
     private ObjectMapper objectMapper;
 
     private Member createMember(int num) {
-        return Member.createMember()
+        return Member.builder()
                 .role(Role.ROLE_MEMBER)
                 .loginId("로그인아이디")
                 .password("패스워드")
@@ -55,7 +55,7 @@ class MemberApiControllerTest {
     }
 
     private MemberDto setAllMemberDTO() {
-        return MemberDto.createMemberDto()
+        return MemberDto.builder()
                 .loginId("로그인아이디")
                 .mail("member@naver.com")
                 .name("이름")
@@ -74,7 +74,7 @@ class MemberApiControllerTest {
     @Test
     void 회원가입_null값() throws Exception {
         //given
-        MemberDto memberDTO = MemberDto.createMemberDto().build();
+        MemberDto memberDTO = MemberDto.builder().build();
         String content = objectMapper.writeValueAsString(memberDTO);
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/member")

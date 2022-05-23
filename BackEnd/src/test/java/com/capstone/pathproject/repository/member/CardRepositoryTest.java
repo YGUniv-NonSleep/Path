@@ -5,6 +5,7 @@ import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.domain.member.MemberGender;
 import com.capstone.pathproject.dto.member.CardDto;
+import com.capstone.pathproject.repository.member.query.CardQueryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,9 @@ class CardRepositoryTest {
     MemberRepository memberRepository;
 
     @Autowired
+    CardQueryRepository cardQueryRepository;
+
+    @Autowired
     CardRepository cardRepository;
 
     @PersistenceContext
@@ -42,7 +46,7 @@ class CardRepositoryTest {
     }
 
     private Member createMember(int num) {
-        return Member.createMember()
+        return Member.builder()
                 .role(Role.ROLE_MEMBER)
                 .loginId("로그인아이디")
                 .password("패스워드")
@@ -142,7 +146,7 @@ class CardRepositoryTest {
         em.flush();
         em.clear();
         //when
-        List<CardDto> cardDtos = cardRepository.findAllMemberCardDtos(member1.getId());
+        List<CardDto> cardDtos = cardQueryRepository.findMemberCardDtos(member1.getId());
         for (CardDto dto : cardDtos) {
             System.out.println("dto = " + dto);
         }

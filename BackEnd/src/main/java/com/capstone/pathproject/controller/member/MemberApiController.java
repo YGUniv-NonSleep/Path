@@ -73,7 +73,7 @@ public class MemberApiController {
 
     @DeleteMapping("/member/{memberId}")
     public ResponseEntity<Message<?>> deleteMember(@PathVariable("memberId") Long id) {
-        Message<MemberDto> message = memberService.deleteMember(id);
+        Message<String> message = memberService.deleteMember(id);
         return responseUtil.createResponseEntity(message);
     }
 
@@ -94,4 +94,9 @@ public class MemberApiController {
         Message<Object> message = memberService.resetPassword(id, body);
         return responseUtil.createResponseEntity(message);
     }
+
+//    @GetMapping("/member/{memberId}/orders")
+//    public ResponseEntity getMemberOrders(@PathVariable Long memberId) {
+//        memberService.getMemberOrders(memberId);
+//    }
 }

@@ -1,10 +1,7 @@
 package com.capstone.pathproject.dto.community;
 
 import com.capstone.pathproject.domain.community.PostType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,15 +11,13 @@ import javax.validation.constraints.NotNull;
 @ToString
 @NoArgsConstructor
 public class ReplyCreatePostDto {
-
-    @NotBlank
+    @NotNull
     private PostType type;
     @NotBlank
     private String title;
     @NotBlank
     private String content;
-    @NotBlank
     private String photoName;
     @NotNull
-    private Long postId;
+    private Long postId; // Parent
 }

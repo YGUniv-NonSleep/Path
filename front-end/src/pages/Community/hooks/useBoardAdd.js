@@ -14,8 +14,7 @@ function useBoardAdd() {
     var data = {
       title: e.target.title.value,
       content: e.target.content.value,
-      type: e.target.type.value,
-      memberId : token.token.id
+      type: e.target.type.value
     };
     console.log(data);
     var formData = new FormData();

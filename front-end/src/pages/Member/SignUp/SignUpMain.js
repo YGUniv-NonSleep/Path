@@ -1,7 +1,19 @@
 import {
-  Avatar, Button, TextField, FormControlLabel, Checkbox, 
-  Grid, Box, Typography, Container, InputLabel, 
-  Radio, RadioGroup, FormLabel, Select, MenuItem, 
+  Avatar,
+  Button,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  InputLabel,
+  Radio,
+  RadioGroup,
+  FormLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -10,7 +22,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { FormHelperText, FormControl } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
 import useSignUp from '../hooks/useSignUp';
 
@@ -42,12 +54,19 @@ const FormHelperTexts = styled(FormHelperText)`
 const theme = createTheme();
 
 function SignUpMain() {
-  const { // role, loginId, email, name, password, rePassword, phone, addrDetail, gender
-    inputValue, errorList, 
-    handleInput, handleBirthday, handleAgree, handleSubmit, daumAddrApi
+  const {
+    // role, loginId, email, name, password, rePassword, phone, addrDetail, gender
+    inputValue,
+    errorList,
+    handleInput,
+    handleBirthday,
+    handleAgree,
+    handleSubmit,
+    daumAddrApi,
+    birthday,
   } = useSignUp();
 
-  // valid check 
+  // valid check
   // roleError, loginIdError, emailError, passwordState, passwordError,
   // nameError, phoneError, postIdError, addrError, addrDetailError,
   // addrExtraError, genderError, birthdayError,
@@ -277,7 +296,7 @@ function SignUpMain() {
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       label="생년월일"
-                      value={inputValue.birthday}
+                      value={birthday}
                       inputFormat={'yyyy-MM-dd'}
                       mask={'____-__-__'}
                       error={errorList.birthdayError !== '' || null}

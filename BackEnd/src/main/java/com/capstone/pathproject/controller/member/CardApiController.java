@@ -3,30 +3,13 @@ package com.capstone.pathproject.controller.member;
 import com.capstone.pathproject.dto.member.CardDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
-import com.capstone.pathproject.dto.rest.toss.billingKey.BillingKeyDto;
-import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.service.member.CardService;
 import com.capstone.pathproject.util.ResponseUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.netty.handler.logging.LogLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-import reactor.netty.http.client.HttpClient;
-import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +24,18 @@ public class CardApiController {
 
     // 카드 조회
     @GetMapping("/cards")
-    public ResponseEntity getAllCard(@RequestParam Long memberId) {
-        Message<List<CardDto>> message = cardService.getAllMemberCards(memberId);
+    public ResponseEntity<Message<?>> getMemberCards(@RequestParam Long memberId) {
+        Message<List<CardDto>> message = cardService.getMemberCards(memberId);
         return responseUtil.createResponseEntity(message);
     }
+
     // 카드 삭제
+    @DeleteMapping("/cards/{cardId}")
+    public ResponseEntity<Message<?>> deleteCard(@PathVariable Long cardId) {
+        Message<String> message = cardService.deleteCard(cardId);
+        return responseUtil.createResponseEntity(message);
+    }
+
     // 카드 수정
 
     //토스 카드 등록 성공 url
