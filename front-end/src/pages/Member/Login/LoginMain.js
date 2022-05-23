@@ -45,7 +45,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 function LoginMain() {
-  const { handleInput, handleSubmit } = useLogin();
+  const { inputValue, handleInput, handleSubmit } = useLogin();
 
   // valid check -> loginId, password
 
@@ -82,6 +82,7 @@ function LoginMain() {
                     fullWidth
                     id="loginId"
                     name="loginId"
+                    value={inputValue.loginId}
                     label="아이디"
                     onChange={handleInput}
                   />
@@ -93,6 +94,7 @@ function LoginMain() {
                     type="password"
                     id="password"
                     name="password"
+                    value={inputValue.password}
                     label="비밀번호"
                     onChange={handleInput}
                   />
