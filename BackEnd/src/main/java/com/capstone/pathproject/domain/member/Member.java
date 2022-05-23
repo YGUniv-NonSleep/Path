@@ -72,7 +72,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "MEM_SCORE")
     private int score;
 
-    @Builder(builderMethodName = "createMember")
+    @Builder
     public Member(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, MemberGender gender, LocalDate birthday, String account, int score) {
         this.id = id;
         this.role = role;
@@ -89,24 +89,6 @@ public class Member extends BaseTimeEntity {
         this.birthday = birthday;
         this.account = account;
         this.score = score;
-    }
-
-    @Builder(builderMethodName = "signup")
-    public Member(SignupFormDto signupFormDto) {
-        this.role = signupFormDto.getRole();
-        this.loginId = signupFormDto.getLoginId();
-        this.password = signupFormDto.getPassword();
-        this.mail = signupFormDto.getMail();
-        this.name = signupFormDto.getName();
-        this.phone = signupFormDto.getPhone();
-        this.postId = signupFormDto.getPostId();
-        this.addr = signupFormDto.getAddr();
-        this.addrDetail = signupFormDto.getAddrDetail();
-        this.addrExtra = signupFormDto.getAddrExtra();
-        this.gender = signupFormDto.getGender();
-        this.birthday = signupFormDto.getBirthday();
-        this.account = "";
-        this.score = 100;
     }
 
     public void updateMail(String mail) {

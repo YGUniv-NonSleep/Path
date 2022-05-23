@@ -36,7 +36,7 @@ public class InitMemberService {
     }
 
     public Member createMember(String name) {
-        return Member.createMember()
+        return Member.builder()
                 .role(Role.ROLE_MEMBER)
                 .loginId(name)
                 .password(bCryptPasswordEncoder.encode("asdf"))
@@ -55,7 +55,7 @@ public class InitMemberService {
     }
 
     public Member createBusiness(String name) {
-        return Member.createMember()
+        return Member.builder()
                 .role(Role.ROLE_BUSINESS)
                 .loginId(name)
                 .password(bCryptPasswordEncoder.encode("asdf"))
@@ -74,7 +74,7 @@ public class InitMemberService {
     }
 
     public Member createAdmin(String name) {
-        return Member.createMember()
+        return Member.builder()
                 .role(Role.ROLE_ADMIN)
                 .loginId(name)
                 .password(bCryptPasswordEncoder.encode("asdf"))

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class MemberDto {
 
     private Long id;
@@ -30,7 +30,7 @@ public class MemberDto {
     private String account;
     private Integer score;
 
-    @Builder(builderMethodName = "createMemberDto")
+    @Builder
     public MemberDto(Long id, String loginId, String mail, String name, String phone, Integer postId, String addr, String addrDetail, String addrExtra, MemberGender gender, LocalDate birthday, String account, Integer score) {
         this.id = id;
         this.loginId = loginId;
@@ -64,7 +64,7 @@ public class MemberDto {
     }
 
     public Member toEntity() {
-        return Member.createMember()
+        return Member.builder()
                 .id(id)
                 .loginId(loginId)
                 .mail(mail)

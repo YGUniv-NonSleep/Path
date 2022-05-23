@@ -46,7 +46,7 @@ class CardRepositoryTest {
     }
 
     private Member createMember(int num) {
-        return Member.createMember()
+        return Member.builder()
                 .role(Role.ROLE_MEMBER)
                 .loginId("로그인아이디")
                 .password("패스워드")
