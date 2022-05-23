@@ -4,8 +4,11 @@ import { useState, useEffect } from 'react';
 import pathLogo from '../assets/images/path_logo.svg';
 import PathRouteElement from './PathRouteElement';
 import CompRouteElement from './CompRouteElement';
-import jwt_decode from 'jwt-decode';
 import axios from 'axios';
+import useTokenReissue from '../hooks/useTokenReissue';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeUser } from '../store';
+import { useNavigate } from 'react-router';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -110,46 +113,10 @@ const ScLink = styled(NavLink)`
 const Menubar = () => {
   const location = useLocation();
   const [currLocation, setCurrLocation] = useState(null);
-
-  useEffect(() => {
-    setCurrLocation(location.pathname);
-  }, [location]);
-
-  const [memberId, setMemberId] = useState('');
-
-  useEffect(() => {
-    tokenReissue();
-  }, []);
-
-  // === AccessToken 재발급 == //
-  const tokenReissue = () => {
-    axios
-      .post(process.env.REACT_APP_SPRING_API + '/api/token', '', {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res.data);
-        const authorization = res.headers.authorization;
-        // 이후 모든 axios 요청 헤더에 access token값 붙여서 보냄.
-        axios.defaults.headers.common['authorization'] = authorization;
-        console.log('AccessToken 발급 완료');
-        const decoded = tokenDecode(authorization);
-        setMemberId(decoded.id);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response) {
-          console.log(err.response.data);
-        }
-      });
-  };
-
-  // === AccessToken 값 디코딩 === //
-  const tokenDecode = (authorization) => {
-    var decoded = jwt_decode(authorization);
-    console.log(decoded);
-    return decoded;
-  };
+  const navigate = useNavigate();
+  const { tokenReissue } = useTokenReissue();
+  let state = useSelector((state) => state);
+  let dispatch = useDispatch();
 
   // === 로그아웃 진행 === //
   const userLogOut = () => {
@@ -158,19 +125,27 @@ const Menubar = () => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
-        setMemberId('');
-        console.log('로그아웃');
-        window.location.href = '/';
+        dispatch(
+          changeUser({
+            name: 'anonymous',
+            loginId: 'anonymous',
+            role: 'ROLE_ANONYMOUS',
+          })
+        );
+        navigate('/');
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const clickToMember = () => {
-    window.location.href = '/member';
-  };
+  useEffect(() => {
+    setCurrLocation(location.pathname);
+  }, [location]);
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   return (
     <NavContainer>
@@ -182,9 +157,9 @@ const Menubar = () => {
       <PathRouteElement></PathRouteElement>
       <CompRouteElement></CompRouteElement>
       <BtnUl>
-        {memberId != '' ? (
+        {state.user.loginId != 'anonymous' ? (
           <Li $current={currLocation === '/logout' && true}>
-            <Button onClick={clickToMember}>내 정보</Button>
+            <Button onClick={() => navigate('/member')}>내 정보</Button>
             <Button onClick={userLogOut}>로그아웃</Button>
           </Li>
         ) : (

@@ -15,11 +15,9 @@ import {
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import MuiLink from '@mui/material/Link';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import useLoading from '../../hooks/useLoading';
 import useMemberMain from './hooks/useMemberMain';
-
 import { MainListItems, SecondaryListItems } from './MyPage/listItems';
 import Chart from './MyPage/Chart';
 import Deposits from './MyPage/Deposits';
