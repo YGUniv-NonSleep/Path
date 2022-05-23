@@ -77,7 +77,7 @@ public class Company {
     }
 
     public CompanyDTO toDTO(){
-        MemberDto memberDTO = MemberDto.createMemberDto()
+        MemberDto memberDTO = MemberDto.builder()
                 .id(member.getId())
                 .name(member.getName())
                 .loginId(member.getLoginId()).build();
