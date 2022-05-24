@@ -22,30 +22,81 @@ import {
   StepTitle,
   AppendixBtnArea,
 } from "./styles/PathStyles";
+import busIcon from "../../assets/images/bus(16x16).png";
+import subwayIcon from "../../assets/images/train(16x16).png";
+import bicycleIcon from "../../assets/images/bicycle(16x16).png";
+import microScooterIcon from "../../assets/images/micro-scooter(16x16).png";
+import circleIcon from "../../assets/images/radio-button.png";
 
 function PathList({ list, click }) {
+
   const transitCount = (item, idx) => {
-    let temp = [];
-    let count = item.busTransitCount + item.subwayTransitCount;
-    // item.startStation, item.endStation
+    let transit = [];
+    let count = item.routeSection.length;
     // console.log(item)
-    // console.log(item.routeSection)
-    for (let i = 0; i <= count; i++) {
-      temp.push(
+    
+    function isTrans(i){
+      let temp = "";
+      let temp2 = "";
+      let icon = null;
+      
+      if(item.routeSection[i].busNo != undefined){
+        if(item.routeSection[i].busNo.length >= 2){
+          for(var j=0; j<item.routeSection[i].busNo.length; j++){
+            if(j==item.routeSection[i].busNo.length-1) temp += `${item.routeSection[i].busNo[j]}`
+            else temp += `${item.routeSection[i].busNo[j]}, `
+          }
+          icon = busIcon
+          return {
+            temp, icon
+          }
+
+        } else {
+          temp += item.routeSection[i].busNo
+          icon = busIcon
+          return {
+            temp, icon
+          }
+        }
+      }
+      if(item.routeSection[i].subwayName != undefined){
+        if(item.routeSection[i].subwayName.length >= 2){
+          for(var j=0; j<item.routeSection[i].subwayName.length; j++){
+            if(j==item.routeSection[i].subwayName.length-1) temp += `${item.routeSection[i].subwayName[j]}`
+            else temp += `${item.routeSection[i].subwayName[j]}, `
+          }
+          icon = subwayIcon
+          return {
+            temp, icon
+          }
+
+        } else {
+          temp += item.routeSection[i].subwayName
+          icon = subwayIcon
+          return {
+            temp, icon
+          }
+        }
+      }
+      else {
+        temp += "하차"
+        icon = circleIcon
+        return {
+          temp, icon
+        }
+      }
+    }
+    
+    for (let i = 1; i < count; i++) {
+      transit.push(
         <StepInfoItem key={`${idx}step${i}`}>
           <IconWrap>
             <IconArea>
-              <IconSpan>icon</IconSpan>
+              <IconSpan img={isTrans(i).icon}>icon</IconSpan>
             </IconArea>
             <VehicleTypeArea>
               <VehicleTypeLabel>
-                  {/* {item.routeSection.map((isTrans)=>{
-                    isTrans.filter((isTrans) => {
-                        // if(isTrans.busNo != undefined) return isTrans.busNo
-                        // if(isTrans.subwayName != undefined) return isTrans.subwayName
-                        // if(isTrans.busNo == undefined && isTrans.subwayName == undefined) return 하차
-                    })
-                  })} */}
+                {isTrans(i).temp}
               </VehicleTypeLabel>
             </VehicleTypeArea>
           </IconWrap>
@@ -58,7 +109,7 @@ function PathList({ list, click }) {
         </StepInfoItem>
       );
     }
-    return temp;
+    return transit;
   };
 
   return (
