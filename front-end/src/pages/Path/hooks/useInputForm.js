@@ -341,7 +341,7 @@ function useInputForm() {
   function deletePathFindingHistory(type, startId, goalId){
     if(localStorage.PathFindingHistoryList==undefined) return;
     let history = getPathFindingHistory();
-    console.log(history)
+    // console.log(history)
     for(let i = 0; i < history.length; i++) {
       // type, startId, goalId 비교 예정
       if(history[i].type == type && history[i].startId == startId && history[i].goalId == goalId){
