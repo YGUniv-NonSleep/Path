@@ -264,36 +264,37 @@ overflow:scroll;
 `;
 
 const PrevStop = styled.div`
-position:absolute;
-top:-1px;
-left:-1px;
+position:fixed;
+top:240px;
+left:104px;
 width:185px;
 height:70px;
 text-align: center;
 line-height: 70px;
 font-weight:bold;
 font-size: 14px;
-background-color: rgb(240, 251, 255, 0.842);
+z-index: 10;
+background-color: rgb(240, 251, 255);
 border-right: 1px solid rgb(184, 184, 184);
 border-top: 1px solid rgb(184, 184, 184);
 border-bottom: 1px solid rgb(184, 184, 184);
 `;
 
 const NextStop = styled.div`
-position:absolute;
-top:-1px;
-left:184px;
+position:fixed;
+top:240px;
+left:289px;
 width:185px;
 height:70px;
 text-align: center;
 line-height: 70px;
 font-size: 14px;
 font-weight:bold;
-background-color: rgb(240, 251, 255, 0.842);
+z-index: 10;
+background-color: rgb(240, 251, 255);
 border-left: 1px solid rgb(184, 184, 184);
 border-top: 1px solid rgb(184, 184, 184);
 border-bottom: 1px solid rgb(184, 184, 184);
-
 `;
 
 const SubwayTimeName = styled.div`
@@ -302,61 +303,65 @@ top: 200px;
 left: 50px;
 font-size: 20px;
 font-weight:bold;
-
 `;
 
 const StopObj = styled.div`
 position:absolute;
-top: 240px;
+top: 310px;
 left: 10px;
-width: 370px;
+width: 380px;
 height: 720px;
 overflow:scroll;
-border-top: 1px solid rgb(184, 184, 184);
-
-`;
-
-const TimeListUpBox = styled.div`
-margin-top: 20px;
-width: 175px;
-
 `;
 
 const TimeListUp = styled.div`
-
+width: 20px;
+margin-left: 10px;
 `;
 
 const MinutesListUp = styled.div`
-
+position: relative;
+top: -15px;
+left: 55px;
+width: 20px;
+background-color: pink;
 `;
 
-const TimeListDownBox = styled.div`
-margin-top: 20px;
-width: 175px;
-
+const TimeUpWay = styled.div`
+position: relative;
+top: -31px;
+left 70px;
+width: 40px;
+background-color: blue;
 `;
 
 const TimeListDown = styled.div`
-
+width: 20px;
 `;
 
 const MinutesListDown = styled.div`
-
+position: relative;
+top: -10px;
+left: 50px;
+width: 20px;
 
 `;
 
 const TimetableBox = styled.div`
-position:absolute;
-top: 65px;
+position: absolute;
+left: 5px;
+width: 170px;
 padding-right: 9px;
 border-right: 1px solid rgb(184, 184, 184);
+
 `;
 
 const TimetableBox1 = styled.div`
-position:absolute;
+position: absolute;
 left: 190px;
-top: 65px;
-
+width: 180px;
+height: 
+background-color: pink;
 `;
 
 
@@ -372,6 +377,7 @@ function SubwayMain() {
   const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
   const [clickValue, setClickValue] = useState(null);
+  const [subTimeInfo, setSubTimeInfo] = useState([]);
 
   async function mapLoad() {
     try {
@@ -444,8 +450,10 @@ function SubwayMain() {
 
     let subTime = await SubwayApi.getSubTime(stationInfo.stationID);
     console.log(subTime)
+    setSubTimeInfo(subTime)
     setSubTime(subTime.OrdList.up.time)
     setSubTimeDown(subTime.OrdList.down.time)
+    
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
     let bounds = new kakao.maps.LatLngBounds();
@@ -590,25 +598,42 @@ function SubwayMain() {
              </NextStop>
              <TimetableBox>
              {
-               subTime.map((item) => {
-                 return (
-                     <TimeListUpBox>
-                     <TimeListUp>{item.Idx}</TimeListUp>
-                     <MinutesListUp>{item.list}</MinutesListUp>
-                     </TimeListUpBox>
+               subTimeInfo.OrdList.up.time.map((item) => {
+                 const num = () => {
+                  var testString = item.list;
+                  var regex = /[^0-9]/g;
+                  var upWay = subTimeInfo.upWay;
+                  var result = testString.replace(regex, " ");
+                  return result;
+                 }
 
+                 return (
+                     <div>
+                     <TimeListUp>{item.Idx}</TimeListUp>
+                     <MinutesListUp>{num()}</MinutesListUp>
+                     {/* <TimeUpWay></TimeUpWay> */}
+                     </div>
                  )
                })
              }
              </TimetableBox>
+
              <TimetableBox1> 
                {
-                 subTimeDown.map((item) => {
+                 subTimeInfo.OrdList.down.time.map((item) => {
+
+                  const num = () => {
+                    var testString = item.list;
+                    var regex = /[^0-9]/g;
+                    var result = testString.replace(regex, " ");
+                    return result;
+                  }
+
                    return (
-                    <TimeListDownBox>
+                    <div>
                     <TimeListDown>{item.Idx}</TimeListDown>
-                    <MinutesListDown>{item.list}</MinutesListDown>
-                    </TimeListDownBox>
+                    <MinutesListDown>{num()}</MinutesListDown>
+                    </div>
                    )
                  })
                }
