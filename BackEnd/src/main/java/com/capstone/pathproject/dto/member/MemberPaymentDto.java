@@ -15,13 +15,13 @@ import java.util.List;
 public class MemberPaymentDto {
     private Long paymentId; // 결제번호
     private Long orderId; // 주문번호
-    private String price; // 결제금액
+    private int price; // 결제금액
     private LocalDateTime paymentDate; // 결제일시
     private OrderState paymentStatus; // 결제상태
     private String method; // 결제수단
     private List<OrderItemQueryDto> orderItems;
 
-    public MemberPaymentDto(Long paymentId, Long orderId, String price, LocalDateTime paymentDate, OrderState paymentStatus, String method) {
+    public MemberPaymentDto(Long paymentId, Long orderId, int price, LocalDateTime paymentDate, OrderState paymentStatus, String method) {
         this.paymentId = paymentId;
         this.orderId = orderId;
         this.price = price;
