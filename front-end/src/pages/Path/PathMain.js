@@ -100,7 +100,10 @@ function PathMain() {
                 <ScrollInner>
                   {/* results */}
                   <SearchResultList>
-                    <PathList list={pathList}></PathList>
+                    <PathList 
+                      list={pathList} 
+                      click={pathDrawing}
+                    ></PathList>
                   </SearchResultList>
                 </ScrollInner>
                 {/* bookmark -> favorites 기능, 요약 정보 컴포넌트 */}
@@ -131,7 +134,7 @@ function PathMain() {
                                           <LinkPlace>
                                             <IconBox>
                                               {/* type에 맞는 아이콘 설정 */}
-
+                                              {/* item.type */}
                                             </IconBox>
                                             <PlaceBox>
                                               <PlaceTextBox>
@@ -145,7 +148,11 @@ function PathMain() {
                                               </PlaceTextBox>
                                             </PlaceBox>
                                           </LinkPlace>
-                                          <DeleteBtn onClick={deletePathFindingHistory}>
+                                          <DeleteBtn 
+                                            onClick={()=>deletePathFindingHistory(
+                                              item.type, item.startId, item.goalId
+                                            )}
+                                          >
                                             삭제
                                           </DeleteBtn>
                                         </HistoryItemPlace>

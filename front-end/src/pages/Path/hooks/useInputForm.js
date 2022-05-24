@@ -61,6 +61,7 @@ function useInputForm() {
     removeMarkers();
     removeGraphics();
     removeWalkGraphics();
+    getPathFindingHistory();
   };
   // 출발지 도착지 전환하는 함수
   const switchPoints = () => {
@@ -183,13 +184,26 @@ function useInputForm() {
   async function pathSearch(){
     // === 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 === //
     console.log(way)
+    let searchType = 0;
     const pathData = await PathApi.getTransPath({
       sx: way[0].x, sy: way[0].y,
       ex: way[1].x, ey: way[1].y,
-      searchPathType: 0
+      searchPathType: searchType
       // 0(지하철+버스), 1(지하철), 2(버스)
-    });
+      // 나중에 정보 받을 예정
+    }).catch((err)=>{
+      console.log(err) 
+      return;
+    })
+
      console.log(pathData);
+
+    let data = {
+      start: way[0],
+      end: way[1],
+      type: searchType // 나중에 유동이게 받음
+    }
+    savePathFindingHistory(data)
 
     // 여기서부터 화면 구성
     setPathList(pathData)
@@ -262,13 +276,6 @@ function useInputForm() {
       pathSearch()
       .catch(err => console.log("경로 검색에 문제가 발생하였습니다.\n") + err)
 
-      let data = {
-        start: way[0],
-        end: way[1],
-        // type: ?? // 나중에 이동수단 종류 정해지면 넣음.
-      }
-      savePathFindingHistory(data)
-      
     } else return;
   }, [way]);
 
@@ -297,7 +304,7 @@ function useInputForm() {
     let history = getPathFindingHistory();
     
     let info = { 
-      // type: , 
+      type: data.type, 
       startId: data.start.id, 
       startLat: data.start.y, 
       startLng: data.start.x, 
@@ -308,8 +315,15 @@ function useInputForm() {
       goalName: data.end.place_name,
     }
     // info 정보와 localHistory의 정보 중 type, startName, goalName 일치하면 제거하고 다시 저장
+    for(let i=0; i<history.length; i++){
+      if(history[i].type == info.type && history[i].startId == info.startId && history[i].goalId == info.goalId){
+        deletePathFindingHistory(info.type, info.startId, info.goalId)
+        break;
+      }
+    }
     history.push(info)
     localStorage.setItem('PathFindingHistoryList', JSON.stringify(history))
+    getPathFindingHistory()
   }
   
   function getPathFindingHistory(){
@@ -324,19 +338,21 @@ function useInputForm() {
     }
   }
 
-  function deletePathFindingHistory(){
+  function deletePathFindingHistory(type, startId, goalId){
     if(localStorage.PathFindingHistoryList==undefined) return;
-
     let history = getPathFindingHistory();
-
+    // console.log(history)
     for(let i = 0; i < history.length; i++) {
       // type, startId, goalId 비교 예정
-      if(history[i].startId == '1553330656' && history[i].goalId == '10258787'){
+      if(history[i].type == type && history[i].startId == startId && history[i].goalId == goalId){
         let idx = history.indexOf(history[i])
+        console.log(idx)
         history.splice(idx)
       }
     }
-    // localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
+    console.log(history)
+    localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
+    getPathFindingHistory()
   }
 
   return {
