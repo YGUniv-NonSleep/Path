@@ -5,6 +5,7 @@ import com.capstone.pathproject.domain.company.Option;
 import com.capstone.pathproject.domain.company.Product;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,9 +31,23 @@ public class OptionDTO {
         return Option.createOption()
                 .id(id)
                 .name(name)
-                .detailOptionList(detailOptionList)
+                .detailOptionList( toEntityList(detailOptionList) )
                 .proId(proId)
                 .build();
+    }
+
+    private List<DetailOption> toEntityList(List<DetailOptionDTO> dtoList){
+        ArrayList<DetailOption> detailOptionList = new ArrayList<>();
+
+        System.out.println("DetailOptionDtoList");
+        for (DetailOptionDTO a: dtoList
+        ) {
+            System.out.println(a.toString());
+        }
+
+        dtoList.stream().map(detailOptionDTO -> detailOptionDTO.toEntity()).forEach(detailOption -> detailOptionList.add(detailOption));
+
+        return detailOptionList;
     }
 
 
