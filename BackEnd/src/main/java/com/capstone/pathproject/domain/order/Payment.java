@@ -3,6 +3,7 @@ package com.capstone.pathproject.domain.order;
 
 import com.capstone.pathproject.domain.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,7 +32,7 @@ public class Payment extends BaseTimeEntity {
     private String paymentKey;
 
     @Column(name = "PAY_PRICE")
-    private String price;
+    private int price;
 
     @Column(name = "PAY_METHOD")
     private String method;
@@ -43,6 +44,16 @@ public class Payment extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_ID")
     private Order order;
+
+    @Builder(builderMethodName = "builder")
+    public Payment(Long id, String paymentKey, String method, int price, OrderState state, Order order){
+        this.id = id;
+        this.method = method;
+        this.order = order;
+        this.paymentKey = paymentKey;
+        this.price = price;
+        this.state = state;
+    }
 
 
 }
