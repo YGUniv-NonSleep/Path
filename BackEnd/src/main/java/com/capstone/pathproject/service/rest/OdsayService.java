@@ -1,10 +1,7 @@
 package com.capstone.pathproject.service.rest;
 
-import com.capstone.pathproject.domain.mobility.Mobility;
-import com.capstone.pathproject.domain.mobility.MobilityCompany;
 import com.capstone.pathproject.dto.rest.odsay.graph.RouteGraphicDTO;
 import com.capstone.pathproject.dto.rest.odsay.path.*;
-import com.capstone.pathproject.dto.rest.tmap.path.WalkPathDto;
 import com.capstone.pathproject.repository.mobility.MobilityRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -44,7 +41,7 @@ public class OdsayService {
             double startY = 0;
             double endX = 0;
             double endY = 0;
-            List<String> stationNames = new ArrayList<>();
+            List<List<String>> stationNames = new ArrayList<>();
             List<Map<String, Object>> routeSection = new ArrayList<>();
             List<SubPath> subPaths = path.getSubPath();
             for (SubPath subPath : subPaths) {
@@ -63,12 +60,6 @@ public class OdsayService {
                         endY = subPath.getEndY();
                     }
                 }
-                if (subPath.getStationCount() != 0) {
-                    List<Stations> stations = subPath.getPassStopList().getStations();
-                    for (Stations station : stations) {
-                        stationNames.add(station.getStationName());
-                    }
-                }
                 int trafficType = subPath.getTrafficType();
                 int sectionTime = subPath.getSectionTime();
                 sectionInfo.put("type", trafficType);
@@ -80,12 +71,24 @@ public class OdsayService {
                         stationName.add(lane.getBusNo());
                     }
                     sectionInfo.put("busNo", stationName);
+                    List<String> busStationNames = new ArrayList<>();
+                    List<Stations> stations = subPath.getPassStopList().getStations();
+                    for (Stations station : stations) {
+                        busStationNames.add(station.getStationName());
+                    }
+                    stationNames.add(busStationNames);
                 } else if (trafficType == 1) {
                     List<Lane> lanes = subPath.getLane();
                     for (Lane lane : lanes) {
                         stationName.add(lane.getName());
                     }
                     sectionInfo.put("subwayName", stationName);
+                    List<String> subwayStationNames = new ArrayList<>();
+                    List<Stations> stations = subPath.getPassStopList().getStations();
+                    for (Stations station : stations) {
+                        subwayStationNames.add(station.getStationName());
+                    }
+                    stationNames.add(subwayStationNames);
                 }
                 routeSection.add(sectionInfo);
             }
