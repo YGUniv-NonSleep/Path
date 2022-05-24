@@ -25,6 +25,7 @@ function useTokenReissue() {
       .then((decoded) => {
         dispatch(
           changeUser({
+            id: decoded.id,
             name: decoded.name,
             loginId: decoded.sub,
             role: decoded.role,
