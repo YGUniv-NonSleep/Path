@@ -31,7 +31,7 @@ function PathMain() {
   const { 
     SPoint, APoint, jusoOption, loading, pathList, historyList, 
     onchangeSP, onchangeAP, refreshPoints, switchPoints, 
-    deletePathFindingHistory, wayFind, pathDrawing 
+    deletePathFindingHistory, wayFind, pathDrawing, historyFind
   } = useInputForm()
   // console.log(pathList)
   // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
@@ -131,7 +131,7 @@ function PathMain() {
                                     historyList.map((item, idx)=>{
                                       return (
                                         <HistoryItemPlace key={idx}>
-                                          <LinkPlace>
+                                          <LinkPlace onClick={()=>{historyFind(item)}}>
                                             <IconBox>
                                               {/* type에 맞는 아이콘 설정 */}
                                               {/* item.type */}
