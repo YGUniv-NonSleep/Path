@@ -55,7 +55,7 @@ public class Product {
     private List<Option> optionList;
 
     @Builder(builderMethodName = "createProduct")
-    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasicDTO prodBasic, String picture, List<OptionDTO> optionList){
+    public Product(Long id, int price, boolean exposure, int discount, LocalDate created, int stock, Company company, ProdBasic prodBasic, String picture, List<Option> optionList){
 
         //optionList.stream().map(optionDTO -> optionDTO.toEntity());
 
@@ -66,9 +66,8 @@ public class Product {
         this.created = created;
         this.stock = stock;
         this.company = company;
-        this.prodBasic = prodBasic.toEntity();
-        this.picture = picture;
-        this.optionList = toEntityList(optionList);
+        this.prodBasic = prodBasic;
+        this.optionList = optionList;
 
     }
 
@@ -89,18 +88,7 @@ public class Product {
                 .build();
     }
 
-    public List<Option> toEntityList(List<OptionDTO> dtoList ){
 
-        for (OptionDTO a  : dtoList ) {
-            System.out.println(a.toString());
-        }
-
-        ArrayList<Option> optionList = new ArrayList<>();
-
-        dtoList.stream().map(optionDTO -> optionDTO.toEntity()).forEach(option -> optionList.add(option));
-
-        return optionList;
-    }
 
     public List<OptionDTO> toDtoList(List<Option> entityList){
 
@@ -110,5 +98,8 @@ public class Product {
     }
 
 
+    public void addOptions(ArrayList<Option> options) {
+        this.optionList = options;
+    }
 }
 

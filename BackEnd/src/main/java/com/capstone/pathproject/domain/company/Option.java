@@ -33,10 +33,10 @@ public class Option {
     private Long proId;
 
     @Builder(builderMethodName = "createOption")
-    public Option(Long id, String name, List<DetailOptionDTO> detailOptionList, Long proId){
+    public Option(Long id, String name, List<DetailOption> detailOptionList, Long proId){
         this.id = id;
         this.name = name;
-        this.detailOptionList =  toEntityList(detailOptionList);
+        this.detailOptionList =  detailOptionList;
         this.proId = proId;
     }
 
@@ -51,25 +51,8 @@ public class Option {
                 .build();
     }
 
-//    public List<DetailOptionDTO> entityListToDto(List<DetailOption> entityList){
-//        ArrayList<DetailOptionDTO> detailOptionList = null;
-//        entityList.stream().map(detailOption -> detailOption.to)
-//
-//    }
 
-    private List<DetailOption> toEntityList(List<DetailOptionDTO> dtoList){
-        ArrayList<DetailOption> detailOptionList = new ArrayList<>();
 
-        System.out.println("DetailOptionDtoList");
-        for (DetailOptionDTO a: dtoList
-             ) {
-            System.out.println(a.toString());
-        }
-
-        dtoList.stream().map(detailOptionDTO -> detailOptionDTO.toEntity()).forEach(detailOption -> detailOptionList.add(detailOption));
-
-        return detailOptionList;
-    }
 
     private List<DetailOptionDTO> toDtoList(List<DetailOption> entityList){
         ArrayList<DetailOptionDTO> detailOptionList = new ArrayList<>();
@@ -80,4 +63,7 @@ public class Option {
 
     }
 
+    public void addDetailOptions(ArrayList<DetailOption> detailOptions) {
+        this.detailOptionList = detailOptions;
+    }
 }

@@ -9,8 +9,8 @@ import com.capstone.pathproject.dto.order.SaveOrderDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.member.MemberRepository;
-import com.capstone.pathproject.repository.order.CompositionRepository;
-import com.capstone.pathproject.repository.order.OptionCompositionRepository;
+import com.capstone.pathproject.repository.order.OrderItemRepository;
+import com.capstone.pathproject.repository.order.OrderItemOptionRepository;
 import com.capstone.pathproject.repository.order.OrderRepository;
 import com.capstone.pathproject.repository.order.PaymentRepository;
 import com.capstone.pathproject.repository.product.DetailOptionRepository;
@@ -27,8 +27,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final DetailOptionRepository detailOptionRepository;
-    private final CompositionRepository compositionRepository;
-    private final OptionCompositionRepository optionCompositionRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderItemOptionRepository orderItemOptionRepository;
     private final PaymentRepository paymentRepository;
 
     public Message<SaveOrderDto> orderProduct(SaveOrderDto saveOrderDto) {
@@ -48,21 +48,21 @@ public class OrderService {
 
             for (SaveOrderCompositionDto saveOrderCompositionDto :saveOrderDto.getOrderCompositionList()) {
                 Optional<Product> product =  productRepository.findById(saveOrderCompositionDto.getProductId());
-                Composition composition = Composition.createComposition()
+                OrderItem orderItem = OrderItem.createComposition()
                         .product(product.get())
                         .order(order)
                         .price(saveOrderCompositionDto.getPrice())
                         .quantity(saveOrderCompositionDto.getQuantity())
                         .build();
-                compositionRepository.save(composition);
+                orderItemRepository.save(orderItem);
 
                 for (Long DetailOptionId:saveOrderCompositionDto.getDetailOptionList()) {
                     Optional<DetailOption> detailOption = detailOptionRepository.findById(DetailOptionId);
-                    OptionComposition optionComposition = OptionComposition.createOptionComposition()
+                    OrderItemOption orderItemOption = OrderItemOption.createOptionComposition()
                             .detailOption(detailOption.get())
-                            .composition(composition)
+                            .orderItem(orderItem)
                             .build();
-                    optionCompositionRepository.save(optionComposition);
+                    orderItemOptionRepository.save(orderItemOption);
                 }
 
                 Payment payment = Payment.builder()
