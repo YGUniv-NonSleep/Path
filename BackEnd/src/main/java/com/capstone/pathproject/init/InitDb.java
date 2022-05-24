@@ -14,6 +14,7 @@ public class InitDb {
     private final InitMobilityCompanyService initMobilityCompanyService;
     private final InitCompanyService initCompanyService;
     private final InitProductService initProductService;
+    private final InitOrderService initOrderService;
 
     @PostConstruct
     public void init() {
@@ -22,5 +23,6 @@ public class InitDb {
         initMobilityService.dbInitMobility();
         initCompanyService.dbInitCompany();
         initProductService.dbInitProduct();
+        initOrderService.dbInitOrder();
     }
 }
