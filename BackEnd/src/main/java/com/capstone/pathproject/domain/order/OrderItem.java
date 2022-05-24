@@ -11,21 +11,21 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
-        name = "COMPOSITION_SEQ_GENERATOR",
-        sequenceName = "COMPOSITION_SEQ",
+        name = "ORDER_ITEM_SEQ_GENERATOR",
+        sequenceName = "ORDER_ITEM_SEQ",
         initialValue = 1, allocationSize = 1
 )
-public class Composition {
+public class OrderItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator ="COMPOSITION_SEQ_GENERATOR")
-    @Column(name = "COMPOSITION_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator ="ORDER_ITEM_SEQ_GENERATOR")
+    @Column(name = "ORDER_ITEM_ID")
     private Long id;
 
-    @Column(name = "COMPOSITION_QUANTITY")
+    @Column(name = "ORDER_ITEM_QUANTITY")
     private int quantity;
 
-    @Column(name = "COMPOSITION_PRICE")
+    @Column(name = "ORDER_ITEM_PRICE")
     private int price;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,7 +38,7 @@ public class Composition {
 
 
     @Builder(builderMethodName = "createComposition")
-    public Composition(Long id, int price, int quantity, Product product, Order order){
+    public OrderItem(Long id, int price, int quantity, Product product, Order order){
         this.id = id;
         this.order = order;
         this.price = price;
