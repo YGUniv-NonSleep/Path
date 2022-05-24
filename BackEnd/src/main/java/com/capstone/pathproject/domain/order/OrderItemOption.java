@@ -12,28 +12,28 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @SequenceGenerator(
-        name = "ORDER_OPTION_SEQ_GENERATOR",
-        sequenceName = "ORDER_OPTION_SEQ",
+        name = "ORDER_ITEM_OPTION_SEQ_GENERATOR",
+        sequenceName = "ORDER_ITEM_OPTION_SEQ",
         initialValue = 1,
         allocationSize = 1
 )
-public class OptionComposition {
+public class OrderItemOption {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "ORDER_OPTION_SEQ_GENERATOR")
-    @Column(name = "COMP_OPT_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "ORDER_ITEM_OPTION_SEQ_GENERATOR")
+    @Column(name = "ORDER_ITEM_OPT_ID")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "COMPOSITION_ID")
-    private Composition composition;
+    @JoinColumn(name = "ORDER_ITEM_ID")
+    private OrderItem orderItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DETAIL_OPTION_ID")
     private DetailOption detailOption;
 
     @Builder(builderMethodName = "createOptionComposition")
-    public OptionComposition(Long id, Composition composition, DetailOption detailOption){
-        this.composition = composition;
+    public OrderItemOption(Long id, OrderItem orderItem, DetailOption detailOption){
+        this.orderItem = orderItem;
         this.id = id;
         this.detailOption = detailOption;
 
