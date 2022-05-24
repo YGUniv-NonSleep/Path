@@ -10,14 +10,17 @@ import com.capstone.pathproject.util.CookieUtil;
 import com.capstone.pathproject.service.member.MemberService;
 import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -95,8 +98,9 @@ public class MemberApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-//    @GetMapping("/member/{memberId}/orders")
-//    public ResponseEntity getMemberOrders(@PathVariable Long memberId) {
-//        memberService.getMemberOrders(memberId);
-//    }
+    @GetMapping("/member/{memberId}/orders")
+    public Page<MemberPaymentDto> getMemberOrders(@PathVariable Long memberId,
+                                                  @PageableDefault(size = 5) Pageable pageable) {
+        return memberService.getMemberPayments(memberId, pageable);
+    }
 }

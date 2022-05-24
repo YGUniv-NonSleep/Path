@@ -430,8 +430,8 @@ const IconSpan = styled.span`
   user-select: none;
   font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
   list-style: none;
-  background-image: url(https://ssl.pstatic.net/static/maps/v5/pc/20220426174319/icon-bus15x16.png);
-  background-size: 66px 61px;
+  background-image: url(${props => props.img});
+  background-size: 16px 15px;
   overflow: hidden;
   display: inline-block;
   width: 15px;
@@ -439,10 +439,10 @@ const IconSpan = styled.span`
   font-size: 0;
   color: transparent;
   vertical-align: top;
-  background-position: 0 -45px;
+  background-position: 0 0px;
   position: relative;
   margin-top: -1px;
-  background-color: #f4f8ff;
+  background-color: #FFFFFF;
 `;
 
 const VehicleTypeArea = styled.div`
@@ -460,7 +460,7 @@ const VehicleTypeLabel = styled.em`
   font-style: normal;
   display: block;
   overflow: hidden;
-  width: 54px;
+  width: 75px;
   margin-right: 4px;
   font-size: 13px;
   line-height: 16px;
