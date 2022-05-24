@@ -2,18 +2,24 @@ package com.capstone.pathproject.service.member;
 
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.member.*;
+import com.capstone.pathproject.dto.order.OrderItemQueryDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.member.MemberRepository;
-import com.capstone.pathproject.repository.order.OrderRepository;
+import com.capstone.pathproject.repository.order.query.OrderItemQueryRepository;
+import com.capstone.pathproject.repository.order.query.PaymentQueryRepository;
 import com.capstone.pathproject.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -21,7 +27,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final OrderRepository orderRepository;
+    private final OrderItemQueryRepository orderItemQueryRepository;
+    private final PaymentQueryRepository paymentQueryRepository;
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -163,5 +170,17 @@ public class MemberService {
         return Message.builder()
                 .header(StatusEnum.OK)
                 .message("비밀번호 재설정되었습니다.").build();
+    }
+
+    public Page<MemberPaymentDto> getMemberPayments(Long memberId, Pageable pageable) {
+        Page<MemberPaymentDto> memberPaymentDtos = paymentQueryRepository.findMemberPayments(memberId, pageable);
+        List<Long> orderIds = memberPaymentDtos.stream()
+                .map(MemberPaymentDto::getOrderId)
+                .collect(Collectors.toList());
+        List<OrderItemQueryDto> orderItems = orderItemQueryRepository.findOrderItems(orderIds);
+        Map<Long, List<OrderItemQueryDto>> orderItemsMap = orderItems.stream()
+                .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
+        memberPaymentDtos.forEach(p -> p.setOrderItems(orderItemsMap.get(p.getOrderId())));
+        return memberPaymentDtos;
     }
 }

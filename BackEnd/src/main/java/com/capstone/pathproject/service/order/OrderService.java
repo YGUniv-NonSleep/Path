@@ -12,8 +12,8 @@ import com.capstone.pathproject.dto.order.SaveOrderDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.member.MemberRepository;
-import com.capstone.pathproject.repository.order.CompositionRepository;
-import com.capstone.pathproject.repository.order.OptionCompositionRepository;
+import com.capstone.pathproject.repository.order.OrderItemRepository;
+import com.capstone.pathproject.repository.order.OrderItemOptionRepository;
 import com.capstone.pathproject.repository.order.OrderRepository;
 import com.capstone.pathproject.repository.product.DetailOptionRepository;
 import com.capstone.pathproject.repository.product.ProductRepository;
@@ -29,8 +29,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final DetailOptionRepository detailOptionRepository;
-    private final CompositionRepository compositionRepository;
-    private final OptionCompositionRepository optionCompositionRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderItemOptionRepository orderItemOptionRepository;
 
     public Message<SaveOrderDto> orderProduct(SaveOrderDto saveOrderDto) {
 
@@ -55,7 +55,7 @@ public class OrderService {
                         .price(saveOrderCompositionDto.getPrice())
                         .quantity(saveOrderCompositionDto.getQuantity())
                         .build();
-                compositionRepository.save(orderItem);
+                orderItemRepository.save(orderItem);
 
                 for (Long DetailOptionId:saveOrderCompositionDto.getDetailOptionList()) {
                     Optional<DetailOption> detailOption = detailOptionRepository.findById(DetailOptionId);
@@ -63,7 +63,7 @@ public class OrderService {
                             .detailOption(detailOption.get())
                             .orderItem(orderItem)
                             .build();
-                    optionCompositionRepository.save(orderItemOption);
+                    orderItemOptionRepository.save(orderItemOption);
                 }
             }
 
