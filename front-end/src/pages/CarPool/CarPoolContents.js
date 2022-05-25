@@ -30,7 +30,7 @@ const ModalContainer = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   max-height: 80%;
-  width: 20rem;
+  width: 50rem;
   height: 80%;
   padding: 16px;
   background: rgb(25, 31, 44);
@@ -49,10 +49,11 @@ const CarPoolContents = () => {
   const { loading } = useLoading();
   const { 
     effectState, tDistance, tTime, taxiFare, showPtag, showModal, 
-    isStartOpen, isArrivedOpen, startAddr, arriveAddr, 
-    Close, PatchModal, Patch, FindWay, 
-    openStartCode, handleComplete, openArriveCode, handleComplete2, 
+    isStartOpen, isArrivedOpen, startAddr, arriveAddr,request,
+    Close, PatchModal, Patch, FindWay,requestCarpool,
+    openStartCode, handleComplete, openArriveCode, handleComplete2,RequestCreate
   } = useCarPoolContents();
+
 
   return (
     <CommuCon>
@@ -79,8 +80,14 @@ const CarPoolContents = () => {
               <div>{effectState.recruit}</div>
             </div>
             <div className="post-view-row">
-              <label>지역 : </label>
-              <div>{effectState.local}</div>
+              <label>출발지역 : </label>
+              <div>{effectState.startLocal1}</div>
+              <div>{effectState.startLocal2}</div>
+            </div>
+            <div className="post-view-row">
+              <label>종료지역 : </label>
+              <div>{effectState.arriveLocal1}</div>
+              <div>{effectState.arriveLocal2}</div>
             </div>
             <div className="post-view-row">
               <label>시작날짜 : </label>
@@ -112,10 +119,11 @@ const CarPoolContents = () => {
             </div>
             <br></br>
             <br></br>
-
+            
             <div>
               <div>
                 <button onClick={FindWay}>경로 및 정보보기</button>
+                <button onClick={requestCarpool}>신청하기</button>
               </div>
               {showPtag ? (
                 <div>
@@ -139,6 +147,39 @@ const CarPoolContents = () => {
         ) : (
           ""
         )}
+
+            {request ? (
+              <>
+                    <Background>
+                      <ModalContainer>
+                        <MousePointer
+                          style={{ color: "white", float: "right" }}
+                          onClick={Close}>
+                          X
+                        </MousePointer>
+                        <div style={{ color: "white", float: "center" }}>신청하기</div>
+                        <div style={{ color: "white", float : "center" }}><br></br>
+                          희망 가격 <br></br> 
+                          <input type="number" name="price" /><br></br>
+                          탑승 인원 <br></br> 
+                          <input type="number" name="passenger" /><br></br>
+                          상세 내용  <br></br>
+                          <textarea  style={{width : "300px",height : "200px"}} name="content"/><br></br>
+                          <div  style={{ float : "center" }} id="request_map"></div>
+                          <button onClick={RequestCreate}>신청하기</button>
+                        </div>
+                        
+                      </ModalContainer>
+                    </Background>     
+              </>
+                        
+                ) : (
+                  ""
+                )
+                  
+            }
+
+
         {showModal ? (
           <Background>
             <ModalContainer>
@@ -184,11 +225,18 @@ const CarPoolContents = () => {
                     defaultValue={effectState.recruit}
                   />
                   <br></br>
-                  지역 :{" "}
+                  출발지역 :{" "}
                   <input
                     type="text"
                     name="local"
-                    defaultValue={effectState.local}
+                    defaultValue={effectState.startLocal1}
+                  />
+                  <br></br>
+                  도착지역 :{" "}
+                  <input
+                    type="text"
+                    name="local"
+                    defaultValue={effectState.arriveLocal2}
                   />
                   <br></br>
                   시작날짜 :{" "}

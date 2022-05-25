@@ -14,19 +14,19 @@ public class CarPostRequestDTO {
     private Member member;
     private CarPost carPost;
     private String content;
-    private String price;
+    private int price;
     private String startLongitude;
     private String startLatitude;
     private String arriveLongitude;
     private String arriveLatitude;
-    private String passenger;
+    private int passenger;
     private String approval;
 
 
     @Builder(builderMethodName = "createRequestDTO")
-    public CarPostRequestDTO(Long id, Member member, CarPost carPost, String content, String price,
+    public CarPostRequestDTO(Long id, Member member, CarPost carPost, String content, int price,
                              String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude,
-                             String passenger, String approval){
+                             int passenger, String approval){
         this.id = id;
         this.member = member;
         this.carPost = carPost;

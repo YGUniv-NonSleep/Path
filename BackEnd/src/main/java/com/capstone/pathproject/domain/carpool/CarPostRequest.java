@@ -22,7 +22,7 @@ public class CarPostRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "REQUEST_SEQ_GENERATOR")
     @Column(name = "REQ_ID")
-    private Long id;
+    private Long id; //신청에 대한 PK
 
     @ManyToOne
     @JoinColumn(name = "MEM_ID")
@@ -36,7 +36,7 @@ public class CarPostRequest {
     private String content;
 
     @Column(name = "REQ_PRICE")
-    private String price;
+    private int price;
 
     @Column(name = "REQ_START_LGT")
     private String startLongitude;
@@ -51,15 +51,15 @@ public class CarPostRequest {
     private String arriveLatitude;
 
     @Column(name = "REQ_PASSENGER")
-    private String passenger;
+    private int passenger;
 
     @Column(name = "REQ_APPROVAL")
     private String approval;
 
     @Builder(builderMethodName = "createRequest")
-    public CarPostRequest(Long id, Member member, CarPost carPost, String content, String price,
+    public CarPostRequest(Long id, Member member, CarPost carPost, String content, int price,
                           String startLongitude, String startLatitude, String arriveLongitude,
-                          String arriveLatitude, String passenger, String approval){
+                          String arriveLatitude, int passenger, String approval){
         this.id = id;
         this.member = member;
         this.carPost = carPost;

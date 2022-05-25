@@ -34,7 +34,8 @@ function CarPoolMain() {
           <tr>
             <CommuBoard>게시글번호</CommuBoard>
             <CommuBoard>제목</CommuBoard>
-            <CommuBoard>지역</CommuBoard>
+            <CommuBoard>출발지역</CommuBoard>
+            <CommuBoard>도착지역</CommuBoard>
             <CommuBoard>탑승인원</CommuBoard>
           </tr>
           {(viewset == null) | (viewset == "") ? (
@@ -51,7 +52,8 @@ function CarPoolMain() {
                       {result.title}
                     </Link>
                   </CommuBoard2>
-                  <CommuBoard2>{result.local}</CommuBoard2>
+                  <CommuBoard2>{result.startLocal1}</CommuBoard2>
+                  <CommuBoard2>{result.arriveLocal1}</CommuBoard2>
                   <CommuBoard2>{result.recruit}</CommuBoard2>
                 </tr>
               );

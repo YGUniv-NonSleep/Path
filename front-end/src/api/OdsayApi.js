@@ -10,7 +10,7 @@ export const PathApi = {
   getTransPath: async (data) => {
     const response = await axios
       .get(
-        process.env.REACT_APP_SPRING_API + '/odsay/paths',
+        process.env.REACT_APP_SPRING_API + "/odsay/paths",
         { params: data },
         { withCredentials: true }
       )

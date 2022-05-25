@@ -1,27 +1,30 @@
 package com.capstone.pathproject.controller.carpool;
 
 
+import com.capstone.pathproject.dto.carpool.CarPostRequestCreateDto;
 import com.capstone.pathproject.dto.carpool.CarPostRequestDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.service.carpool.CarPostRequestService;
+import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/request")
 @RequiredArgsConstructor
 public class CarPostRequestApiController {
     private final CarPostRequestService carPostRequestService;
+    private final ResponseUtil responseUtil;
 
 
-    @PostMapping("/create")
-    public ResponseEntity<Message<CarPostRequestDTO>> create(CarPostRequestDTO carPostRequestDTO){
-        Message<CarPostRequestDTO> message = carPostRequestService.create(carPostRequestDTO);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+    @PostMapping("")
+    public ResponseEntity<Message<?>> create(@Valid @RequestBody CarPostRequestCreateDto carPostRequestCreateDto){
+        Message<String> message = carPostRequestService.create(carPostRequestCreateDto);
+        return responseUtil.createResponseEntity(message);
     }
 }
