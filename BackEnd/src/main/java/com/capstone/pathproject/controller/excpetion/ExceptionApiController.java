@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,9 +35,17 @@ public class ExceptionApiController {
         throw new InternalAuthenticationServiceException("아이디가 존재하지 않습니다");
     }
 
-    @GetMapping("/refreshToken")
-    public void refreshTokenValidException() {
+    @GetMapping("/token")
+    public void tokenValidException() {
         throw new AccountExpiredException("유효하지 않은 토큰입니다");
+    }
+
+    @DeleteMapping("/token")
+    public ResponseEntity<Object> deleteTokenValidException(HttpServletResponse response) throws URISyntaxException {
+        cookieUtil.deleteCookie(response, JwtProperties.REFRESH_HEADER_STRING);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI("https://localhost:3000"));
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/expired")
@@ -45,6 +54,5 @@ public class ExceptionApiController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(new URI("https://localhost:3000"));
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
-
     }
 }

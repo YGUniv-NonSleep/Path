@@ -97,7 +97,9 @@ function MemberMain() {
           <List component="nav">
             <MainListItems></MainListItems>
             <Divider sx={{ my: 1 }} />
-            <SecondaryListItems onClick={deleteMember}></SecondaryListItems>
+            <SecondaryListItems
+              deleteMember={deleteMember}
+            ></SecondaryListItems>
           </List>
         </Drawer>
         <Box
