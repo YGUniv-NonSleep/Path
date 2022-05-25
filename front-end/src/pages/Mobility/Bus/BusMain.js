@@ -6,7 +6,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
-import Button from '@mui/material/Button';
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import useLoading from "../../../hooks/useLoading";
 import useBusInfo from "../hooks/useBusInfo";
@@ -120,35 +119,41 @@ const BusStep1 = styled.div`
   color: rgb(102, 102, 102);
 `;
 
-const BusBtn = styled.div`
+const BusBtn = styled.button`
   position: absolute;
   top: 95px;
   left: 15px;
   width: 180px;
-  height: 40px;
+  height: 45px;
+  cursor:pointer;
+  font-size: 14px;
+  border-radius: 7px;
+  background-color: white;
+  border: 1px solid rgb(184, 184, 184);
+  &:hover {
+    color: blue;
+  }
 `;
 
-const BusStopBtn = styled.div`
+const BusStopBtn = styled.button`
   position: absolute;
   top: 95px;
   left: 195px;
   width: 180px;
-  height: 40px;
- 
+  height: 45px;
+  cursor:pointer;
+  font-size: 14px;
+  border-radius: 7px;
+  background-color: white;
+  border: 1px solid rgb(184, 184, 184);
+  &:hover {
+    color: blue;
+  }
 `;
 
-const BusStopList = styled.div`
-  position: absolute;
-  top: 350px;
-  left: 30px;
-  width: 350px;
-  height: 600px;
-  border: none;
-  overflow: scroll;
-`;
 const BusListBtn = styled.button`
-width: 300px;
-height: 70px;
+width: 330px;
+height: 75px;
 border: 0;
 border-bottom: 1px solid rgb(184, 184, 184);
 font-size: 15px;
@@ -166,6 +171,16 @@ width: 350px;
 height: 70px;
 // background-color: pink;
 border-bottom: 1px solid rgb(194, 194, 194, 0.849);
+`;
+
+const BusStopList = styled.div`
+  position: absolute;
+  top: 330px;
+  left: 30px;
+  width: 350px;
+  height: 600px;
+  border: none;
+  overflow: scroll;
 `;
 
 const BusStayList = styled.div`
@@ -192,7 +207,6 @@ background-color: white;
 &:hover {
   background-color: rgb(240, 251, 255, 0.842);
 }
-// background-color: green;
 `;
 
 function BusMain() {
@@ -206,7 +220,6 @@ function BusMain() {
   return (
     <div className="Mobility">
       <SideNav>
-        {/* { loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2> } */}
         <MIcon />
         <BarContainer>
           <Box component="form" noValidate onSubmit={submit} sx={{ mt: 3 }}>
@@ -284,24 +297,8 @@ function BusMain() {
               <Line1></Line1>
             </>
           )}
-          <BusBtn>
-            <Button variant="outlined" size="large" onClick={onToggle} value="bus"
-            style={{
-              maxWidth: "150px",
-              maxHeight: "50px",
-              minWidth: "170px",
-              minHeight: "45px"
-            }}> 버스</Button>
-            </BusBtn>
-          <BusStopBtn>
-          <Button variant="outlined" onClick={onToggle} value="busStop"
-          style={{
-          maxWidth: "150px",
-          maxHeight: "50px",
-          minWidth: "170px",
-          minHeight: "45px"
-        }} >버스 정류장</Button>
-          </BusStopBtn>
+          <BusBtn onClick={onToggle} value="bus"> 버스 </BusBtn>
+            <BusStopBtn onClick={onToggle} value="busStop"> 버스 정류장 </BusStopBtn>
         </BarContainer>
       </SideNav>
       <Map />
