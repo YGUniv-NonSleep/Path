@@ -45,7 +45,10 @@ public class Order extends BaseTimeEntity {
         this.member = member;
         this.price = price;
         this.state = state;
+    }
 
+    public void updateState(String state){
+        this.state = OrderState.valueOf(state);
     }
 
 }

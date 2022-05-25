@@ -65,6 +65,7 @@ function useInputForm() {
   };
   // 출발지 도착지 전환하는 함수
   const switchPoints = () => {
+    console.log("switch")
     let temp = SPoint;
     setSPoint(APoint);
     setAPoint(temp);
@@ -94,14 +95,14 @@ function useInputForm() {
     placeSearch();
   }, [insertPoint]);
 
-  function getKeywordLatLng(data) {
+  async function getKeywordLatLng(data) {
     const ps = new kakao.maps.services.Places();
 
-    for (var i = 0; i < data.length; i++) {
+    for(var i=0; i<data.length; i++){
       let idx = data[i].indexOf('(');
       let string = data[i].substr(0, idx - 1);
 
-      ps.keywordSearch(string, function (result, status, pagination) {
+      await ps.keywordSearch(string, function (result, status, pagination) {
         if (status === daum.maps.services.Status.OK) {
           let k = result.filter((item) => {
             return item.place_name === string;
@@ -112,6 +113,20 @@ function useInputForm() {
     }
   }
 
+  async function historyKeywordLatLng(data) {
+    console.log(data)
+    setWay((cur) => [...cur, {
+      x: data.startLng, y: data.startLat, 
+      id: data.startId, place_name: data.startName
+    }])
+    setWay((cur) => [...cur, {
+      x: data.goalLng, y: data.goalLat, 
+      id: data.goalId, place_name: data.goalName
+    }])
+    setSPoint(data.startName)
+    setAPoint(data.goalName)
+  }
+
   function wayFind() {
     try {
       // input창 검색 데이터 초기화
@@ -119,6 +134,18 @@ function useInputForm() {
 
       // 출발지, 도착지의 위도, 경도 얻음
       getKeywordLatLng([SPoint, APoint]); // 이친구들의 콜백이 끝나야 X, Y 좌표를 얻을 수 있음
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function historyFind(histInfo){
+    try {
+      // input창 검색 데이터 초기화
+      setWay([]);
+
+      // 출발지, 도착지의 위도, 경도 얻음
+      historyKeywordLatLng(histInfo); // 이친구들의 콜백이 끝나야 X, Y 좌표를 얻을 수 있음
     } catch (error) {
       console.log(error);
     }
@@ -173,7 +200,7 @@ function useInputForm() {
   }
 
   function removeWalkGraphics() {
-    console.log(walkLineData.length)
+    // console.log(walkLineData.length)
     for(let i=0; i<walkLineData.length; i++){
       walkLineData[i].setMap(null);
     }
@@ -183,7 +210,7 @@ function useInputForm() {
 
   async function pathSearch(){
     // === 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 === //
-    console.log(way)
+     console.log(way)
     let searchType = 0;
     const pathData = await PathApi.getTransPath({
       sx: way[0].x, sy: way[0].y,
@@ -207,8 +234,6 @@ function useInputForm() {
 
     // 여기서부터 화면 구성
     setPathList(pathData)
-    // 검색 후 setWay([]) 해주기 -> 불필요한 추가 동작 방지
-    // 그러기 위해서 Drawing에서 x, y좌표는 pathList에서 받아서 쓰기
   }
 
   async function pathDrawing(idx) {
@@ -216,13 +241,13 @@ function useInputForm() {
     if(markerData.length != 0) removeMarkers();    
     if(polyLineData != "") removeGraphics();
     if(walkLineData != "") removeWalkGraphics();
-
+    
     // 나중에 pathList에서 출발지, 도착지 x, y 좌표 받아서 쓰기
-    const sp = await MapApi().drawKakaoMarker(way[0].x, way[0].y);
+    const sp = await MapApi().drawKakaoMarker(pathList[idx].startPos.x, pathList[idx].startPos.y);
     sp.setMap(map);
     setMarkerData((current) => [...current, sp])
 
-    const ap = await MapApi().drawKakaoMarker(way[1].x, way[1].y);
+    const ap = await MapApi().drawKakaoMarker(pathList[idx].endPos.x, pathList[idx].endPos.y);
     ap.setMap(map);
     setMarkerData((current) => [...current, ap])
 
@@ -239,8 +264,8 @@ function useInputForm() {
     // console.log(pathList[0].boundary) // 사용자의 입력(idx)에 따른 boundary 변화
     if (pathList[idx].routeGraphic.result.boundary) {
       let points = [
-        new kakao.maps.LatLng(way[0].y, way[0].x),
-        new kakao.maps.LatLng(way[1].y, way[1].x),
+        new kakao.maps.LatLng(pathList[idx].startPos.y, pathList[idx].startPos.x),
+        new kakao.maps.LatLng(pathList[idx].endPos.y, pathList[idx].endPos.x),
       ];
       // points 실행순서 수정 필요
 
@@ -252,12 +277,12 @@ function useInputForm() {
       // console.log(points)
 
       // 보행자 경로 생성 및 그리기
-      createWalkPath(way[0].x, way[0].y, points[2].La, points[2].Ma);
+      createWalkPath(pathList[idx].startPos.x, pathList[idx].startPos.y, points[2].La, points[2].Ma);
       createWalkPath(
         points[points.length - 1].La,
         points[points.length - 1].Ma,
-        way[1].x,
-        way[1].y
+        pathList[idx].endPos.x,
+        pathList[idx].endPos.y
       );
 
       let bounds = new kakao.maps.LatLngBounds();
@@ -314,23 +339,25 @@ function useInputForm() {
       goalLng: data.end.x, 
       goalName: data.end.place_name,
     }
+
     // info 정보와 localHistory의 정보 중 type, startName, goalName 일치하면 제거하고 다시 저장
     for(let i=0; i<history.length; i++){
       if(history[i].type == info.type && history[i].startId == info.startId && history[i].goalId == info.goalId){
+        console.log("duplicated history")
         deletePathFindingHistory(info.type, info.startId, info.goalId)
         break;
       }
     }
     history.push(info)
+    console.log(history)
     localStorage.setItem('PathFindingHistoryList', JSON.stringify(history))
     getPathFindingHistory()
   }
   
   function getPathFindingHistory(){
     const history = localStorage.getItem('PathFindingHistoryList'); // 읽기(key 정보)
-    // console.log(history)
+
     if(history == null) {
-      // setHistoryList([])
       return []
     } else {
       setHistoryList(JSON.parse(history))
@@ -341,17 +368,17 @@ function useInputForm() {
   function deletePathFindingHistory(type, startId, goalId){
     if(localStorage.PathFindingHistoryList==undefined) return;
     let history = getPathFindingHistory();
-    // console.log(history)
+     console.log(history)
+     console.log(type, startId, goalId)
     for(let i = 0; i < history.length; i++) {
       // type, startId, goalId 비교 예정
       if(history[i].type == type && history[i].startId == startId && history[i].goalId == goalId){
         let idx = history.indexOf(history[i])
-        console.log(idx)
         history.splice(idx)
+        console.log(history)
       }
     }
-    console.log(history)
-    localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
+    //localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
     getPathFindingHistory()
   }
 
@@ -384,7 +411,9 @@ function useInputForm() {
     removeWalkGraphics, 
     savePathFindingHistory, 
     getPathFindingHistory, 
-    deletePathFindingHistory
+    deletePathFindingHistory,
+    historyFind,
+    historyKeywordLatLng
   };
 }
 
