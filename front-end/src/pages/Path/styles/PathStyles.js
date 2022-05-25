@@ -220,25 +220,12 @@ const LinkLogin = styled.button`
   margin-top: 13px;
   padding: 0 18px;
   border-radius: 3px;
-  background-color: #03c75a;
+  background-color: #3396ff;
   font-size: 12px;
   color: #fff;
   letter-spacing: -.7px;
   line-height: 33px;
   cursor: pointer;
-  &:before {
-    overflow: hidden;
-    display: inline-block;
-    width: 10px;
-    height: 9px;
-    font-size: 0;
-    color: transparent;
-    vertical-align: top;
-    background-position: -166px -36px;
-    margin: -1px 6px 1px 0;
-    vertical-align: middle;
-    content: "";
-  }
 `;
 
 
