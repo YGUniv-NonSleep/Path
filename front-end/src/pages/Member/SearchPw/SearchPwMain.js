@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import styled from "styled-components";
-import PropTypes from "prop-types";
+import { Link } from 'react-router-dom';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import {
   Avatar,
   Button,
@@ -13,10 +13,10 @@ import {
   Container,
   FormControl,
   FormHelperText,
-} from "@mui/material";
-import KeyIcon from "@mui/icons-material/Key";
-import useLoading from '../../../hooks/useLoading'
-import useSearchPw from '../hooks/useSearchPw'
+} from '@mui/material';
+import KeyIcon from '@mui/icons-material/Key';
+import useLoading from '../../../hooks/useLoading';
+import useSearchPw from '../hooks/useSearchPw';
 
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
@@ -30,8 +30,12 @@ const theme = createTheme();
 function SearchPwMain() {
   const { loading } = useLoading();
   const {
-    isResetPw, errorList, 
-    handleInput, handleSearchSubmit, handleResetSubmit
+    isResetPw,
+    errorList,
+    handleInput,
+    handleSearchSubmit,
+    handleResetSubmit,
+    goBackPage,
   } = useSearchPw();
 
   // valid check -> loginId, phone / password, rePassword
@@ -43,13 +47,13 @@ function SearchPwMain() {
           <CssBaseline />
           <Box
             sx={{
-              padding: "60px 0 0 0",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              padding: '60px 0 0 0',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <KeyIcon />
             </Avatar>
             <Typography component="h1" variant="h4">
@@ -72,7 +76,7 @@ function SearchPwMain() {
                       name="loginId"
                       label="아이디"
                       onChange={handleInput}
-                      error={errorList.loginIdError !== "" || false}
+                      error={errorList.loginIdError !== '' || false}
                     />
                   </Grid>
                   <FormHelperTexts>{errorList.loginIdError}</FormHelperTexts>
@@ -84,7 +88,7 @@ function SearchPwMain() {
                       name="phone"
                       label="전화번호 (010-XXXX-XXXX)"
                       onChange={handleInput}
-                      error={errorList.phoneError !== "" || false}
+                      error={errorList.phoneError !== '' || false}
                     />
                   </Grid>
                   <FormHelperTexts>{errorList.phoneError}</FormHelperTexts>
@@ -98,6 +102,15 @@ function SearchPwMain() {
                 >
                   비밀번호 찾기
                 </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 5 }}
+                  size="large"
+                  onClick={goBackPage}
+                >
+                  돌아가기
+                </Button>
               </FormControl>
             </Box>
           </Box>
@@ -109,13 +122,13 @@ function SearchPwMain() {
             <CssBaseline />
             <Box
               sx={{
-                padding: "50px 0 0 0",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                padding: '50px 0 0 0',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <KeyIcon />
               </Avatar>
               <Typography component="h1" variant="h4">
@@ -138,7 +151,7 @@ function SearchPwMain() {
                         name="password"
                         label="비밀번호 (숫자+영문자+특수문자 8자리 이상)"
                         onChange={handleInput}
-                        error={errorList.passwordState !== "" || false}
+                        error={errorList.passwordState !== '' || false}
                       />
                     </Grid>
                     <FormHelperTexts>{errorList.passwordState}</FormHelperTexts>
@@ -151,7 +164,7 @@ function SearchPwMain() {
                         name="rePassword"
                         label="비밀번호 재입력"
                         onChange={handleInput}
-                        error={errorList.passwordError !== "" || false}
+                        error={errorList.passwordError !== '' || false}
                       />
                     </Grid>
                     <FormHelperTexts>{errorList.passwordError}</FormHelperTexts>
@@ -171,7 +184,7 @@ function SearchPwMain() {
           </Container>
         </div>
       ) : (
-        ""
+        ''
       )}
     </ThemeProvider>
   );

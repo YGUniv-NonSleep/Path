@@ -73,6 +73,7 @@ function useSearchId() {
     handleSubmit,
     nameError,
     emailError,
+    goBackPage,
   };
 }
 
