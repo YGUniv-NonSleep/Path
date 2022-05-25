@@ -2,11 +2,12 @@ package com.capstone.pathproject.service.carpool;
 
 
 import com.capstone.pathproject.domain.carpool.Cars;
-import com.capstone.pathproject.dto.carpool.CarPostDTO;
-import com.capstone.pathproject.dto.carpool.CarsDTO;
+import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.dto.carpool.CarsDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.carpool.CarsRepository;
+import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,59 +22,70 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class CarsService {
     private final CarsRepository carsRepository;
+    private final MemberRepository memberRepository;
 
 
     //CRUD
     @Transactional
-    public Message<CarsDTO> create(CarsDTO carsDTO, String fileName) {
-        CarsDTO result = CarsDTO.createCarsDTO()
-                .id(carsDTO.getId())
-                .member(carsDTO.getMember())
-                .carKind(carsDTO.getCarKind())
-                .carNum(carsDTO.getCarNum())
+    public Message<Object> create(CarsDto carsDto, String fileName) {
+        Optional<Member> findMember = memberRepository.findById(carsDto.getMemberDto().getId());
+        Member member = findMember.orElse(null);
+        if (member == null) {
+            return Message.builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("회원이 존재하지 않습니다.")
+                    .body("").build();
+        }
+        Cars car = Cars.createCars()
+                .member(member)
+                .carKind(carsDto.getCarKind())
+                .carNum(carsDto.getCarKind())
                 .photoName(fileName)
                 .build();
-        carsRepository.save(result.toEntity());
-        return Message.<CarsDTO>builder()
+        carsRepository.save(car);
+        CarsDto result = new CarsDto(car);
+        return Message.<Object>builder()
                 .header(StatusEnum.OK)
                 .message("등록완료")
                 .body(result).build();
-
     }
 
     @Transactional
-    public Message<CarsDTO> update(CarsDTO carsDTO, String fileName) {
-        Optional<Cars> result = carsRepository.findById(carsDTO.getId());
-        if (result.isPresent()) {
-            CarsDTO updateResult = CarsDTO.createCarsDTO()
-                    .id(carsDTO.getId())
-                    .member(carsDTO.getMember())
-                    .carKind(carsDTO.getCarKind())
-                    .carNum(carsDTO.getCarNum())
-                    .photoName(fileName)
-                    .build();
-            if (carsDTO.getMember().getId() == 1) {
-                carsRepository.save(updateResult.toEntity());
-                return Message.<CarsDTO>builder()
-                        .header(StatusEnum.OK)
-                        .message("업데이트 완료")
-                        .body(carsDTO).build();
-            }
+    public Message<Object> update(CarsDto carsDto, String fileName) {
+        Optional<Cars> findCars = carsRepository.findById(carsDto.getId());
+        Cars car = findCars.orElse(null);
+        if (car == null) {
+            return Message.builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("차량이 존재하지 않습니다.")
+                    .body("").build();
         }
-        return Message.<CarsDTO>builder()
-                .header(StatusEnum.BAD_REQUEST)
-                .message("작성자가 아닙니다")
-                .build();
+        Optional<Member> findMember = memberRepository.findById(carsDto.getMemberDto().getId());
+        Member member = findMember.orElse(null);
+        if (member == null) {
+            return Message.builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("회원이 존재하지 않습니다.")
+                    .body("").build();
+        }
+        car.updateMember(member);
+        car.updateCarKind(carsDto.getCarKind());
+        car.updateCarNum(carsDto.getCarNum());
+        car.updatePhotoName(carsDto.getPhotoName());
+        return Message.<Object>builder()
+                .header(StatusEnum.OK)
+                .message("업데이트 완료")
+                .body(carsDto).build();
     }
 
     @Transactional
-    public Message<CarsDTO> delete(Long carsId) {
+    public Message<CarsDto> delete(Long carsId) {
         Optional<Cars> result = carsRepository.findById(carsId);
         Long rs = result.get().getId();
         if (result.isPresent()) {
             carsRepository.deleteById(rs);
         }
-        return Message.<CarsDTO>builder()
+        return Message.<CarsDto>builder()
                 .header(StatusEnum.OK)
                 .message("삭제완료")
                 .build();
@@ -82,26 +94,25 @@ public class CarsService {
 
     //조회
     @Transactional
-    public Message<List<CarsDTO>> findview(Pageable pageable){
-        List<Cars> result = carsRepository.findAll(pageable).getContent();
-        ArrayList<CarsDTO> listDTO = new ArrayList<CarsDTO>();
-        result.stream().map(cars -> cars.toDTO()).forEach(carsDTO -> listDTO.add(carsDTO));
-        return Message.<List<CarsDTO>>builder()
+    public Message<List<CarsDto>> findView(Pageable pageable) {
+        List<Cars> cars = carsRepository.findAll(pageable).getContent();
+        ArrayList<CarsDto> listDto = new ArrayList<>();
+        cars.stream().map(CarsDto::new).forEach(listDto::add);
+        return Message.<List<CarsDto>>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")
-                .body(listDTO).build();
+                .body(listDto).build();
     }
 
     //차량이름으로 검색
     @Transactional
-    public Message<List<CarsDTO>> search(String keyword, Pageable pageable){
-        List<Cars> carsList = carsRepository.findByCarKindContaining(keyword,pageable);
-        ArrayList<CarsDTO> listDTO = new ArrayList<CarsDTO>();
-        carsList.stream().map(cars -> cars.toDTO()).forEach(carsDTO -> listDTO.add(carsDTO));
-        return Message.<List<CarsDTO>>builder()
+    public Message<List<CarsDto>> search(String keyword, Pageable pageable) {
+        List<Cars> cars = carsRepository.findByCarKindContaining(keyword, pageable);
+        ArrayList<CarsDto> listDto = new ArrayList<>();
+        cars.stream().map(CarsDto::new).forEach(listDto::add);
+        return Message.<List<CarsDto>>builder()
                 .header(StatusEnum.OK)
                 .message("검색완료")
-                .body(listDTO).build();
+                .body(listDto).build();
     }
-
 }

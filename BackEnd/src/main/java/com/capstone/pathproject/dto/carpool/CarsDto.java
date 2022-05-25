@@ -3,35 +3,33 @@ package com.capstone.pathproject.dto.carpool;
 
 import com.capstone.pathproject.domain.carpool.Cars;
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.dto.member.MemberDto;
 import lombok.*;
 
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CarsDTO {
+public class CarsDto {
     private Long id;
-    private Member member;
+    private MemberDto memberDto;
     private String carKind;
     private String carNum;
     private String photoName;
 
-
     @Builder(builderMethodName = "createCarsDTO")
-    public CarsDTO(Long id, Member member, String carKind, String carNum, String photoName){
+    public CarsDto(Long id, MemberDto memberDto, String carKind, String carNum, String photoName){
         this.id = id;
-        this.member = member;
+        this.memberDto = memberDto;
         this.carKind = carKind;
         this.carNum = carNum;
         this.photoName = photoName;
     }
 
-    public Cars toEntity(){
-        return Cars.createCars()
-                .id(id)
-                .member(member)
-                .carKind(carKind)
-                .carNum(carNum)
-                .photoName(photoName)
-                .build();
+    public CarsDto(Cars cars) {
+        this.id = cars.getId();
+        this.memberDto = new MemberDto(cars.getMember());
+        this.carKind = cars.getCarKind();
+        this.carNum = cars.getCarNum();
+        this.photoName = cars.getPhotoName();
     }
 }
