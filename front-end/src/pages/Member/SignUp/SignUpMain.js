@@ -64,6 +64,7 @@ function SignUpMain() {
     handleSubmit,
     daumAddrApi,
     birthday,
+    goBackPage,
   } = useSignUp();
 
   // valid check
@@ -77,7 +78,7 @@ function SignUpMain() {
         <CssBaseline />
         <Box
           sx={{
-            padding: '180px 0 0 0',
+            padding: '100px 0 0 0',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -330,6 +331,15 @@ function SignUpMain() {
                 size="large"
               >
                 회원가입
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                sx={{ mb: 10 }}
+                size="large"
+                onClick={goBackPage}
+              >
+                돌아가기
               </Button>
             </FormControl>
           </Box>

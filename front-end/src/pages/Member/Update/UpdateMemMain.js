@@ -178,7 +178,7 @@ function UpdateMemMain() {
                 fullWidth
                 variant="contained"
                 size="large"
-                onClick={() => goBackPage()}
+                onClick={goBackPage}
               >
                 돌아가기
               </Button>

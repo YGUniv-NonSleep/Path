@@ -29,7 +29,7 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const theme = createTheme();
 
 function CardMain() {
-  const { requestBillingAuth } = useCard();
+  const { requestBillingAuth, goBackPage } = useCard();
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -78,6 +78,7 @@ function CardMain() {
             <Stack sx={{ pt: 3 }} direction="row" justifyContent="center">
               <Button
                 variant="outlined"
+                onClick={goBackPage}
                 sx={{
                   bgcolor: 'background.paper',
                   pt: 1,

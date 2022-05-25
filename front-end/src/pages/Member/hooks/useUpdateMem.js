@@ -4,8 +4,10 @@ import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { isEmpty, isBlank } from '../../../utils/StringUtil';
 import { $CombinedState } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 
 function useUpdateMem() {
+  let state = useSelector((state) => state);
   const navigate = useNavigate();
   const [memberId, setMemberId] = useState('');
   const [postId, setPostId] = useState('');
@@ -27,30 +29,6 @@ function useUpdateMem() {
     phoneError,
     addrError,
     addrDetailError,
-  };
-
-  const tokenReissue = () => {
-    axios
-      .post(process.env.REACT_APP_SPRING_API + '/api/token', '', {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res.data);
-        const authorization = res.headers.authorization;
-        // 이후 모든 axios 요청 헤더에 access token값 붙여서 보냄.
-        axios.defaults.headers.common['authorization'] = authorization;
-        console.log('AccessToken 발급 완료');
-        const decoded = tokenDecode(authorization);
-        setMemberId(decoded.id);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const tokenDecode = (authorization) => {
-    var decoded = jwt_decode(authorization);
-    return decoded;
   };
 
   const goBackPage = () => {
@@ -130,14 +108,14 @@ function useUpdateMem() {
       addrDetail: addrDetail,
       addrExtra: addrExtra,
     };
-    const url = process.env.REACT_APP_SPRING_API + '/api/member/' + memberId;
+    const url =
+      process.env.REACT_APP_SPRING_API + '/api/member/' + state.user.id;
 
     axios
       .patch(url, data, {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
         alert(res.data.message);
         goBackPage();
       })
@@ -217,11 +195,6 @@ function useUpdateMem() {
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
-
-  useEffect(() => {
-    tokenReissue();
-    console.log('실행됨');
   }, []);
 
   return {
