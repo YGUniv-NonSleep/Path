@@ -2,6 +2,7 @@ package com.capstone.pathproject.controller;
 
 import com.capstone.pathproject.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
@@ -11,14 +12,20 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Base64.Encoder;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UtilApiController {
+
+    @Value("${api.toss.secret-key}")
+    private String apiKey;
 
     private final FileUtil fileUtil;
 
@@ -37,16 +44,16 @@ public class UtilApiController {
     @GetMapping("/pay")
     public String tossPaymentsTest(@RequestParam("paymentKey") String paymentKey, @RequestParam("orderId") String orderId, @RequestParam("amount") String amount) {
 
-        System.out.println(paymentKey);
-        System.out.println(orderId);
-        System.out.println(amount);
+        String headerKey = "Basic "+apiKey + ":";
+        Encoder encoder = Base64.getEncoder();
 
-        //Base64.Encoder encoder = Base64.getEncoder();
+        byte[] apiByte = headerKey.getBytes(StandardCharsets.UTF_8);
+        byte[] encodedByte = encoder.encode(apiByte);
+        String encodedString = encoder.encodeToString(encodedByte);
 
-        //        HttpURLConnection httpURLConnection = HttpURLConnection.
         WebClient tossWebClient = WebClient.builder()
                 .baseUrl("https://api.tosspayments.com/")
-                .defaultHeader("Authorization", "Basic dGVzdF9za19QMjR4TGVhNXpWQUU2Rzl2TGoyVlFBTVlOd1c2Og==")
+                .defaultHeader("Authorization", encodedString)
                 .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
@@ -61,6 +68,7 @@ public class UtilApiController {
                 .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
         return mono.block();
     }
+
 
 
 }

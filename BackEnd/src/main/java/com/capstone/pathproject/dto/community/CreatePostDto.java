@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 @NoArgsConstructor
 public class CreatePostDto {
+
     private PostType type;
     @NotBlank
     private String title;

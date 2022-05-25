@@ -2,23 +2,28 @@ import { useEffect } from 'react';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 import axios from 'axios';
 import useTokenReissue from '../../../hooks/useTokenReissue';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function useCard() {
-  const { token } = useTokenReissue();
+  let user = useSelector((state) => state.user);
+  const navigate = useNavigate();
+
+  const goBackPage = () => {
+    navigate(-1);
+  };
 
   async function requestBillingAuth() {
-    console.log(token);
     const clientKey = process.env.REACT_APP_TOSS_CLIENT_KEY;
     var tossPayments = await loadTossPayments(clientKey);
     tossPayments
       .requestBillingAuth('카드', {
-        customerKey: token.name,
+        customerKey: user.loginId,
         successUrl: 'https://localhost:8080/api/card/success',
         failUrl: 'https://localhost:8080/api/card/fail',
       })
       .catch((err) => {
-        if (error.code === 'USER_CANCEL') {
-          // 사용자가 결제창을 닫은 경우 에러 처리
+        if (err.code === 'USER_CANCEL') {
           console.log(err);
           console.log('사용자가 결제창을 닫았습니다.');
         }
@@ -27,6 +32,7 @@ function useCard() {
 
   return {
     requestBillingAuth,
+    goBackPage,
   };
 }
 

@@ -8,11 +8,13 @@ import {
   Box,
   Typography,
   Container,
+  Modal,
 } from '@mui/material';
-import AddCardIcon from '@mui/icons-material/AddCard';
-import CreditCardOffIcon from '@mui/icons-material/CreditCardOff';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import useCard from '../hooks/useCard';
+import useCars from '../hooks/useCars';
+import AddCarsModal from './addCars';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Copyright() {
   return (
@@ -24,12 +26,14 @@ function Copyright() {
   );
 }
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const cards = [1, 2, 3];
 
 const theme = createTheme();
 
-function CardMain() {
-  const { requestBillingAuth, goBackPage } = useCard();
+function CarsMain() {
+  const { goBackPage, modalOpen, handleModalOpen, handleModalClose } =
+    useCars();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -50,7 +54,7 @@ function CardMain() {
               gutterBottom
               fontWeight={'normal'}
             >
-              카드 관리
+              차량 관리
             </Typography>
             <Typography
               variant="h5"
@@ -58,7 +62,7 @@ function CardMain() {
               color="text.secondary"
               paragraph
             >
-              카드를 등록하고 제거할 수 있습니다.
+              차량을 등록하고 제거할 수 있습니다.
             </Typography>
             <Stack
               sx={{ pt: 4 }}
@@ -66,14 +70,24 @@ function CardMain() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained" onClick={() => requestBillingAuth()}>
-                <AddCardIcon sx={{ mr: 1 }} />
-                카드 등록
+              <Button variant="contained" onClick={handleModalOpen}>
+                <DirectionsCarIcon sx={{ mr: 1 }} />
+                차량 등록
               </Button>
               <Button variant="outlined">
-                <CreditCardOffIcon sx={{ mr: 1 }} />
-                카드 삭제
+                <DeleteIcon sx={{ mr: 1 }} />
+                차량 삭제
               </Button>
+              <Modal
+                open={modalOpen}
+                onClose={handleModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <>
+                  <AddCarsModal />
+                </>
+              </Modal>
             </Stack>
             <Stack sx={{ pt: 3 }} direction="row" justifyContent="center">
               <Button
@@ -106,7 +120,7 @@ function CardMain() {
                     mr: 1,
                   }}
                 >
-                  <Box sx={{ color: 'text.secondary' }}>현대 카드</Box>
+                  <Box sx={{ color: 'text.secondary' }}>현대 자동차</Box>
                   <Box
                     sx={{
                       mt: 2,
@@ -116,7 +130,7 @@ function CardMain() {
                       fontWeight: 'medium',
                     }}
                   >
-                    4330-12**-****-1234
+                    쏘나타
                   </Box>
                   <Box
                     sx={{
@@ -127,7 +141,7 @@ function CardMain() {
                       fontSize: 14,
                     }}
                   >
-                    신용
+                    중형
                   </Box>
                   <Box
                     sx={{
@@ -165,4 +179,4 @@ function CardMain() {
   );
 }
 
-export default CardMain;
+export default CarsMain;

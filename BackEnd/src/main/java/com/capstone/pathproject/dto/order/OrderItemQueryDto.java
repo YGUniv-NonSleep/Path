@@ -13,12 +13,14 @@ public class OrderItemQueryDto {
     private String productName;
     private int productPrice;
     private int productDiscount;
+    private int productQuantity;
 
-    public OrderItemQueryDto(Long orderId, String companyName, String productName, int productPrice, int productDiscount) {
+    public OrderItemQueryDto(Long orderId, String companyName, String productName, int productPrice, int productDiscount, int productQuantity) {
         this.orderId = orderId;
         this.companyName = companyName;
         this.productName = productName;
         this.productPrice = productPrice;
         this.productDiscount = productDiscount;
+        this.productQuantity = productQuantity;
     }
 }

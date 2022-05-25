@@ -9,6 +9,9 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import AddCardIcon from '@mui/icons-material/AddCard';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Link } from 'react-router-dom';
 
 function MainListItems(props) {
@@ -63,13 +66,19 @@ function SecondaryListItems(props) {
       </ListItemButton>
       <ListItemButton component={Link} to="/member/card">
         <ListItemIcon>
-          <AssignmentIcon />
+          <AddCardIcon />
         </ListItemIcon>
         <ListItemText primary="카드 관리" />
       </ListItemButton>
+      <ListItemButton component={Link} to="/member/cars">
+        <ListItemIcon>
+          <DirectionsCarIcon />
+        </ListItemIcon>
+        <ListItemText primary="차량 관리" />
+      </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
-          <AssignmentIcon />
+          <DeleteForeverIcon />
         </ListItemIcon>
         <ListItemText
           primary="회원 탈퇴"

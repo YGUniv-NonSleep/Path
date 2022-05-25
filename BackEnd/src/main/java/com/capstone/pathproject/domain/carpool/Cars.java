@@ -2,7 +2,6 @@ package com.capstone.pathproject.domain.carpool;
 
 
 import com.capstone.pathproject.domain.member.Member;
-import com.capstone.pathproject.dto.carpool.CarsDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class Cars {
     @Column(name = "CARS_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
     private Member member;
 
@@ -46,14 +45,19 @@ public class Cars {
         this.photoName = photoName;
     }
 
-    public CarsDTO toDTO(){
-        return CarsDTO.createCarsDTO()
-                .id(this.id)
-                .member(this.member)
-                .carKind(this.carKind)
-                .carNum(this.carNum)
-                .photoName(this.photoName)
-                .build();
+    public void updateMember(Member member) {
+        this.member = member;
     }
 
+    public void updateCarKind(String carKind) {
+        this.carKind = carKind;
+    }
+
+    public void updateCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public void updatePhotoName(String photoName) {
+        this.photoName = photoName;
+    }
 }

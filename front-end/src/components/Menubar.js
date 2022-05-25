@@ -114,30 +114,9 @@ const Menubar = () => {
   const location = useLocation();
   const [currLocation, setCurrLocation] = useState(null);
   const navigate = useNavigate();
-  const { tokenReissue } = useTokenReissue();
+  const { userLogOut } = useTokenReissue();
   let state = useSelector((state) => state);
   let dispatch = useDispatch();
-
-  // === 로그아웃 진행 === //
-  const userLogOut = () => {
-    axios
-      .delete(process.env.REACT_APP_SPRING_API + '/api/token', {
-        withCredentials: true,
-      })
-      .then((res) => {
-        dispatch(
-          changeUser({
-            name: 'anonymous',
-            loginId: 'anonymous',
-            role: 'ROLE_ANONYMOUS',
-          })
-        );
-        navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   useEffect(() => {
     setCurrLocation(location.pathname);

@@ -35,8 +35,14 @@ function Copyright(props) {
 }
 
 function SearchIdMain() {
-  const { inputValue, handleInput, handleSubmit, nameError, emailError } =
-    useSearchId();
+  const {
+    inputValue,
+    handleInput,
+    handleSubmit,
+    nameError,
+    emailError,
+    goBackPage,
+  } = useSearchId();
 
   // valid check -> name, email
 
@@ -101,6 +107,15 @@ function SearchIdMain() {
                 size="large"
               >
                 아이디 찾기
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                sx={{ mb: 5 }}
+                size="large"
+                onClick={goBackPage}
+              >
+                돌아가기
               </Button>
             </FormControl>
           </Box>

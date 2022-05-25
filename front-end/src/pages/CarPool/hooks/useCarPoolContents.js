@@ -16,21 +16,76 @@ function useCarPoolContents(){
   const [isStartOpen, setIsStartOpen] = useState(false);
   const [startX, setStartX] = useState(null);
   const [startY, setStartY] = useState(null);
-  const [startLocal, setStartLocal] = useState(null);
+ 
   const [isArrivedOpen, setIsArrivedOpen] = useState(false);
   const [arriveX, setArriveX] = useState(null);
   const [arriveY, setArriveY] = useState(null);
-  const [arriveLocal, setArriveLocal] = useState(null);
+
   const [startAddr, setStartAddr] = useState(null);
   const [arriveAddr, setArriveAddr] = useState(null);
 
-  const setLocal = () => {
-    if (arriveLocal == null) {
-      return effectState.local;
-    } else if (arriveLocal != null) {
-      return arriveLocal;
+  const [startLocal1, setStartLocal1] = useState(null);
+  const [startLocal2, setStartLocal2] = useState(null);
+  const [arriveLocal1, setArriveLocal1] = useState(null);
+  const [arriveLocal2, setArriveLocal2] = useState(null);
+
+  const [request, setRequestCarpool] = useState(false);
+
+  const UpdateStartLocal1 = () =>{
+    if(startLocal1 == null){
+      return effectState.startLocal1
+    }else if(startLocal1 != null){
+      return startLocal1
     }
-  };
+  }
+
+  const UpdateStartLocal2 = () =>{
+    if(startLocal2 == null){
+      return effectState.startLocal2
+    }else if(startLocal2 != null){
+      return startLocal2;
+    }
+  }
+
+  const UpdateArriveLocal1 = () =>{
+    if(arriveLocal1 == null){
+      return effectState.arriveLocal1
+    }else if(arriveLocal1 != null){
+      return arriveLocal1
+    }
+  }
+
+  const UpdateArriveLocal2 = () =>{
+    if(arriveLocal2 == null){
+      return effectState.arriveLocal1
+    }else if(arriveLocal2 != null){
+      return arriveLocal2
+    }
+  }
+  
+
+  const RequestCreate = (e) =>{
+    e.preventDefault();
+ 
+    var data = {
+      price  : document.getElementsByName("price")[0].value,
+      passenger : document.getElementsByName("passenger")[0].value,
+      content : document.getElementsByName("content")[0].value,
+      startLatitude : effectState.startLatitude,
+      startLongitude : effectState.startLongitude,
+      arriveLatitude : effectState.arriveLatitude,
+      arriveLongitude : effectState.arriveLongitude,
+      postId : effectState.id
+    }
+    console.log(data);
+    axios.post(process.env.REACT_APP_SPRING_API + "/api/request",data)
+    .then((res)=>{
+      console.log(res.data)
+    })
+    .catch((err)=>{
+      console.log(err.data)
+    })
+  }
 
   var geocoder = new kakao.maps.services.Geocoder();
   var map, markerInfo;
@@ -70,7 +125,6 @@ function useCarPoolContents(){
       );
     }
   }, [effectState]);
-
   function getCoords(data) {
     geocoder.addressSearch(data, function (result, status) {
       // 정상적으로 검색이 완료됐으면
@@ -105,12 +159,26 @@ function useCarPoolContents(){
   const Close = (e) => {
     e.preventDefault();
     setShowModal(false);
+    setRequestCarpool(false);
   };
   
   const PatchModal = (e) => {
     e.preventDefault();
     setShowModal(true);
   };
+
+  const requestCarpool = (e) =>{
+    e.preventDefault();
+    setRequestCarpool(true);
+  }
+  useEffect(()=>{
+    if(request == true){
+      Map2(effectState.startLatitude,
+        effectState.startLongitude,
+        effectState.arriveLatitude,
+        effectState.arriveLongitude)
+    }
+  },[request])
 
   const Patch = (e) => {
     e.preventDefault();
@@ -122,7 +190,10 @@ function useCarPoolContents(){
       sdate: e.target.sdate.value,
       edate: e.target.edate.value,
       stime: e.target.stime.value + ":00",
-      local: setLocal(),
+      startLocal1 : UpdateStartLocal1(),
+      startLocal2 : UpdateStartLocal2(),
+      arriveLocal1 : UpdateArriveLocal1(),
+      arriveLocal2 : UpdateArriveLocal2(),
       startLongitude: effectState.arriveLongitude,
       startLatitude: effectState.startLatitude,
       arriveLongitude: effectState.arriveLongitude,
@@ -181,7 +252,8 @@ function useCarPoolContents(){
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    setStartLocal(data.sido);
+    setStartLocal1(data.sigungu);
+    setStartLocal2(data.bname)
     setStartAddr(fullAddress);
     getCoords(fullAddress);
   };
@@ -205,13 +277,14 @@ function useCarPoolContents(){
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    setArriveLocal(data.sido);
+    setArriveLocal1(data.sigungu);
+    setArriveLocal2(data.bname);
     setArriveAddr(fullAddress);
     getArrivedCoords(fullAddress);
   };
   
-  const FindWay = (e) => {
-    e.preventDefault();
+  const FindWay = () => {
+
     setShowPtag(true);
     resettingMap();
     var params = {
@@ -572,9 +645,35 @@ function useCarPoolContents(){
       iconSize: new Tmapv2.Size(24, 38),
       map: map,
     });
-    // FindWay(data1,data2,data3,data4)
+  };
+
+  const Map2 = (data1, data2, data3, data4) => {
+    map = new Tmapv2.Map("request_map", {
+      center: new Tmapv2.LatLng(data1, data2),
+      width: "750px",
+      height: "350px",
+      zoom: 13,
+      zoomControl: true,
+      scrollwheel: true,
+    });
+    marker_s = new Tmapv2.Marker({
+      position: new Tmapv2.LatLng(data1, data2),
+      icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+      iconSize: new Tmapv2.Size(24, 38),
+      map: map,
+    });
+
+    //도착
+    marker_e = new Tmapv2.Marker({
+      position: new Tmapv2.LatLng(data3, data4),
+      icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
+      iconSize: new Tmapv2.Size(24, 38),
+      map: map,
+    });
+    FindWay(data1,data2,data3,data4);
   };
   
+ 
   function resettingMap() {
     //기존마커는 삭제
     marker_s.setMap(null);
@@ -600,11 +699,11 @@ function useCarPoolContents(){
 
   return {
     effectState, drawLineState, tDistance, tTime, taxiFare, showPtag, showModal, 
-    isStartOpen, startX, startY, startLocal, isArrivedOpen, arriveX, arriveY, 
-    arriveLocal, startAddr, arriveAddr, 
-    setLocal, getCoords, getArrivedCoords, Close, PatchModal, Patch, 
+    isStartOpen, startX, startY, startLocal1,startLocal2, isArrivedOpen, arriveX, arriveY, 
+    arriveLocal1,arriveLocal2, startAddr, arriveAddr,request,
+    getCoords, getArrivedCoords, Close, PatchModal, Patch, 
     openStartCode, handleComplete, openArriveCode, handleComplete2, 
-    FindWay, addMarkers, drawLine, Map, resettingMap, 
+    FindWay, addMarkers, drawLine, Map, resettingMap,requestCarpool,Map2,RequestCreate
   }
 }
 

@@ -29,6 +29,7 @@ import {
 import {
   Member,
   Card,
+  Cars,
   Login,
   SignUp,
   UpdateMem,
@@ -62,6 +63,7 @@ function Router() {
         <Route path="/member" element={<Member />} />
         <Route path="/member/update" element={<UpdateMem />} />
         <Route path="/member/card" element={<Card />} />
+        <Route path="/member/cars" element={<Cars />} />
       </Routes>
       <Routes>
         <Route path="/company" element={<Company />} />

@@ -3,13 +3,11 @@ package com.capstone.pathproject.controller.order;
 import com.capstone.pathproject.dto.order.SaveOrderDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.service.order.OrderService;
+import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,13 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private final OrderService orderService;
+    private final ResponseUtil responseUtil;
 
     @PostMapping("/product")
-    public ResponseEntity<Message<SaveOrderDto>> orderProduct(@RequestBody SaveOrderDto saveOrderDto){
+    public ResponseEntity<Message<?>> orderProduct(@RequestBody SaveOrderDto saveOrderDto){
         Message<SaveOrderDto> message = orderService.orderProduct(saveOrderDto);
 
+        return responseUtil.createResponseEntity(message);
+    }
 
-        return new ResponseEntity<>(message, HttpStatus.OK);
+    @PatchMapping("/orderState")
+    public ResponseEntity<Message<?>> updateState(@RequestParam Long orderId, @RequestParam String state){
+
+        Message<?> message = orderService.updateState(orderId, state);
+
+        return responseUtil.createResponseEntity(message);
     }
 
 

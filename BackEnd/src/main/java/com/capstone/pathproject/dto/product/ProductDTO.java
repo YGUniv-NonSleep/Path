@@ -8,6 +8,7 @@ import com.capstone.pathproject.dto.company.CompanyDTO;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
@@ -47,11 +48,25 @@ public class ProductDTO {
                 .exposure(exposure)
                 .price(price)
                 .stock(stock)
-                .prodBasic(prodBasic)
+                .prodBasic(prodBasic.toEntity())
                 .company(company.toEntity())
-                .optionList(optionList)
+                .optionList(toEntityList( optionList))
                 .picture(picture)
                 .build();
+    }
+
+
+    public List<Option> toEntityList(List<OptionDTO> dtoList ){
+
+        for (OptionDTO a  : dtoList ) {
+            System.out.println(a.toString());
+        }
+
+        ArrayList<Option> optionList = new ArrayList<>();
+
+        dtoList.stream().map(optionDTO -> optionDTO.toEntity()).forEach(option -> optionList.add(option));
+
+        return optionList;
     }
 
 

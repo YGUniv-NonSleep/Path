@@ -83,7 +83,12 @@ function PathMain() {
               <Grid>
                 <Button
                   variant="contained"
-                  sx={{ width: 80, height: 35, marginLeft: "84px", paddingLeft: "13px" }}
+                  sx={{ 
+                    backgroundColor: '#3396ff', 
+                    width: 80, height: 35, 
+                    marginLeft: "84px", 
+                    paddingLeft: "13px" 
+                  }}
                   endIcon={<ChevronRightIcon sx={{ marginRight: -2 }} />}
                   onClick={wayFind}
                 ><Typography variant="inherit" align="left" sx={{ fontSize: 12 }}>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import { changeUser } from '../store';
 function useTokenReissue() {
   let state = useSelector((state) => state);
   let dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // === AccessToken 재발급 == //
   const tokenReissue = () => {
@@ -43,7 +44,32 @@ function useTokenReissue() {
     return decoded;
   };
 
-  return { tokenReissue };
+  // === 로그아웃 진행 === //
+  const userLogOut = () => {
+    axios
+      .delete(process.env.REACT_APP_SPRING_API + '/api/token', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log('로그아웃 완료');
+      })
+      .catch((err) => {
+        console.log(err);
+        axios.defaults.headers.common['authorization'] = '';
+      })
+      .finally(() => {
+        dispatch(
+          changeUser({
+            name: 'anonymous',
+            loginId: 'anonymous',
+            role: 'ROLE_ANONYMOUS',
+          })
+        );
+        navigate('/');
+      });
+  };
+
+  return { tokenReissue, userLogOut };
 }
 
 export default useTokenReissue;

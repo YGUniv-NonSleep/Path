@@ -74,7 +74,7 @@ function UpdateMemMain() {
         <CssBaseline />
         <Box
           sx={{
-            padding: '180px 0 0 0',
+            padding: '100px 0 0 0',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -176,9 +176,10 @@ function UpdateMemMain() {
               </Button>
               <Button
                 fullWidth
-                variant="contained"
+                variant="outlined"
+                sx={{ mb: 10 }}
                 size="large"
-                onClick={() => goBackPage()}
+                onClick={goBackPage}
               >
                 돌아가기
               </Button>

@@ -1,5 +1,4 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-// import counterReducer from '../features/counter/counterSlice';
 
 let user = createSlice({
   name: 'user',
@@ -23,7 +22,6 @@ export let { changeUser } = user.actions;
 
 export default configureStore({
   reducer: {
-    // counter: counterReducer,
     user: user.reducer,
   },
 });
