@@ -327,7 +327,11 @@ const TimeListUp = styled.div`
 `;
 
 const MinutesListUp = styled.div`
-
+position: relative;
+left: 40px;
+top: -15px;
+width: 30px;
+background-color: pink;
 `;
 
 const TimeListDownBox = styled.div`
@@ -372,6 +376,7 @@ function SubwayMain() {
   const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
   const [clickValue, setClickValue] = useState(null);
+  const [subTimeInfo, setSubTimeInfo] = useState([]);
 
   async function mapLoad() {
     try {
@@ -446,6 +451,7 @@ function SubwayMain() {
     console.log(subTime)
     setSubTime(subTime.OrdList.up.time)
     setSubTimeDown(subTime.OrdList.down.time)
+    setSubTimeInfo(subTime)
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
     let bounds = new kakao.maps.LatLngBounds();
@@ -568,7 +574,6 @@ function SubwayMain() {
                       staInfo.useInfo.crossover == 2 ? <p>반대편 연결 됨</p> : <p>반대편 환승역 연결</p>
                     )
                   }
-                 
                 </DetailInfo>
                 <InfoIcon>
                   <DirectionsTransitIcon fontSize="small" /><br/>
@@ -590,24 +595,39 @@ function SubwayMain() {
              </NextStop>
              <TimetableBox>
              {
-               subTime.map((item) => {
+              subTime.OrdList.up.time.map((item) => {
+
+                const num  = () => {
+                  let string = item.list;
+                  let regex = /[^0-9]/g;
+                  let result = string.replace(regex, " ");
+                  return result;
+                }
                  return (
                      <TimeListUpBox>
                      <TimeListUp>{item.Idx}</TimeListUp>
-                     <MinutesListUp>{item.list}</MinutesListUp>
+                     <MinutesListUp>{num()}</MinutesListUp>
+                    
                      </TimeListUpBox>
-
                  )
                })
              }
              </TimetableBox>
              <TimetableBox1> 
                {
-                 subTimeDown.map((item) => {
+                 subTime.OrdList.down.time.map((item) => {
+
+                  const num  = () => {
+                    let string = item.list;
+                    let regex = /[^0-9]/g;
+                    let result = string.replace(regex, " ");
+                    return result;
+                  }
+
                    return (
                     <TimeListDownBox>
                     <TimeListDown>{item.Idx}</TimeListDown>
-                    <MinutesListDown>{item.list}</MinutesListDown>
+                    <MinutesListDown>{num()}</MinutesListDown>
                     </TimeListDownBox>
                    )
                  })

@@ -6,6 +6,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import useLoading from "../../../hooks/useLoading";
 import useBusInfo from "../hooks/useBusInfo";
@@ -119,7 +120,7 @@ const BusStep1 = styled.div`
   color: rgb(102, 102, 102);
 `;
 
-const BusBtn = styled.button`
+const BusBtn = styled.div`
   position: absolute;
   top: 95px;
   left: 15px;
@@ -127,7 +128,7 @@ const BusBtn = styled.button`
   height: 40px;
 `;
 
-const BusStopBtn = styled.button`
+const BusStopBtn = styled.div`
   position: absolute;
   top: 95px;
   left: 195px;
@@ -158,27 +159,40 @@ background-color: white;
 }
 `;
 
+const SearchResult = styled.div`
+position: relative;
+top: 0px;
+width: 350px;
+height: 70px;
+// background-color: pink;
+border-bottom: 1px solid rgb(194, 194, 194, 0.849);
+`;
+
 const BusStayList = styled.div`
 position: absolute;
-top: 240px;
+top: 200px;
 left: 20px;
 width: 350px;
-height: 600px;
+height: 78%;
 border: none;
 overflow: scroll;
+// background-color: gray;
 `;
 
 const BusStayList1 = styled.button`
-width: 300px;
+position: relative;
+top: 5px;
+width: 350px;
 height: 70px;
 border: 0;
-border-bottom: 1px solid rgb(184, 184, 184);
+border-bottom: 1px solid rgb(194, 194, 194, 0.849);
 font-size: 15px;
 text-align: left;
 background-color: white;
 &:hover {
   background-color: rgb(240, 251, 255, 0.842);
 }
+// background-color: green;
 `;
 
 function BusMain() {
@@ -219,9 +233,7 @@ function BusMain() {
               }}
             />
           </Box>
-          {toggleValue == "bus" &&
-          busList != undefined &&
-          busList.length != 0 ? (
+          {toggleValue == "bus" && busList != undefined && busList.length != 0 ? (
             <>
               <BusNum>{busList.busNo}</BusNum>
               <BusIcon>
@@ -253,6 +265,7 @@ function BusMain() {
           ) : toggleValue == "busStop" && busStop != undefined && busStop.length != 0 ? (
             <>
               <BusStayList>
+              <SearchResult>hello</SearchResult>
                 { busStop.map((item)=> {
                     return (
                       <div>
@@ -271,11 +284,23 @@ function BusMain() {
               <Line1></Line1>
             </>
           )}
-          <BusBtn onClick={onToggle} value="bus">
-            버스
-          </BusBtn>
-          <BusStopBtn onClick={onToggle} value="busStop">
-            버스 정류장
+          <BusBtn>
+            <Button variant="outlined" size="large" onClick={onToggle} value="bus"
+            style={{
+              maxWidth: "150px",
+              maxHeight: "50px",
+              minWidth: "170px",
+              minHeight: "45px"
+            }}> 버스</Button>
+            </BusBtn>
+          <BusStopBtn>
+          <Button variant="outlined" onClick={onToggle} value="busStop"
+          style={{
+          maxWidth: "150px",
+          maxHeight: "50px",
+          minWidth: "170px",
+          minHeight: "45px"
+        }} >버스 정류장</Button>
           </BusStopBtn>
         </BarContainer>
       </SideNav>

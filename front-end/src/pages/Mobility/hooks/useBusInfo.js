@@ -37,11 +37,12 @@ function useBusInfo(){
     }, [busNo]);
 
     function onToggle(e){
-      // console.log(e.target.value)
+       console.log(e.target.value)
       if(e.target.value != "busStop"){
         setToggleValue("bus")
         setBusNo("")
         setBusStop([])
+        
       } else {
         setToggleValue("busStop")
         setBusNo("")
