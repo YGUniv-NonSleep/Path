@@ -10,12 +10,15 @@ import com.capstone.pathproject.repository.order.query.OrderItemQueryRepository;
 import com.capstone.pathproject.repository.order.query.PaymentQueryRepository;
 import com.capstone.pathproject.util.StringUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -172,15 +175,34 @@ public class MemberService {
                 .message("비밀번호 재설정되었습니다.").build();
     }
 
-    public Page<MemberPaymentDto> getMemberPayments(Long memberId, Pageable pageable) {
-        Page<MemberPaymentDto> memberPaymentDtos = paymentQueryRepository.findMemberPayments(memberId, pageable);
-        List<Long> orderIds = memberPaymentDtos.stream()
+    public Slice<MemberPaymentDto> getMemberPayments(Long memberId, Pageable pageable) {
+        Slice<MemberPaymentDto> memberPaymentDtos = paymentQueryRepository.findMemberPayments(memberId, pageable);
+        Map<Long, List<OrderItemQueryDto>> orderItemMap = getOrderItemMap(toOrderIds(memberPaymentDtos));
+        memberPaymentDtos.forEach(p -> p.setOrderItems(orderItemMap.get(p.getOrderId())));
+        return memberPaymentDtos;
+    }
+
+    public Slice<MemberPaymentDto> getMemberPaymentsBetweenDate(Long memberId, String startDate, String endDate, Pageable pageable) {
+        LocalDate startLocalDate = LocalDate.parse(startDate);
+        LocalDateTime startLocalDateTime = startLocalDate.atTime(0, 0);
+        LocalDate endLocalDate = LocalDate.parse(endDate);
+        LocalDateTime endLocalDateTime = endLocalDate.atTime(LocalTime.MAX);
+
+        Slice<MemberPaymentDto> memberPaymentDtos = paymentQueryRepository.findMemberPaymentsBetweenDate(memberId, startLocalDateTime, endLocalDateTime, pageable);
+        Map<Long, List<OrderItemQueryDto>> orderItemMap = getOrderItemMap(toOrderIds(memberPaymentDtos));
+        memberPaymentDtos.forEach(p -> p.setOrderItems(orderItemMap.get(p.getOrderId())));
+        return memberPaymentDtos;
+    }
+
+    private Map<Long, List<OrderItemQueryDto>> getOrderItemMap(List<Long> orderIds) {
+        List<OrderItemQueryDto> orderItems = orderItemQueryRepository.findOrderItems(orderIds);
+        return orderItems.stream()
+                .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
+    }
+
+    private List<Long> toOrderIds(Slice<MemberPaymentDto> memberPaymentDtos) {
+        return memberPaymentDtos.stream()
                 .map(MemberPaymentDto::getOrderId)
                 .collect(Collectors.toList());
-        List<OrderItemQueryDto> orderItems = orderItemQueryRepository.findOrderItems(orderIds);
-        Map<Long, List<OrderItemQueryDto>> orderItemsMap = orderItems.stream()
-                .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
-        memberPaymentDtos.forEach(p -> p.setOrderItems(orderItemsMap.get(p.getOrderId())));
-        return memberPaymentDtos;
     }
 }
