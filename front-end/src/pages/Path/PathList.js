@@ -30,79 +30,122 @@ import circleIcon from "../../assets/images/radio-button.png";
 
 function PathList({ list, click }) {
 
-  const transitCount = (item, idx) => {
+  const transitSection = (item, idx) => {
     let transit = [];
-    let count = item.routeSection.length;
-    // console.log(item)
-    
+    let section = item.routeSection.length;
+    let stationNames = undefined;
+    if(item.stationNames != undefined) 
+      stationNames = item.stationNames;
+    let count = 0; // 정류장, 지하철역 넣기 위한 count
+     
+
     function isTrans(i){
-      let temp = "";
-      let temp2 = "";
-      let icon = null;
+      let transitLabel = ""; // 버스, 지하철 번호 출력
+      let station = ""; // 정류장, 지하철역 출력
+      let icon = null; // 아이콘 출력
+      let fontColor = "#484848";
       
+      // 버스
       if(item.routeSection[i].busNo != undefined){
+        // 대체 버스 수가 2대 이상일 때
         if(item.routeSection[i].busNo.length >= 2){
           for(var j=0; j<item.routeSection[i].busNo.length; j++){
-            if(j==item.routeSection[i].busNo.length-1) temp += `${item.routeSection[i].busNo[j]}`
-            else temp += `${item.routeSection[i].busNo[j]}, `
+            if(j==item.routeSection[i].busNo.length-1) 
+              transitLabel += `${item.routeSection[i].busNo[j]}`
+            else 
+              transitLabel += `${item.routeSection[i].busNo[j]}, `
           }
           icon = busIcon
-          return {
-            temp, icon
-          }
+          fontColor = "#356de9"
+          station = stationNames[count][0]
 
-        } else {
-          temp += item.routeSection[i].busNo
-          icon = busIcon
           return {
-            temp, icon
+            transitLabel, station, icon, fontColor
+          }
+        } else {
+          transitLabel += item.routeSection[i].busNo
+          icon = busIcon
+          fontColor = "#356de9"
+          station = stationNames[count][0]
+
+          return {
+            transitLabel, station, icon, fontColor
           }
         }
       }
+
+      // 지하철
       if(item.routeSection[i].subwayName != undefined){
+        // 대체 지하철 수가 2대 이상일 때
         if(item.routeSection[i].subwayName.length >= 2){
           for(var j=0; j<item.routeSection[i].subwayName.length; j++){
-            if(j==item.routeSection[i].subwayName.length-1) temp += `${item.routeSection[i].subwayName[j]}`
-            else temp += `${item.routeSection[i].subwayName[j]}, `
+            if(j==item.routeSection[i].subwayName.length-1) 
+              transitLabel += `${item.routeSection[i].subwayName[j]}`
+            else 
+              transitLabel += `${item.routeSection[i].subwayName[j]}, `
           }
           icon = subwayIcon
-          return {
-            temp, icon
-          }
+          fontColor = "#f37229"
+          station = stationNames[count][0]
+          if(station.includes("역"))
+            undefined
+          else 
+            station = `${station}역`;
 
-        } else {
-          temp += item.routeSection[i].subwayName
-          icon = subwayIcon
           return {
-            temp, icon
+            transitLabel, station, icon, fontColor
+          }
+        } else {
+          transitLabel += item.routeSection[i].subwayName
+          icon = subwayIcon
+          fontColor = "#f37229"
+          station = stationNames[count][0]
+          if(station.includes("역"))
+            undefined
+          else 
+            station = `${station}역`;
+
+          return {
+            transitLabel, station, icon, fontColor
           }
         }
       }
+
       else {
-        temp += "하차"
+        transitLabel += "하차"
         icon = circleIcon
+        let k = stationNames[count].length
+        station = stationNames[count][k-1]
+        if(station.includes("역"))
+          undefined
+        else 
+          station = `${station}역`;
+        count++
+
         return {
-          temp, icon
+          transitLabel, station, icon, fontColor
         }
       }
     }
     
-    for (let i = 1; i < count; i++) {
+    for (let i = 1; i < section; i++) {
+      let isTransit = isTrans(i)
+
       transit.push(
         <StepInfoItem key={`${idx}step${i}`}>
           <IconWrap>
             <IconArea>
-              <IconSpan img={isTrans(i).icon}>icon</IconSpan>
+              <IconSpan img={isTransit.icon}>icon</IconSpan>
             </IconArea>
             <VehicleTypeArea>
-              <VehicleTypeLabel>
-                {isTrans(i).temp}
+              <VehicleTypeLabel fontColor={isTransit.fontColor}>
+                {isTransit.transitLabel}
               </VehicleTypeLabel>
             </VehicleTypeArea>
           </IconWrap>
           <StepInfoArea>
             <StepTitleArea>
-              <StepTitle>asd</StepTitle>
+              <StepTitle>{isTransit.station}</StepTitle>
               <AppendixBtnArea>{/* 공간 채우기 */}</AppendixBtnArea>
             </StepTitleArea>
           </StepInfoArea>
@@ -137,7 +180,7 @@ function PathList({ list, click }) {
             <StepInfoWrap>
               <StepInfoList>
                 {/* 리스트 */}
-                {transitCount(item, idx)}
+                {transitSection(item, idx)}
               </StepInfoList>
             </StepInfoWrap>
 

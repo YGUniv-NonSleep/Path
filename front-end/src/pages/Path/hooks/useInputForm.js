@@ -73,26 +73,33 @@ function useInputForm() {
 
   // 키워드로 장소 검색인데 추후 주소로 바꿀것
   function placeSearch() {
-    // 장소 검색 객체를 생성합니다
-    const ps = new kakao.maps.services.Places();
+    if(insertPoint != ''){
+      // 장소 검색 객체를 생성합니다
+      const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(insertPoint, function (result, status, pagination) {
-      if (status === daum.maps.services.Status.OK) {
-        let k = result.map((item) => {
-          const data = {
-            pN: item.place_name,
-            aN: item.address_name,
-          };
-          return data;
-        });
-        setJusoValue([...k]);
-      } else return '몬가... 잘못됨..';
-    });
+      ps.keywordSearch(insertPoint, function (result, status, pagination) {
+        if (status === daum.maps.services.Status.OK) {
+          let k = result.map((item) => {
+            const data = {
+              pN: item.place_name,
+              aN: item.address_name,
+            };
+            return data;
+          });
+          setJusoValue([...k]);
+        } else return '몬가... 잘못됨..';
+      });
+    } else return;
   }
 
   // 장소 검색 로직
   useEffect(() => {
-    placeSearch();
+    try {
+      placeSearch();
+
+    } catch (error) {
+      console.log(error)
+    }
   }, [insertPoint]);
 
   async function getKeywordLatLng(data) {
@@ -114,7 +121,6 @@ function useInputForm() {
   }
 
   async function historyKeywordLatLng(data) {
-    console.log(data)
     setWay((cur) => [...cur, {
       x: data.startLng, y: data.startLat, 
       id: data.startId, place_name: data.startName
@@ -179,7 +185,7 @@ function useInputForm() {
       }
     }
     // console.log(walkCoordinate);
-    console.log('보행자 경로 좌표 생성 완료');
+    // console.log('보행자 경로 좌표 생성 완료');
 
     // 보행자 경로 그리기
     const walkResult = await MapApi().drawKakaoWalkPolyLine(walkCoordinate);
@@ -210,7 +216,7 @@ function useInputForm() {
 
   async function pathSearch(){
     // === 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 === //
-     console.log(way)
+    // console.log(way)
     let searchType = 0;
     const pathData = await PathApi.getTransPath({
       sx: way[0].x, sy: way[0].y,
@@ -223,7 +229,7 @@ function useInputForm() {
       return;
     })
 
-     console.log(pathData);
+    // console.log(pathData);
 
     let data = {
       start: way[0],
@@ -345,18 +351,21 @@ function useInputForm() {
       if(history[i].type == info.type && history[i].startId == info.startId && history[i].goalId == info.goalId){
         console.log("duplicated history")
         deletePathFindingHistory(info.type, info.startId, info.goalId)
+        
+        // delete가 실행되었을 때 history 갱신이 필요.
+        history = getPathFindingHistory();
         break;
       }
     }
+    
     history.push(info)
-    console.log(history)
     localStorage.setItem('PathFindingHistoryList', JSON.stringify(history))
     getPathFindingHistory()
   }
   
   function getPathFindingHistory(){
     const history = localStorage.getItem('PathFindingHistoryList'); // 읽기(key 정보)
-
+    
     if(history == null) {
       return []
     } else {
@@ -367,18 +376,17 @@ function useInputForm() {
 
   function deletePathFindingHistory(type, startId, goalId){
     if(localStorage.PathFindingHistoryList==undefined) return;
-    let history = getPathFindingHistory();
-     console.log(history)
-     console.log(type, startId, goalId)
+    let history = getPathFindingHistory()
+    
     for(let i = 0; i < history.length; i++) {
-      // type, startId, goalId 비교 예정
+      // type, startId, goalId 비교 
       if(history[i].type == type && history[i].startId == startId && history[i].goalId == goalId){
         let idx = history.indexOf(history[i])
-        history.splice(idx)
-        console.log(history)
+        history.splice(idx, 1) // 1개만 제거 넣어야했네
       }
     }
-    //localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
+    
+    localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
     getPathFindingHistory()
   }
 
