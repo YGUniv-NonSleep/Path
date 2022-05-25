@@ -16,8 +16,6 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import RoomIcon from '@mui/icons-material/Room';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { style } from "@mui/system";
-import { NoBackpackSharp } from "@mui/icons-material";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -310,41 +308,32 @@ position:absolute;
 top: 310px;
 left: 10px;
 width: 380px;
-height: 720px;
+height: 68%;
 overflow:scroll;
+// background-color: red;
 `;
 
-const TimeListUp = styled.div`
-width: 20px;
-margin-left: 10px;
-`;
-
-const MinutesListUp = styled.div`
+const TimeListDown = styled.div`
 position: relative;
-top: -15px;
-left: 55px;
+top: 10px;
+left: 5px;
 width: 20px;
 background-color: pink;
 `;
 
-const TimeUpWay = styled.div`
+const MinutesListDown = styled.div`
 position: relative;
-top: -31px;
-left 70px;
-width: 40px;
+top: -5px;
+left: 50px;
+width: 20px;
 background-color: blue;
 `;
 
-const TimeListDown = styled.div`
-width: 20px;
-`;
-
-const MinutesListDown = styled.div`
-position: relative;
-top: -10px;
-left: 50px;
-width: 20px;
-
+const TimetableBox1 = styled.div`
+position: absolute;
+left: 190px;
+width: 180px;
+// background-color: orange;
 `;
 
 const TimetableBox = styled.div`
@@ -353,18 +342,21 @@ left: 5px;
 width: 170px;
 padding-right: 9px;
 border-right: 1px solid rgb(184, 184, 184);
-
+background-color: green;
 `;
 
-const TimetableBox1 = styled.div`
-position: absolute;
-left: 190px;
-width: 180px;
-height: 
-background-color: pink;
+const TimeListUp = styled.div`
+width: 20px;
+margin-left: 10px;
+background-color: orange;
 `;
 
-
+const MinutesListUp = styled.div`
+position: relative;
+top: -15px;
+left: 55px;
+width: 20px;
+`;
 
 function SubwayMain() {
   const [map, settingMap] = useState(null);

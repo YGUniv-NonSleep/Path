@@ -125,6 +125,12 @@ const BusBtn = styled.button`
   left: 15px;
   width: 180px;
   height: 40px;
+  background-color: white;
+  border: 1px solid rgb(184, 184, 184);
+  border-radius: 7px;
+  &:hover {
+    color: blue;
+  }
 `;
 
 const BusStopBtn = styled.button`
@@ -133,20 +139,26 @@ const BusStopBtn = styled.button`
   left: 195px;
   width: 180px;
   height: 40px;
- 
+  background-color: white;
+  border: 1px solid rgb(184, 184, 184);
+  border-radius: 7px;
+  &:hover {
+    color: blue;
+  }
 `;
 
 const BusStopList = styled.div`
   position: absolute;
-  top: 350px;
+  top: 330px;
   left: 30px;
   width: 350px;
   height: 600px;
   border: none;
   overflow: scroll;
+  
 `;
 const BusListBtn = styled.button`
-width: 300px;
+width: 320px;
 height: 70px;
 border: 0;
 border-bottom: 1px solid rgb(184, 184, 184);
