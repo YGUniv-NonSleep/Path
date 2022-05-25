@@ -351,18 +351,21 @@ function useInputForm() {
       if(history[i].type == info.type && history[i].startId == info.startId && history[i].goalId == info.goalId){
         console.log("duplicated history")
         deletePathFindingHistory(info.type, info.startId, info.goalId)
+        
+        // delete가 실행되었을 때 history 갱신이 필요.
+        history = getPathFindingHistory();
         break;
       }
     }
+    
     history.push(info)
-    console.log(history)
     localStorage.setItem('PathFindingHistoryList', JSON.stringify(history))
     getPathFindingHistory()
   }
   
   function getPathFindingHistory(){
     const history = localStorage.getItem('PathFindingHistoryList'); // 읽기(key 정보)
-
+    
     if(history == null) {
       return []
     } else {
@@ -373,18 +376,17 @@ function useInputForm() {
 
   function deletePathFindingHistory(type, startId, goalId){
     if(localStorage.PathFindingHistoryList==undefined) return;
-    let history = getPathFindingHistory();
-     console.log(history)
-     console.log(type, startId, goalId)
+    let history = getPathFindingHistory()
+    
     for(let i = 0; i < history.length; i++) {
-      // type, startId, goalId 비교 예정
+      // type, startId, goalId 비교 
       if(history[i].type == type && history[i].startId == startId && history[i].goalId == goalId){
         let idx = history.indexOf(history[i])
-        history.splice(idx)
-         console.log(history)
+        history.splice(idx, 1) // 1개만 제거 넣어야했네
       }
     }
-    //localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
+    
+    localStorage.setItem('PathFindingHistoryList', JSON.stringify(history));
     getPathFindingHistory()
   }
 

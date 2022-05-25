@@ -454,7 +454,7 @@ const VehicleTypeLabel = styled.em`
   font-weight: 700;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: rgb(56, 109, 232);
+  color: ${props => props.fontColor};
 `;
 
 const StepInfoArea = styled.div`

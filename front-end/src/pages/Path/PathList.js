@@ -43,6 +43,7 @@ function PathList({ list, click }) {
       let transitLabel = ""; // 버스, 지하철 번호 출력
       let station = ""; // 정류장, 지하철역 출력
       let icon = null; // 아이콘 출력
+      let fontColor = "#484848";
       
       // 버스
       if(item.routeSection[i].busNo != undefined){
@@ -55,18 +56,20 @@ function PathList({ list, click }) {
               transitLabel += `${item.routeSection[i].busNo[j]}, `
           }
           icon = busIcon
+          fontColor = "#356de9"
           station = stationNames[count][0]
 
           return {
-            transitLabel, station, icon
+            transitLabel, station, icon, fontColor
           }
         } else {
           transitLabel += item.routeSection[i].busNo
           icon = busIcon
+          fontColor = "#356de9"
           station = stationNames[count][0]
 
           return {
-            transitLabel, station, icon
+            transitLabel, station, icon, fontColor
           }
         }
       }
@@ -82,6 +85,7 @@ function PathList({ list, click }) {
               transitLabel += `${item.routeSection[i].subwayName[j]}, `
           }
           icon = subwayIcon
+          fontColor = "#f37229"
           station = stationNames[count][0]
           if(station.includes("역"))
             undefined
@@ -89,11 +93,12 @@ function PathList({ list, click }) {
             station = `${station}역`;
 
           return {
-            transitLabel, station, icon
+            transitLabel, station, icon, fontColor
           }
         } else {
           transitLabel += item.routeSection[i].subwayName
           icon = subwayIcon
+          fontColor = "#f37229"
           station = stationNames[count][0]
           if(station.includes("역"))
             undefined
@@ -101,7 +106,7 @@ function PathList({ list, click }) {
             station = `${station}역`;
 
           return {
-            transitLabel, station, icon
+            transitLabel, station, icon, fontColor
           }
         }
       }
@@ -118,7 +123,7 @@ function PathList({ list, click }) {
         count++
 
         return {
-          transitLabel, station, icon
+          transitLabel, station, icon, fontColor
         }
       }
     }
@@ -133,7 +138,7 @@ function PathList({ list, click }) {
               <IconSpan img={isTransit.icon}>icon</IconSpan>
             </IconArea>
             <VehicleTypeArea>
-              <VehicleTypeLabel>
+              <VehicleTypeLabel fontColor={isTransit.fontColor}>
                 {isTransit.transitLabel}
               </VehicleTypeLabel>
             </VehicleTypeArea>
