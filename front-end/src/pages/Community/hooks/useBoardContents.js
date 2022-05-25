@@ -23,7 +23,7 @@ function useBoardContents() {
  
   const [username, setUsername] = useState("");
   const token = useTokenReissue();
-  
+
   useEffect(()=>{
     tokenReissue();
   },[])

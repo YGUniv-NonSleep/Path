@@ -52,7 +52,7 @@ const CommunityContents = () => {
     username
   } = useBoardContents();
   const {
-    navigate, getPostId, PostDelete, commuSubmit, 
+    navigate, getPostId, PostDelete, 
     RepUpdateState, RepCreate, RepUpdate, RepDelete,PatchPostContents
   } = useBoardContents();
 
@@ -116,7 +116,7 @@ const CommunityContents = () => {
                  <ModalContainer>
                  <MousePointer
                    style={{ color: "white", float: "right" }}
-                   //onClick={Close}
+                   onClick={() => setUpdateForm((data)=>!data)}
                    >
                    X
                </MousePointer>
@@ -161,11 +161,11 @@ const CommunityContents = () => {
                 <ModalContainer>
                 <MousePointer
                   style={{ color: "white", float: "right" }}
-                  //onClick={Close}
+                  onClick={() => setCreateState((data)=>!data)}
                   >
                   X
               </MousePointer>
-              <div style={{ color: "white", float: "center" }}>수정하기</div>
+              <div style={{ color: "white", float: "center" }}>답글등록</div>
               <div  style={{ color : "white"}}>
                   <form
                     id="myForm"
@@ -236,7 +236,7 @@ const CommunityContents = () => {
              <ModalContainer>
              <MousePointer
                style={{ color: "white", float: "right" }}
-               //onClick={Close}
+               onClick={() => setUpdateState((data)=>!data)}
                >
                X
            </MousePointer>

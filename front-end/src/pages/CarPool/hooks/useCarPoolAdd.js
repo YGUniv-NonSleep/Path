@@ -7,16 +7,22 @@ function useCarPoolAdd() {
   const [isStartOpen, setIsStartOpen] = useState(false);
   const [startX, setStartX] = useState(null);
   const [startY, setStartY] = useState(null);
-  const [startLocal, setStartLocal] = useState(null);
+  
 
   const [isArrivedOpen, setIsArrivedOpen] = useState(false);
   const [arriveX, setArriveX] = useState(null);
   const [arriveY, setArriveY] = useState(null);
-  const [arriveLocal, setArriveLocal] = useState(null);
+
 
   const [startAddr, setStartAddr] = useState(null);
   const [arriveAddr, setArriveAddr] = useState(null);
   const [dataset, setDataSet] = useState(null);
+
+  const [startLocal1, setStartLocal1] = useState(null);
+  const [startLocal2, setStartLocal2] = useState(null);
+  const [arriveLocal1, setArriveLocal1] = useState(null);
+  const [arriveLocal2, setArriveLocal2] = useState(null);
+
 
   let navigate = useNavigate();
   let geocoder = new kakao.maps.services.Geocoder();
@@ -66,7 +72,8 @@ function useCarPoolAdd() {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    setStartLocal(data.sido);
+    setStartLocal1(data.sigungu);
+    setStartLocal2(data.banme);
     setStartAddr(fullAddress);
     getCoords(fullAddress);
   };
@@ -91,7 +98,8 @@ function useCarPoolAdd() {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    setArriveLocal(data.sido);
+    setArriveLocal1(data.sigungu);
+    setArriveLocal2(data.bname);
     setArriveAddr(fullAddress);
     getArrivedCoords(fullAddress);
   };
@@ -109,12 +117,14 @@ function useCarPoolAdd() {
       startLongitude : startY,
       arriveLatitude : arriveX,
       arriveLongitude : arriveY,
-      local: arriveLocal,
+      startLocal1 : startLocal1,
+      startLocal2 : startLocal2,
+      arriveLocal1 : arriveLocal1,
+      arriveLocal2 : arriveLocal2,
       cars: {
         id: 1,
       },
     };
-    console.log(typeof data.sdate)
     console.log(data);
 
     var formData = new FormData();
