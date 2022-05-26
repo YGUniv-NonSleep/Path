@@ -38,13 +38,11 @@ public class CardApiController {
     }
 
     // 카드 삭제
-    @DeleteMapping("/cards/{cardId}")
+    @DeleteMapping("/card/{cardId}")
     public ResponseEntity<Message<?>> deleteCard(@PathVariable Long cardId) {
         Message<String> message = cardService.deleteCard(cardId);
         return responseUtil.createResponseEntity(message);
     }
-
-    // 카드 수정
 
     //토스 카드 등록 성공 url
     @GetMapping("/card/success")
