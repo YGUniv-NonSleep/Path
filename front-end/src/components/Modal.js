@@ -41,6 +41,21 @@ const ModalInner = styled.div`
   padding: 40px 20px;
 `
 
+const CloseButton = styled.button`
+  position: fixed;
+  top: 5px;
+  right: 9px;
+  background-color: #fff;
+  width: 16px;
+  height: 16px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+`
+
 function Modal({ 
     className,
     onClose,
@@ -57,11 +72,11 @@ function Modal({
         }
     }
 
-    // const close = (e) => {
-    //     if (onClose) {
-    //       onClose()
-    //     }
-    // }
+    const close = (e) => {
+        if (onClose) {
+          onClose()
+        }
+    }
 
     useEffect(() => {
         // modal 오픈시 후방 영역 스크롤 방지
@@ -89,7 +104,7 @@ function Modal({
         visible={visible}
       >
         <ModalInner tabIndex="0" className="modal-inner">
-          {/* {closable && <button className="modal-close" onClick={close}>X</button>} */}
+          {closable && <CloseButton className="modal-close" onClick={close}>X</CloseButton>}
           {children}
         </ModalInner>
       </ModalWrapper>
