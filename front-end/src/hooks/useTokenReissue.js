@@ -55,9 +55,9 @@ function useTokenReissue() {
       })
       .catch((err) => {
         console.log(err);
-        axios.defaults.headers.common['authorization'] = '';
       })
       .finally(() => {
+        axios.defaults.headers.common['authorization'] = '';
         dispatch(
           changeUser({
             name: 'anonymous',
