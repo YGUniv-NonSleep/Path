@@ -1,9 +1,11 @@
-import { Grid, Box } from '@mui/material';
+import { Grid, Box, Button, SvgIcon, IconButton } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import { red } from '@mui/material/colors';
 
-const Card = ({ card }) => {
+const Card = ({ card, isRemove, handleRemove }) => {
   const createDate = card.createTime.slice(0, 10);
   const cardNum = `${card.number.slice(0, 4)}-${card.number.slice(4, 8)}-
-  ${card.number.slice(12, 16)}-${card.number.slice(16, 20)}`;
+  ${card.number.slice(8, 12)}-${card.number.slice(12, 16)}`;
 
   return (
     <Grid item xs={14} sm={6} md={4}>
@@ -18,10 +20,32 @@ const Card = ({ card }) => {
           mr: 1,
         }}
       >
-        <Box sx={{ color: 'text.secondary' }}>{card.cardCompany} 카드</Box>
         <Box
           sx={{
-            mt: 2,
+            color: 'text.secondary',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          {card.cardCompany}카드
+          {isRemove ? (
+            <>
+              <IconButton
+                sx={{ color: red[400] }}
+                component="span"
+                onClick={() => handleRemove(card)}
+              >
+                <ClearIcon />
+              </IconButton>
+            </>
+          ) : (
+            <></>
+          )}
+        </Box>
+        <Box
+          sx={{
+            mt: 1,
             mb: 2,
             color: 'text.primary',
             fontSize: 22,
