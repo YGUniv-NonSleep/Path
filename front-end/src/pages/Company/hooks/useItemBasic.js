@@ -36,20 +36,29 @@ function useItemBasic() {
     let inputImageFiles = e.target.imgFile.files;
 
     const imageformData = new FormData();
-    // FormData에 Key:Value 넣기
-    for (var i = 0; i < inputImageFiles.length; i++) {
-      imageformData.append("multipartFile", inputImageFiles[i]);
-    }
+    let images = null;
 
-    const images = await axios
-      .post(process.env.REACT_APP_SPRING_API + `/api/image`, imageformData, {
-        headers: {
-          "Content-Type": `multipart/form-data`,
-        },
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if(inputImageFiles.length == 0) {
+      images = {
+        data: "blankImage"
+      }
+
+    } else {
+      // FormData에 Key:Value 넣기
+      for (var i = 0; i < inputImageFiles.length; i++) {
+        imageformData.append("multipartFile", inputImageFiles[i]);
+      }
+
+      images = await axios
+        .post(process.env.REACT_APP_SPRING_API + `/api/image`, imageformData, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
 
     const data = {
       name: e.target.name.value,
@@ -85,29 +94,25 @@ function useItemBasic() {
       });
   }
 
-  function getProductBasic(prodId){
-    axios
-      .get(process.env.REACT_APP_SPRING_API + `/api/product/basic/${prodId}`)
-      .then((res) => {
-        basicItems.filter((list)=>{
-          if(list.id == res.data.body.id){
-            let tempList = basicItems;
-            // 객체 배열의 인덱스 검색 함수 findIndex()
-            let idx = basicItems.findIndex(i => i.id == res.data.body.id)
-            console.log(idx)
-            console.log(tempList)
-            tempList.splice(idx, 1)
-            console.log(tempList)
-            tempList.splice(idx, 0, res.data.body)
-            console.log(tempList)
-            setBasicItems(tempList)
-          }
-        }) 
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  // function getProductBasic(prodId){
+  //   axios
+  //     .get(process.env.REACT_APP_SPRING_API + `/api/product/basic/${prodId}`)
+  //     .then((res) => {
+  //       basicItems.filter((list)=>{
+  //         if(list.id == res.data.body.id){
+  //           let tempList = basicItems;
+  //           // 객체 배열의 인덱스 검색 함수 findIndex()
+  //           let idx = basicItems.findIndex(i => i.id == res.data.body.id)
+  //           tempList.splice(idx, 1)
+  //           tempList.splice(idx, 0, res.data.body)
+  //           setBasicItems(tempList)
+  //         }
+  //       }) 
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
   // 기본 상품 수정
   function patchProductBasic() {
@@ -144,7 +149,8 @@ function useItemBasic() {
           if(it.id == res.data.body.id){
             alert("성공적으로 수정되었습니다.");
             // 수정된 상품만 재랜더링
-            getProductBasic(it.id)
+            // getProductBasic(it.id)
+            getProductBasicList()
             handleClose();
           }
         });
