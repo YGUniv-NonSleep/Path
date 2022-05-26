@@ -77,7 +77,7 @@ public class InitProductService {
     public ProdBasic createProdBasic(Long name) {
         return ProdBasic.createProdBasic()
                 .category("커피")
-                .image("이미지 없음")
+                .image("blankImage")
                 .name("Product Basic" + name)
                 .detail("커피")
                 .brand("Twosome Place")
