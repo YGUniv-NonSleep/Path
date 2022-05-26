@@ -1,5 +1,5 @@
 import Member from './MemberMain';
-import Card from './Card/Card';
+import Card from './Card/CardMain';
 import Cars from './Cars/Cars';
 import Login from './Login/LoginMain';
 import SignUp from './SignUp/SignUpMain';
