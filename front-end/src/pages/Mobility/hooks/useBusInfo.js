@@ -11,6 +11,7 @@ function useBusInfo(){
     const [busList, setBusList] = useState([]);
     const [busStop, setBusStop] = useState([]);
     const [toggleValue, setToggleValue] = useState("bus");
+    const [busStopValue, setBusStopValue] = useState("");
   
     async function mapLoad() {
       try {
@@ -37,7 +38,7 @@ function useBusInfo(){
     }, [busNo]);
 
     function onToggle(e){
-      // console.log(e.target.value)
+      console.log(e.target.value)
       if(e.target.value != "busStop"){
         setToggleValue("bus")
         setBusNo("")
@@ -47,6 +48,10 @@ function useBusInfo(){
         setBusNo("")
         setBusList([])
       }
+    }
+
+    function busStopClick(e){
+      console.log(e.target.value);
     }
   
     function submit(e) {
@@ -156,7 +161,7 @@ function useBusInfo(){
 
     return {
         busNo, busList, busStop, toggleValue, 
-        mapLoad, onChanged, submit, busInfo, onToggle
+        mapLoad, onChanged, submit, busInfo, onToggle, busStopClick
     }
 }
 

@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import MIcon from "../MIcon";
 import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
 import DirectionsTransitIcon from '@mui/icons-material/DirectionsTransit';
 import SensorDoorIcon from '@mui/icons-material/SensorDoor';
 import WcIcon from '@mui/icons-material/Wc';
@@ -318,22 +319,20 @@ position: relative;
 top: 10px;
 left: 5px;
 width: 20px;
-background-color: pink;
 `;
 
 const MinutesListDown = styled.div`
 position: relative;
-top: -5px;
-left: 50px;
+top: -7px;
+left: 40px;
 width: 20px;
-background-color: blue;
+line-height: 20px;
 `;
 
 const TimetableBox1 = styled.div`
 position: absolute;
 left: 190px;
 width: 180px;
-// background-color: orange;
 `;
 
 const TimetableBox = styled.div`
@@ -342,20 +341,28 @@ left: 5px;
 width: 170px;
 padding-right: 9px;
 border-right: 1px solid rgb(184, 184, 184);
-background-color: green;
 `;
 
 const TimeListUp = styled.div`
+position: relative;
+top: 10px;
 width: 20px;
 margin-left: 10px;
-background-color: orange;
 `;
 
 const MinutesListUp = styled.div`
 position: relative;
-top: -15px;
-left: 55px;
+top: -7px;
+left: 45px;
 width: 20px;
+line-height: 20px;
+`;
+
+const UpDownContain = styled.div`
+position: relative;
+width: 185px;
+height: 260px;
+border-bottom: 1px solid rgb(184, 184, 184);
 `;
 
 function SubwayMain() {
@@ -364,7 +371,7 @@ function SubwayMain() {
   const [subName, setSubName] = useState("");
   const [markers, setMarkers] = useState([]);
   const [staInfo, setStaInfo] = useState([]);
-  const [subTime, setSubTime] = useState([]);
+  const [subTimeUp, setSubTimeUp] = useState([]);
   const [subTimeDown, setSubTimeDown] =useState([]);
   const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
@@ -397,6 +404,7 @@ function SubwayMain() {
   //[subName]이 실행될 때마다 useEffect 안에 있는 onChanged()를 실행하는 것
 
   function onToggle(e){
+    console.log(e.target.value);
    if(e.target.value != "time"){
      setToggleValue("exit")
    } else{
@@ -404,11 +412,10 @@ function SubwayMain() {
    }
   }
 
-  function BackClick(e){
-    if(e.target.value == "Back"){
-      setClickValue("back")
-    }
+  function backClick(e){ 
+    setToggleValue(null);
   }
+
 
   function submit(e) {
     e.preventDefault();
@@ -443,7 +450,7 @@ function SubwayMain() {
     let subTime = await SubwayApi.getSubTime(stationInfo.stationID);
     console.log(subTime)
     setSubTimeInfo(subTime)
-    setSubTime(subTime.OrdList.up.time)
+    setSubTimeUp(subTime.OrdList.up.time)
     setSubTimeDown(subTime.OrdList.down.time)
     
 
@@ -496,11 +503,7 @@ function SubwayMain() {
     <div className="Mobility">
       <SideNav>
         <MIcon />
-
-        {/* { loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2> } */}
-
         <Ul></Ul>
-
         <BarContainer>
           <Box component="form" noValidate onSubmit={submit} sx={{ mt: 3 }}>
             <TextField
@@ -581,7 +584,7 @@ function SubwayMain() {
             <>
              <TimeBtn onClick={onToggle} value="time">시간표</TimeBtn>
              <ExitBtn1 onClick={onToggle} value="exit">출구정보</ExitBtn1>
-             <BackBtn1 onClick={BackClick} value="back"><ArrowBackIosNewIcon/></BackBtn1>
+             <BackBtn1 onClick={backClick} value="back"><ArrowBackIosNewIcon/></BackBtn1>
              <SubwayTimeName>{staInfo.stationName} {staInfo.laneName} (시간표)</SubwayTimeName>
              <StopObj>
              <PrevStop> {staInfo.prevOBJ.station[0].stationName} 방향 
@@ -590,29 +593,36 @@ function SubwayMain() {
              </NextStop>
              <TimetableBox>
              {
-               subTimeInfo.OrdList.up.time.map((item) => {
+               subTimeUp.map((item) => {
                  const num = () => {
                   var testString = item.list;
                   var regex = /[^0-9]/g;
-                  var upWay = subTimeInfo.upWay;
                   var result = testString.replace(regex, " ");
+                  //console.log(result);
                   return result;
                  }
 
+                //  const string = () => {
+                //    let message = item.list;
+                //    let subMessage = message.subString(0,3);
+                //    console.log(subMessage);
+                //    //return subMessage;
+                //  }
                  return (
-                     <div>
-                     <TimeListUp>{item.Idx}</TimeListUp>
-                     <MinutesListUp>{num()}</MinutesListUp>
-                     {/* <TimeUpWay></TimeUpWay> */}
-                     </div>
+                  <div>
+                  <UpDownContain>
+                  <TimeListUp>{item.Idx}</TimeListUp>
+                  <MinutesListUp>{num()}</MinutesListUp>
+                  </UpDownContain>
+                  </div>
                  )
                })
              }
-             </TimetableBox>
 
+             </TimetableBox>
              <TimetableBox1> 
                {
-                 subTimeInfo.OrdList.down.time.map((item) => {
+                 subTimeDown.map((item) => {
 
                   const num = () => {
                     var testString = item.list;
@@ -623,8 +633,10 @@ function SubwayMain() {
 
                    return (
                     <div>
+                    <UpDownContain>
                     <TimeListDown>{item.Idx}</TimeListDown>
                     <MinutesListDown>{num()}</MinutesListDown>
+                    </UpDownContain>
                     </div>
                    )
                  })
@@ -636,7 +648,7 @@ function SubwayMain() {
             </>
           ) : toggleValue == "exit" && staInfo != undefined && staInfo.length !=0 ?(
             <>
-             <BackBtn onClick={BackClick} value="back"><ArrowBackIosNewIcon/></BackBtn>
+             <BackBtn onClick={backClick} value="back"><ArrowBackIosNewIcon/></BackBtn>
              <SubwayName>{staInfo.stationName}역 {staInfo.laneName}</SubwayName>
              <HeadLine/>
              <ExitGateInfo>출구·연계버스</ExitGateInfo>
@@ -654,7 +666,8 @@ function SubwayMain() {
                 else return;
                }
                     return (
-                        <ExitNum>{item.gateNo}
+                        <ExitNum>
+                          {item.gateNo}
                           <ExitGate>
                             {
                               arr()

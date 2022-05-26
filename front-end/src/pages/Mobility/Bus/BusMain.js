@@ -155,7 +155,6 @@ const BusStopList = styled.div`
   height: 600px;
   border: none;
   overflow: scroll;
-  
 `;
 const BusListBtn = styled.button`
 width: 320px;
@@ -175,7 +174,7 @@ position: absolute;
 top: 240px;
 left: 20px;
 width: 350px;
-height: 600px;
+height: 74%;
 border: none;
 overflow: scroll;
 `;
@@ -197,14 +196,13 @@ function BusMain() {
   const { loading } = useLoading();
   const { 
     busNo, busList, busStop, toggleValue, 
-    onChanged, submit, onToggle
+    onChanged, submit, onToggle, busStopClick, busStopValue
   } = useBusInfo();
   // console.log(toggleValue)
 
   return (
     <div className="Mobility">
       <SideNav>
-        {/* { loading ? <p>이동수단 화면 나왔다</p> : <h2>로드 중...</h2> } */}
         <MIcon />
         <BarContainer>
           <Box component="form" noValidate onSubmit={submit} sx={{ mt: 3 }}>
@@ -231,9 +229,7 @@ function BusMain() {
               }}
             />
           </Box>
-          {toggleValue == "bus" &&
-          busList != undefined &&
-          busList.length != 0 ? (
+          {toggleValue == "bus" && busList != undefined && busList.length != 0 ? (
             <>
               <BusNum>{busList.busNo}</BusNum>
               <BusIcon>
@@ -252,10 +248,17 @@ function BusMain() {
               
               <BusStopList>
                 { busList.station.map((item)=>{
-                    // console.log(item)
                     return(
                       <div>
-                      <BusListBtn>{item.stationName}</BusListBtn>
+                      <BusListBtn onClick={busStopClick} value="busStop">{item.stationName}</BusListBtn>
+                      {
+                        busStopValue == "busStopClick" && busList != undefined && busList.length != 0 ? (
+                          <div>
+                            {
+                               
+                            }</div>
+                        ) : <> </>
+                      }
                       </div>
                     ) 
                   })
@@ -283,12 +286,9 @@ function BusMain() {
               <Line1></Line1>
             </>
           )}
-          <BusBtn onClick={onToggle} value="bus">
-            버스
-          </BusBtn>
-          <BusStopBtn onClick={onToggle} value="busStop">
-            버스 정류장
-          </BusStopBtn>
+          <BusBtn onClick={onToggle} value="bus">버스</BusBtn>
+          <BusStopBtn onClick={onToggle} value="busStop">버스 정류장</BusStopBtn>
+
         </BarContainer>
       </SideNav>
       <Map />
