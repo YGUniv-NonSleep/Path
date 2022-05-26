@@ -28,7 +28,15 @@ function Copyright() {
 const theme = createTheme();
 
 function CardMain() {
-  const { cards, goBackPage, requestBillingAuth } = useCard();
+  const {
+    cards,
+    isRemove,
+    toggleIsRemove,
+    handleRemove,
+    requestBillingAuth,
+    goBackPage,
+  } = useCard();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -65,11 +73,11 @@ function CardMain() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained" onClick={() => requestBillingAuth()}>
+              <Button variant="contained" onClick={requestBillingAuth}>
                 <AddCardIcon sx={{ mr: 1 }} />
                 카드 등록
               </Button>
-              <Button variant="outlined">
+              <Button variant="outlined" onClick={toggleIsRemove}>
                 <CreditCardOffIcon sx={{ mr: 1 }} />
                 카드 삭제
               </Button>
@@ -92,7 +100,12 @@ function CardMain() {
         <Container sx={{ py: 2 }} maxWidth="md">
           <Grid container spacing={4}>
             {cards.map((card) => (
-              <Card key={card.id} card={card} />
+              <Card
+                key={card.id}
+                card={card}
+                isRemove={isRemove}
+                handleRemove={handleRemove}
+              />
             ))}
           </Grid>
         </Container>
