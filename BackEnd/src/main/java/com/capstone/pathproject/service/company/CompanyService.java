@@ -1,5 +1,6 @@
 package com.capstone.pathproject.service.company;
 
+import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.company.CompMember;
 import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.member.Member;
@@ -138,7 +139,35 @@ public class CompanyService {
     }
 
 
+    public Message<?> findCompany(CompCategory category) {
 
+        ArrayList<CompanyDTO> companyDTOArrayList = new ArrayList<>();
+        List<Company> companyList;
+
+        if (category != null){
+             companyList= companyRepository.findByCategory(category);
+        }else{
+            companyList = companyRepository.findAll();
+        }
+
+        companyList.stream().map(company -> CompanyDTO.createCompanyDTD()
+                        .thumbnail(company.getThumbnail())
+                        .id(company.getId())
+                        .name(company.getName())
+                        .phone(company.getPhone())
+                        .mail(company.getMail())
+                        .longitude(company.getLongitude())
+                        .latitude(company.getLatitude())
+                        .category(company.getCategory())
+                        .build())
+                .forEach(companyDTOArrayList::add);
+
+        return Message.<List<CompanyDTO>>builder()
+                .body(companyDTOArrayList)
+                .header(StatusEnum.OK)
+                .message( category + " list find success")
+                .build();
+    }
 }
 
 
