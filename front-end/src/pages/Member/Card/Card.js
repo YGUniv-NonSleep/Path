@@ -1,14 +1,6 @@
-import {
-  Grid,
-  Box,
-  Button,
-  SvgIcon,
-  IconButton,
-  CardMedia,
-} from '@mui/material';
+import { Grid, Box, IconButton } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import { red } from '@mui/material/colors';
-import Background from '../../../assets/images/cards/국민카드.png';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 
