@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @ToString
 @Entity
@@ -49,10 +50,22 @@ public class Company {
     private String phone;
 
     @Column(name = "COM_LAT")
-    private String latitude;
+    private double latitude;
 
     @Column(name = "COM_LONG")
-    private String longitude;
+    private double longitude;
+
+    @Column(name = "COM_ADDR")
+    private String addr;
+
+    @Column(name = "COM_ADDR_DETAIL")
+    private String addrDetail;
+
+    @Column(name="COM_OPEN")
+    private LocalTime open;
+
+    @Column(name="COM_CLOSE")
+    private LocalTime close;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
@@ -61,7 +74,7 @@ public class Company {
     public Company(){}
 
     @Builder(builderMethodName = "createCompany")
-    public Company(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, Member member, String thumbnail) {
+    public Company(Long id,LocalTime open,LocalTime close, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, double latitude, double longitude, Member member, String thumbnail, String addr, String addrDetail) {
         this.id = id;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
@@ -72,6 +85,10 @@ public class Company {
         this.latitude = latitude;
         this.longitude = longitude;
         this.thumbnail = thumbnail;
+        this.addr = addr;
+        this.addrDetail = addrDetail;
+        this.open = open;
+        this.close = close;
         this.member = member;
 
     }
@@ -94,6 +111,10 @@ public class Company {
                 .openDate(this.openDate)
                 .phone(this.phone)
                 .thumbnail(this.thumbnail)
+                .addr(this.addr)
+                .addrDetail(this.addrDetail)
+                .open(this.open)
+                .close(this.close)
                 .build();
     }
 

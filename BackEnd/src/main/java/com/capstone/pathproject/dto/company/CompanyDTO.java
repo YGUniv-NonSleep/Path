@@ -8,6 +8,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @ToString
 @Getter
@@ -33,14 +34,22 @@ public class CompanyDTO {
 
     private MemberDto member;
 
-    private String latitude;
+    private double latitude;
 
-    private String longitude;
+    private double longitude;
+
+    private String addr;
+    private String addrDetail;
+
+    private LocalTime open;
+    private LocalTime close;
 
     private String thumbnail;
 
+
+
     @Builder(builderMethodName = "createCompanyDTD")
-    public CompanyDTO(Long id, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, String latitude, String longitude, MemberDto member, String thumbnail) {
+    public CompanyDTO(Long id,LocalTime open, LocalTime close,String addr,String addrDetail, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, Double latitude, Double longitude, MemberDto member, String thumbnail) {
         this.id = id;
         this.name = name;
         this.companyNumber = companyNumber;
@@ -52,6 +61,10 @@ public class CompanyDTO {
         this.latitude = latitude;
         this.member = member;
         this.thumbnail = thumbnail;
+        this.addr = addr;
+        this.addrDetail = addrDetail;
+        this.open = open;
+        this.close = close;
     }
 
 
@@ -68,6 +81,8 @@ public class CompanyDTO {
                 .thumbnail(thumbnail)
                 .latitude(latitude)
                 .longitude(longitude)
+                .addr(addr)
+                .addrDetail(addrDetail)
                 .build();
     }
 
@@ -75,7 +90,4 @@ public class CompanyDTO {
         this.member = member;
     }
 
-    public void addFile(String fileName){
-        this.thumbnail = fileName;
-    }
 }

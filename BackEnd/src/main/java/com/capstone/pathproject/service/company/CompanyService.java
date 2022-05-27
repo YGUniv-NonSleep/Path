@@ -159,6 +159,10 @@ public class CompanyService {
                         .longitude(company.getLongitude())
                         .latitude(company.getLatitude())
                         .category(company.getCategory())
+                        .addr(company.getAddr())
+                        .addrDetail(company.getAddrDetail())
+                        .open(company.getOpen())
+                        .close(company.getClose())
                         .build())
                 .forEach(companyDTOArrayList::add);
 
