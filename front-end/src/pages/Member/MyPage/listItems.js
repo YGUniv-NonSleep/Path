@@ -28,7 +28,7 @@ function MainListItems(props) {
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
-        <ListItemText primary="주문내역" />
+        <ListItemText primary="결제내역" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>

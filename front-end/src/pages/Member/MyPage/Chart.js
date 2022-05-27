@@ -7,6 +7,8 @@ import {
   YAxis,
   Label,
   ResponsiveContainer,
+  Tooltip,
+  CartesianGrid,
 } from 'recharts';
 import Title from './Title';
 
@@ -15,22 +17,13 @@ function createData(time, amount) {
   return { time, amount };
 }
 
-const data = [
-  createData('1일', 0),
-  createData('4일', 6900),
-  createData('7일', 11900),
-  createData('10일', 16800),
-  createData('13일', 19900),
-  createData('16일', 22400),
-  createData('19일', 26900),
-  createData('22일', 32100),
-  createData('25일', undefined),
-  createData('28일', undefined),
-  createData('30일', undefined),
-];
-
-export default function Chart() {
+export default function Chart({ amountByDay }) {
   const theme = useTheme();
+  console.log(amountByDay);
+  let data = [];
+  amountByDay.map((pay) => {
+    data.push(createData(`${pay.payDate.slice(8, 10)}일`, pay.payPrice));
+  });
 
   return (
     <React.Fragment>
@@ -73,6 +66,7 @@ export default function Chart() {
             stroke={theme.palette.primary.main}
             dot={true}
           />
+          <Tooltip />
         </LineChart>
       </ResponsiveContainer>
     </React.Fragment>
