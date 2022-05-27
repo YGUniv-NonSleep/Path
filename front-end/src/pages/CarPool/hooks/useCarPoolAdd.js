@@ -7,7 +7,6 @@ function useCarPoolAdd() {
   const [isStartOpen, setIsStartOpen] = useState(false);
   const [startX, setStartX] = useState(null);
   const [startY, setStartY] = useState(null);
-  
 
   const [isArrivedOpen, setIsArrivedOpen] = useState(false);
   const [arriveX, setArriveX] = useState(null);
@@ -71,7 +70,7 @@ function useCarPoolAdd() {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-
+    console.log(data)
     setStartLocal1(data.sigungu);
     setStartLocal2(data.banme);
     setStartAddr(fullAddress);

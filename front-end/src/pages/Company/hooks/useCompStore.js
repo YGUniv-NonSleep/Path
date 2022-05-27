@@ -3,6 +3,22 @@ import { useEffect, useState } from "react";
 
 function useCompStore(){
   const [myStore, setMyStore] = useState([]);
+  const [storeDetail, setStoreDetail] = useState(null);
+
+  //== 모달 창 제어 ==//
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = (e) => {
+    setOpen(true);
+    setStoreDetail(myStore[e.target.value-1])
+  };
+
+  const handleClose = () => {
+    if (open === true) {
+      setOpen(false)
+      setStoreDetail(null)
+    }
+  };
 
   function getMyStore() {
     axios
@@ -10,7 +26,6 @@ function useCompStore(){
       .then((res) => {
         // console.log(res.data.body);
          setMyStore(res.data.body);
-        //setMyStore((cur)=>[...cur, res.data.body])
       })
       .catch((err) => {
         console.log(err);
@@ -25,8 +40,8 @@ function useCompStore(){
   }, []);
 
   return {
-    myStore, 
-    getMyStore
+    myStore, storeDetail, open, 
+    getMyStore, handleOpen, handleClose
   }
 }
 
