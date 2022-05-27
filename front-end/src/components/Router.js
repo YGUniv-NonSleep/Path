@@ -15,7 +15,6 @@ import { CarPool, CarPoolContents, CarPoolAdd } from '../pages/CarPool';
 import {
   Company,
   CompStore,
-  CompDetail,
   CompCreate,
   ItemBasic,
 } from '../pages/Company';
@@ -67,9 +66,7 @@ function Router() {
       </Routes>
       <Routes>
         <Route path="/company" element={<Company />} />
-        <Route path="/company/store" element={<CompStore />}>
-          <Route path=":comId" element={<CompDetail />} />
-        </Route>
+        <Route path="/company/store" element={<CompStore />} />
         <Route path="/company/create" element={<CompCreate />} />
         <Route path="/company/basic" element={<ItemBasic />} />
         <Route path="/company/manage/:comId" element={<CompManage />}>

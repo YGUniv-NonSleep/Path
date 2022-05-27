@@ -29,7 +29,6 @@ const style = {
 
 function AddCarsModal() {
   const { handleInput, inputValue, handleSubmit } = useAddCars();
-
   return (
     <Box sx={style}>
       <DirectionsCarIcon sx={{ m: 1 }} />

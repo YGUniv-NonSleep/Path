@@ -10,13 +10,13 @@ export const PathApi = {
   getTransPath: async (data) => {
     const response = await axios
       .get(
-        process.env.REACT_APP_SPRING_API + '/odsay/paths',
+        process.env.REACT_APP_SPRING_API + "/odsay/paths",
         { params: data },
         { withCredentials: true }
       )
       .catch((err) => console.log(err));
       // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
-      // console.log(response)
+       console.log(response)
     return response.data;
   },
 };

@@ -31,8 +31,14 @@ const cards = [1, 2, 3];
 const theme = createTheme();
 
 function CarsMain() {
-  const { goBackPage, modalOpen, handleModalOpen, handleModalClose } =
-    useCars();
+  const {
+    goBackPage,
+    modalOpen,
+    handleModalOpen,
+    handleModalClose,
+    inputValue,
+    handleInput,
+  } = useCars();
 
   return (
     <ThemeProvider theme={theme}>

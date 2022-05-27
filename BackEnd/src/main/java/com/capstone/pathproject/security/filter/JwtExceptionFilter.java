@@ -30,8 +30,8 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
                 response.sendRedirect("/exception/password");
             else if (exception.equals("loginId"))
                 response.sendRedirect("/exception/loginId");
-            else if (exception.equals("refreshToken"))
-                response.sendRedirect("/exception/refreshToken");
+            else if (exception.equals("token"))
+                response.sendRedirect("/exception/token");
         }
         log.info("JwtExceptionFilter 실행 끝");
     }

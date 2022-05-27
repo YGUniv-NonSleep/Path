@@ -92,6 +92,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             // AccessToken 재발급
             Claims claimsFormToken = jwtTokenUtil.getClaimsFormToken(TokenType.ACCESS_TOKEN, token);
             Authentication authentication = getAuthentication(claimsFormToken.getSubject());
+            if(authentication == null) {
+                request.setAttribute("exception", "token");
+                throw new JwtException("존재하지 않는 사용자의 토큰입니다.");
+            }
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             reissueAccessToken(request, response, principalDetails);
             // RefreshToken 만료시간 확인 후 재발급

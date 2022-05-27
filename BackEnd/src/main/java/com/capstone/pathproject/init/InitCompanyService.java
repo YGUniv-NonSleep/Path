@@ -32,7 +32,7 @@ public class InitCompanyService {
         return Company.createCompany()
                 .longitude("123")
                 .latitude("123")
-                .thumbnail("")
+                .thumbnail("blankImage")
                 .phone("010-0000-0000")
                 .name(name)
                 .category(CompCategory.CAFE)

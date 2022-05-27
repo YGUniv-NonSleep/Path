@@ -1,5 +1,6 @@
 package com.capstone.pathproject.controller.company;
 
+import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
@@ -84,5 +85,16 @@ public class CompanyApiController {
         Message<List<CompMemberDTO>> message = companyService.findCompMember(companyId);
         return responseUtil.createResponseEntity(message);
     }
+
+    @GetMapping("/")
+    public ResponseEntity<?> findCompany(@RequestParam(required = false ,value = "category") CompCategory category){
+
+
+        Message<?> message =  companyService.findCompany(category);
+
+
+        return responseUtil.createResponseEntity(message);
+    }
+
 
 }

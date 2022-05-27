@@ -211,7 +211,7 @@ function SignUpMain() {
                   <Button
                     type="button"
                     variant="contained"
-                    onClick={() => daumAddrApi()}
+                    onClick={daumAddrApi}
                     endIcon={<LocalPostOfficeIcon />}
                   >
                     주소찾기

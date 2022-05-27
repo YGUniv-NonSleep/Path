@@ -23,14 +23,14 @@ const ModalOverlay = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.05);
   z-index: 850;
 `
 
 const ModalInner = styled.div`
   box-sizing: border-box;
   position: relative;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.3);
   background-color: #fff;
   border-radius: 10px;
   width: 360px;
@@ -39,6 +39,21 @@ const ModalInner = styled.div`
   transform: translateY(-50%);
   margin: 0 auto;
   padding: 40px 20px;
+`
+
+const CloseButton = styled.button`
+  position: fixed;
+  top: 5px;
+  right: 9px;
+  background-color: #fff;
+  width: 16px;
+  height: 16px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
 `
 
 function Modal({ 
@@ -57,11 +72,11 @@ function Modal({
         }
     }
 
-    // const close = (e) => {
-    //     if (onClose) {
-    //       onClose()
-    //     }
-    // }
+    const close = (e) => {
+        if (onClose) {
+          onClose()
+        }
+    }
 
     useEffect(() => {
         // modal 오픈시 후방 영역 스크롤 방지
@@ -89,7 +104,7 @@ function Modal({
         visible={visible}
       >
         <ModalInner tabIndex="0" className="modal-inner">
-          {/* {closable && <button className="modal-close" onClick={close}>X</button>} */}
+          {closable && <CloseButton className="modal-close" onClick={close}>X</CloseButton>}
           {children}
         </ModalInner>
       </ModalWrapper>

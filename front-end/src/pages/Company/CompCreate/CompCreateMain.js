@@ -42,6 +42,7 @@ function CompCreateMain() {
                 </select>
                 <input type="text" placeholder="이메일" name="email"/>
                 <input type="text" placeholder="전화번호" name="phone"/>
+                {/* 도로명주소 받으면서 위도, 경도 받아서 넘기기 */}
                 <input type="text" placeholder="위도" name="lat"/>
                 <input type="text" placeholder="경도" name="long"/>
                 <input type="file" name="userfile" multiple="multiple" />
