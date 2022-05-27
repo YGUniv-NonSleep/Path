@@ -84,15 +84,6 @@ public class CardService {
                 .body(cardDtos).build();
     }
 
-    private boolean validateMemberAndCard(Long cardId) {
-        Optional<Card> findCard = cardRepository.findById(cardId);
-        Card card = findCard.orElse(null);
-        if (card == null) return false;
-        Member member = card.getMember();
-        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return member.getLoginId().equals(principalDetails.getMember().getLoginId());
-    }
-
     public Message<String> deleteCard(Long cardId) {
         if (validateMemberAndCard(cardId)) {
             cardRepository.deleteById(cardId);
@@ -105,5 +96,14 @@ public class CardService {
                 .header(StatusEnum.BAD_REQUEST)
                 .message("카드가 존재하지 않거나 카드 회원이 아닙니다.")
                 .body("").build();
+    }
+
+    private boolean validateMemberAndCard(Long cardId) {
+        Optional<Card> findCard = cardRepository.findById(cardId);
+        Card card = findCard.orElse(null);
+        if (card == null) return false;
+        Member member = card.getMember();
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return member.getLoginId().equals(principalDetails.getMember().getLoginId());
     }
 }

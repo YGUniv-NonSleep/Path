@@ -1,5 +1,6 @@
 package com.capstone.pathproject.repository.company;
 
+import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.company.Company;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -21,4 +22,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @EntityGraph(attributePaths = {"member"})
     @Query("select c from Company c where c.name = :name and c.companyNumber = :companyNumber")
     Optional<Company> findCompany(@Param("name") String name, @Param("name") String companyNumber);
+
+    List<Company> findByCategory(CompCategory category);
+
+
 }

@@ -114,7 +114,7 @@ const Menubar = () => {
   const location = useLocation();
   const [currLocation, setCurrLocation] = useState(null);
   const navigate = useNavigate();
-  const { userLogOut } = useTokenReissue();
+  const { userLogOut, tokenReissue } = useTokenReissue();
   let state = useSelector((state) => state);
   let dispatch = useDispatch();
 
@@ -123,6 +123,7 @@ const Menubar = () => {
   }, [location]);
 
   useEffect(() => {
+    tokenReissue();
     console.log(state);
   }, [state]);
 
