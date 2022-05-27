@@ -12,6 +12,8 @@ function useBusInfo(){
     const [busStop, setBusStop] = useState([]);
     const [toggleValue, setToggleValue] = useState("bus");
     const [busStopValue, setBusStopValue] = useState("");
+    const [searchValue, setSearchValue] = useState("");
+    const [busValue, setBusValue] = useState("");
   
     async function mapLoad() {
       try {
@@ -50,14 +52,29 @@ function useBusInfo(){
       }
     }
 
+    function busClickValue(e) {
+      console.log(e.target.value);
+      if(e.target.value != undefined){
+        setBusValue("stopValue");
+      }else {
+        return 0;
+      }
+    }
+
     function busStopClick(e){
       console.log(e.target.value);
+      if(e.target.value != undefined){
+        setBusStopValue("busStopClick");
+      } else {
+        return 0;
+      }
     }
   
     function submit(e) {
       e.preventDefault();
       console.log(busNo);
       busInfo(busNo);
+      setSearchValue(busNo);
     }
     
     async function busInfo(data) {
@@ -161,7 +178,8 @@ function useBusInfo(){
 
     return {
         busNo, busList, busStop, toggleValue, 
-        mapLoad, onChanged, submit, busInfo, onToggle, busStopClick
+        mapLoad, onChanged, submit, busInfo, onToggle, 
+        busStopClick, busStopValue, searchValue, busClickValue, busValue,
     }
 }
 

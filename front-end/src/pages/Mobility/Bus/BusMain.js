@@ -40,9 +40,9 @@ const Line = styled.hr`
   top: 250px;
   left: 15px;
   width: 350px;
+  border: 0;
   height: 1px;
-  border: none;
-  background-color: rgb(211, 211, 211);
+  background: #ccc
 `;
 
 const Text1 = styled.p`
@@ -58,9 +58,9 @@ const Line1 = styled.hr`
   top: 420px;
   left: 15px;
   width: 350px;
+  border: 0;
   height: 1px;
-  border: none;
-  background-color: rgb(211, 211, 211);
+  background: #ccc
 `;
 
 const Line2 = styled.hr`
@@ -68,9 +68,9 @@ const Line2 = styled.hr`
   top: 320px;
   left: 15px;
   width: 350px;
+  border: 0;
   height: 1px;
-  border: none;
-  background-color: rgb(211, 211, 211);
+  background: #ccc
 `;
 
 const BusNum = styled.div`
@@ -126,7 +126,7 @@ const BusBtn = styled.button`
   width: 180px;
   height: 40px;
   background-color: white;
-  border: 1px solid rgb(184, 184, 184);
+  border: 1px solid #ccc;
   border-radius: 7px;
   &:hover {
     color: blue;
@@ -140,7 +140,7 @@ const BusStopBtn = styled.button`
   width: 180px;
   height: 40px;
   background-color: white;
-  border: 1px solid rgb(184, 184, 184);
+  border: 1px solid #ccc;
   border-radius: 7px;
   &:hover {
     color: blue;
@@ -160,7 +160,7 @@ const BusListBtn = styled.button`
 width: 320px;
 height: 70px;
 border: 0;
-border-bottom: 1px solid rgb(184, 184, 184);
+border-bottom: 1px solid #ccc;
 font-size: 15px;
 text-align: left;
 background-color: white;
@@ -171,32 +171,55 @@ background-color: white;
 
 const BusStayList = styled.div`
 position: absolute;
-top: 240px;
-left: 20px;
-width: 350px;
+top: 250px;
+width: 100%;
 height: 74%;
 border: none;
 overflow: scroll;
 `;
 
 const BusStayList1 = styled.button`
-width: 300px;
-height: 70px;
+width: 100%;
+height: 90px;
+padding-left: 15px;
 border: 0;
-border-bottom: 1px solid rgb(184, 184, 184);
-font-size: 15px;
+border-bottom: 1px solid #ccc;
+font-size: 16px;
+font-weight: bold;
 text-align: left;
+color: #386DE8;
 background-color: white;
 &:hover {
   background-color: rgb(240, 251, 255, 0.842);
 }
 `;
 
+const SearchResult = styled.div`
+position: relative;
+top: 12px;
+text-align: left;
+width: 100%;
+height: 40px;
+word-break: break-all;
+font-size: 15px;
+font-weight: bold;
+`;
+
+const Line3 = styled.hr`
+position: relative;
+top: 12px;
+z-index: 10;
+border: 0;
+height: 1px;
+background: #ccc;
+`;
+
 function BusMain() {
   const { loading } = useLoading();
   const { 
     busNo, busList, busStop, toggleValue, 
-    onChanged, submit, onToggle, busStopClick, busStopValue
+    onChanged, submit, onToggle, busStopClick, busStopValue, searchValue,
+    busClickValue, busValue,
   } = useBusInfo();
   // console.log(toggleValue)
 
@@ -250,13 +273,13 @@ function BusMain() {
                 { busList.station.map((item)=>{
                     return(
                       <div>
-                      <BusListBtn onClick={busStopClick} value="busStop">{item.stationName}</BusListBtn>
+                      <BusListBtn onClick={busClickValue} value="busStop">{item.stationName}</BusListBtn>
                       {
                         busStopValue == "busStopClick" && busList != undefined && busList.length != 0 ? (
                           <div>
                             {
                                
-                            }</div>
+                            } </div>
                         ) : <> </>
                       }
                       </div>
@@ -267,16 +290,29 @@ function BusMain() {
             </>
           ) : toggleValue == "busStop" && busStop != undefined && busStop.length != 0 ? (
             <>
+            <SearchResult>'{busStop[0].do} {busStop[0].gu}' 중심의 '{searchValue}' 정류장 검색 결과</SearchResult>
+            <Line3/>
               <BusStayList>
                 { busStop.map((item)=> {
                     return (
                       <div>
-                        <BusStayList1>{item.stationName}</BusStayList1>
+                        <BusStayList1 onClick={busStopClick} value="stopValue">{item.stationName}</BusStayList1>
                       </div>
                     );
                   })
                 }
               </BusStayList>
+
+              { busValue == "stopValue" ? 
+              <>
+              <div>{}</div>
+              </> 
+              :(
+                <>
+                
+                </>
+              )}
+
             </>
           ) : (
             <>
