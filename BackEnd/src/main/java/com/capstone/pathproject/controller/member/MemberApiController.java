@@ -2,6 +2,7 @@ package com.capstone.pathproject.controller.member;
 
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.member.*;
+import com.capstone.pathproject.dto.order.MemberPaymentDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
@@ -97,17 +98,23 @@ public class MemberApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/member/{memberId}/orders")
-    public Slice<MemberPaymentDto> getMemberOrders(@PathVariable Long memberId,
-                                                   @PageableDefault(size = 5) Pageable pageable) {
+    @GetMapping("/member/{memberId}/payments")
+    public Slice<MemberPaymentDto> getMemberPayments(@PathVariable Long memberId,
+                                                     @PageableDefault(size = 5) Pageable pageable) {
         return memberService.getMemberPayments(memberId, pageable);
     }
 
-    @GetMapping("/member/{memberId}/orders/date")
-    public Slice<MemberPaymentDto> findMemberPaymentsBetweenDate(@PathVariable Long memberId,
-                                                                 @RequestParam String startDate, // yyyy-MM-dd
-                                                                 @RequestParam String endDate,
-                                                                 Pageable pageable) {
+    @GetMapping("/member/{memberId}/payments/date")
+    public Slice<MemberPaymentDto> getMemberPaymentsBetweenDate(@PathVariable Long memberId,
+                                                                @RequestParam String startDate, // yyyy-MM-dd
+                                                                @RequestParam String endDate,
+                                                                Pageable pageable) {
         return memberService.getMemberPaymentsBetweenDate(memberId, startDate, endDate, pageable);
+    }
+
+    @GetMapping("/member/{memberId}/payments/all")
+    public ResponseEntity<Message<?>> getTotalPayments(@PathVariable Long memberId) {
+        Message<Object> message = memberService.getMemberTotalPaymentsMonth(memberId);
+        return responseUtil.createResponseEntity(message);
     }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useTokenReissue from '../../../hooks/useTokenReissue';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,8 @@ function useMemberMain() {
   const navigate = useNavigate();
   const { userLogOut } = useTokenReissue();
   const [open, setOpen] = useState(true);
+  const [payments, setPayments] = useState([]);
+  const [amountByDay, setAmountByDat] = useState([]);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -36,10 +38,52 @@ function useMemberMain() {
       });
   };
 
+  const getPayments = () => {
+    const url =
+      process.env.REACT_APP_SPRING_API + '/api/member/' + user.id + '/payments';
+    const data = {
+      page: 0,
+      size: 5,
+    };
+    axios
+      .get(url, { params: data }, { withCredentials: true })
+      .then((res) => {
+        setPayments(res.data.content);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getTotalChargeForMonth = () => {
+    const url =
+      process.env.REACT_APP_SPRING_API +
+      '/api/member/' +
+      user.id +
+      '/payments/all';
+    axios
+      .get(url, { withCredentials: true })
+      .then((res) => {
+        setAmountByDat(res.data.body);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    if (user.id !== 0) {
+      getPayments();
+      getTotalChargeForMonth();
+    }
+  }, [user]);
+
   return {
     open,
     toggleDrawer,
     deleteMember,
+    payments,
+    amountByDay,
   };
 }
 
