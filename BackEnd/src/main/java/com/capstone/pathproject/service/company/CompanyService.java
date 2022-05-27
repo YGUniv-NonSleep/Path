@@ -1,11 +1,12 @@
 package com.capstone.pathproject.service.company;
 
-import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.company.CompMember;
 import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
+import com.capstone.pathproject.dto.company.FindCompanyDto;
+import com.capstone.pathproject.dto.company.LocationDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.company.CompMemberRepository;
@@ -13,7 +14,6 @@ import com.capstone.pathproject.repository.company.CompanyRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,13 +139,22 @@ public class CompanyService {
     }
 
 
-    public Message<?> findCompany(CompCategory category) {
+    public Message<?> findCompany(FindCompanyDto findCompanyDto) {
 
         ArrayList<CompanyDTO> companyDTOArrayList = new ArrayList<>();
-        List<Company> companyList;
+        List<Company> companyList = new ArrayList<>();
 
-        if (category != null){
-             companyList= companyRepository.findByCategory(category);
+        if (findCompanyDto != null){
+
+            for (LocationDto locationDto : findCompanyDto.getLocationList()) {
+                List<Company> companies = companyRepository.findLocationCompanies(locationDto.getX(), locationDto.getY());
+
+                for (Company company: companies) {
+                    companyList.add(company);
+                }
+
+            }
+
         }else{
             companyList = companyRepository.findAll();
         }
@@ -169,7 +178,7 @@ public class CompanyService {
         return Message.<List<CompanyDTO>>builder()
                 .body(companyDTOArrayList)
                 .header(StatusEnum.OK)
-                .message( category + " list find success")
+                .message(  " list find success")
                 .build();
     }
 }
