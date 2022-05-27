@@ -9,6 +9,8 @@ import {
   FormControl,
 } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import useCars from '../hooks/useCars';
+import useAddCars from '../hooks/useAddCars'
 
 const style = {
   position: 'absolute',
@@ -26,13 +28,15 @@ const style = {
 };
 
 function AddCarsModal() {
+  const { handleInput, inputValue, handleSubmit } = useAddCars();
+
   return (
     <Box sx={style}>
       <DirectionsCarIcon sx={{ m: 1 }} />
       <Typography component="h1" variant="h4" align="center">
         차량 등록
       </Typography>
-      <Box component="form" noValidate sx={{ mt: 3 }}>
+      <Box component="form" noValidate sx={{ mt: 3 }} onSubmit={handleSubmit}>
         <FormControl component="fieldset" variant="standard">
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -40,15 +44,26 @@ function AddCarsModal() {
                 required
                 autoFocus
                 fullWidth
+                id="carKind"
                 name="carKind"
                 label="차량 종류"
+                value={inputValue.carKind}
+                onChange={handleInput}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField required fullWidth name="carNum" label="차량 번호" />
+              <TextField
+                required
+                fullWidth
+                id="carNum"
+                name="carNum"
+                label="차량 번호"
+                value={inputValue.carNum}
+                onChange={handleInput}
+              />
             </Grid>
             <Grid item xs={12}>
-              <Input fullWidth type="file" />
+              <input type="file" name="imageFile" />
             </Grid>
           </Grid>
           <Button
