@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeUser } from '../store';
+import { useDispatch } from 'react-redux';
+import { changeUser } from '../store/user';
 
 function useTokenReissue() {
-  let state = useSelector((state) => state);
   let dispatch = useDispatch();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   // === AccessToken 재발급 == //
   const tokenReissue = () => {
@@ -30,7 +28,7 @@ function useTokenReissue() {
             name: decoded.name,
             loginId: decoded.sub,
             role: decoded.role,
-          })
+          }),
         );
       })
       .catch((err) => {

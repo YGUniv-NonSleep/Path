@@ -1,27 +1,9 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-
-let user = createSlice({
-  name: 'user',
-  initialState: {
-    id: 0,
-    name: 'anonymous',
-    loginId: 'anonymous',
-    role: 'ROLE_ANONYMOUS',
-  },
-  reducers: {
-    changeUser(state, action) {
-      state.id = action.payload.id;
-      state.name = action.payload.name;
-      state.loginId = action.payload.loginId;
-      state.role = action.payload.role;
-    },
-  },
-});
-
-export let { changeUser } = user.actions;
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from "./user";
 
 export default configureStore({
+  // redux가 관리할 모든 reducer(상태)를 정의할 공간
   reducer: {
-    user: user.reducer,
+    user: userReducer,
   },
 });

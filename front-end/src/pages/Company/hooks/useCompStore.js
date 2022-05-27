@@ -1,16 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 
 function useCompStore(){
+  const userInfo = useSelector((state) => state);
+  // console.log(userInfo);
   const [myStore, setMyStore] = useState([]);
   const [storeDetail, setStoreDetail] = useState(null);
-
+  
   //== 모달 창 제어 ==//
   const [open, setOpen] = useState(false);
 
   const handleOpen = (e) => {
     setOpen(true);
-    setStoreDetail(myStore[e.target.value-1])
+    setStoreDetail(myStore[e.target.value])
   };
 
   const handleClose = () => {
@@ -25,7 +28,7 @@ function useCompStore(){
       .get(process.env.REACT_APP_SPRING_API + "/api/company/myStore")
       .then((res) => {
         // console.log(res.data.body);
-         setMyStore(res.data.body);
+        setMyStore(res.data.body);
       })
       .catch((err) => {
         console.log(err);

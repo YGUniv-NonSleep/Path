@@ -18,7 +18,8 @@ function CompanyMain() {
     return (
         <CompCon>
             <CompSubCon>
-            { loading ? <p>업체 소개 화면 나왔다</p> : <h2>로드 중...</h2> }
+            { loading ? <p>업체 소개 화면 입니다.</p> : <h2>로드 중...</h2> }
+            <div>너의 업체입니다.</div>
             </CompSubCon>
         </CompCon>
     )
