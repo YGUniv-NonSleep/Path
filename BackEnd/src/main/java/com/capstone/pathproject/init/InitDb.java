@@ -15,6 +15,7 @@ public class InitDb {
     private final InitCompanyService initCompanyService;
     private final InitProductService initProductService;
     private final InitOrderService initOrderService;
+    private final InitCardService initCardService;
 
     @PostConstruct
     public void init() {
@@ -24,5 +25,6 @@ public class InitDb {
         initCompanyService.dbInitCompany();
         initProductService.dbInitProduct();
         initOrderService.dbInitOrder();
+        initCardService.dbInitCard();
     }
 }
