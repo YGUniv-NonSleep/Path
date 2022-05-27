@@ -1,4 +1,4 @@
-package com.capstone.pathproject.dto.member;
+package com.capstone.pathproject.dto.order;
 
 import com.capstone.pathproject.domain.order.OrderState;
 import com.capstone.pathproject.dto.order.OrderItemQueryDto;

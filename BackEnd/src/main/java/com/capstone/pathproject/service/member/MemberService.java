@@ -2,6 +2,8 @@ package com.capstone.pathproject.service.member;
 
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.member.*;
+import com.capstone.pathproject.dto.order.AmountByDayDto;
+import com.capstone.pathproject.dto.order.MemberPaymentDto;
 import com.capstone.pathproject.dto.order.OrderItemQueryDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -204,5 +207,16 @@ public class MemberService {
         return memberPaymentDtos.stream()
                 .map(MemberPaymentDto::getOrderId)
                 .collect(Collectors.toList());
+    }
+
+    public Message<Object> getMemberTotalPaymentsMonth(Long memberId) {
+        int year = LocalDate.now().getYear();
+        String month = LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
+        LocalDateTime firstDateTime = LocalDate.of(year, Integer.parseInt(month), 1).atTime(0, 0);
+        List<AmountByDayDto> amountByDayDtos = paymentQueryRepository.findTotalPaymentsBetweenDate(memberId, firstDateTime, LocalDateTime.now());
+        return Message.builder()
+                .header(StatusEnum.OK)
+                .message("이번달 총 결제요금 조회완료")
+                .body(amountByDayDtos).build();
     }
 }
