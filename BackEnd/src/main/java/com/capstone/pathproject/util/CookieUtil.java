@@ -24,7 +24,7 @@ public class CookieUtil {
         } catch (UnsupportedEncodingException e) {
             log.error("UnsupportedEncodingException : createCookie()", e);
         }
-        refreshCookie.setMaxAge(JwtProperties.REFRESH_EXPIRATION_TIME / 1000); // 24시간
+        refreshCookie.setMaxAge(JwtProperties.REFRESH_EXPIRATION_TIME / 1000); // 1시간
         refreshCookie.setHttpOnly(true);
 //        refreshCookie.setSecure(true);
         refreshCookie.setPath("/"); // 모든 경로에서 접근 가능
