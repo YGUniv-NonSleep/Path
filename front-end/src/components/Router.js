@@ -12,30 +12,11 @@ import { Oder } from '../pages/Oder';
 import { Bus, Subway, Scooter, Bike } from '../pages/Mobility';
 import { Community, CommunityContents, CommunityAdd } from '../pages/Community';
 import { CarPool, CarPoolContents, CarPoolAdd } from '../pages/CarPool';
-import {
-  Company,
-  CompStore,
-  CompCreate,
-  ItemBasic,
-} from '../pages/Company';
-import {
-  CompManage,
-  CompEdit,
-  ItemEdit,
-  Items,
-  Resign,
-} from '../pages/Company/CompManage';
-import {
-  Member,
-  Card,
-  Cars,
-  Login,
-  SignUp,
-  UpdateMem,
-  SearchId,
-  SearchPw,
-} from '../pages/Member';
+import { Company, CompStore, CompCreate, ItemBasic } from '../pages/Company';
+import { CompManage, CompEdit, ItemEdit, Items, Resign } from '../pages/Company/CompManage';
+import { Member, Card, Cars, Login, SignUp, UpdateMem, SearchId, SearchPw } from '../pages/Member';
 import TossPayments from '../pages/TosspaymentsTest';
+
 // https://kyung-a.tistory.com/36
 
 function Router() {
