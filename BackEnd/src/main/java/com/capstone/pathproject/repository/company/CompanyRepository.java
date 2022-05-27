@@ -25,5 +25,12 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     List<Company> findByCategory(CompCategory category);
 
+    @Query("select c from Company c "
+
+
+    )
+    List<Company> findLocationCompanies(@Param("x") double x, @Param("y")double y );
+    //List<Company> findLocationCompanies(@Param("point")List<Double> pointList);
+
 
 }
