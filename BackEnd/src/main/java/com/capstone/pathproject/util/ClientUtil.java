@@ -28,7 +28,6 @@ public class ClientUtil {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
             log.info(">>>> HTTP_X_FORWARDED_FOR : " + ip);
         }
-
         if (ip == null) {
             ip = request.getRemoteAddr();
         }
