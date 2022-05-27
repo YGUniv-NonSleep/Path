@@ -40,7 +40,7 @@ function ItemsMain() {
               <br></br>
               {/* <div>상품옵션이름: {it.optionList[0].name}</div> */}
               {/* <div>상품상세옵션이름: {it.optionList[0].detailOptionList[0].name}</div>
-                            <div>상품상세옵션가격: {it.optionList[0].detailOptionList[0].price}</div> */}
+                  <div>상품상세옵션가격: {it.optionList[0].detailOptionList[0].price}</div> */}
             </Fragment>
           );
         })}
