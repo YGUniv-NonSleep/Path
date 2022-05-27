@@ -3,16 +3,21 @@ import { useEffect, useState } from "react";
 
 function useCompStore(){
   const [myStore, setMyStore] = useState([]);
+  const [storeDetail, setStoreDetail] = useState(null);
 
   //== 모달 창 제어 ==//
   const [open, setOpen] = useState(false);
 
   const handleOpen = (e) => {
     setOpen(true);
+    setStoreDetail(myStore[e.target.value-1])
   };
 
   const handleClose = () => {
-    if (open === true) return setOpen(false);
+    if (open === true) {
+      setOpen(false)
+      setStoreDetail(null)
+    }
   };
 
   function getMyStore() {
@@ -35,7 +40,7 @@ function useCompStore(){
   }, []);
 
   return {
-    myStore, open, 
+    myStore, storeDetail, open, 
     getMyStore, handleOpen, handleClose
   }
 }

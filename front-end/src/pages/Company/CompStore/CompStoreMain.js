@@ -19,10 +19,10 @@ const CompStoreSubCon = styled.div`
 function CompStoreMain() {
   const { loading } = useLoading();
   const { 
-    myStore, open, 
+    myStore, storeDetail, open, 
     handleOpen, handleClose
   } = useCompStore();
-  
+  console.log(storeDetail)
   return (
     <CompStoreCon>
       <CompStoreSubCon>
@@ -34,10 +34,26 @@ function CompStoreMain() {
             } else {
                 return (
                     <Fragment key={item.id}>
-                      <div>업체 카테고리: {item.category}</div>
-                      <div>업체 이메일: {item.mail}</div>
-                      <div>업체명: {item.name}</div>
-                      <div>업체 전화번호: {item.phone}</div>
+                      { open ? (
+                        <Modal
+                          className={"comp-store-modal"}
+                          visible={open}
+                          closable={true}
+                          maskClosable={true}
+                          onClose={handleClose}
+                        >
+                          <div>{ `대표자명: ${storeDetail.member.name}` }</div>
+                          <div>{ `상호명: ${storeDetail.name} ${storeDetail.category}` }</div>
+                          <div>{ `영업시간: 예정` }</div>
+                          <div>{ `전화번호: ${item.phone}` }</div>
+                          <div>{ `사업자주소: 예정` }</div>
+                          <Link to={`/company/manage/${storeDetail.id}`}><button>상품 관리로 이동</button></Link>
+                          {/* <Link to={`/company/oder/${storeDetail.id}`}><button>주문 관리로 이동</button></Link> */}
+                        </Modal>
+                      ) : null }
+                      <div>{ `상호명: ${item.name} ${item.category}` }</div>
+                      <div>{ `전화번호: ${item.phone}` }</div>
+                      <div>{ `사업자주소: 예정` }</div>
                       <img
                         src={
                           item.thumbnail != "blankImage" ? (
@@ -48,20 +64,7 @@ function CompStoreMain() {
                         width={"100px"}
                         height={"100px"}
                       /><br/>
-                      <button onClick={handleOpen}>업체 세부정보</button>
-                      { open ? (
-                          <Modal
-                            className={"comp-store-modal"}
-                            visible={open}
-                            closable={true}
-                            maskClosable={true}
-                            onClose={handleClose}
-                          >
-                            <div>{ `id:${item.id}인 업체의 정보` }</div>
-                            {/* item.id가 마지막 번호만 출력되고 있음 */}
-                            <Link to={`/company/manage/${item.id}`}><button>상품 관리로 이동</button></Link>
-                          </Modal>
-                        ) : null }
+                      <button onClick={handleOpen} value={item.id}>업체 세부정보</button>
                     </Fragment>
                   );
             }
