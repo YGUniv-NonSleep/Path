@@ -101,7 +101,7 @@ public class JwtTokenUtil {
         long expiration = claimsFormToken.getExpiration().getTime();
         long now = new Date().getTime();
         if (expiration >= now && expiration - 600000 <= now) {
-            log.info("RefreshToken 갱신 필요 : {}", expiration);
+            log.info("RefreshToken 갱신 필요 : {}", new Date(expiration));
             return true;
         }
         log.info("RefreshToken 갱신 불필요 : {}", expiration);

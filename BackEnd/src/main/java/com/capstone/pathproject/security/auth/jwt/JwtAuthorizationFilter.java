@@ -103,7 +103,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             if (isValidateCookie(refreshTokenCookie)) {
                 String refreshToken = cookieUtil.exchangeToken(refreshTokenCookie).replace(JwtProperties.TOKEN_PREFIX, "");
                 if (jwtTokenUtil.isRefreshTokenExpireReissueTime(refreshToken)) {
-                    if (isTokenEqualsRedisValue(request, response, token)) {
+                    if (isTokenEqualsRedisValue(request, response, refreshToken)) {
                         reissueRefreshToken(request, response, principalDetails);
                     }
                 }
