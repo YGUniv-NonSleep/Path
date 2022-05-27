@@ -26,24 +26,9 @@ public class CarsAPIController {
 
 
     //CRUD
-    @PostMapping("/create")
-    public ResponseEntity<Message<Object>> create(@RequestPart(value = "key", required = false) CarsDto carsDTO,
-                                                  @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                                  HttpServletRequest request) {
-        String fileName;
-        if (file == null) {
-            fileName = "";
-        } else {
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "cars\\";
-
-            try {
-                file.transferTo(new File(filePath + fileName));
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Message<Object> message = carsService.create(carsDTO, fileName);
+    @PostMapping("")
+    public ResponseEntity<Message<Object>> create(@RequestBody CarsDto carsDto) {
+        Message<Object> message = carsService.create(carsDto);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
