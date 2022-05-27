@@ -27,7 +27,7 @@ function useCompStore(){
     axios
       .get(process.env.REACT_APP_SPRING_API + "/api/company/myStore")
       .then((res) => {
-        // console.log(res.data.body);
+        // 새로고침 오류
         setMyStore(res.data.body);
       })
       .catch((err) => {
