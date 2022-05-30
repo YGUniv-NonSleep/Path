@@ -88,7 +88,7 @@ public class CompanyApiController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> findCompany(@RequestBody FindCompanyDto findCompanyDto ){
+    public ResponseEntity<?> findCompany(@RequestBody(required = false) FindCompanyDto findCompanyDto ){
         Message<?> message =  companyService.findCompany(findCompanyDto);
         return responseUtil.createResponseEntity(message);
     }

@@ -16,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -152,8 +154,8 @@ public class CompanyService {
                 for (Company company: companies) {
                     companyList.add(company);
                 }
-
             }
+            companyList.stream().distinct().collect(Collectors.toList());
 
         }else{
             companyList = companyRepository.findAll();
@@ -178,7 +180,7 @@ public class CompanyService {
         return Message.<List<CompanyDTO>>builder()
                 .body(companyDTOArrayList)
                 .header(StatusEnum.OK)
-                .message(  " list find success")
+                .message("list find success")
                 .build();
     }
 }

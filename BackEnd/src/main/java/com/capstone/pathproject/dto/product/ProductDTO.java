@@ -14,6 +14,7 @@ import java.util.List;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 public class ProductDTO {
     private Long id;
     private int price;
@@ -40,7 +41,7 @@ public class ProductDTO {
     this.optionList = optionList;
     }
 
-    public Product toEntity(){
+    public Product toEntity(Company company){
         return Product.createProduct()
                 .id(id)
                 .created(created)
@@ -49,7 +50,7 @@ public class ProductDTO {
                 .price(price)
                 .stock(stock)
                 .prodBasic(prodBasic.toEntity())
-                .company(company.toEntity())
+                .company(company)
                 .optionList(toEntityList( optionList))
                 .picture(picture)
                 .build();
