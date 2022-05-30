@@ -72,10 +72,8 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function MemberMain() {
-  const { loading } = useLoading();
-  const { open, toggleDrawer, deleteMember } = useMemberMain();
-
-  // valid check -> email, phone, addr, addrDetail
+  const { open, toggleDrawer, deleteMember, payments, amountByDay } =
+    useMemberMain();
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -130,7 +128,7 @@ function MemberMain() {
                     height: 240,
                   }}
                 >
-                  <Chart />
+                  <Chart amountByDay={amountByDay} />
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
@@ -143,13 +141,13 @@ function MemberMain() {
                     height: 240,
                   }}
                 >
-                  <Deposits />
+                  <Deposits amountByDay={amountByDay} />
                 </Paper>
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
+                  <Orders payments={payments} />
                 </Paper>
               </Grid>
             </Grid>

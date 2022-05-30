@@ -1,7 +1,8 @@
 package com.capstone.pathproject.repository.order.query;
 
 import com.capstone.pathproject.domain.order.Payment;
-import com.capstone.pathproject.dto.member.MemberPaymentDto;
+import com.capstone.pathproject.dto.order.AmountByDayDto;
+import com.capstone.pathproject.dto.order.MemberPaymentDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,11 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public interface PaymentQueryRepository extends JpaRepository<Payment, Long> {
 
-    @Query("select new com.capstone.pathproject.dto.member.MemberPaymentDto(p.id, o.id, p.price, p.createdDateTime, p.state, p.method) " +
+    @Query("select new com.capstone.pathproject.dto.order.MemberPaymentDto(p.id, o.id, p.price, p.createdDateTime, p.state, p.method) " +
             "from Payment p " +
             "join p.order o " +
             "join o.member m " +
@@ -21,7 +23,7 @@ public interface PaymentQueryRepository extends JpaRepository<Payment, Long> {
             "order by p.createdDateTime desc")
     Slice<MemberPaymentDto> findMemberPayments(@Param("memberId") Long memberId, Pageable pageable);
 
-    @Query("select new com.capstone.pathproject.dto.member.MemberPaymentDto(p.id, o.id, p.price, p.createdDateTime, p.state, p.method) " +
+    @Query("select new com.capstone.pathproject.dto.order.MemberPaymentDto(p.id, o.id, p.price, p.createdDateTime, p.state, p.method) " +
             "from Payment p " +
             "join p.order o " +
             "join o.member m " +
@@ -32,4 +34,15 @@ public interface PaymentQueryRepository extends JpaRepository<Payment, Long> {
                                                           @Param("startDate") LocalDateTime startDate,
                                                           @Param("endDate") LocalDateTime endDate,
                                                           Pageable pageable);
+
+    @Query("select new com.capstone.pathproject.dto.order.AmountByDayDto(p.id, p.createdDateTime, p.price) " +
+            "from Payment p " +
+            "join p.order o " +
+            "join o.member m " +
+            "where p.order.member.id = :memberId " +
+            "and p.createdDateTime between :startDate and :endDate " +
+            "order by p.createdDateTime asc")
+    List<AmountByDayDto> findTotalPaymentsBetweenDate(@Param("memberId") Long memberId,
+                                                      @Param("startDate") LocalDateTime startDate,
+                                                      @Param("endDate") LocalDateTime endDate);
 }

@@ -89,6 +89,7 @@ public class Member extends BaseTimeEntity {
         this.birthday = birthday;
         this.account = account;
         this.score = score;
+
     }
 
     public void updateMail(String mail) {

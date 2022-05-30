@@ -55,8 +55,8 @@ function useCarPoolAdd() {
         console.log(result[0].x);
         console.log(result[0].y);
       }
-      setStartX(result[0].y);
-      setStartY(result[0].x);
+      setStartX(result[0].y); //출발 경도
+      setStartY(result[0].x); // 출발 위도
     });
   }
 
@@ -93,8 +93,9 @@ function useCarPoolAdd() {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
     console.log(data)
-    setStartLocal1(data.sigungu);
-    setStartLocal2(data.bname);
+
+    setStartLocal1(data.sigungu); //대구시 북구
+    setStartLocal2(data.banme); // 동읍면 복현동
     setStartAddr(fullAddress);
     getCoords(fullAddress);
   };
