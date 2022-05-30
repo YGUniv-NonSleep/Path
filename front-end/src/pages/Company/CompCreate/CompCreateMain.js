@@ -30,7 +30,7 @@ function CompCreateMain() {
     const { loading } = useLoading();
     const {
         navigate, open, address, 
-        handleOpen, compFormSubmit, createCompany, handleComplete
+        handleOpen, compFormSubmit, handleComplete
     } = useCompCreate();
 
     return (
@@ -43,7 +43,7 @@ function CompCreateMain() {
                 onSubmit={compFormSubmit}
                 encType="multipart/form-data">
                 <input type="text" placeholder="업체명" name="name"/><br/>
-                <input type="text" placeholder="사업자등록번호" name="crn"/><br/>
+                <input type="text" placeholder="사업자등록번호" name="companyNumber"/><br/>
                 <input type="date" placeholder="개업일자" name="openDate"/><br/>
                 <select type="text" placeholder="카테고리" name="category" >
                     <option defaultValue={''}>ㅡㅡㅡㅡ 선택 ㅡㅡㅡㅡ</option>
@@ -86,7 +86,7 @@ function CompCreateMain() {
                 종료시간 : <input type="time" name="cTime" /><br/>
                 <input type="file" name="userfile" multiple="multiple" />
                 <button type="button" onClick={() => navigate("/company/store")}>돌아가기</button>
-                <button type="button" onClick={createCompany}>업체등록</button>
+                <button type="submit">업체등록</button>
             </form>
             </CompCreateSubCon>
         </CompCreateCon>
