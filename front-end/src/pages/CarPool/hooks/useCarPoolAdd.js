@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 function useCarPoolAdd() {
   
@@ -21,10 +22,31 @@ function useCarPoolAdd() {
   const [startLocal2, setStartLocal2] = useState(null);
   const [arriveLocal1, setArriveLocal1] = useState(null);
   const [arriveLocal2, setArriveLocal2] = useState(null);
-
-
+  const [memberCars, setMemberCars] = useState(null);
+  const [caropenModal, setCarOpenModal] = useState(false);
+  const [carChoose, setCarChoose] = useState(null);
+  
+  const [carsId, setCarsId] = useState(null);
+  const [choiceCarKind, setChoiceCarKind] = useState(null);
+  const [choiceCarNum, setChoiceCarNum] = useState(null);
+  
   let navigate = useNavigate();
   let geocoder = new kakao.maps.services.Geocoder();
+  let state = useSelector((state) => state);
+
+ 
+  useEffect(()=>{
+    var memberId = state.user.id;
+    console.log(typeof memberId);
+    axios.get(process.env.REACT_APP_SPRING_API + `/api/cars/view?memberId=${memberId}`)
+    .then((res)=>{
+      console.log(res.data.body)
+      setMemberCars(res.data.body);
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[state])
 
   function getCoords(data) {
     geocoder.addressSearch(data, function (result, status) {
@@ -72,7 +94,7 @@ function useCarPoolAdd() {
     }
     console.log(data)
     setStartLocal1(data.sigungu);
-    setStartLocal2(data.banme);
+    setStartLocal2(data.bname);
     setStartAddr(fullAddress);
     getCoords(fullAddress);
   };
@@ -103,8 +125,30 @@ function useCarPoolAdd() {
     getArrivedCoords(fullAddress);
   };
 
+  const findCarsModal = (e) => {
+    e.preventDefault();
+    setCarOpenModal(true);
+  }
+
+  const closeCarsModal = (e) => {
+    e.preventDefault();
+    setCarOpenModal(false)
+  }
+  
+  const choiceMyCar = (cars,e) => {
+    e.preventDefault();
+    setCarsId(cars.id);
+    setChoiceCarKind(cars.carKind);
+    setChoiceCarNum(cars.carNum);
+    alert("선택완료");
+    closeCarsModal(e);
+    //console.log(e.target.carKind.value)
+  }
+
+
   const createCarPost = (e) => {
     e.preventDefault();
+  
     var data = {
       title: e.target.title.value,
       content: e.target.content.value,
@@ -120,9 +164,9 @@ function useCarPoolAdd() {
       startLocal2 : startLocal2,
       arriveLocal1 : arriveLocal1,
       arriveLocal2 : arriveLocal2,
-      cars: {
-        id: 1,
-      },
+      cars : {
+        id : carsId
+      }
     };
     console.log(data);
 
@@ -154,9 +198,9 @@ function useCarPoolAdd() {
   };
 
   return { 
-    isStartOpen, isArrivedOpen, dataset, startAddr, arriveAddr, 
+    isStartOpen, isArrivedOpen, dataset, startAddr, arriveAddr, memberCars,caropenModal,choiceCarKind,choiceCarNum,
     navigate, getCoords, getArrivedCoords, openStartCode, openArrivedCode, 
-    handleComplete, handleComplete2, createCarPost 
+    handleComplete, handleComplete2, createCarPost,findCarsModal,closeCarsModal,choiceMyCar
   }
 }
 
