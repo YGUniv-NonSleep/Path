@@ -1,15 +1,13 @@
 package com.capstone.pathproject.service.product;
 
-import com.capstone.pathproject.domain.company.DetailOption;
-import com.capstone.pathproject.domain.company.Option;
-import com.capstone.pathproject.domain.company.ProdBasic;
-import com.capstone.pathproject.domain.company.Product;
+import com.capstone.pathproject.domain.company.*;
 import com.capstone.pathproject.dto.product.DetailOptionDTO;
 import com.capstone.pathproject.dto.product.OptionDTO;
 import com.capstone.pathproject.dto.product.ProdBasicDTO;
 import com.capstone.pathproject.dto.product.ProductDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
+import com.capstone.pathproject.repository.company.CompanyRepository;
 import com.capstone.pathproject.repository.product.DetailOptionRepository;
 import com.capstone.pathproject.repository.product.OptionRepository;
 import com.capstone.pathproject.repository.product.ProdBasicRepository;
@@ -29,6 +27,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final OptionRepository optionRepository;
     private final DetailOptionRepository detailOptionRepository;
+    private final CompanyRepository companyRepository;
 
 
     public Message<ProdBasicDTO> createBasic(ProdBasicDTO prodBasicDTO) {
@@ -92,7 +91,10 @@ public class ProductService {
     }
 
     public Message<ProductDTO> createProduct(ProductDTO productDTO){
-        productRepository.save(productDTO.toEntity());
+
+        Optional<Company> company = companyRepository.findById(productDTO.getCompany().getId());
+
+        productRepository.save(productDTO.toEntity(company.get()));
 
         return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
@@ -111,7 +113,10 @@ public class ProductService {
     }
 
     public Message<ProductDTO> updateProduct(ProductDTO productDTO){
-        productRepository.save(productDTO.toEntity());
+
+        Optional<Company> company = companyRepository.findById(productDTO.getCompany().getId());
+
+        productRepository.save(productDTO.toEntity(company.get()));
 
         return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
