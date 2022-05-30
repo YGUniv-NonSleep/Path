@@ -115,6 +115,7 @@ const Menubar = () => {
   const [currLocation, setCurrLocation] = useState(null);
   const navigate = useNavigate();
   const { userLogOut, tokenReissue } = useTokenReissue();
+  const [isAutoTokenReissue, setIsAutoTokenReissue] = useState(false);
   let state = useSelector((state) => state);
   let dispatch = useDispatch();
 
@@ -125,7 +126,26 @@ const Menubar = () => {
   useEffect(() => {
     tokenReissue();
     console.log(state);
+    if (state.user.id === 0) {
+      console.log('false 변경');
+      setIsAutoTokenReissue(false);
+    } else {
+      console.log('true 변경');
+      setIsAutoTokenReissue(true);
+    }
   }, [state]);
+
+  useEffect(() => {
+    if (isAutoTokenReissue) {
+      let timer = setInterval(() => {
+        tokenReissue();
+        console.log('자동 로그인 연장');
+      }, 600000);
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [isAutoTokenReissue]);
 
   return (
     <NavContainer>
