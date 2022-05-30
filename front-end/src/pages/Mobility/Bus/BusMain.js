@@ -180,25 +180,59 @@ overflow: scroll;
 
 const BusStayList1 = styled.button`
 width: 100%;
-height: 90px;
-padding-left: 15px;
+height: 150px;
 border: 0;
 border-bottom: 1px solid #ccc;
 font-size: 16px;
-font-weight: bold;
 text-align: left;
-color: #386DE8;
-background-color: white;
+background-color: transparent;
 &:hover {
   background-color: rgb(240, 251, 255, 0.842);
 }
 `;
 
+const BusStopList1 = styled.button`
+position:relative;
+left: 5px;
+bottom:10px;
+border:0;
+outline:0;
+width: auto;
+color: #386DE8;
+font-size: 17px;
+font-weight: bold;
+background-color:transparent;
+`;
+
+const BusStayListInfo = styled.div`
+position: relative;
+top: 19px;
+left: 12px;
+width: 190px;
+font-size: 14px;
+color: #8F8F8F;
+background-color: transparent;
+`;
+
+const BusStopNum = styled.button`
+position:relative;
+top: -25px;
+left: 8px;
+border:0;
+outline:0;
+bottom: 20px;
+width: auto;
+height: auto;
+font-size: 13px;
+background-color: transparent;
+`;
+
 const SearchResult = styled.div`
 position: relative;
-top: 12px;
+top: 20px;
+left: 10px;
 text-align: left;
-width: 100%;
+width: 95%;
 height: 40px;
 word-break: break-all;
 font-size: 15px;
@@ -214,12 +248,20 @@ height: 1px;
 background: #ccc;
 `;
 
+const BusCLickList = styled.div`
+position: relative;
+top: 20px;
+width: 150px;
+height:50px;
+background-color: blue;
+`;
+
 function BusMain() {
   const { loading } = useLoading();
   const { 
     busNo, busList, busStop, toggleValue, 
     onChanged, submit, onToggle, busStopClick, busStopValue, searchValue,
-    busClickValue, busValue,
+    busClickValue, busValue
   } = useBusInfo();
   // console.log(toggleValue)
 
@@ -294,27 +336,38 @@ function BusMain() {
             <Line3/>
               <BusStayList>
                 { busStop.map((item)=> {
+
+                  const num = () => {
+                  var testString = item.arsID;
+                  var regex = /[^0-9]/g;
+                  var result = testString.replace(regex, " ");
+                  //console.log(result);
+                  return result;
+                 }
                     return (
-                      <div>
-                        <BusStayList1 onClick={busStopClick} value="stopValue">{item.stationName}</BusStayList1>
-                      </div>
+                        <BusStayList1 onClick={busStopClick} value="stopValue">
+                        <BusStopList1 onClick={busStopClick} value="stopValue">{item.stationName}</BusStopList1>
+                        <BusStayListInfo onClick={busStopClick} value="stopValue">{item.do} {item.gu} {item.dong}</BusStayListInfo>
+                        <BusStopNum onClick={busStopClick} value="stopValue">{num()}</BusStopNum>
+                        </BusStayList1>
                     );
                   })
                 }
               </BusStayList>
 
-              { busValue == "stopValue" ? 
+              { busValue == "stopValue" && busStop.length != 0 ? 
               <>
-              <div>{}</div>
+              <div>hello</div>
               </> 
               :(
                 <>
                 
                 </>
-              )}
+              )
+              }
 
             </>
-          ) : (
+          )  : (
             <>
               <Text>최근 검색</Text>
               <Line></Line>

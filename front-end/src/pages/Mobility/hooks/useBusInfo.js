@@ -179,7 +179,7 @@ function useBusInfo(){
     return {
         busNo, busList, busStop, toggleValue, 
         mapLoad, onChanged, submit, busInfo, onToggle, 
-        busStopClick, busStopValue, searchValue, busClickValue, busValue,
+        busStopClick, busStopValue, searchValue, busClickValue, busValue
     }
 }
 

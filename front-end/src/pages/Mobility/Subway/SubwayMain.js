@@ -365,6 +365,15 @@ height: 260px;
 border-bottom: 1px solid rgb(184, 184, 184);
 `;
 
+const UpDownWay = styled.div`
+position: absolute;
+top: 1px;
+left: 80px;
+width: 50px;
+height: 17px;
+background-color: green;
+`;
+
 function SubwayMain() {
   const [map, settingMap] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -606,13 +615,14 @@ function SubwayMain() {
                 //    let message = item.list;
                 //    let subMessage = message.subString(0,3);
                 //    console.log(subMessage);
-                //    //return subMessage;
+                //    return subMessage;
                 //  }
                  return (
                   <div>
                   <UpDownContain>
                   <TimeListUp>{item.Idx}</TimeListUp>
                   <MinutesListUp>{num()}</MinutesListUp>
+                  <UpDownWay></UpDownWay>
                   </UpDownContain>
                   </div>
                  )
