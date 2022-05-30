@@ -2,10 +2,12 @@ package com.capstone.pathproject.service.carpool;
 
 
 import com.capstone.pathproject.domain.carpool.CarPost;
+import com.capstone.pathproject.domain.carpool.Cars;
 import com.capstone.pathproject.dto.carpool.CarPostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.carpool.CarPostRepository;
+import com.capstone.pathproject.repository.carpool.CarsRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +24,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class CarPostService {
     private final CarPostRepository carPostRepository;
-
+    private final CarsRepository carsRepository;
 //CRUD
     @Transactional
     public Message<CarPostDTO> create(CarPostDTO carPostDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails){

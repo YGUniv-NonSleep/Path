@@ -4,6 +4,7 @@ package com.capstone.pathproject.service.carpool;
 import com.capstone.pathproject.domain.carpool.Cars;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.carpool.CarsDto;
+import com.capstone.pathproject.dto.member.MemberDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.carpool.CarsRepository;
@@ -96,11 +97,15 @@ public class CarsService {
 
     //조회
     @Transactional
-    public Message<List<CarsDto>> findView(Pageable pageable) {
-        List<Cars> cars = carsRepository.findAll(pageable).getContent();
+    public Message<?> findView(Long Id) {
+        Optional<Member> findMember = memberRepository.findById(Id);
+
+        //로그인한 사용자의 차량정보 확인
+        List<Cars> cars = carsRepository.findByMember_Id(findMember.get().getId());
+
         ArrayList<CarsDto> listDto = new ArrayList<>();
         cars.stream().map(CarsDto::new).forEach(listDto::add);
-        return Message.<List<CarsDto>>builder()
+        return Message.<ArrayList<?>>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")
                 .body(listDto).build();
