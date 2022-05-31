@@ -5,27 +5,89 @@ import { useNavigate } from "react-router-dom";
 function useCompCreate() {
   const navigate = useNavigate();
   const [formInfo, setFormInfo] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [address, setAddress] = useState(null);
+  const [coord, setCoord] = useState(null);
+
+  const handleComplete = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+
+    // console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+
+    // 주소 저장, 닫기 처리, 좌표 수집
+    setAddress({
+      fullAddress: data.address,
+      zoneCode: data.zonecode,
+    });
+    handleClose();
+    getCoords(data.address);
+  };
+
+  async function getCoords(data) {
+    let geocoder = new kakao.maps.services.Geocoder();
+
+    if (geocoder != null) {
+      await geocoder.addressSearch(data, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          // console.log(result[0].x);
+          // console.log(result[0].y);
+          setCoord({
+            x: result[0].x,
+            y: result[0].y,
+          });
+        }
+      });
+    } else return;
+  }
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    if (open === true) return setOpen(false);
+  };
 
   async function compFormSubmit(e) {
     e.preventDefault();
 
     let inputImageFiles = e.target.userfile.files;
 
-    const imageformData = new FormData();
-    // FormData에 Key:Value 넣기
-    for (var i = 0; i < inputImageFiles.length; i++) {
-      imageformData.append("multipartFile", inputImageFiles[i]);
-    }
+    const imageFormData = new FormData();
+    let imageData = null;
 
-    const imageData = await axios
-      .post(`${process.env.REACT_APP_SPRING_API}/api/image`, imageformData, {
-        headers: {
-          "Content-Type": `multipart/form-data`,
-        },
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (inputImageFiles.length == 0) {
+      images = {
+        data: "blankCompImage",
+      };
+    } else {
+      // FormData에 Key:Value 넣기
+      for (var i = 0; i < inputImageFiles.length; i++) {
+        imageFormData.append("multipartFile", inputImageFiles[i]);
+      }
+
+      imageData = await axios
+        .post(process.env.REACT_APP_SPRING_API + `/api/image`, imageFormData, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
 
     const data = {
       name: e.target.name.value,
@@ -34,8 +96,13 @@ function useCompCreate() {
       category: e.target.category.value,
       mail: e.target.email.value,
       phone: e.target.phone.value,
-      latitude: e.target.lat.value,
-      longitude: e.target.long.value,
+      addr: address.fullAddress,
+      addrDetail: e.target.subJuso,
+      lat: coord.x,
+      lng: coord.y,
+      // crn: ?,
+      open: e.target.oTime,
+      close: e.target.cTime,
       thumbnail: imageData.data,
     };
 
@@ -66,24 +133,16 @@ function useCompCreate() {
     createCompany();
   }, [formInfo]);
 
-  // const test = (event) => {
-  //     event.preventDefault();
-  //     axios.get(
-  //         process.env.REACT_APP_SPRING_API+"/api/company/1"
-  //         //"https://localhost:8080/api/company/1"
-  //         )
-  //         .then((res) => {
-  //             console.log(res);
-  //       }).catch((err) => {
-  //             console.log(err);
-  //       });
-  //   };
-
   return {
     navigate,
     formInfo,
+    address,
     compFormSubmit,
     createCompany,
+    open,
+    handleOpen,
+    handleClose,
+    handleComplete,
   };
 }
 
