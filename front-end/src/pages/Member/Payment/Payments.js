@@ -13,7 +13,30 @@ import {
 } from '@mui/material';
 import React from 'react';
 import PaymentsList from './PaymentsList';
+import { grey } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+
+const HoverPaper = styled(Paper)`
+  padding: 0 2px 2px 2px;
+  opacity: 0.9;
+  transition: all 0.5s ease-out;
+  &:hover {
+    opacity: 1;
+    transform: translateY(-3px);
+    transition: all 0.5s ease-out;
+  }
+`;
+
+const HoverInnerPaper = styled(Paper)`
+  padding: 0 2px 2px 2px;
+  opacity: 0.9;
+  transition: all 0.5s ease-out;
+  &:hover {
+    opacity: 1;
+    transform: translateY(-6px);
+    transition: all 0.5s ease-out;
+  }
+`;
 
 const Payments = ({ payment }) => {
   const paymentDate = `${payment.paymentDate.substring(
@@ -38,7 +61,7 @@ const Payments = ({ payment }) => {
         {/* <Typography component={'h4'} variant="h4" align="center" gutterBottom>
           2022년 5월
         </Typography> */}
-        <Paper sx={{ pb: 2, pl: 2, pr: 2, borderRadius: 3 }} elevation={2}>
+        <HoverPaper sx={{ borderRadius: 3, bgcolor: grey[100] }} elevation={6}>
           <Box display={'flex'}></Box>
           <Grid container spacing={2}>
             <Grid item xs>
@@ -62,7 +85,7 @@ const Payments = ({ payment }) => {
               </Typography>
             </Grid>
           </Grid>
-          <Paper
+          <HoverInnerPaper
             sx={{
               pb: 2,
               pl: 2,
@@ -92,8 +115,8 @@ const Payments = ({ payment }) => {
                 </TableRow>
               </TableBody>
             </Table>
-          </Paper>
-        </Paper>
+          </HoverInnerPaper>
+        </HoverPaper>
       </Stack>
     </Box>
   );

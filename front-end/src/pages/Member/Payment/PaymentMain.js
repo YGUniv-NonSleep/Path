@@ -21,6 +21,8 @@ import SearchDateBar from './SearchDateBar';
 import { MainListItems, SecondaryListItems } from '../MyPage/listItems';
 import useMemberMain from '../hooks/useMemberMain';
 import MenuIcon from '@mui/icons-material/Menu';
+import { grey } from '@mui/material/colors';
+
 const drawerWidth = 240;
 const theme = createTheme();
 
@@ -123,6 +125,7 @@ const PaymentMain = () => {
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
+                bgcolor: grey[50],
               }}
               elevation={2}
             >
