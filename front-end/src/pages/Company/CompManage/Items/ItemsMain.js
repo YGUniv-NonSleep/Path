@@ -18,7 +18,7 @@ function ItemsMain() {
   const { loading } = useLoading();
   const { 
     myItems, 
-    productForm, registProduct
+    productForm
   } = useCompItems()
 
   return (
