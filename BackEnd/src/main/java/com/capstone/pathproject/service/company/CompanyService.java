@@ -1,5 +1,6 @@
 package com.capstone.pathproject.service.company;
 
+import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.company.CompMember;
 import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.member.Member;
@@ -67,7 +68,8 @@ public class CompanyService {
 
         if (findCompany.isPresent()){
             Company result = findCompany.get();
-            CompanyDTO companyDTO = result.toDTO();
+//            CompanyDTO companyDTO = result.toDTO();
+            CompanyDTO companyDTO = new CompanyDTO(result);
 
             return Message.<CompanyDTO>builder()
                     .header(StatusEnum.OK)
@@ -85,7 +87,7 @@ public class CompanyService {
     public Message<List<CompanyDTO>> companyDetailByMember(Long memId){
         List<Company> result = companyRepository.findByMemberId(memId);
         ArrayList<CompanyDTO> companyDTOList = new ArrayList<>();
-        result.stream().map(Company::toDTO).forEach(companyDTOList::add);
+        result.stream().map(company -> new CompanyDTO(company)).forEach(companyDTO -> companyDTOList.add(companyDTO));
         return Message.<List<CompanyDTO>>builder()
                 .message("업체 조회 성공")
                 .body(companyDTOList)
@@ -142,40 +144,20 @@ public class CompanyService {
 
 
     public Message<?> findCompany(FindCompanyDto findCompanyDto) {
-
         ArrayList<CompanyDTO> companyDTOArrayList = new ArrayList<>();
         List<Company> companyList = new ArrayList<>();
-
         if (findCompanyDto != null){
-
             for (LocationDto locationDto : findCompanyDto.getLocationList()) {
-                List<Company> companies = companyRepository.findLocationCompanies(locationDto.getX(), locationDto.getY());
-
+                List<Company> companies = companyRepository.findLocationCompanies(locationDto.getX(), locationDto.getY(), CompCategory.valueOf(findCompanyDto.getCategory()));
                 for (Company company: companies) {
                     companyList.add(company);
                 }
             }
             companyList.stream().distinct().collect(Collectors.toList());
-
         }else{
             companyList = companyRepository.findAll();
         }
-
-        companyList.stream().map(company -> CompanyDTO.createCompanyDTD()
-                        .thumbnail(company.getThumbnail())
-                        .id(company.getId())
-                        .name(company.getName())
-                        .phone(company.getPhone())
-                        .mail(company.getMail())
-                        .longitude(company.getLongitude())
-                        .latitude(company.getLatitude())
-                        .category(company.getCategory())
-                        .addr(company.getAddr())
-                        .addrDetail(company.getAddrDetail())
-                        .open(company.getOpen())
-                        .close(company.getClose())
-                        .build())
-                .forEach(companyDTOArrayList::add);
+        companyList.stream().map(CompanyDTO::new).forEach(companyDTOArrayList::add);
 
         return Message.<List<CompanyDTO>>builder()
                 .body(companyDTOArrayList)
