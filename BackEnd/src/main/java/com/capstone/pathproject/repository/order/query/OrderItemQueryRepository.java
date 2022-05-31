@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface OrderItemQueryRepository extends JpaRepository<OrderItem, Long> {
 
-    @Query("select new com.capstone.pathproject.dto.order.OrderItemQueryDto(oi.order.id, c.name, pb.name, p.price, p.discount, oi.quantity) " +
+    @Query("select new com.capstone.pathproject.dto.order.OrderItemQueryDto(oi.id, oi.order.id, c.name, pb.name, p.price, p.discount, oi.quantity) " +
             "from OrderItem  oi " +
             "join oi.product p " +
             "join p.prodBasic pb " +
