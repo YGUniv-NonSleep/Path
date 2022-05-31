@@ -190,7 +190,6 @@ public class MemberService {
         LocalDateTime startLocalDateTime = startLocalDate.atTime(0, 0);
         LocalDate endLocalDate = LocalDate.parse(endDate);
         LocalDateTime endLocalDateTime = endLocalDate.atTime(LocalTime.MAX);
-
         Slice<MemberPaymentDto> memberPaymentDtos = paymentQueryRepository.findMemberPaymentsBetweenDate(memberId, startLocalDateTime, endLocalDateTime, pageable);
         Map<Long, List<OrderItemQueryDto>> orderItemMap = getOrderItemMap(toOrderIds(memberPaymentDtos));
         memberPaymentDtos.forEach(p -> p.setOrderItems(orderItemMap.get(p.getOrderId())));

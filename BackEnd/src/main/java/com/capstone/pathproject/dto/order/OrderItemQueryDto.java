@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class OrderItemQueryDto {
+    private Long orderItemId;
     private Long orderId;
     private String companyName;
     private String productName;
@@ -15,7 +16,8 @@ public class OrderItemQueryDto {
     private int productDiscount;
     private int productQuantity;
 
-    public OrderItemQueryDto(Long orderId, String companyName, String productName, int productPrice, int productDiscount, int productQuantity) {
+    public OrderItemQueryDto(Long orderItemId, Long orderId, String companyName, String productName, int productPrice, int productDiscount, int productQuantity) {
+        this.orderItemId = orderItemId;
         this.orderId = orderId;
         this.companyName = companyName;
         this.productName = productName;

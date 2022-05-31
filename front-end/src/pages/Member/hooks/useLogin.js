@@ -29,7 +29,7 @@ function useLogin() {
         withCredentials: true,
       })
       .then((res) => {
-        onLoginSuccess(res);
+        tokenReissue();
         navigate('/');
       })
       .catch((err) => {
@@ -37,12 +37,6 @@ function useLogin() {
         console.log(err.response.data);
         alert(err.response.data.message);
       });
-  };
-
-  const onLoginSuccess = (res) => {
-    const authorization = res.headers.authorization;
-    axios.defaults.headers.common['authorization'] = authorization; // axios 모든 요청 헤더에 토큰값 넣기
-    tokenReissue();
   };
 
   return {
