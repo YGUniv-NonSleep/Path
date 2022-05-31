@@ -62,8 +62,8 @@ public class ProductService {
 
     public Message<ProdBasicDTO> basicDetail(Long prodBasicId) {
 
-        Optional<ProdBasic> result = prodBasicRepository.findById(prodBasicId);
-        ProdBasicDTO prodBasicDTO = result.get().toDTO();
+        Optional<ProdBasic> prodBasic = prodBasicRepository.findById(prodBasicId);
+        ProdBasicDTO prodBasicDTO = new ProdBasicDTO(prodBasic.get());
 
         return Message.<ProdBasicDTO>builder()
                 .header(StatusEnum.OK)
@@ -78,7 +78,7 @@ public class ProductService {
         ArrayList<ProdBasicDTO> prodBasicDTOList = new ArrayList<>();
 
         prodBasicList.stream()
-                .map(prodBasic -> prodBasic.toDTO())
+                .map(prodBasic -> new ProdBasicDTO(prodBasic))
                 .forEach(prodBasicDTO -> prodBasicDTOList.add(prodBasicDTO));
 
         System.out.println(prodBasicList);
@@ -129,24 +129,7 @@ public class ProductService {
 
         Product product = productRepository.findById(prodId).get();
 
-        //System.out.println(rs.toString());
-        System.out.println(product.getOptionList());
-
-//        ProductDTO result = ProductDTO.createProductDTO()
-//                .prodbasic(product.getProdbasic())
-//                .company(product.getCompany())
-//                .optionList(product.getOptionList())
-//                .created(product.getCreated())
-//                .discount(product.getDiscount())
-//                .exposure(product.getExposure())
-//                .id(product.getId())
-//                .price(product.getPrice())
-//                .stock(product.getStock())
-//                .build();
-
-        ProductDTO productDTO = product.toDTO();
-
-        System.out.println(productDTO.getOptionList());
+        ProductDTO productDTO = new ProductDTO(product);
 
         return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
@@ -161,7 +144,7 @@ public class ProductService {
         ArrayList<ProductDTO> productDTOList = new ArrayList<>();
 
         productList.stream()
-                .map(product -> product.toDTO())
+                .map(product -> new ProductDTO(product))
                 .forEach(productDTO -> productDTOList.add(productDTO));
 
 //        for (ProductDTO p : productDTOList){

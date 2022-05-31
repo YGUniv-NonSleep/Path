@@ -56,6 +56,24 @@ public class ProductDTO {
                 .build();
     }
 
+    public ProductDTO(Product product){
+        ArrayList<OptionDTO> optionList = new ArrayList<>();
+        product.getOptionList().stream().map(OptionDTO::new).forEach(optionList::add);
+
+        this.id =product.getId();
+        this.price =product.getPrice();
+        this.exposure =product.getExposure();
+        this.discount =product.getDiscount();
+        this.created =product.getCreated();
+        this.stock =product.getStock();
+        this.picture =product.getPicture();
+        this.company =new CompanyDTO(product.getCompany());
+        this.prodBasic =new ProdBasicDTO(product.getProdBasic());
+        this.optionList = optionList;
+    }
+
+
+
 
     public List<Option> toEntityList(List<OptionDTO> dtoList ){
 

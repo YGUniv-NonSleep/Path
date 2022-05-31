@@ -93,29 +93,4 @@ public class Company {
 
     }
 
-    public CompanyDTO toDTO(){
-        MemberDto memberDTO = MemberDto.builder()
-                .id(member.getId())
-                .name(member.getName())
-                .loginId(member.getLoginId()).build();
-
-        return CompanyDTO.createCompanyDTD()
-                .id(this.id)
-                .companyNumber(this.companyNumber)
-                .category(this.category)
-                .latitude(this.latitude)
-                .longitude(this.longitude)
-                .mail(this.mail)
-                .member(memberDTO)
-                .name(this.name)
-                .openDate(this.openDate)
-                .phone(this.phone)
-                .thumbnail(this.thumbnail)
-                .addr(this.addr)
-                .addrDetail(this.addrDetail)
-                .open(this.open)
-                .close(this.close)
-                .build();
-    }
-
 }

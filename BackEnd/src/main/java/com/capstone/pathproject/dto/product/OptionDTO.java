@@ -36,6 +36,17 @@ public class OptionDTO {
                 .build();
     }
 
+    public OptionDTO(Option option){
+
+        ArrayList<DetailOptionDTO> detailOptionList = new ArrayList<>();
+        option.getDetailOptionList().stream().map(DetailOptionDTO::new).forEach(detailOptionList::add);
+
+        this.id = option.getId();
+        this.name = option.getName();
+        this.detailOptionList = detailOptionList;
+        this.proId = option.getProId();
+    }
+
     private List<DetailOption> toEntityList(List<DetailOptionDTO> dtoList){
         ArrayList<DetailOption> detailOptionList = new ArrayList<>();
 

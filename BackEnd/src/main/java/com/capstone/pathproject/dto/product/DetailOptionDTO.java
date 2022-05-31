@@ -33,6 +33,13 @@ public class DetailOptionDTO {
                 .build();
     }
 
+    public DetailOptionDTO(DetailOption detailOption){
+        this.id = detailOption.getId();
+        this.name = detailOption.getName();
+        this.price = detailOption.getPrice();
+        this.optionId = detailOption.getOptionId();
+    }
+
     public List<DetailOption> toEntityList(List<DetailOptionDTO> dtoList){
         ArrayList<DetailOption> detailOptionList = null;
 

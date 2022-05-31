@@ -28,8 +28,9 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("select c " +
             "from Company c " +
             "where (c.longitude between :x - 0.0055 and :x + 0.0055) " +
-            "and (c.latitude between :y - 0.00475 and :y + 0.00475) "
+            "and (c.latitude between :y - 0.00475 and :y + 0.00475) " +
+            "and (c.category = :category)"
             )
-    List<Company> findLocationCompanies(@Param("x") double x, @Param("y")double y );
+    List<Company> findLocationCompanies(@Param("x") double x, @Param("y") double y, @Param("category") CompCategory category);
 
 }

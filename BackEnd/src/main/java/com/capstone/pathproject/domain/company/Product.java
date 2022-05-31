@@ -1,5 +1,6 @@
 package com.capstone.pathproject.domain.company;
 
+import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.product.OptionDTO;
 import com.capstone.pathproject.dto.product.ProdBasicDTO;
 import com.capstone.pathproject.dto.product.ProductDTO;
@@ -71,31 +72,33 @@ public class Product {
 
     }
 
-    public Product() {}
+    public Product() {
 
-    public ProductDTO toDTO(){
-        return ProductDTO.createProductDTO()
-                .company(this.company.toDTO())
-                .id(this.id)
-                .created(this.created)
-                .discount(this.discount)
-                .exposure(this.exposure)
-                .optionList( toDtoList(optionList)  )
-                .price(this.price)
-                .prodBasic(this.prodBasic.toDTO())
-                .stock(this.stock)
-                .picture(this.picture)
-                .build();
     }
 
+//    public ProductDTO toDTO(){
+//        return ProductDTO.createProductDTO()
+//                .company(new CompanyDTO(company))
+//                .id(this.id)
+//                .created(this.created)
+//                .discount(this.discount)
+//                .exposure(this.exposure)
+//                .optionList( toDtoList(optionList)  )
+//                .price(this.price)
+//                .prodBasic(this.prodBasic.toDTO())
+//                .stock(this.stock)
+//                .picture(this.picture)
+//                .build();
+//    }
 
 
-    public List<OptionDTO> toDtoList(List<Option> entityList){
 
-        ArrayList<OptionDTO> optionList = new ArrayList<>();
-        entityList.stream().map(option -> option.toDTO()).forEach(optionDTO -> optionList.add(optionDTO));
-        return optionList;
-    }
+//    public List<OptionDTO> toDtoList(List<Option> entityList){
+//
+//        ArrayList<OptionDTO> optionList = new ArrayList<>();
+//        entityList.stream().map(option -> new OptionDTO(option)).forEach(optionDTO -> optionList.add(optionDTO));
+//        return optionList;
+//    }
 
 
     public void addOptions(ArrayList<Option> options) {

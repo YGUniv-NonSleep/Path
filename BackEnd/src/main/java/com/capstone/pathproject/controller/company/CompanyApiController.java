@@ -1,6 +1,5 @@
 package com.capstone.pathproject.controller.company;
 
-import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
@@ -10,10 +9,8 @@ import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.service.company.CompanyService;
 import com.capstone.pathproject.util.FileUtil;
-import com.capstone.pathproject.util.JwtTokenUtil;
 import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
