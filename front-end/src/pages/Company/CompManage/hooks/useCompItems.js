@@ -4,34 +4,19 @@ import { useOutletContext } from "react-router-dom";
 
 function useCompItems() {
   const [myItems, setMyItems] = useState([]);
+  const [prodForm, setProdForm] = useState(null);
   const companyId = useOutletContext();
 
-  async function getUserSelect(){
-    // 유저가 선택한 업체의 번호 반환하는 함수
-  }
+  // 상품 입력 폼
+  function productForm(e){
+    e.preventDefault();
 
-  // 가게 상품 생성
-  async function registProduct() {
-    const myStore = await getMyStore();
-    // const userSelect = await getUserSelect();
-    console.log(myStore)
     const data = {
       price: 1500,
       exposure: false,
       discount: 0,
-      created: new Date(),
       stock: 10,
       picture: "blankProdImage",
-      member: {
-        id: myStore[0].member.id
-      },
-      company: {
-        id: myStore[0].id,
-        name: myStore[0].name,
-        companyNumber: 21321321,
-        category: myStore[0].category,
-        phone: myStore[0].phone,
-      },
       prodBasic: { // basic상품 정보를 가져와야함.
         id: 1,
       },
@@ -46,18 +31,33 @@ function useCompItems() {
           ],
         },
       ],
+      created: new Date(),
+      company: {
+        id: companyId,
+      },
     };
     console.log(data)
 
-    axios
-      .post(process.env.REACT_APP_SPRING_API + "/api/product/", data)
+    // setProdForm(data)
+  }
+
+  // 가게 상품 생성
+  function registProduct() {
+    if(prodForm != null){
+      axios
+      .post(process.env.REACT_APP_SPRING_API + "/api/product/", prodForm)
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
+    }
   }
+
+  useEffect(() => {
+    registProduct()
+  }, [prodForm])
 
   // 가게 상품 읽기
   function getProduct() {
@@ -70,14 +70,6 @@ function useCompItems() {
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  // 가게 정보 읽기
-  async function getMyStore() {
-    const myStore = await axios.get(
-      process.env.REACT_APP_SPRING_API + "/api/company/myStore"
-    ).catch((err) => { console.log(err) });
-    return myStore.data.body
   }
 
   // 가게 상품 정보 수정
@@ -118,13 +110,13 @@ function useCompItems() {
   useEffect(() => {
     getProduct();
     return () => {
-      setMyItems([]);
+      // setMyItems([]);
     };
   }, []);
 
   return {
     myItems,
-    companyId,
+    productForm, 
     registProduct,
     getProduct,
   };
