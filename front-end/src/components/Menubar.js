@@ -127,10 +127,8 @@ const Menubar = () => {
     tokenReissue();
     console.log(state);
     if (state.user.id === 0) {
-      console.log('false 변경');
       setIsAutoTokenReissue(false);
     } else {
-      console.log('true 변경');
       setIsAutoTokenReissue(true);
     }
   }, [state]);

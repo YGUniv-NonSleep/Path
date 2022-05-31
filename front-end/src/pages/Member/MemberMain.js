@@ -22,6 +22,7 @@ import { MainListItems, SecondaryListItems } from './MyPage/listItems';
 import Chart from './MyPage/Chart';
 import Deposits from './MyPage/Deposits';
 import Orders from './MyPage/Orders';
+import usePayment from './hooks/usePayment';
 
 const drawerWidth = 240;
 
@@ -72,8 +73,8 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function MemberMain() {
-  const { open, toggleDrawer, deleteMember, payments, amountByDay } =
-    useMemberMain();
+  const { open, toggleDrawer, deleteMember } = useMemberMain();
+  const { payments, amountByDay } = usePayment();
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -118,7 +119,6 @@ function MemberMain() {
               회원정보
             </Typography>
             <Grid container spacing={3}>
-              {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Paper
                   sx={{

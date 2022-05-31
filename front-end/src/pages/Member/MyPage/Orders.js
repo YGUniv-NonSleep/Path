@@ -8,8 +8,11 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import useMemberMain from '../hooks/useMemberMain';
 import OrdersList from './OrdersList';
+import { useNavigate } from 'react-router-dom';
 
 export default function Orders({ payments }) {
+  const navigate = useNavigate();
+
   return (
     <React.Fragment>
       <Title>최근 결제내역</Title>
@@ -29,7 +32,12 @@ export default function Orders({ payments }) {
           ))}
         </TableBody>
       </Table>
-      <MuiLink color="primary" sx={{ mt: 3 }}>
+      <MuiLink
+        color="primary"
+        sx={{ mt: 3 }}
+        onClick={() => navigate('/member/payments')}
+        style={{ cursor: 'pointer' }}
+      >
         결제내역 더보기
       </MuiLink>
     </React.Fragment>

@@ -21,9 +21,9 @@ export default function Deposits({ amountByDay }) {
 
   return (
     <React.Fragment>
-      <Title>4월 이용 금액</Title>
+      <Title>{now.getMonth() + 1}월 이용 금액</Title>
       <Typography component="p" variant="h4">
-        {totalAmount}원
+        {totalAmount.toLocaleString('ko-KR')}원
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
         {today}

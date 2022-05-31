@@ -13,13 +13,12 @@ import {
 import Title from './Title';
 
 // Generate Sales Data
-function createData(time, amount) {
-  return { time, amount };
+function createData(time, 금액) {
+  return { time, 금액 };
 }
 
 export default function Chart({ amountByDay }) {
   const theme = useTheme();
-  console.log(amountByDay);
   let data = [];
   amountByDay.map((pay) => {
     data.push(createData(`${pay.payDate.slice(8, 10)}일`, pay.payPrice));
@@ -27,7 +26,7 @@ export default function Chart({ amountByDay }) {
 
   return (
     <React.Fragment>
-      <Title>4월 이용금액</Title>
+      <Title>{new Date().getMonth() + 1}월 이용금액</Title>
       <ResponsiveContainer>
         <LineChart
           data={data}
@@ -62,7 +61,7 @@ export default function Chart({ amountByDay }) {
           <Line
             isAnimationActive={true}
             type="monotone"
-            dataKey="amount"
+            dataKey="금액"
             stroke={theme.palette.primary.main}
             dot={true}
           />
