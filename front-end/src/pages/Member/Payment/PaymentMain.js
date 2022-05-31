@@ -155,11 +155,11 @@ const PaymentMain = () => {
               {!isLastPage ? (
                 isDatePage ? (
                   <Button variant="contained" onClick={getPaymentsDate}>
-                    버튼
+                    더보기
                   </Button>
                 ) : (
                   <Button variant="contained" onClick={getPayments}>
-                    버튼
+                    더보기
                   </Button>
                 )
               ) : (
