@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 
 function useCompStore(){
   const userInfo = useSelector((state) => state);
-  // console.log(userInfo);
   const [myStore, setMyStore] = useState([]);
   const [storeDetail, setStoreDetail] = useState(null);
   
@@ -38,7 +37,9 @@ function useCompStore(){
   useEffect(() => {
     getMyStore();
     return () => {
-      setMyStore([]); // unmount
+      console.log("unmounted")
+      // 데이터 초기화가 확실히 필요한 곳에서 사용
+      //setMyStore([]); 
     };
   }, []);
 
