@@ -29,9 +29,9 @@ import PathList from "./PathList";
 
 function PathMain() {
   const { 
-    SPoint, APoint, jusoOption, loading, pathList, historyList, 
+    SPoint, APoint, jusoOption, loading, pathList, historyList, userInfo, 
     onchangeSP, onchangeAP, refreshPoints, switchPoints, 
-    deletePathFindingHistory, wayFind, pathDrawing, historyFind
+    deletePathFindingHistory, wayFind, pathDrawing, historyFind,
   } = useInputForm()
   // console.log(pathList)
   // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
@@ -189,14 +189,24 @@ function PathMain() {
                       </InstantTitle>
                     </TitleBox>
                     <EmptyBox>
-                      <FavoritesText>
-                        로그인 하면 즐겨찾기한 경로를 빠르게 확인할 수 있습니다
-                      </FavoritesText>
-                      <Link to="/login">
-                        <LinkLogin>
-                          로그인
-                        </LinkLogin>
-                      </Link>
+                      {userInfo.id == 0 || userInfo.loginId == 'anonymous' ? (
+                        <>
+                          <FavoritesText>
+                            로그인 하면 즐겨찾기한 경로를 빠르게 확인할 수 있습니다
+                          </FavoritesText>
+                          <Link to="/login">
+                            <LinkLogin>
+                              로그인
+                            </LinkLogin>
+                          </Link>
+                        </>
+                        ) : (
+                          <>
+                            <FavoritesText>
+                              즐겨찾기한 경로가 존재하지않습니다.
+                            </FavoritesText>
+                          </>
+                      )}
                     </EmptyBox>
                   </InstantBox>
                 </DirectionIndexFavorites>
