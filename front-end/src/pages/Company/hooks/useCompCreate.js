@@ -62,14 +62,14 @@ function useCompCreate() {
 
   async function compFormSubmit(e) {
     e.preventDefault();
-
+    // 회원 입력 처리 필요
     let inputImageFiles = e.target.userfile.files;
 
     const imageFormData = new FormData();
     let imageData = null;
 
     if (inputImageFiles.length == 0) {
-      images = {
+      imageData = {
         data: "blankCompImage",
       };
     } else {
@@ -91,27 +91,26 @@ function useCompCreate() {
 
     const data = {
       name: e.target.name.value,
-      companyNumber: parseInt(e.target.crn.value),
+      companyNumber: parseInt(e.target.companyNumber.value),
       openDate: e.target.openDate.value,
       category: e.target.category.value,
       mail: e.target.email.value,
       phone: e.target.phone.value,
       addr: address.fullAddress,
-      addrDetail: e.target.subJuso,
-      lat: coord.x,
-      lng: coord.y,
-      // crn: ?,
-      open: e.target.oTime,
-      close: e.target.cTime,
+      addrDetail: e.target.subJuso.value,
+      lat: parseFloat(coord.x),
+      lng: parseFloat(coord.y),
+      open: `${e.target.oTime.value}:00`,
+      close: `${e.target.cTime.value}:00`,
       thumbnail: imageData.data,
     };
-
+    console.log(data)
     // let formData = new FormData();
     // formData.append("picture", e.target.userfile.files[0]);
     // formData.append(
     //     "json", new Blob([JSON.stringify(data)], { type: "application/json" })
     // );
-    setFormInfo(data);
+    //setFormInfo(data);
   }
 
   function createCompany() {
@@ -121,7 +120,7 @@ function useCompCreate() {
         .then((res) => {
           console.log(res);
           alert("업체 등록 완료");
-          navigate(-1);
+          navigate("/company/store");
         })
         .catch((err) => {
           console.log(err);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { PathApi } from '../../../api/OdsayApi';
 import MapApi from '../../../api/MapApi';
 import { TmapApi } from '../../../api/TmapApi';
@@ -6,6 +7,7 @@ import useLoading from '../../../hooks/useLoading';
 
 function useInputForm() {
   const { loading } = useLoading();
+  const userInfo = useSelector((state) => state.user);
   const [map, settingMap] = useState(null);
 
   const [jusoValue, setJusoValue] = useState([]); // 가져온 주소 받아서 띄워줄 배열 state
@@ -403,6 +405,7 @@ function useInputForm() {
     jusoOption,
     pathList, 
     historyList, 
+    userInfo, 
     mapLoad,
     onchangeSP,
     onchangeAP,
