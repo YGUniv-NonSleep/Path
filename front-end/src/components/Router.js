@@ -39,19 +39,19 @@ function Router() {
   return (
     <BrowserRouter>
       <Menubar></Menubar>
-
+      
       <Routes>
-        {/* 속성을 component 대신에 element */}
+        {/* 404 rounte */}
+        <Route path="*" element={<PageNotFound />} />
+        
+        {/* path */}
         <Route path="/" element={<Path />} />
         <Route path="/walk" element={<WalkPath />} />
-      </Routes>
-      <Routes>
+
+        {/* pay test */}
         <Route path="/pay" element={<TossPayments />} />
 
-        {/* 404 rounte */}
-        {/* <Route path="/*" element={<PageNotFound />} /> */}
-      </Routes>
-      <Routes>
+        {/* member */}
         <Route path="/login" element={<Login />} />
         <Route path="/searchId" element={<SearchId />} />
         <Route path="/searchPw" element={<SearchPw />} />
@@ -61,37 +61,37 @@ function Router() {
         <Route path="/member/card" element={<Card />} />
         <Route path="/member/cars" element={<Cars />} />
         <Route path="/member/payments" element={<Payment />} />
-      </Routes>
-      <Routes>
+
+        {/* company */}
         <Route path="/company" element={<Company />} />
         <Route path="/company/store" element={<CompStore />} />
         <Route path="/company/create" element={<CompCreate />} />
         <Route path="/company/basic" element={<ItemBasic />} />
         <Route path="/company/manage/:comId" element={<CompManage />}>
-          {/* 없으면 업체 등록하라고 팝업창, 마이 업체 경로 타고 들어온거 아니면 첫 번째 업체 관리로 들어옴 */}
+          {/* 등록된 업체 없을 때 들어오면 업체 등록하라고 팝업창 띄우고 마이업체 화면 이동,
+              마이 업체 경로 타고 들어온거 아니면 첫 번째 업체 관리로 들어옴 */}
           <Route path="items" element={<Items />}>
             <Route path="itemEdit" element={<ItemEdit />} />
           </Route>
           <Route path="compEdit" element={<CompEdit />} />
           <Route path="resign" element={<Resign />} />
         </Route>
-      </Routes>
-      <Routes>
+
+        {/* oder */}
         <Route path="/oder" element={<Oder />} />
-      </Routes>
-      <Routes>
-        {/* <Route path="/mobility" element={<Mobility />} /> */}
-        <Route path="/mobility/bus" element={<Bus />} />
+
+        {/* mobility */}
+        <Route index path="/mobility/bus" element={<Bus />} />
         <Route path="/mobility/subway" element={<Subway />} />
         <Route path="/mobility/scooter" element={<Scooter />} />
         <Route path="/mobility/bike" element={<Bike />} />
-      </Routes>
-      <Routes>
+
+        {/* community */}
         <Route path="/community" element={<Community />} />
         <Route path="/community/:postId" element={<CommunityContents />} />
         <Route path="/community/add" element={<CommunityAdd />} />
-      </Routes>
-      <Routes>
+
+        {/* carpool */}
         <Route path="/carpool" element={<CarPool />} />
         <Route path="/carpool/:postId" element={<CarPoolContents />} />
         <Route path="/carpool/add" element={<CarPoolAdd />} />

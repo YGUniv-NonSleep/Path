@@ -39,9 +39,15 @@ const BtnUl = styled.ul`
   display: flex-inline;
   align-items: center;
   width: 100%;
-  position: absolute;
-  top: 85%;
-`;
+  position: relative;
+  bottom: ${(props) => { 
+    return props.h === 'ROLE_ANONYMOUS' ? "-40%" : (
+      props.h === 'ROLE_BUSINESS' ? (
+        props.compView ? "-48.1%" : "-30%"
+      ) : "-35%"
+    )
+  }};
+`; // -48%
 
 const Image = styled.div`
   background: url(${pathLogo}) no-repeat center center;
@@ -70,8 +76,9 @@ const Button = styled.button`
   display: block;
   font-size: 0.4em;
   margin: 2em auto;
+  width: 90px;
 
-  padding: 1.5em 4em;
+  padding: 1.5em 3em;
   position: relative;
   text-transform: uppercase;
   ::before ;
@@ -99,6 +106,10 @@ const Button = styled.button`
   }
 `;
 
+const BtnLiEm = styled.em`
+
+`;
+
 const ScLink = styled(NavLink)`
   height: 70px;
   display: flex;
@@ -113,37 +124,33 @@ const ScLink = styled(NavLink)`
 const Menubar = () => {
   const location = useLocation();
   const [currLocation, setCurrLocation] = useState(null);
+  const [compChk, setCompChk] = useState(false);
   const navigate = useNavigate();
   const { userLogOut, tokenReissue } = useTokenReissue();
-  const [isAutoTokenReissue, setIsAutoTokenReissue] = useState(false);
-  let state = useSelector((state) => state);
-  let dispatch = useDispatch();
+  let userState = useSelector((state) => state);
+  // let dispatch = useDispatch();
+
+  function isBusiness(){
+    if(currLocation != null){
+      // 경로 이동했을 때 company가 포함되는지의 여부
+      if(currLocation.includes("company") == true) return setCompChk(true)
+      else return setCompChk(false)
+      // 회원 role이 비즈니스이면 창이 보이도록
+    }
+  }
 
   useEffect(() => {
     setCurrLocation(location.pathname);
   }, [location]);
 
   useEffect(() => {
-    tokenReissue();
-    console.log(state);
-    if (state.user.id === 0) {
-      setIsAutoTokenReissue(false);
-    } else {
-      setIsAutoTokenReissue(true);
-    }
-  }, [state]);
+    isBusiness()
+  }, [currLocation])
 
   useEffect(() => {
-    if (isAutoTokenReissue) {
-      let timer = setInterval(() => {
-        tokenReissue();
-        console.log('자동 로그인 연장');
-      }, 600000);
-      return () => {
-        clearInterval(timer);
-      };
-    }
-  }, [isAutoTokenReissue]);
+    tokenReissue();
+    console.log(userState);
+  }, [userState]);
 
   return (
     <NavContainer>
@@ -152,13 +159,35 @@ const Menubar = () => {
           <ScLink to="/"></ScLink>
         </Image>
       </Ul>
-      <PathRouteElement></PathRouteElement>
-      <CompRouteElement></CompRouteElement>
-      <BtnUl>
-        {state.user.loginId != 'anonymous' ? (
+      {userState.user.role != 'ROLE_BUSINESS' ? (
+        <PathRouteElement></PathRouteElement>  
+        ) : (
+          <>
+            {compChk != true ? (
+              <PathRouteElement></PathRouteElement>
+              ) : (
+                <CompRouteElement></CompRouteElement>
+            )}
+          </>
+      )}
+      <BtnUl h={userState.user.role} compView={compChk}>
+        {userState.user.loginId != 'anonymous' ? (
           <Li $current={currLocation === '/logout' && true}>
+            {userState.user.role === 'ROLE_BUSINESS' ? (
+              <>
+                {compChk != true ? (
+                  <Button onClick={() => navigate('/company')}>내 업체</Button>
+                  ) : (
+                    <Button onClick={() => navigate('/')}>패스 콕</Button>
+                )}
+              </>
+              ) : (
+                null
+            )}
             <Button onClick={() => navigate('/member')}>내 정보</Button>
-            <Button onClick={userLogOut}>로그아웃</Button>
+            <Button onClick={userLogOut}>
+              <BtnLiEm>로그아웃</BtnLiEm>
+            </Button>
           </Li>
         ) : (
           <Li $current={currLocation === '/login' && true}>
