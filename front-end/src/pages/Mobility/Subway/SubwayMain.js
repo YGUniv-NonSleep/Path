@@ -384,7 +384,6 @@ function SubwayMain() {
   const [subTimeDown, setSubTimeDown] =useState([]);
   const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
-  const [clickValue, setClickValue] = useState(null);
   const [subTimeInfo, setSubTimeInfo] = useState([]);
 
   async function mapLoad() {
@@ -611,12 +610,6 @@ function SubwayMain() {
                   return result;
                  }
 
-                //  const string = () => {
-                //    let message = item.list;
-                //    let subMessage = message.subString(0,3);
-                //    console.log(subMessage);
-                //    return subMessage;
-                //  }
                  return (
                   <div>
                   <UpDownContain>
