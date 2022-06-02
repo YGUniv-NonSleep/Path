@@ -5,7 +5,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import PageNotFound from './PageNotFound';
 import Menubar from './Menubar';
@@ -34,21 +34,26 @@ import TossPayments from '../pages/TosspaymentsTest';
 
 function Router() {
   const userInfo = useSelector((state) => state.user);
+  // const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   
+  // useEffect(() => {
+  //   setUserRole(userInfo.role)
+  // }, [userInfo])
+
   useEffect(() => {
     // url 창에 입력해서 넘어가면 role이 anonymous 뜸 수정 필요
-    if(userInfo.role == 'ROLE_ANONYMOUS'){
-      if(location.pathname.includes("member")){
-        alert("로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.")
-        return navigate('/login')
-      }
-      if(location.pathname.includes("company")){
-        alert("해당 페이지 접근 권한이 없습니다! 메인페이지로 이동합니다.")
-        return navigate('/') 
-      }
-    }
+    // if(userInfo.role == 'ROLE_ANONYMOUS'){
+    //   if(location.pathname.includes("member")){
+    //     alert("로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.")
+    //     return navigate('/login')
+    //   }
+    //   if(location.pathname.includes("company")){
+    //     alert("해당 페이지 접근 권한이 없습니다! 메인페이지로 이동합니다.")
+    //     return navigate('/') 
+    //   }
+    // }
     
     // if(location.pathname.includes("company") && userInfo.role != 'ROLE_BUSINESS'){
     //   alert("업체 회원만 접근 가능합니다. 서비스 이용을 원하실 경우 업체 회원으로 가입해주세요.")

@@ -38,7 +38,7 @@ function useCompItems() {
     };
     console.log(data)
 
-    // setProdForm(data)
+    setProdForm(data)
   }
 
   // 가게 상품 생성
@@ -48,6 +48,8 @@ function useCompItems() {
       .post(process.env.REACT_APP_SPRING_API + "/api/product/", prodForm)
       .then((res) => {
         console.log(res);
+        // 생성하고 다시 읽어오기
+        getProduct()
       })
       .catch((err) => {
         console.log(err);
