@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router';
 const NavContainer = styled.nav`
   display: flex;
   flex-direction: column;
-  position: absolute;
+  position: fixed;
 
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(3px);
@@ -40,12 +40,14 @@ const BtnUl = styled.ul`
   align-items: center;
   width: 100%;
   position: relative;
-  bottom: ${(props) => {
-    props.h == 'ROLE_ANONYMOUS' ? "-40%" : (
-      props.h == 'ROLE_BUSINESS' ? "-30%" : "-35%"
+  bottom: ${(props) => { 
+    return props.h === 'ROLE_ANONYMOUS' ? "-40%" : (
+      props.h === 'ROLE_BUSINESS' ? (
+        props.compView ? "-48.1%" : "-30%"
+      ) : "-35%"
     )
   }};
-`;
+`; // -48%
 
 const Image = styled.div`
   background: url(${pathLogo}) no-repeat center center;
@@ -168,7 +170,7 @@ const Menubar = () => {
             )}
           </>
       )}
-      <BtnUl h={userState.user.role}>
+      <BtnUl h={userState.user.role} compView={compChk}>
         {userState.user.loginId != 'anonymous' ? (
           <Li $current={currLocation === '/logout' && true}>
             {userState.user.role === 'ROLE_BUSINESS' ? (
