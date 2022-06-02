@@ -44,6 +44,7 @@ public class OrderService {
                     .state(OrderState.CHECKING)
                     .member(member.get())
                     .price(saveOrderDto.getTotalAmount())
+                    .request(saveOrderDto.getRequest())
                     .build();
             orderRepository.save(order);
 
