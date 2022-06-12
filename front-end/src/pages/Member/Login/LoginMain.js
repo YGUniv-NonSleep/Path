@@ -18,6 +18,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useLogin from '../hooks/useLogin';
+import GoogleIcon from '@mui/icons-material/Google';
 
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
@@ -108,10 +109,24 @@ function LoginMain() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3 }}
                 size="large"
               >
                 Sign In
+              </Button>
+              <Button
+                type="button"
+                onClick={() =>
+                  (location.href =
+                    'https://localhost:8080/oauth2/authorization/google')
+                }
+                fullWidth
+                variant="outlined"
+                sx={{ mt: 1, mb: 2 }}
+                size="large"
+                startIcon={<GoogleIcon color="action" />}
+              >
+                Google
               </Button>
             </FormControl>
             <Grid container spacing={3}>
