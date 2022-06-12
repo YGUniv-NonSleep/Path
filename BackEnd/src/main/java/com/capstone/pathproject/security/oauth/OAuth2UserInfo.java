@@ -5,4 +5,8 @@ public interface OAuth2UserInfo {
     String getProvider();
     String getEmail();
     String getName();
+    String getGender();
+    String getMobile();
+    String getBirthday();
+    String getBirthyear();
 }

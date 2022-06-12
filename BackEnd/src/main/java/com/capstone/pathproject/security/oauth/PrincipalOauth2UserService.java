@@ -1,6 +1,7 @@
 package com.capstone.pathproject.security.oauth;
 
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.domain.member.MemberGender;
 import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
@@ -13,6 +14,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +39,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
             log.info("PrincipalOauth2UserService : 구글 로그인 요청");
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
+            log.info("PrincipalOauth2UserService : 네이버 로그인 요청");
+            oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
         } else {
             log.warn("PrincipalOauth2UserService : 구글, 네이버, 페이스북 외 로그인 요청이 왔습니다.");
         }
@@ -48,6 +54,25 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2UserInfo.getEmail();
         String name = oAuth2UserInfo.getName();
         Role role = Role.ROLE_MEMBER;
+        MemberGender gender = null;
+        String mobile = null;
+        LocalDate birthday = null;
+
+        if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
+            switch (oAuth2UserInfo.getGender()) {
+                case "M":
+                    gender = MemberGender.MALE;
+                    break;
+                case "F":
+                    gender = MemberGender.FEMALE;
+                    break;
+            }
+            mobile = oAuth2UserInfo.getMobile();
+            int month = Integer.parseInt(oAuth2UserInfo.getBirthday().substring(0, 2));
+            int day = Integer.parseInt(oAuth2UserInfo.getBirthday().substring(3, 5));
+            int year = Integer.parseInt(oAuth2UserInfo.getBirthyear());
+            birthday = LocalDate.of(year, month, day);
+        }
 
         Optional<Member> findMember = memberRepository.findByLoginId(loginId);
         Member member = findMember.orElse(null);
@@ -62,6 +87,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .provider(provider)
                     .providerId(providerId)
                     .score(100)
+                    .gender(gender)
+                    .phone(mobile)
+                    .birthday(birthday)
                     .build();
             memberRepository.save(member);
         } else {
