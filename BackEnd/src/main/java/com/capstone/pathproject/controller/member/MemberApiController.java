@@ -16,7 +16,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -116,5 +118,16 @@ public class MemberApiController {
     public ResponseEntity<Message<?>> getTotalPayments(@PathVariable Long memberId) {
         Message<Object> message = memberService.getMemberTotalPaymentsMonth(memberId);
         return responseUtil.createResponseEntity(message);
+    }
+
+    @GetMapping("/test/oauth/login")
+    public @ResponseBody
+    String testOAuthLogin(Authentication authentication,
+                          @AuthenticationPrincipal OAuth2User oauth) { // DI(의존성 주입)
+        System.out.println("/test/oauth/login =================");
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        System.out.println("authentication : " + oAuth2User.getAttributes());
+        System.out.println("oauth : " + oauth.getAttributes());
+        return "OAuth 세션 정보 확인하기";
     }
 }
