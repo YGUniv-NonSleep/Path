@@ -19,14 +19,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useLogin from '../hooks/useLogin';
 import GoogleIcon from '@mui/icons-material/Google';
-import { green } from '@mui/material/colors';
-
-const FormHelperTexts = styled(FormHelperText)`
-  width: 100%;
-  padding-left: 16px;
-  font-weight: 700;
-  color: #d32f2f;
-`;
+import { green, indigo } from '@mui/material/colors';
 
 function Copyright(props) {
   return (
@@ -110,10 +103,10 @@ function LoginMain() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3 }}
+                sx={{ mt: 2 }}
                 size="large"
               >
-                Sign In
+                로그인
               </Button>
               <Button
                 type="button"
@@ -138,7 +131,6 @@ function LoginMain() {
                 }
                 sx={{
                   mt: 1,
-                  mb: 2,
                   bgcolor: green[500],
                   '&:hover': {
                     bgcolor: green[700],
@@ -147,6 +139,26 @@ function LoginMain() {
                 size="large"
               >
                 Naver
+              </Button>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  (location.href =
+                    'https://localhost:8080/oauth2/authorization/facebook')
+                }
+                sx={{
+                  mt: 1,
+                  mb: 2,
+                  bgcolor: indigo[500],
+                  '&:hover': {
+                    bgcolor: indigo[700],
+                  },
+                }}
+                size="large"
+              >
+                FACKBOOK
               </Button>
             </FormControl>
             <Grid container spacing={3}>
