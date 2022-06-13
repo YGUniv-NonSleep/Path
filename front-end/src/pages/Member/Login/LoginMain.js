@@ -19,7 +19,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useLogin from '../hooks/useLogin';
 import GoogleIcon from '@mui/icons-material/Google';
-import { green, indigo } from '@mui/material/colors';
+import { green, indigo, yellow } from '@mui/material/colors';
 
 function Copyright(props) {
   return (
@@ -150,7 +150,6 @@ function LoginMain() {
                 }
                 sx={{
                   mt: 1,
-                  mb: 2,
                   bgcolor: indigo[500],
                   '&:hover': {
                     bgcolor: indigo[700],
@@ -159,6 +158,27 @@ function LoginMain() {
                 size="large"
               >
                 FACKBOOK
+              </Button>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  (location.href =
+                    'https://localhost:8080/oauth2/authorization/kakao')
+                }
+                sx={{
+                  mt: 1,
+                  mb: 2,
+                  color: 'text.primary',
+                  bgcolor: yellow[500],
+                  '&:hover': {
+                    bgcolor: yellow[700],
+                  },
+                }}
+                size="large"
+              >
+                KAKAO
               </Button>
             </FormControl>
             <Grid container spacing={3}>
