@@ -126,6 +126,4 @@ public class Member extends BaseTimeEntity {
     public void updateEncodePassword(String encodePassword) {
         this.password = encodePassword;
     }
-
-
 }
