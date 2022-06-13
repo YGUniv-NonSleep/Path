@@ -19,6 +19,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useLogin from '../hooks/useLogin';
 import GoogleIcon from '@mui/icons-material/Google';
+import { green } from '@mui/material/colors';
 
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
@@ -122,11 +123,30 @@ function LoginMain() {
                 }
                 fullWidth
                 variant="outlined"
-                sx={{ mt: 1, mb: 2 }}
+                sx={{ mt: 1 }}
                 size="large"
-                startIcon={<GoogleIcon color="action" />}
               >
                 Google
+              </Button>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  (location.href =
+                    'https://localhost:8080/oauth2/authorization/naver')
+                }
+                sx={{
+                  mt: 1,
+                  mb: 2,
+                  bgcolor: green[500],
+                  '&:hover': {
+                    bgcolor: green[700],
+                  },
+                }}
+                size="large"
+              >
+                Naver
               </Button>
             </FormControl>
             <Grid container spacing={3}>
