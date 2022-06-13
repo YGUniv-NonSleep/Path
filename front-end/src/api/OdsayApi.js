@@ -47,6 +47,13 @@ export const MobilityApi = {
       .catch((error) => console.log(error));
     return response.data;
   },
+
+  getBusDetailLine : async(busID) => {
+    const response = await odsayApi.get(`/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`)
+    .catch((error)=>console.log(error));
+    return response.data.result;
+  },
+
   getBusStayDetail: async (busID) => {
     const response = await odsayApi
       .get(`/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`)
@@ -54,6 +61,14 @@ export const MobilityApi = {
     //console.log(response.data.result)
     return response.data.result;
   },
+
+  getBusStationInfo: async (stopID) => {
+    console.log(stopID)
+    const response = await odsayApi.get(`/busStationInfo?lang=0&stationID=${stopID}&apiKey=${key}`)
+    .catch((error) => console.log(error));
+    //console.log(response.data.result)
+    return response.data.result;
+  }
 };
 
 export const SubwayApi = {

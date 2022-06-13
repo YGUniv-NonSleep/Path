@@ -365,6 +365,15 @@ height: 260px;
 border-bottom: 1px solid rgb(184, 184, 184);
 `;
 
+const UpDownWay = styled.div`
+position: absolute;
+top: 1px;
+left: 80px;
+width: 50px;
+height: 17px;
+background-color: green;
+`;
+
 function SubwayMain() {
   const [map, settingMap] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -375,7 +384,6 @@ function SubwayMain() {
   const [subTimeDown, setSubTimeDown] =useState([]);
   const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
-  const [clickValue, setClickValue] = useState(null);
   const [subTimeInfo, setSubTimeInfo] = useState([]);
 
   async function mapLoad() {
@@ -598,21 +606,15 @@ function SubwayMain() {
                   var testString = item.list;
                   var regex = /[^0-9]/g;
                   var result = testString.replace(regex, " ");
-                  //console.log(result);
                   return result;
                  }
 
-                //  const string = () => {
-                //    let message = item.list;
-                //    let subMessage = message.subString(0,3);
-                //    console.log(subMessage);
-                //    //return subMessage;
-                //  }
                  return (
                   <div>
                   <UpDownContain>
                   <TimeListUp>{item.Idx}</TimeListUp>
                   <MinutesListUp>{num()}</MinutesListUp>
+                  <UpDownWay></UpDownWay>
                   </UpDownContain>
                   </div>
                  )
