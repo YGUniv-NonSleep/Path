@@ -2,8 +2,10 @@ package com.capstone.pathproject.controller.carpool;
 
 
 import com.capstone.pathproject.dto.carpool.CarsDto;
+import com.capstone.pathproject.dto.member.MemberDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.service.carpool.CarsService;
+import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,27 +25,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarsAPIController {
     private final CarsService carsService;
+    private final ResponseUtil responseUtil;
 
 
     //CRUD
-    @PostMapping("/create")
-    public ResponseEntity<Message<Object>> create(@RequestPart(value = "key", required = false) CarsDto carsDTO,
-                                                  @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                                  HttpServletRequest request) {
-        String fileName;
-        if (file == null) {
-            fileName = "";
-        } else {
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "cars\\";
-
-            try {
-                file.transferTo(new File(filePath + fileName));
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Message<Object> message = carsService.create(carsDTO, fileName);
+    @PostMapping("")
+    public ResponseEntity<Message<Object>> create(@RequestBody CarsDto carsDto) {
+        Message<Object> message = carsService.create(carsDto);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -77,10 +65,9 @@ public class CarsAPIController {
 
     //view
     @GetMapping("/view")
-    public ResponseEntity findview(@PageableDefault(size = 5, sort = "id",
-            direction = Sort.Direction.DESC) Pageable pageable) {
-        Message<List<CarsDto>> message = carsService.findView(pageable);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> findview(@RequestParam("memberId") Long Id) {
+        Message<?> message = carsService.findView(Id);
+        return responseUtil.createResponseEntity(message);
     }
 
     @GetMapping("/view/search")

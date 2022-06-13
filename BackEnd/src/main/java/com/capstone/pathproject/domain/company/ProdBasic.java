@@ -48,17 +48,17 @@ public class ProdBasic {
         this.brand = brand;
         this.category = category;
     }
-
-    public ProdBasicDTO toDTO(){
-        return ProdBasicDTO.createProdBasicDTO()
-                .id(this.id)
-                .brand(this.brand)
-                .category(this.category)
-                .detail(this.detail)
-                .image(this.image)
-                .name(this.name)
-                .build();
-    }
+//
+//    public ProdBasicDTO toDTO(){
+//        return ProdBasicDTO.createProdBasicDTO()
+//                .id(this.id)
+//                .brand(this.brand)
+//                .category(this.category)
+//                .detail(this.detail)
+//                .image(this.image)
+//                .name(this.name)
+//                .build();
+//    }
 
 
 }

@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import useCars from '../hooks/useCars';
+import useAddCars from '../hooks/useAddCars'
 
 const style = {
   position: 'absolute',
@@ -27,8 +28,7 @@ const style = {
 };
 
 function AddCarsModal() {
-  const { handleInput, inputValue, handleSubmit } = useCars();
-
+  const { handleInput, inputValue, handleSubmit } = useAddCars();
   return (
     <Box sx={style}>
       <DirectionsCarIcon sx={{ m: 1 }} />

@@ -37,6 +37,15 @@ public class ProdBasicDTO {
                 .build();
     }
 
+    public ProdBasicDTO(ProdBasic prodBasic){
+        this.id = prodBasic.getId() ;
+        this.name = prodBasic.getName();
+        this.image = prodBasic.getImage();
+        this.detail = prodBasic.getDetail();
+        this.brand = prodBasic.getBrand();
+        this.category = prodBasic.getCategory();
+    }
+
 
     public void addFile(String fileName) {
         this.image = fileName;

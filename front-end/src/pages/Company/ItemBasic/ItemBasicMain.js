@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Modal from "../../../components/Modal";
 import useLoading from '../../../hooks/useLoading';
 import useItemBasic from '../hooks/useItemBasic';
+import blankImage from "../../../assets/images/gift.png";
 
 const ItemBasicCon = styled.div`
   width: 390px;
@@ -58,9 +59,14 @@ function ItemBasicMain() {
                   <div>{item.brand}</div>
                   <div>{item.category}</div>
                   <img
-                    src={`${process.env.REACT_APP_SPRING_API}/api/image/${item.image}`}
-                    width={"100px"}
-                    height={"100px"}
+                    src={
+                      item.image != "blankImage" ? (
+                        `${process.env.REACT_APP_SPRING_API}/api/image/${item.image}`
+                      ) : (
+                        blankImage
+                    )}
+                    width={"64px"}
+                    height={"64px"}
                   />
                   <br />
                   <button

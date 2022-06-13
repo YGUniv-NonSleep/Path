@@ -30,6 +30,9 @@ public class Order extends BaseTimeEntity {
     @Column(name = "ORDER_PRICE")
     private int price;
 
+    @Column(name = "ORDER_REQUEST")
+    private String request;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "ORDER_STATE")
     private OrderState state;
@@ -40,11 +43,12 @@ public class Order extends BaseTimeEntity {
 
 
     @Builder(builderMethodName = "createOrder")
-    public Order(Long id, int price, OrderState state, Member member){
+    public Order(Long id, int price, OrderState state, Member member, String request){
         this.id = id;
         this.member = member;
         this.price = price;
         this.state = state;
+        this.request = request;
     }
 
     public void updateState(String state){

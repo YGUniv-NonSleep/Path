@@ -4,12 +4,15 @@ package com.capstone.pathproject.service.carpool;
 import com.capstone.pathproject.domain.carpool.Cars;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.carpool.CarsDto;
+import com.capstone.pathproject.dto.member.MemberDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.carpool.CarsRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
+import com.capstone.pathproject.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +30,9 @@ public class CarsService {
 
     //CRUD
     @Transactional
-    public Message<Object> create(CarsDto carsDto, String fileName) {
-        Optional<Member> findMember = memberRepository.findById(carsDto.getMemberDto().getId());
-        Member member = findMember.orElse(null);
+    public Message<Object> create(CarsDto carsDto) {
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
         if (member == null) {
             return Message.builder()
                     .header(StatusEnum.BAD_REQUEST)
@@ -39,8 +42,8 @@ public class CarsService {
         Cars car = Cars.createCars()
                 .member(member)
                 .carKind(carsDto.getCarKind())
-                .carNum(carsDto.getCarKind())
-                .photoName(fileName)
+                .carNum(carsDto.getCarNum())
+                .photoName(carsDto.getPhotoName())
                 .build();
         carsRepository.save(car);
         CarsDto result = new CarsDto(car);
@@ -94,11 +97,15 @@ public class CarsService {
 
     //조회
     @Transactional
-    public Message<List<CarsDto>> findView(Pageable pageable) {
-        List<Cars> cars = carsRepository.findAll(pageable).getContent();
+    public Message<?> findView(Long Id) {
+        Optional<Member> findMember = memberRepository.findById(Id);
+
+        //로그인한 사용자의 차량정보 확인
+        List<Cars> cars = carsRepository.findByMember_Id(findMember.get().getId());
+
         ArrayList<CarsDto> listDto = new ArrayList<>();
         cars.stream().map(CarsDto::new).forEach(listDto::add);
-        return Message.<List<CarsDto>>builder()
+        return Message.<ArrayList<?>>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")
                 .body(listDto).build();

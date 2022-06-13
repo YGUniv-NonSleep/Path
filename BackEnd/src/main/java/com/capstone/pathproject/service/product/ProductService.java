@@ -1,15 +1,13 @@
 package com.capstone.pathproject.service.product;
 
-import com.capstone.pathproject.domain.company.DetailOption;
-import com.capstone.pathproject.domain.company.Option;
-import com.capstone.pathproject.domain.company.ProdBasic;
-import com.capstone.pathproject.domain.company.Product;
+import com.capstone.pathproject.domain.company.*;
 import com.capstone.pathproject.dto.product.DetailOptionDTO;
 import com.capstone.pathproject.dto.product.OptionDTO;
 import com.capstone.pathproject.dto.product.ProdBasicDTO;
 import com.capstone.pathproject.dto.product.ProductDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
+import com.capstone.pathproject.repository.company.CompanyRepository;
 import com.capstone.pathproject.repository.product.DetailOptionRepository;
 import com.capstone.pathproject.repository.product.OptionRepository;
 import com.capstone.pathproject.repository.product.ProdBasicRepository;
@@ -29,6 +27,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final OptionRepository optionRepository;
     private final DetailOptionRepository detailOptionRepository;
+    private final CompanyRepository companyRepository;
 
 
     public Message<ProdBasicDTO> createBasic(ProdBasicDTO prodBasicDTO) {
@@ -63,8 +62,8 @@ public class ProductService {
 
     public Message<ProdBasicDTO> basicDetail(Long prodBasicId) {
 
-        Optional<ProdBasic> result = prodBasicRepository.findById(prodBasicId);
-        ProdBasicDTO prodBasicDTO = result.get().toDTO();
+        Optional<ProdBasic> prodBasic = prodBasicRepository.findById(prodBasicId);
+        ProdBasicDTO prodBasicDTO = new ProdBasicDTO(prodBasic.get());
 
         return Message.<ProdBasicDTO>builder()
                 .header(StatusEnum.OK)
@@ -79,7 +78,7 @@ public class ProductService {
         ArrayList<ProdBasicDTO> prodBasicDTOList = new ArrayList<>();
 
         prodBasicList.stream()
-                .map(prodBasic -> prodBasic.toDTO())
+                .map(prodBasic -> new ProdBasicDTO(prodBasic))
                 .forEach(prodBasicDTO -> prodBasicDTOList.add(prodBasicDTO));
 
         System.out.println(prodBasicList);
@@ -92,7 +91,10 @@ public class ProductService {
     }
 
     public Message<ProductDTO> createProduct(ProductDTO productDTO){
-        productRepository.save(productDTO.toEntity());
+
+        Optional<Company> company = companyRepository.findById(productDTO.getCompany().getId());
+
+        productRepository.save(productDTO.toEntity(company.get()));
 
         return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
@@ -111,7 +113,10 @@ public class ProductService {
     }
 
     public Message<ProductDTO> updateProduct(ProductDTO productDTO){
-        productRepository.save(productDTO.toEntity());
+
+        Optional<Company> company = companyRepository.findById(productDTO.getCompany().getId());
+
+        productRepository.save(productDTO.toEntity(company.get()));
 
         return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
@@ -124,24 +129,7 @@ public class ProductService {
 
         Product product = productRepository.findById(prodId).get();
 
-        //System.out.println(rs.toString());
-        System.out.println(product.getOptionList());
-
-//        ProductDTO result = ProductDTO.createProductDTO()
-//                .prodbasic(product.getProdbasic())
-//                .company(product.getCompany())
-//                .optionList(product.getOptionList())
-//                .created(product.getCreated())
-//                .discount(product.getDiscount())
-//                .exposure(product.getExposure())
-//                .id(product.getId())
-//                .price(product.getPrice())
-//                .stock(product.getStock())
-//                .build();
-
-        ProductDTO productDTO = product.toDTO();
-
-        System.out.println(productDTO.getOptionList());
+        ProductDTO productDTO = new ProductDTO(product);
 
         return Message.<ProductDTO>builder()
                 .header(StatusEnum.OK)
@@ -156,7 +144,7 @@ public class ProductService {
         ArrayList<ProductDTO> productDTOList = new ArrayList<>();
 
         productList.stream()
-                .map(product -> product.toDTO())
+                .map(product -> new ProductDTO(product))
                 .forEach(productDTO -> productDTOList.add(productDTO));
 
 //        for (ProductDTO p : productDTOList){

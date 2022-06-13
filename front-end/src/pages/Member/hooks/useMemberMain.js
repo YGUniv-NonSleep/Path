@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useTokenReissue from '../../../hooks/useTokenReissue';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,8 @@ function useMemberMain() {
   const navigate = useNavigate();
   const { userLogOut } = useTokenReissue();
   const [open, setOpen] = useState(true);
+  const [payments, setPayments] = useState([]);
+  const [amountByDay, setAmountByDay] = useState([]);
 
   const toggleDrawer = () => {
     setOpen(!open);

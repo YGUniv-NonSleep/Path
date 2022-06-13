@@ -2,6 +2,7 @@ package com.capstone.pathproject.controller.member;
 
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.member.*;
+import com.capstone.pathproject.dto.order.MemberPaymentDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
@@ -15,7 +16,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -97,17 +100,34 @@ public class MemberApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/member/{memberId}/orders")
-    public Slice<MemberPaymentDto> getMemberOrders(@PathVariable Long memberId,
-                                                   @PageableDefault(size = 5) Pageable pageable) {
+    @GetMapping("/member/{memberId}/payments")
+    public Slice<MemberPaymentDto> getMemberPayments(@PathVariable Long memberId,
+                                                     @PageableDefault(size = 5) Pageable pageable) {
         return memberService.getMemberPayments(memberId, pageable);
     }
 
-    @GetMapping("/member/{memberId}/orders/date")
-    public Slice<MemberPaymentDto> findMemberPaymentsBetweenDate(@PathVariable Long memberId,
-                                                                 @RequestParam String startDate, // yyyy-MM-dd
-                                                                 @RequestParam String endDate,
-                                                                 Pageable pageable) {
+    @GetMapping("/member/{memberId}/payments/date")
+    public Slice<MemberPaymentDto> getMemberPaymentsBetweenDate(@PathVariable Long memberId,
+                                                                @RequestParam String startDate, // yyyy-MM-dd
+                                                                @RequestParam String endDate,
+                                                                Pageable pageable) {
         return memberService.getMemberPaymentsBetweenDate(memberId, startDate, endDate, pageable);
+    }
+
+    @GetMapping("/member/{memberId}/payments/all")
+    public ResponseEntity<Message<?>> getTotalPayments(@PathVariable Long memberId) {
+        Message<Object> message = memberService.getMemberTotalPaymentsMonth(memberId);
+        return responseUtil.createResponseEntity(message);
+    }
+
+    @GetMapping("/test/oauth/login")
+    public @ResponseBody
+    String testOAuthLogin(Authentication authentication,
+                          @AuthenticationPrincipal OAuth2User oauth) { // DI(의존성 주입)
+        System.out.println("/test/oauth/login =================");
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        System.out.println("authentication : " + oAuth2User.getAttributes());
+        System.out.println("oauth : " + oauth.getAttributes());
+        return "OAuth 세션 정보 확인하기";
     }
 }

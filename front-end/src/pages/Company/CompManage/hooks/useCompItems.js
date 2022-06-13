@@ -2,25 +2,25 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
-function useCompItems(){
-    const [myItems, setMyItems] = useState([]);
-    const companyId = useOutletContext();
+function useCompItems() {
+  const [myItems, setMyItems] = useState([]);
+  const [prodForm, setProdForm] = useState(null);
+  const companyId = useOutletContext();
 
-  // 가게 상품 생성
-  function registProduct() {
+  // 상품 입력 폼
+  function productForm(e){
+    e.preventDefault();
+
     const data = {
       price: 1500,
       exposure: false,
       discount: 0,
-      created: new Date(),
       stock: 10,
-      company: {
-        id: companyId,
-      },
-      prodBasic: {
+      picture: "blankProdImage",
+      prodBasic: { // basic상품 정보를 가져와야함.
         id: 1,
       },
-      optionList: [
+      optionList: [ // 옵션 리스트 만들어서 줘야함
         {
           name: "온도",
           detailOptionList: [
@@ -31,17 +31,33 @@ function useCompItems(){
           ],
         },
       ],
+      created: new Date(),
+      company: {
+        id: companyId,
+      },
     };
+    console.log(data)
 
-    axios
-      .post(process.env.REACT_APP_SPRING_API + "/api/product/", data)
+    // setProdForm(data)
+  }
+
+  // 가게 상품 생성
+  function registProduct() {
+    if(prodForm != null){
+      axios
+      .post(process.env.REACT_APP_SPRING_API + "/api/product/", prodForm)
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
+    }
   }
+
+  useEffect(() => {
+    registProduct()
+  }, [prodForm])
 
   // 가게 상품 읽기
   function getProduct() {
@@ -56,17 +72,54 @@ function useCompItems(){
       });
   }
 
+  // 가게 상품 정보 수정
+  // 이전 정보 들고와서 화면에 보여주어야 함
+  function patchProduct(prod, e) {
+    e.preventDefault();
+
+    console.log(prod)
+    console.log(e.target)
+
+    axios
+      .patch(process.env.REACT_APP_SPRING_API + "/api/product/", prod)
+      .then((res) => {
+        console.log(res);
+        getProduct();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  // 가게 상품 삭제
+  function deleteProduct(productId) {
+    axios
+      .delete(process.env.REACT_APP_SPRING_API + "/api/product/" + productId)
+      .then((res) => {
+        console.log(res);
+        getProduct();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   // 가게 상품 상세 읽기
   // 한 상품의 상세 정보를 얻어서 모달창에 넘겨주기
 
   useEffect(() => {
     getProduct();
+    return () => {
+      // setMyItems([]);
+    };
   }, []);
 
   return {
-    myItems, companyId, 
-    registProduct, getProduct 
-  }
+    myItems,
+    productForm, 
+    registProduct,
+    getProduct,
+  };
 }
 
-export default useCompItems
+export default useCompItems;

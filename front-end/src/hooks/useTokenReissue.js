@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeUser } from '../store';
+import { useDispatch } from 'react-redux';
+import { changeUser } from '../store/user';
+import { useSelector } from 'react-redux';
 
 function useTokenReissue() {
-  let state = useSelector((state) => state);
   let dispatch = useDispatch();
   const navigate = useNavigate();
+  let user = useSelector((state) => state.user);
 
   // === AccessToken 재발급 == //
   const tokenReissue = () => {
@@ -60,6 +60,7 @@ function useTokenReissue() {
         axios.defaults.headers.common['authorization'] = '';
         dispatch(
           changeUser({
+            id: 0,
             name: 'anonymous',
             loginId: 'anonymous',
             role: 'ROLE_ANONYMOUS',

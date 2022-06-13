@@ -22,6 +22,7 @@ import { MainListItems, SecondaryListItems } from './MyPage/listItems';
 import Chart from './MyPage/Chart';
 import Deposits from './MyPage/Deposits';
 import Orders from './MyPage/Orders';
+import usePayment from './hooks/usePayment';
 
 const drawerWidth = 240;
 
@@ -72,10 +73,8 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function MemberMain() {
-  const { loading } = useLoading();
   const { open, toggleDrawer, deleteMember } = useMemberMain();
-
-  // valid check -> email, phone, addr, addrDetail
+  const { payments, amountByDay } = usePayment();
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -120,7 +119,6 @@ function MemberMain() {
               회원정보
             </Typography>
             <Grid container spacing={3}>
-              {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Paper
                   sx={{
@@ -130,7 +128,7 @@ function MemberMain() {
                     height: 240,
                   }}
                 >
-                  <Chart />
+                  <Chart amountByDay={amountByDay} />
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
@@ -143,13 +141,13 @@ function MemberMain() {
                     height: 240,
                   }}
                 >
-                  <Deposits />
+                  <Deposits amountByDay={amountByDay} />
                 </Paper>
               </Grid>
               {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
+                  <Orders payments={payments} />
                 </Paper>
               </Grid>
             </Grid>

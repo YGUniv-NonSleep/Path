@@ -35,21 +35,30 @@ function useItemBasic() {
 
     let inputImageFiles = e.target.imgFile.files;
 
-    const imageformData = new FormData();
-    // FormData에 Key:Value 넣기
-    for (var i = 0; i < inputImageFiles.length; i++) {
-      imageformData.append("multipartFile", inputImageFiles[i]);
-    }
+    const imageFormData = new FormData();
+    let images = null;
 
-    const images = await axios
-      .post(process.env.REACT_APP_SPRING_API + `/api/image`, imageformData, {
-        headers: {
-          "Content-Type": `multipart/form-data`,
-        },
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if(inputImageFiles.length == 0) {
+      images = {
+        data: "blankImage"
+      }
+
+    } else {
+      // FormData에 Key:Value 넣기
+      for (var i = 0; i < inputImageFiles.length; i++) {
+        imageFormData.append("multipartFile", inputImageFiles[i]);
+      }
+
+      images = await axios
+        .post(process.env.REACT_APP_SPRING_API + `/api/image`, imageFormData, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
 
     const data = {
       name: e.target.name.value,
@@ -68,12 +77,12 @@ function useItemBasic() {
     if (result.data != "") {
       alert("성공적으로 등록되었습니다.");
       /* 상품 추가 폼 비우기 코드 추가 */
-      getProductBasic();
+      getProductBasicList();
     } else return console.log("뭔가 안됨");
   }
 
   // 기본 상품 전체 읽기
-  function getProductBasic() {
+  function getProductBasicList() {
     axios
       .get(process.env.REACT_APP_SPRING_API + "/api/product/basic")
       .then((res) => {
@@ -85,9 +94,29 @@ function useItemBasic() {
       });
   }
 
+  // function getProductBasic(prodId){
+  //   axios
+  //     .get(process.env.REACT_APP_SPRING_API + `/api/product/basic/${prodId}`)
+  //     .then((res) => {
+  //       basicItems.filter((list)=>{
+  //         if(list.id == res.data.body.id){
+  //           let tempList = basicItems;
+  //           // 객체 배열의 인덱스 검색 함수 findIndex()
+  //           let idx = basicItems.findIndex(i => i.id == res.data.body.id)
+  //           tempList.splice(idx, 1)
+  //           tempList.splice(idx, 0, res.data.body)
+  //           setBasicItems(tempList)
+  //         }
+  //       }) 
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+
   // 기본 상품 수정
   function patchProductBasic() {
-    console.log(updateItem)
+    // console.log(updateItem)
 
     const data = {
       id: updateItem.id,
@@ -115,14 +144,15 @@ function useItemBasic() {
         }
       )
       .then((res) => {
-        // console.log(res);
-
         return basicItems.filter((it) => {
-          console.log(it);
-          alert("성공적으로 수정되었습니다.");
-          // 수정된 상품만 재랜더링하도록 수정
-          getProductBasic();
-          handleClose();
+          // console.log(it);
+          if(it.id == res.data.body.id){
+            alert("성공적으로 수정되었습니다.");
+            // 수정된 상품만 재랜더링
+            // getProductBasic(it.id)
+            getProductBasicList()
+            handleClose();
+          }
         });
       })
       .catch((err) => {
@@ -138,7 +168,7 @@ function useItemBasic() {
         // console.log(res);
         if (res.data.header.statusCode == 200) {
           alert("성공적으로 제거되었습니다.");
-          getProductBasic();
+          getProductBasicList();
         } else return console.log("뭔가 안됨");
       })
       .catch((err) => {
@@ -147,12 +177,12 @@ function useItemBasic() {
   }
 
   useEffect(() => {
-    getProductBasic();
+    getProductBasicList();
   }, []);
 
   return {
     basicItems, updateItem, open, 
-    getProductBasic, handleOpen, handleClose, 
+    getProductBasicList, handleOpen, handleClose, 
     handleChange, registProductBasic, patchProductBasic, deleteProductBasic 
   };
 }

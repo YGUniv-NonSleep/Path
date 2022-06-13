@@ -17,18 +17,18 @@ import { Link } from 'react-router-dom';
 function MainListItems(props) {
   return (
     <React.Fragment>
-      <ListItemButton>
+      <ListItemButton component={Link} to="/member">
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="마이페이지" />
       </ListItemButton>
 
-      <ListItemButton>
+      <ListItemButton component={Link} to="/member/payments">
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
-        <ListItemText primary="주문내역" />
+        <ListItemText primary="결제내역" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>

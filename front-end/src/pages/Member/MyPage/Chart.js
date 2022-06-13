@@ -7,34 +7,26 @@ import {
   YAxis,
   Label,
   ResponsiveContainer,
+  Tooltip,
+  CartesianGrid,
 } from 'recharts';
 import Title from './Title';
 
 // Generate Sales Data
-function createData(time, amount) {
-  return { time, amount };
+function createData(time, 금액) {
+  return { time, 금액 };
 }
 
-const data = [
-  createData('1일', 0),
-  createData('4일', 6900),
-  createData('7일', 11900),
-  createData('10일', 16800),
-  createData('13일', 19900),
-  createData('16일', 22400),
-  createData('19일', 26900),
-  createData('22일', 32100),
-  createData('25일', undefined),
-  createData('28일', undefined),
-  createData('30일', undefined),
-];
-
-export default function Chart() {
+export default function Chart({ amountByDay }) {
   const theme = useTheme();
+  let data = [];
+  amountByDay.map((pay) => {
+    data.push(createData(`${pay.payDate.slice(8, 10)}일`, pay.payPrice));
+  });
 
   return (
     <React.Fragment>
-      <Title>4월 이용금액</Title>
+      <Title>{new Date().getMonth() + 1}월 이용금액</Title>
       <ResponsiveContainer>
         <LineChart
           data={data}
@@ -69,10 +61,11 @@ export default function Chart() {
           <Line
             isAnimationActive={true}
             type="monotone"
-            dataKey="amount"
+            dataKey="금액"
             stroke={theme.palette.primary.main}
             dot={true}
           />
+          <Tooltip />
         </LineChart>
       </ResponsiveContainer>
     </React.Fragment>

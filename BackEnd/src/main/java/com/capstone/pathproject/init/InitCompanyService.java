@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
+
 @Component
 @Transactional
 @RequiredArgsConstructor
@@ -30,13 +32,17 @@ public class InitCompanyService {
 
     public Company createCafe(String name, Long id){
         return Company.createCompany()
-                .longitude("123")
-                .latitude("123")
+                .longitude(123.0)
+                .latitude(123.0)
                 .thumbnail("blankImage")
                 .phone("010-0000-0000")
                 .name(name)
                 .category(CompCategory.CAFE)
                 .mail(name+"@naver.com")
+                .addr("주소")
+                .addrDetail("상세주소")
+                .open(LocalTime.of(9,10))
+                .close(LocalTime.of(20,30))
                 .member(memberRepository.findById(id).get())
                 .build();
     }

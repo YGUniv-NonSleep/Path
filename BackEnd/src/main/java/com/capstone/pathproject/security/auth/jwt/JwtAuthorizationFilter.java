@@ -34,7 +34,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final StringRedisTemplate redisTemplate;
     private final JwtTokenUtil jwtTokenUtil;
     private final CookieUtil cookieUtil;
-    private static final String[] whiteList = {"/", "/login", "/logout", "/odsay/**", "/kakao/**"};
+    private static final String[] whiteList = {"/", "/login", "/logout", "/odsay/**", "/kakao/**", "/api/image/**"};
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository, StringRedisTemplate redisTemplate, JwtTokenUtil jwtTokenUtil, CookieUtil cookieUtil) {
         super(authenticationManager);
@@ -103,7 +103,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             if (isValidateCookie(refreshTokenCookie)) {
                 String refreshToken = cookieUtil.exchangeToken(refreshTokenCookie).replace(JwtProperties.TOKEN_PREFIX, "");
                 if (jwtTokenUtil.isRefreshTokenExpireReissueTime(refreshToken)) {
-                    if (isTokenEqualsRedisValue(request, response, token)) {
+                    if (isTokenEqualsRedisValue(request, response, refreshToken)) {
                         reissueRefreshToken(request, response, principalDetails);
                     }
                 }
