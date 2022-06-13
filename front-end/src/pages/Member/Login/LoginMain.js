@@ -19,7 +19,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useLogin from '../hooks/useLogin';
-import GoogleIcon from '@mui/icons-material/Google';
 import { green, indigo, yellow, grey } from '@mui/material/colors';
 
 function Copyright(props) {
@@ -100,7 +99,7 @@ function LoginMain() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 5 }}
+                sx={{ mt: 5, fontWeight: 'bold' }}
                 size="large"
               >
                 로그인
@@ -126,7 +125,8 @@ function LoginMain() {
                     bgcolor: grey[0],
                     maxWidth: '50%',
                     mr: '5px',
-                    '&:hover': { bgcolor: grey[200] },
+                    '&:hover': { bgcolor: grey[300] },
+                    fontWeight: 'bold',
                   }}
                   size="large"
                 >
@@ -147,6 +147,7 @@ function LoginMain() {
                     '&:hover': {
                       bgcolor: indigo[700],
                     },
+                    fontWeight: 'bold',
                   }}
                   size="large"
                 >
@@ -178,6 +179,7 @@ function LoginMain() {
                     '&:hover': {
                       bgcolor: green[700],
                     },
+                    fontWeight: 'bold',
                   }}
                   size="large"
                 >
@@ -199,6 +201,7 @@ function LoginMain() {
                     '&:hover': {
                       bgcolor: yellow[700],
                     },
+                    fontWeight: 'bold',
                   }}
                   size="large"
                 >
