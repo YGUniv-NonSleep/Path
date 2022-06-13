@@ -47,6 +47,13 @@ export const MobilityApi = {
       .catch((error) => console.log(error));
     return response.data;
   },
+
+  getBusDetailLine : async(busID) => {
+    const response = await odsayApi.get(`/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`)
+    .catch((error)=>console.log(error));
+    return response.data.result;
+  },
+
   getBusStayDetail: async (busID) => {
     const response = await odsayApi
       .get(`/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`)

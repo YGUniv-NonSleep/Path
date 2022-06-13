@@ -9,9 +9,8 @@ import Box from "@mui/material/Box";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import useLoading from "../../../hooks/useLoading";
 import useBusInfo from "../hooks/useBusInfo";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -160,100 +159,100 @@ const BusStopList = styled.div`
   overflow: scroll;
 `;
 const BusListBtn = styled.button`
-width: 320px;
-height: 70px;
-border: 0;
-border-bottom: 1px solid #ccc;
-font-size: 15px;
-text-align: left;
-background-color: white;
-&:hover {
-  background-color: rgb(248, 252, 255, 0.925);
-}
+  width: 320px;
+  height: 70px;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  font-size: 15px;
+  text-align: left;
+  background-color: white;
+  &:hover {
+    background-color: rgb(248, 252, 255, 0.925);
+  }
 `;
 
 const BusStayList = styled.div`
-position: absolute;
-top: 250px;
-width: 100%;
-height: 74%;
-border: none;
-overflow: scroll;
+  position: absolute;
+  top: 250px;
+  width: 100%;
+  height: 74%;
+  border: none;
+  overflow: scroll;
 `;
 
 const BusStayList1 = styled.button`
-width: 100%;
-height: 150px;
-border: 0;
-border-bottom: 1px solid #ccc;
-font-size: 16px;
-text-align: left;
-background-color: transparent;
-&:hover {
-  background-color: rgb(240, 251, 255, 0.842);
-}
+  width: 100%;
+  height: 150px;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+  text-align: left;
+  background-color: transparent;
+  &:hover {
+    background-color: rgb(240, 251, 255, 0.842);
+  }
 `;
 
 const BusStopList1 = styled.button`
-position:relative;
-left: 5px;
-bottom:45px;
-border:0;
-outline:0;
-width: 100%;
-text-align: left;
-color: #386DE8;
-font-size: 17px;
-font-weight: bold;
-background-color: transparent;
+  position: relative;
+  left: 5px;
+  bottom: 45px;
+  border: 0;
+  outline: 0;
+  width: 100%;
+  text-align: left;
+  color: #386de8;
+  font-size: 17px;
+  font-weight: bold;
+  background-color: transparent;
 `;
 
 const BusStayListInfo = styled.button`
-position: relative;
-top: 33px;
-left: 5px;
-border:0;
-outline:0;
-width: 100%;
-text-align:left;
-font-size: 14px;
-color: #8F8F8F;
-background-color: transparent;
+  position: relative;
+  top: 33px;
+  left: 5px;
+  border: 0;
+  outline: 0;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  color: #8f8f8f;
+  background-color: transparent;
 `;
 
 const BusStopNum = styled.button`
-position:relative;
-top: 25px;
-left: 5px;
-border:0;
-outline:0;
-text-align:left;
-bottom: 20px;
-width: 100%;
-height: auto;
-font-size: 13px;
-background-color: transparent;
+  position: relative;
+  top: 25px;
+  left: 5px;
+  border: 0;
+  outline: 0;
+  text-align: left;
+  bottom: 20px;
+  width: 100%;
+  height: auto;
+  font-size: 13px;
+  background-color: transparent;
 `;
 
 const SearchResult = styled.div`
-position: relative;
-top: 20px;
-left: 10px;
-text-align: left;
-width: 95%;
-height: 40px;
-word-break: break-all;
-font-size: 15px;
-font-weight: bold;
+  position: relative;
+  top: 20px;
+  left: 10px;
+  text-align: left;
+  width: 95%;
+  height: 40px;
+  word-break: break-all;
+  font-size: 15px;
+  font-weight: bold;
 `;
 
 const Line3 = styled.hr`
-position: relative;
-top: 12px;
-z-index: 10;
-border: 0;
-height: 1px;
-background: #ccc;
+  position: relative;
+  top: 12px;
+  z-index: 10;
+  border: 0;
+  height: 1px;
+  background: #ccc;
 `;
 
 const BackBtn = styled.button`
@@ -263,8 +262,19 @@ const BackBtn = styled.button`
   width: 40px;
   height: 40px;
   border: none;
-  cursor:pointer;
-  background-color:white;
+  cursor: pointer;
+  background-color: transparent;
+`;
+
+const BackBtn1 = styled.button`
+position: relative;
+top: 8px;
+left: 7px;
+width: 40px;
+height: 40px;
+border: none;
+cursor: pointer;
+background-color: transparent;
 `;
 
 const BusStopName = styled.div`
@@ -275,114 +285,210 @@ font-size: 22px;
 font-weight: bold;
 `;
 
-
 const BusCLickList = styled.div`
-position: relative;
-top: 55px;
-left: 10px;
-width: 95%;
-height:82%;
-overflow:scroll;
-border-top: 1px solid #ccc;
-background-color: white;
+  position: relative;
+  top: 55px;
+  left: 10px;
+  width: 97%;
+  height: 82%;
+  border: 0;
+  outline: 0;
+  border-top: 1px solid #ccc;
+  background-color: white;
+  overflow: scroll;
 `;
 
 const ListBusInfo = styled.button`
-position:relative;
-top: 2px;
-bottom: 20px;
-width: 100%;
-height: 120px;
-border:0;
-outline:0;
-border-bottom: 1px solid #ccc;
-background-color: transparent;
-&:hover {
-  background-color: #FAFAFB;
-}
+  position: relative;
+  top: 2px;
+  bottom: 20px;
+  width: 100%;
+  height: 120px;
+  border: 0;
+  outline: 0;
+  border-bottom: 1px solid #ccc;
+  background-color: transparent;
+  &:hover {
+    background-color: #fafafb;
+  }
 `;
 
-const ListBusIcon = styled.div`
-position:relative;
-right: 47%;
-bottom: 67%;
+const ListBusIcon = styled.button`
+  position: relative;
+  bottom: 50px;
+  right: 85%;
+  border: 0;
+  outline: 0;
+  background-color: transparent;
 `;
 
-const ListBusNo = styled.div`
-position: relative;
-top: 16px;
-left 30px;
-width: 50%;
-color: #333333;
-text-align: left;
-font-size: 19px;
-font-weight: bold;
+const ListBusNo = styled.button`
+  position: relative;
+  right: 50px;
+  width: 50%;
+  color: #333333;
+  text-align: left;
+  font-size: 19px;
+  font-weight: bold;
+  outline: 0;
+  border: 0;
+  background-color: transparent;
 `;
 
 const ListBusCity = styled.button`
-position: relative;
-top: 25px;
-right: 38%;
-border: 0;
-outline:0;
-width: auto;
-font-size: 12px;
-text-align: left;
-color: #333333;
-background-color: transparent;
+  position: relative;
+  right: 66%;
+  top: 29px;
+  border: 0;
+  outline: 0;
+  width: auto;
+  font-size: 12px;
+  text-align: left;
+  color: #333333;
+  background-color: transparent;
 `;
 
-const ListBusPoint = styled.div`
-position: relative;
-bottom: 15px;
-left: 20%;
-width: 75%;
-height: 10%;
-`;
-
-const ListBusStartPoint = styled.div`
-position: relative;
-width: 50%;
-border:0;
-outline:0;
-text-align: left;
-font-size: 11px;
-`;
-
-const ListBusEndPoint = styled.div`
-position: relative;
-bottom: 15px;
-left: 50%;
-width: 50%;
-font-size: 11px;
-text-align:left;
+const ListBusStartPoint = styled.button`
+  position: relative;
+  bottom: 24px;
+  left: 20px;
+  width: 75%;
+  border: 0;
+  outline: 0;
+  text-align: left;
+  font-size: 11px;
+  background-color: transparent;
 `;
 
 const Line4 = styled.hr`
+  position: relative;
+  top: 6px;
+  right: 36%;
+  border: 0;
+  width: 1px;
+  height: 10px;
+  background: #ccc;
+`;
+
+const ArrowIcon = styled.button`
+  position: relative;
+  top: 6px;
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+`;
+
+const BusStayClick = styled.div`
+  position: absolute;
+  top: 190px;
+  width: 100%;
+  height: 80%;
+  background-color: transparent;
+`;
+
+const BusDetailInfoBox = styled.div`
 position: relative;
-top: 5px;
-right: 32%;
-border: 0;
-width: 1px;
-height: 10px;
-background: #ccc;
+width: 100%;
+height: 145px;
+border-bottom: 1px solid #ccc;
 `;
 
-const ArrowsIcon = styled.div`
-position:relative;
-bottom: 30px;
+const BusDetailBusNum = styled.div`
+position: relative;
+bottom: 53px;
+left: 80px;
+width: 70%;
+font-weight: bold;
+font-size: 25px;
 `;
 
+const BusLineDetailBox = styled.div`
+position: relative;
+width: 100%;
+height: 81%;
+overflow:scroll;
+`;
 
+const BusLineInfoBox = styled.div`
+position: relative;
+width: 100%;
+height: 60px;
+border-bottom: 1px solid #ccc;
+background-color: transparent;
+&:hover {
+  background-color: #F2FCFF;
+}
+`;
+
+const BusLineName = styled.div`
+position: relative;
+top: 35%;
+left: 10px;
+width: 90%;
+`;
+
+const BusDetailIcon = styled.div`
+  position: relative;
+  bottom: 25px;
+  left: 50px;
+`;
+
+const BusDetailRunTime = styled.div`
+  position: relative;
+  bottom: 25px;
+  left: 30px;
+  width: 60px;
+  font-size: 14px;
+  color: rgb(138, 138, 138);
+`;
+
+const BusDetailRunTime1 = styled.div`
+  position: relative;
+  bottom: 40px;
+  left: 100px;
+  font-size: 14px;
+  color: rgb(102, 102, 102);
+`;
+
+const BusDetailStep = styled.div`
+  position: relative;
+  bottom: 15px;
+  left: 30px;
+  width: 60px;
+  font-size: 14px;
+  color: rgb(138, 138, 138);
+`;
+
+const BusDetailStep1 = styled.div`
+  position: relative;
+  bottom: 30px;
+  left: 100px;
+  font-size: 14px;
+  color: rgb(102, 102, 102);
+`;
 
 function BusMain() {
   const { loading } = useLoading();
-  const { 
-    busNo, busList, busStop, toggleValue, 
-    onChanged, submit, onToggle, busStopClick, busStopValue, searchValue,
-    busClickValue, busValue, backClick, busStopInfo
+  const {
+    busNo,
+    busList,
+    busStop,
+    toggleValue,
+    onChanged,
+    submit,
+    onToggle,
+    busStopClick,
+    busStopValue,
+    searchValue,
+    busClickValue,
+    busValue,
+    backClick,
+    clickBack,
+    busStopInfo,
+    busStopList,
+    busStopClickList,
+    busLineDetail,
   } = useBusInfo();
-  // console.log(toggleValue)
 
   return (
     <div className="Mobility">
@@ -429,87 +535,120 @@ function BusMain() {
                 {busList.bus_Interval_Sat}분
               </BusStep1>
               <Line2 />
-              
+
               <BusStopList>
-                { busList.station.map((item)=>{
-                    return(
-                      <div>
-                      <BusListBtn onClick={busClickValue} value="stopValue">{item.stationName}</BusListBtn>
-                      {
-                        busValue == "stopValue" && busList != undefined && busList.length != 0 ? (
-                          <div>
-                            {
-                               
-                            } </div>
-                        ) : <> </>
-                      }
-                      </div>
-                    ) 
-                  })
-                }
+                {busList.station.map((item) => {
+                  return (
+                    <div>
+                      <BusListBtn onClick={(e) => { busClickValue(item.y, item.x, e);}} value="stopValue">
+                        {item.stationName}
+                      </BusListBtn>
+                      {busValue == "stopValue" && busList != undefined && busList.length != 0 ? (
+                        <div> {} </div>
+                      ) : (
+                        <> </>
+                      )}
+                    </div>
+                  );
+                })}
               </BusStopList>
             </>
           ) : busStopValue == "busStopClick" && toggleValue == "busStop" && busStop != undefined && busStop.length != 0 ? (
             <>
-            <BackBtn onClick={backClick} value="back"><ArrowBackIosNewIcon/></BackBtn>
-            <BusStopName>{busStopInfo.stationName}</BusStopName>
-            <BusCLickList>
-            { busStopInfo.lane.map((item)=> {
-              return (
-                <ListBusInfo>
-                  <ListBusNo>{item.busNo}</ListBusNo>
-                  <ListBusCity> {item.busCityName} </ListBusCity>
-                  <Line4/> 
-                  <ListBusPoint>
-                  <ListBusStartPoint>{item.busStartPoint}</ListBusStartPoint>
-                  <ListBusEndPoint>{item.busEndPoint}</ListBusEndPoint>
-                  <ArrowsIcon>
-                    <ArrowBackIcon sx={{ fontSize: 15, color: "#ccc" }}/>
-                    <ArrowForwardIcon sx={{ fontSize: 15, color: "#ccc" }}/> 
-                    </ArrowsIcon>
-                    
-                  </ListBusPoint>
+              { busStopClickList == "busStopList" ? 
+                <BusStayClick> 
+                  {console.log(busLineDetail)}
+                  <BusDetailInfoBox>
+                  <BackBtn1 onClick={clickBack} value="back"> <ArrowBackIosNewIcon /> </BackBtn1>
+                  <BusDetailIcon><DirectionsBusIcon color="primary" /></BusDetailIcon>
+                  <BusDetailBusNum>{busLineDetail.busNo}</BusDetailBusNum>
+                  <BusDetailRunTime>운행시간</BusDetailRunTime>
+                  <BusDetailRunTime1> 첫차 {busLineDetail.busFirstTime}, 막차 {busLineDetail.busLastTime}</BusDetailRunTime1>
+                    <BusDetailStep>배차간격</BusDetailStep>
+                    <BusDetailStep1> 평일 {busLineDetail.bus_Interval_Week}분, 주말{" "} {busLineDetail.bus_Interval_Sat}분 </BusDetailStep1>
                   
-                    
-                   
+                  </BusDetailInfoBox>
+                  
+                  <BusLineDetailBox>
+ 
+                    { busLineDetail.station.map((item) => {
+                      return (
+                        <BusLineInfoBox>
+                        <BusLineName> {item.stationName} </BusLineName>
+                        </BusLineInfoBox>
+                      )
+                    })
+                    }
+                  </BusLineDetailBox>
 
-                   
-                  <ListBusIcon><DirectionsBusIcon sx={{ fontSize: 20, color: "#386DE8" }}/></ListBusIcon>
-                  
-                </ListBusInfo>
-              );
-            }) 
-            }
-            </BusCLickList>
-            
+              </BusStayClick> :(  
+                <>
+              <BackBtn onClick={backClick} value="back"> <ArrowBackIosNewIcon /> </BackBtn>
+              <BusStopName>{busStopInfo.stationName}</BusStopName>
+              <BusCLickList>
+                {busStopInfo.lane.map((item) => {
+                  return (
+                    <ListBusInfo onClick={(e) => {busStopList(item.busID, e);}} value="busStopList">
+                      <ListBusNo onClick={(e) => {busStopList(item.busID, e);}} value="busStopList">
+                        {item.busNo}
+                      </ListBusNo>
+                      <ListBusCity onClick={(e) => {busStopList(item.busID, e);}} value="busStopList">
+                        {" "}
+                        {item.busCityName}{" "}
+                      </ListBusCity>
+                      <Line4 />
+
+                      <ListBusStartPoint onClick={(e) => {busStopList(item.busID, e);}} value="busStopList">
+                        {item.busStartPoint}{" "}
+                        <ArrowIcon onClick={busStopList} value="busStopList">
+                          <SwapHorizIcon sx={{ fontSize: 20, color: "#ccc" }} />{" "}
+                        </ArrowIcon>{" "}
+                        {item.busEndPoint}
+                      </ListBusStartPoint>
+                      <ListBusIcon onClick={(e) => {busStopList(item.busID, e);}} value="busStopList">
+                        <DirectionsBusIcon
+                          sx={{ fontSize: 20, color: "#386DE8" }}
+                        />
+                      </ListBusIcon>
+                    </ListBusInfo>
+                  );
+                })}
+              </BusCLickList>
+                </>
+                )}
             </>
-          ) : busStopValue != "busStopClick" && busStop.length != 0 && toggleValue == "busStop" && busStop.length != 0 ? 
-          (
+          ) : busStopValue != "busStopClick" &&busStop.length != 0 && toggleValue == "busStop" && busStop.length != 0 ? (
             <>
-            <SearchResult>'{busStop[0].do} {busStop[0].gu}' 중심의 '{searchValue}' 정류장 검색 결과</SearchResult>
-            <Line3/>
+              <SearchResult>
+                '{busStop[0].do} {busStop[0].gu}' 중심의 '{searchValue}' 정류장
+                검색 결과
+              </SearchResult>
+              <Line3 />
               <BusStayList>
-                { busStop.map((item)=> {
-                  
+                {busStop.map((item) => {
                   const num = () => {
-                  var testString = item.arsID;
-                  var regex = /[^0-9]/g;
-                  var result = testString.replace(regex, " ");
-                  return result;
-                 }
-                    return (
-                        <BusStayList1 onClick={(e) => {busStopClick(item.stationID, e)}} value="busStopClick">
-                        <BusStopNum onClick={(e) => {busStopClick(item.stationID, e)}} value="busStopClick">{num()}</BusStopNum>
-                        <BusStayListInfo onClick={(e) => {busStopClick(item.stationID, e)}} value="busStopClick">{item.do} {item.gu} {item.dong}</BusStayListInfo>
-                        <BusStopList1 onClick={(e) => {busStopClick(item.stationID, e)}} value="busStopClick">{item.stationName}</BusStopList1>
-                        </BusStayList1>
-                    );
-                  })
-                }
+                    var testString = item.arsID;
+                    var regex = /[^0-9]/g;
+                    var result = testString.replace(regex, " ");
+                    return result;
+                  };
+                  return (
+                    <BusStayList1 onClick={(e) => { busStopClick(item.stationID, e);}} value="busStopClick" >
+                      <BusStopNum onClick={(e) => {busStopClick(item.stationID, e); }}value="busStopClick" >
+                        {num()}
+                      </BusStopNum>
+                      <BusStayListInfo onClick={(e) => { busStopClick(item.stationID, e);}} value="busStopClick">
+                        {item.do} {item.gu} {item.dong}
+                      </BusStayListInfo>
+                      <BusStopList1 onClick={(e) => { busStopClick(item.stationID, e);}} value="busStopClick">
+                        {item.stationName}
+                      </BusStopList1>
+                    </BusStayList1>
+                  );
+                })}
               </BusStayList>
             </>
-          ) : 
-          (
+          ) : (
             <>
               <Text>최근 검색</Text>
               <Line></Line>
@@ -517,14 +656,15 @@ function BusMain() {
               <Line1></Line1>
             </>
           )}
-          <BusBtn onClick={onToggle} value="bus">버스</BusBtn>
-          <BusStopBtn onClick={onToggle} value="busStop">버스 정류장</BusStopBtn>
-
+          <BusBtn onClick={onToggle} value="bus">
+            버스
+          </BusBtn>
+          <BusStopBtn onClick={onToggle} value="busStop">
+            버스 정류장
+          </BusStopBtn>
         </BarContainer>
       </SideNav>
       <Map />
-
-      
     </div>
   );
 }

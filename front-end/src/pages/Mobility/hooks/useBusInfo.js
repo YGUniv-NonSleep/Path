@@ -15,6 +15,8 @@ function useBusInfo(){
     const [busStopValue, setBusStopValue] = useState(null);
     const [busValue, setBusValue] = useState("");
     const [busStopInfo, setBusStopInfo] = useState("");
+    const [busStopClickList, setBusStopClickList] = useState("");
+    const [busLineDetail, setBusLineDetail] = useState("");
   
     async function mapLoad() {
       try {
@@ -53,8 +55,9 @@ function useBusInfo(){
       }
     }
 
-    function busClickValue(e) {
-      console.log(e.target.value);
+    async function busClickValue(paramY, paramX, e) {
+      e.preventDefault();
+      console.log(paramY, paramX);
       if(e.target.value != undefined){
         setBusValue("stopValue");
       }else {
@@ -76,8 +79,23 @@ function useBusInfo(){
       }
     }
 
-    function backClick(e) {
+    async function busStopList(params, e){ 
+      e.preventDefault();
+      console.log(params);
+      if(e.target.value != undefined){
+      let busID = params;
+      let busLineDetail = await MobilityApi.getBusDetailLine(busID).catch((error) => console.log(error));
+      setBusLineDetail(busLineDetail);
+      setBusStopClickList("busStopList");
+      }
+    }
+
+    function backClick() {
       setBusStopValue(null);
+    }
+
+    function clickBack(){
+      setBusStopClickList("");
     }
   
     function submit(e) {
@@ -117,7 +135,6 @@ function useBusInfo(){
           setStayMarker((current) => [...current, mark]);
           bound.extend(busStayMark);
         }
-  
         map.setBounds(bound);
       }
   
@@ -130,7 +147,6 @@ function useBusInfo(){
   
       const array = busDetailInfo.result.station;
       console.log(array)
-      
       setBusList(busStayDetail)
   
       const bPoly = await MapApi().drawKakaoBusPolyLine(
@@ -189,8 +205,8 @@ function useBusInfo(){
     return {
         busNo, busList, busStop, toggleValue, 
         mapLoad, onChanged, submit, busInfo, onToggle, 
-        busStopClick, busStopValue, searchValue, busClickValue, busValue, backClick,
-        busStopInfo
+        busStopClick, busStopValue, searchValue, busClickValue, busValue, backClick, clickBack,
+        busStopInfo, busStopList, busStopClickList, busLineDetail
     }
 }
 

@@ -606,7 +606,6 @@ function SubwayMain() {
                   var testString = item.list;
                   var regex = /[^0-9]/g;
                   var result = testString.replace(regex, " ");
-                  //console.log(result);
                   return result;
                  }
 
