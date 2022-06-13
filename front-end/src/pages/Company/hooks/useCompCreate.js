@@ -110,7 +110,7 @@ function useCompCreate() {
     // formData.append(
     //     "json", new Blob([JSON.stringify(data)], { type: "application/json" })
     // );
-    //setFormInfo(data);
+    setFormInfo(data);
   }
 
   function createCompany() {

@@ -30,6 +30,11 @@ function ItemsMain() {
         <button onClick={productForm}>
           가게 상품 등록
         </button>
+        <Link to={"/company/basic"}>
+          <button>
+            기본 상품 등록
+          </button>
+        </Link>
         {myItems == null ? (
           console.log("데이터 잘못넘어옴")
         ) : (

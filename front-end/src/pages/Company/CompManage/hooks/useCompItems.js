@@ -38,7 +38,7 @@ function useCompItems() {
     };
     console.log(data)
 
-    // setProdForm(data)
+    setProdForm(data)
   }
 
   // 가게 상품 생성
@@ -48,6 +48,8 @@ function useCompItems() {
       .post(process.env.REACT_APP_SPRING_API + "/api/product/", prodForm)
       .then((res) => {
         console.log(res);
+        // 생성하고 다시 읽어오기
+        getProduct()
       })
       .catch((err) => {
         console.log(err);
@@ -65,6 +67,8 @@ function useCompItems() {
       .get(process.env.REACT_APP_SPRING_API + `/api/product/comp/${companyId}`)
       .then((res) => {
         console.log(res);
+        // 현재 url 수정으로 자기업체가 아닌 업체의 상품을 볼 수 있음.
+        // url 랜더링시 유저의 업체 번호를 조회해서 해당 사용자의 업체번호가 아닌 경우 리다이렉트
         setMyItems(res.data.body);
       })
       .catch((err) => {

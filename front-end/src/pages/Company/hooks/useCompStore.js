@@ -6,7 +6,7 @@ function useCompStore(){
   const userInfo = useSelector((state) => state);
   const [myStore, setMyStore] = useState([]);
   const [storeDetail, setStoreDetail] = useState(null);
-  
+
   //== 모달 창 제어 ==//
   const [open, setOpen] = useState(false);
 
