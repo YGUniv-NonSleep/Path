@@ -42,6 +42,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
             log.info("PrincipalOauth2UserService : 네이버 로그인 요청");
             oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            log.info("PrincipalOauth2UserService : 페이스북 로그인 요청");
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
         } else {
             log.warn("PrincipalOauth2UserService : 구글, 네이버, 페이스북 외 로그인 요청이 왔습니다.");
         }
