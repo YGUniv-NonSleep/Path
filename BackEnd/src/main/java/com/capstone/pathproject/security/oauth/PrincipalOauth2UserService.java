@@ -33,7 +33,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         System.out.println("getAccessToken: " + userRequest.getAccessToken().getTokenValue());
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        System.out.println("oAuth2User = " + oAuth2User.getAttributes());
+        System.out.println("oAuth2User.getAttributes() = " + oAuth2User.getAttributes());
 
         OAuth2UserInfo oAuth2UserInfo = null;
         if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
@@ -42,6 +42,12 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
             log.info("PrincipalOauth2UserService : 네이버 로그인 요청");
             oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) oAuth2User.getAttributes().get("response"));
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            log.info("PrincipalOauth2UserService : 페이스북 로그인 요청");
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")) {
+            log.info("PrincipalOauth2UserService : 카카오 로그인 요청");
+            oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         } else {
             log.warn("PrincipalOauth2UserService : 구글, 네이버, 페이스북 외 로그인 요청이 왔습니다.");
         }

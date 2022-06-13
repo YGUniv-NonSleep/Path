@@ -19,13 +19,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useLogin from '../hooks/useLogin';
 import GoogleIcon from '@mui/icons-material/Google';
-
-const FormHelperTexts = styled(FormHelperText)`
-  width: 100%;
-  padding-left: 16px;
-  font-weight: 700;
-  color: #d32f2f;
-`;
+import { green, indigo, yellow } from '@mui/material/colors';
 
 function Copyright(props) {
   return (
@@ -109,10 +103,10 @@ function LoginMain() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3 }}
+                sx={{ mt: 2 }}
                 size="large"
               >
-                Sign In
+                로그인
               </Button>
               <Button
                 type="button"
@@ -122,11 +116,69 @@ function LoginMain() {
                 }
                 fullWidth
                 variant="outlined"
-                sx={{ mt: 1, mb: 2 }}
+                sx={{ mt: 1 }}
                 size="large"
-                startIcon={<GoogleIcon color="action" />}
               >
                 Google
+              </Button>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  (location.href =
+                    'https://localhost:8080/oauth2/authorization/naver')
+                }
+                sx={{
+                  mt: 1,
+                  bgcolor: green[500],
+                  '&:hover': {
+                    bgcolor: green[700],
+                  },
+                }}
+                size="large"
+              >
+                Naver
+              </Button>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  (location.href =
+                    'https://localhost:8080/oauth2/authorization/facebook')
+                }
+                sx={{
+                  mt: 1,
+                  bgcolor: indigo[500],
+                  '&:hover': {
+                    bgcolor: indigo[700],
+                  },
+                }}
+                size="large"
+              >
+                FACKBOOK
+              </Button>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  (location.href =
+                    'https://localhost:8080/oauth2/authorization/kakao')
+                }
+                sx={{
+                  mt: 1,
+                  mb: 2,
+                  color: 'text.primary',
+                  bgcolor: yellow[500],
+                  '&:hover': {
+                    bgcolor: yellow[700],
+                  },
+                }}
+                size="large"
+              >
+                KAKAO
               </Button>
             </FormControl>
             <Grid container spacing={3}>
