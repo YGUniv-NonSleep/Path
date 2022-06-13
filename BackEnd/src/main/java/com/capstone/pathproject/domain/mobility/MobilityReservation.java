@@ -31,7 +31,7 @@ public class MobilityReservation {
     private Mobility mobility;
 
     @Column(name = "MOBIL_RESER_DATE")
-    private LocalDateTime reserveDateAndTime;
+    private LocalDateTime reservedDateTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "MOBIL_RESER_RESULT")
