@@ -2,16 +2,14 @@ package com.capstone.pathproject.domain.mobility;
 
 import com.capstone.pathproject.domain.BaseTimeEntity;
 import com.capstone.pathproject.domain.member.Member;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@ToString
 @SequenceGenerator(
         name = "MOBILITY_RESERVE_SEQ_GENERATOR",
         sequenceName = "MOBILITY_RESERVE_SEQ",
