@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -87,5 +88,26 @@ public class MobilityService {
                 .header(StatusEnum.OK)
                 .message("예약된 퍼스널모빌리티를 사용합니다.")
                 .body("").build();
+    }
+
+    public void manageReserves() {
+        LocalDateTime time = LocalDateTime.now().minusMinutes(15);
+        List<MobilityReserve> mobilityReserves = mobilityReserveRepository.findReadyMobilities(time);
+        if (mobilityReserves.size() != 0) {
+            mobilityReserveRepository.updateToDisuseMobilities(toReserveMobilIds(mobilityReserves));
+            memberRepository.penaltyMember(toMemberIds(mobilityReserves), -2);
+        }
+    }
+
+    public List<Long> toReserveMobilIds(List<MobilityReserve> mobilityReserves) {
+        return mobilityReserves.stream()
+                .map(MobilityReserve::getId)
+                .collect(Collectors.toList());
+    }
+
+    public List<Long> toMemberIds(List<MobilityReserve> mobilityReserves) {
+        return mobilityReserves.stream()
+                .map(mr -> mr.getMember().getId())
+                .collect(Collectors.toList());
     }
 }
