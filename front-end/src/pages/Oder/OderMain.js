@@ -5,15 +5,19 @@ import PropTypes from "prop-types";
 import useLoading from '../../hooks/useLoading';
 import useOderMain from './hooks/useOderMain';
 
-import { SideNav, OderCon, OderSubCon } from './styles/oderStyle'
+import { SideNav, WrapBarCloseBtn, BarCloseBtn } from './styles/oderStyle'
 
 function OderMain() {
     const { loading } = useLoading()
+    const { closeToggle, animate, onCloseToggle } = useOderMain()
 
     return (
         <div className="Oder">
-            <SideNav>
+            <SideNav clicked={closeToggle} visible={animate}>
                 { loading ? null : <h2>로드 중...</h2> }
+                <WrapBarCloseBtn onClick={onCloseToggle}>
+                    <BarCloseBtn clicked={closeToggle} />
+                </WrapBarCloseBtn>
             </SideNav>
             <Map />
         </div>

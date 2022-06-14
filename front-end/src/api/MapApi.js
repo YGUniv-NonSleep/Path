@@ -1,9 +1,12 @@
 function MapApi() {
-  function createMap() {
+  function createMap(latLng) {
     const mapContainer = document.getElementById('map'); // 지도 표시 div 탐색
 
+    if(latLng == null || latLng == undefined)
+      latLng = new kakao.maps.LatLng(37.55525165729346, 126.93737555322481);
+    
     let mapOption = {
-      center: new kakao.maps.LatLng(37.55525165729346, 126.93737555322481), // 지도의 중심좌표
+      center: latLng, // 지도의 중심좌표
       level: 3, // 지도 확대 레벨
       mapTypeId: kakao.maps.MapTypeId.ROADMAP, // 지도 맵타입
     };
@@ -11,6 +14,22 @@ function MapApi() {
     let map = new kakao.maps.Map(mapContainer, mapOption);
 
     return map;
+  }
+
+  function setCurrentLocation() {
+    // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
+    if (navigator.geolocation) {
+      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+      return new Promise((res)=>{
+        navigator.geolocation.getCurrentPosition(res)
+      });
+    
+    } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+      console.log('geolocation을 사용할수 없어요..')
+      // geolocation 사용할 수 없을 때 기본 설정된 좌표 값
+      const locPosition = new kakao.maps.LatLng(37.55525165729346, 126.93737555322481);
+      return locPosition
+    }
   }
 
   function setController(map) {
@@ -192,6 +211,7 @@ function MapApi() {
 
   return {
     createMap,
+    setCurrentLocation,
     setController,
     getInfo, //getLatLng,
     drawKakaoMarker,
