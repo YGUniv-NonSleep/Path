@@ -42,7 +42,7 @@ function useBikeIcon() {
       });
 
       kakao.maps.event.addListener(marker, "click", function () {
-        axios.get("/api/mobilities")
+        axios.get("/api/mobilities/reserve")
         .then((result)=>{
           console.log(result);
           
