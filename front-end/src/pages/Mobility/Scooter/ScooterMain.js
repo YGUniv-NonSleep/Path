@@ -4,6 +4,7 @@ import MIcon from "../MIcon";
 import Map from "../../../components/Map";
 import useLoading from '../../../hooks/useLoading';
 import useScooterIcon from '../hooks/useScooterIcon';
+
 const SideNav = styled.nav`
   position: fixed;
   left: 95px;
@@ -32,6 +33,7 @@ function ScooterMain() {
           <MIcon />
         </BarContainer>
       </SideNav>
+     
       <Map />
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import MapApi from "../../../api/MapApi";
+import axios from 'axios'
 
 function useBikeIcon() {
   const [map, settingMap] = useState(null);
@@ -28,6 +29,7 @@ function useBikeIcon() {
     ];
 
     let imageSrc = "https://cdn-icons-png.flaticon.com/512/4473/4473741.png";
+
     let imageSize = new kakao.maps.Size(50, 55);
 
     for (var i = 0; i < positions.length; i++) {
@@ -39,9 +41,27 @@ function useBikeIcon() {
         image: markerImage,
       });
 
+      kakao.maps.event.addListener(marker, "click", function () {
+        axios.get("/api/mobilities")
+        .then((result)=>{
+          console.log(result);
+          
+        })
+        .catch((err)=>{
+          console.error(err);
+        })
+      });
+
       console.log(positions[i].latlng);
     }
     marker.setMap(map);
+  }
+
+  
+  const test = () => {
+    //신호보내고 받음
+    var res;
+    res.body[0].battery;
   }
 
   useEffect(() => {
