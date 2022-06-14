@@ -31,4 +31,11 @@ public interface MobilityReserveRepository extends JpaRepository<MobilityReserve
     @Modifying(clearAutomatically = true)
     @Query("update MobilityReserve mr set mr.result = 'DISUSE' where mr.id in :reserveMobilId")
     void updateToDisuseMobilities(@Param("reserveMobilId") List<Long> reserveMobilId);
+
+    @Query("select mr " +
+            "from MobilityReserve mr " +
+            "join fetch mr.mobility mo " +
+            "join fetch mo.mobilityCompany mc " +
+            "where mr.member.id = :memberId and mr.result = 'READY'")
+    Optional<MobilityReserve> findReserveMobility(@Param("memberId") Long memberId);
 }
