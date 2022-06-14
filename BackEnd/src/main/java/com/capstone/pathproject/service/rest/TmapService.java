@@ -66,8 +66,8 @@ public class TmapService {
         Mobility mobility = findMobility.orElse(null);
         if (mobility == null) return null;
         LocationMobilityDto mobilityDto = new LocationMobilityDto(mobility);
-        int unlockFee = mobilityDto.getLocationMobilityCompanyDto().getUnlockFee();
-        int minuteFee = mobilityDto.getLocationMobilityCompanyDto().getMinuteFee();
+        int unlockFee = mobilityDto.getMobilityCompany().getUnlockFee();
+        int minuteFee = mobilityDto.getMobilityCompany().getMinuteFee();
         List<Map<String, Object>> routeSection = new ArrayList<>();
 
         // 출발지 -> 퍼스널 모빌리티 조회
