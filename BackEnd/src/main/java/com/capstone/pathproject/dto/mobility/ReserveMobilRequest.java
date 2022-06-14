@@ -7,11 +7,11 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-public class MobilReserveRequest {
+public class ReserveMobilRequest {
     private Long memberId;
     private Long mobilId;
 
-    public MobilReserveRequest(Long memberId, Long mobilId) {
+    public ReserveMobilRequest(Long memberId, Long mobilId) {
         this.memberId = memberId;
         this.mobilId = mobilId;
     }
