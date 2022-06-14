@@ -18,8 +18,10 @@ const CompStoreSubCon = styled.div`
 
 function CompStoreMain() {
   const { loading } = useLoading();
-  const { myStore, storeDetail, open, handleOpen, handleClose } =
-    useCompStore();
+  const { 
+    myStore, storeDetail, open, 
+    handleOpen, handleClose 
+  } = useCompStore();
 
   return (
     <CompStoreCon>

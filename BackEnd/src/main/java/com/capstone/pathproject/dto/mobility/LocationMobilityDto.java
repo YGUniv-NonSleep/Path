@@ -17,11 +17,11 @@ public class LocationMobilityDto {
     private double latitude;
     private MobilityState state;
     private MobilityType type;
-    private LocationMobilityCompanyDto locationMobilityCompanyDto;
+    private LocationMobilityCompanyDto mobilityCompany;
 
     public LocationMobilityDto(Mobility mobility) {
         this.id = mobility.getId();
-        this.locationMobilityCompanyDto = new LocationMobilityCompanyDto(mobility.getMobilityCompany());
+        this.mobilityCompany = new LocationMobilityCompanyDto(mobility.getMobilityCompany());
         this.battery = mobility.getBattery();
         this.longitude = mobility.getLongitude();
         this.latitude = mobility.getLatitude();

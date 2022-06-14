@@ -1,7 +1,8 @@
 import { useParams, Link, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import useLoading from '../../../hooks/useLoading'
+import useLoading from '../../../hooks/useLoading';
+import useCompManageMain from './hooks/useCompManageMain';
 
 const CompManageCon = styled.div`
     width: 390px;
@@ -15,6 +16,7 @@ const CompManageSubCon = styled.div`
 function CompManageMain() {
     const { loading } = useLoading();
     const { comId } = useParams();
+    const { myStore } = useCompManageMain();
 
     return (
         <CompManageCon>

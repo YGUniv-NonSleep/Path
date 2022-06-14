@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import pathLogo from '../assets/images/path_logo.svg';
 import PathRouteElement from './PathRouteElement';
 import CompRouteElement from './CompRouteElement';
-import axios from 'axios';
 import useTokenReissue from '../hooks/useTokenReissue';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeUser } from '../store';
 import { useNavigate } from 'react-router';
 
 const NavContainer = styled.nav`
