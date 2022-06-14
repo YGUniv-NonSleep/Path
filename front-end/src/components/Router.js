@@ -4,8 +4,10 @@ import {
   useNavigate, 
   useLocation,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Fragment, useEffect, useState } from 'react';
+import { storeInfo } from '../store/comp';
+import axios from "axios";
 
 import PageNotFound from './PageNotFound';
 import Menubar from './Menubar';
@@ -34,13 +36,50 @@ import TossPayments from '../pages/TosspaymentsTest';
 
 function Router() {
   const userInfo = useSelector((state) => state.user);
-  // const [userRole, setUserRole] = useState(null);
+  const compUserStore = useSelector((state) => state.comp.compList);
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + "/api/company/myStore")
+      .then((res) => {
+        // 새로고침 오류
+        if(res.data.body.length != 0) {
+          let idList = []
+          res.data.body.map((item) => {
+            idList.push(item.id)
+          })
+          dispatch( storeInfo({ state: idList }) )
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [userInfo])
+
+  useEffect(() => {
+    if(compUserStore.length != 0 && location.pathname === '/company/manage') {
+      axios
+      .get(process.env.REACT_APP_SPRING_API + `/api/company/${compUserStore[0]}`)
+      .then((res) => {
+        navigate(`/company/manage/${res.data.body.id}`)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    } else if(compUserStore.length == 0 && location.pathname === '/company/manage'){
+      alert("업체 정보가 없습니다.")
+      navigate("/company/store")
+    }
+  }, [location.pathname])
   
-  // useEffect(() => {
-  //   setUserRole(userInfo.role)
-  // }, [userInfo])
+  useEffect(() => {
+    setUserRole(userInfo.role)
+  }, [userInfo])
 
   useEffect(() => {
     // url 창에 입력해서 넘어가면 role이 anonymous 뜸 수정 필요
@@ -51,7 +90,7 @@ function Router() {
     //   }
     //   if(location.pathname.includes("company")){
     //     alert("해당 페이지 접근 권한이 없습니다! 메인페이지로 이동합니다.")
-    //     return navigate('/') 
+    //     return navigate('/')
     //   }
     // }
     

@@ -16,7 +16,7 @@ const CompManageSubCon = styled.div`
 function CompManageMain() {
     const { loading } = useLoading();
     const { comId } = useParams();
-    const { myStore } = useCompManageMain();
+    const {  } = useCompManageMain();
 
     return (
         <CompManageCon>
