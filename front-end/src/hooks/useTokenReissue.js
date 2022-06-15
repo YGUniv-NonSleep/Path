@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeUser } from '../store/user';
+import { storeInfo } from '../store/comp'
 
 function useTokenReissue() {
   let dispatch = useDispatch();
@@ -63,7 +64,8 @@ function useTokenReissue() {
             name: 'anonymous',
             loginId: 'anonymous',
             role: 'ROLE_ANONYMOUS',
-          })
+          }),
+          dispatch( storeInfo({ state: [] }) )
         );
         navigate('/');
       });
