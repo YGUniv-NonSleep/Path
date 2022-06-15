@@ -19,9 +19,14 @@ function MapApi() {
   function setCurrentLocation() {
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
     if (navigator.geolocation) {
+      // let watchID = new Promise((success, error)=>{
+      //   watchID = navigator.geolocation.watchPosition(success, error);
+      //   console.log(watchID)
+      // })
+      
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-      return new Promise((res)=>{
-        navigator.geolocation.getCurrentPosition(res)
+      return new Promise((res, rej)=>{
+        navigator.geolocation.getCurrentPosition(res, rej)
       });
     
     } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다

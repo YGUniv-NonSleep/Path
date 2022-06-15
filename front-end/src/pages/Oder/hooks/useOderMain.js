@@ -12,22 +12,24 @@ function useOderMain() {
 
   useEffect(() => {
     if(!closeToggle && true){
-        setAnimate(true);
-        setTimeout(() => setAnimate(false), 300);
+      setAnimate(true);
+      setTimeout(() => setAnimate(false), 300);
     }
   }, [closeToggle])
 
   const onCloseToggle = () => {
-    setCloseToggle((prev) => !prev )
+    setCloseToggle((prev) => !prev)
   }
 
   async function setUserLatLng() {
     try {
         let result = await MapApi().setCurrentLocation();
+        // console.log(result)
         let locPosition = new kakao.maps.LatLng(result.coords.latitude, result.coords.longitude);
         let createMap = await MapApi().createMap(locPosition);
         settingMap(createMap)
         setUserLocation(locPosition)
+        
       } catch (error) {
         console.log(error);
       }
