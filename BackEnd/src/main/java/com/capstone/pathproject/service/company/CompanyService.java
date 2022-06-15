@@ -147,12 +147,26 @@ public class CompanyService {
         ArrayList<CompanyDTO> companyDTOArrayList = new ArrayList<>();
         List<Company> companyList = new ArrayList<>();
         if (findCompanyDto != null){
-            for (LocationDto locationDto : findCompanyDto.getLocationList()) {
-                List<Company> companies = companyRepository.findLocationCompanies(locationDto.getX(), locationDto.getY(), CompCategory.valueOf(findCompanyDto.getCategory()));
-                for (Company company: companies) {
-                    companyList.add(company);
+
+            if (findCompanyDto.getCategory() == null){
+                System.out.println("findCompanyDto.getCategory() = " + findCompanyDto.getCategory());
+                for (LocationDto locationDto : findCompanyDto.getLocationList()) {
+                    List<Company> companies = companyRepository.findLocationCompanies(locationDto.getX(), locationDto.getY());
+                    for (Company company: companies) {
+                        companyList.add(company);
+                    }
+                }
+
+            }else{
+                for (LocationDto locationDto : findCompanyDto.getLocationList()) {
+                    List<Company> companies = companyRepository.findLocationCategoryCompanies(locationDto.getX(), locationDto.getY(), findCompanyDto.getCategory());
+                    for (Company company: companies) {
+                        companyList.add(company);
+                    }
                 }
             }
+
+            
             companyList.stream().distinct().collect(Collectors.toList());
         }else{
             companyList = companyRepository.findAll();
