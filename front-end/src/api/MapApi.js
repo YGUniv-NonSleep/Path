@@ -19,11 +19,6 @@ function MapApi() {
   function setCurrentLocation() {
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
     if (navigator.geolocation) {
-      // let watchID = new Promise((success, error)=>{
-      //   watchID = navigator.geolocation.watchPosition(success, error);
-      //   console.log(watchID)
-      // })
-      
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       return new Promise((res, rej)=>{
         navigator.geolocation.getCurrentPosition(res, rej)
@@ -35,6 +30,21 @@ function MapApi() {
       const locPosition = new kakao.maps.LatLng(37.55525165729346, 126.93737555322481);
       return locPosition
     }
+  }
+
+  function keywordSearch(keyword) {
+    if(!keyword.replace(/^\s+|\s+$/g, '')){
+      alert('키워드를 입력해주세요!');
+      return false
+
+    }
+    // 장소 검색 객체를 생성합니다
+    const ps = new kakao.maps.services.Places();
+
+    return new Promise((resolve) => {
+      ps.keywordSearch(keyword, resolve)
+    });
+
   }
 
   function setController(map) {
@@ -217,6 +227,7 @@ function MapApi() {
   return {
     createMap,
     setCurrentLocation,
+    keywordSearch, 
     setController,
     getInfo, //getLatLng,
     drawKakaoMarker,

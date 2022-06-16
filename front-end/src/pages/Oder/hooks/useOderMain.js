@@ -5,10 +5,19 @@ import { PathApi } from "../../../api/OdsayApi";
 import { TmapApi } from "../../../api/TmapApi";
 
 function useOderMain() {
-  const [userLocation, setUserLocation] = useState(null);
-  const [map, settingMap] = useState(null);
   const [closeToggle, setCloseToggle] = useState(true);
   const [animate, setAnimate] = useState(false);
+
+  const [userLocation, setUserLocation] = useState(null);
+  const [map, settingMap] = useState(null);
+  const [searchPath, setSearchPath] = useState(null);
+  const [category, setCategory] = useState('');
+  const [searchData, setSearchData] = useState('');
+
+  // 검색창 토글 버튼
+  const onCloseToggle = () => {
+    setCloseToggle((prev) => !prev)
+  }
 
   useEffect(() => {
     if(!closeToggle && true){
@@ -17,15 +26,47 @@ function useOderMain() {
     }
   }, [closeToggle])
 
-  const onCloseToggle = () => {
-    setCloseToggle((prev) => !prev)
+  function handleChange(e) {
+    if (e != undefined) {
+      if(e.target.name == 'store') {
+        console.log(e.target.value)
+        setSearchData(e.target.value);
+      } else if(e.target.name == 'category') {
+        console.log(e.target.value)
+        setCategory(e.target.value);
+      }
+
+    } else {
+      return;
+    }
   }
 
+  useEffect(() => {
+    handleChange();
+  }, [searchData]);
+
+  // 키워드 검색 & 카테고리 검색(추가 예정)
+  async function submit(e){
+    try {
+      e.preventDefault();
+
+      let res = await MapApi().keywordSearch(searchData);
+      console.log(res)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // 현재 위치정보
   async function setUserLatLng() {
     try {
         let result = await MapApi().setCurrentLocation();
-        // console.log(result)
-        let locPosition = new kakao.maps.LatLng(result.coords.latitude, result.coords.longitude);
+        let locPosition
+        if(result.coords) {
+          locPosition = new kakao.maps.LatLng(result.coords.latitude, result.coords.longitude);
+        } else locPosition = result
+
         let createMap = await MapApi().createMap(locPosition);
         settingMap(createMap)
         setUserLocation(locPosition)
@@ -35,12 +76,13 @@ function useOderMain() {
       }
   }
   
+  // 맵 로드
   async function mapLoad() {
     try {
-        let createMap = await MapApi().createMap(userLocation);
-        let setController = await MapApi().setController(createMap);
-        settingMap(setController);
-
+      let createMap = await MapApi().createMap(userLocation);
+      let setController = await MapApi().setController(createMap);
+      settingMap(setController);
+        
     } catch (error) {
       console.log(error);
     }
@@ -65,8 +107,8 @@ function useOderMain() {
   }, []);
 
   return {
-    map, closeToggle, animate, 
-    mapLoad, onCloseToggle
+    map, closeToggle, animate, searchData, category, 
+    submit, handleChange, mapLoad, onCloseToggle
   };
 }
 
