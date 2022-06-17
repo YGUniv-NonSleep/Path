@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import MapApi from "../../../api/MapApi";
 import axios from 'axios'
+import useScooterIcon from "./useScooterIcon";
 
 function useBikeIcon() {
   const [map, settingMap] = useState(null);
@@ -42,7 +43,12 @@ function useBikeIcon() {
       });
 
       kakao.maps.event.addListener(marker, "click", function () {
-        axios.get("/api/mobilities/reserve")
+        axios.get(process.env.REACT_APP_SPRING_API+"/api/mobilities",{
+          id: 1,
+          x: "128.62269785225394",
+          y: "35.89624784236353",
+          type: scooter,
+        })
         .then((result)=>{
           console.log(result);
           
@@ -51,8 +57,6 @@ function useBikeIcon() {
           console.error(err);
         })
       });
-
-      console.log(positions[i].latlng);
     }
     marker.setMap(map);
   }
