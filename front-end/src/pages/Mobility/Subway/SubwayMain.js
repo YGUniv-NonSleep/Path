@@ -341,6 +341,7 @@ left: 5px;
 width: 170px;
 padding-right: 9px;
 border-right: 1px solid rgb(184, 184, 184);
+
 `;
 
 const TimeListUp = styled.div`
@@ -353,7 +354,7 @@ margin-left: 10px;
 const MinutesListUp = styled.div`
 position: relative;
 top: -7px;
-left: 45px;
+left: 40px;
 width: 20px;
 line-height: 20px;
 `;
@@ -363,15 +364,28 @@ position: relative;
 width: 185px;
 height: 260px;
 border-bottom: 1px solid rgb(184, 184, 184);
+
 `;
 
 const UpDownWay = styled.div`
 position: absolute;
-top: 1px;
-left: 80px;
-width: 50px;
-height: 17px;
-background-color: green;
+top: 8px;
+left: 70px;
+width: 40px;
+height: 90%;
+word-break: break-all;
+line-height : 20px;
+`;
+
+const UpDownWay1 = styled.div`
+position: absolute;
+bottom: 17px;
+left: 70px;
+width: 60px;
+height: 90%;
+word-break: break-all;
+line-height : 20px;
+
 `;
 
 function SubwayMain() {
@@ -600,6 +614,7 @@ function SubwayMain() {
              <NextStop> {staInfo.nextOBJ.station[0].stationName} 방향 
              </NextStop>
              <TimetableBox>
+              {console.log(subTimeUp)}
              {
                subTimeUp.map((item) => {
                  const num = () => {
@@ -609,12 +624,21 @@ function SubwayMain() {
                   return result;
                  }
 
+                 const str = () => {
+                  var testString = item.list;
+                  var regex = /[0-9]/g;
+                  var word = testString.replace(regex, "a");
+                  var regex = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+                  var result = word.replace(regex,"");
+                  return result;
+                 }
+
                  return (
                   <div>
                   <UpDownContain>
                   <TimeListUp>{item.Idx}</TimeListUp>
                   <MinutesListUp>{num()}</MinutesListUp>
-                  <UpDownWay></UpDownWay>
+                  <UpDownWay>{str()}</UpDownWay>
                   </UpDownContain>
                   </div>
                  )
@@ -625,7 +649,6 @@ function SubwayMain() {
              <TimetableBox1> 
                {
                  subTimeDown.map((item) => {
-
                   const num = () => {
                     var testString = item.list;
                     var regex = /[^0-9]/g;
@@ -633,11 +656,22 @@ function SubwayMain() {
                     return result;
                   }
 
+                  const str = () => {
+                    var testString = item.list;
+                    var regex = /[0-9]/g;
+                    var word = testString.replace(regex, "");
+                    var regex = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+                    
+                    var result = word.replace(regex,"");
+                    return result;
+                   }
+
                    return (
                     <div>
                     <UpDownContain>
                     <TimeListDown>{item.Idx}</TimeListDown>
                     <MinutesListDown>{num()}</MinutesListDown>
+                    <UpDownWay1>{str()}</UpDownWay1>
                     </UpDownContain>
                     </div>
                    )
