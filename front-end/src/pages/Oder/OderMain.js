@@ -15,28 +15,28 @@ import {
   SideNav, NavLayout, PanelWrap, PanelBase, SearchBarBox,
   BubbleFilter, BubbleFilterListWrap, BubbleFilterArea, BubbleFilterList, BubbleFilterItem, BubbleFilterBtn, MoreGroupWrap, MoreGroupBtn, MoreGroupBtnSpan, 
   AppendixFilterArea, AppendixFilterWrap, AppendixFilterInner, AppendixFilterListUl, AppendixFilterListLi, AppendixFilterListBtn, AppendixFilterListImg, 
-  WrapBarCloseBtn,
-  BarCloseBtn,
+  BaseCard, MainTopSpace, SearchPathSpace, PathView, 
+  SubNav, EntryLayout,EntryPlaceBridge, EntryCloseBtn, EntryCloseBtnSpan, WrapBarCloseBtn, BarCloseBtn,
 } from "./styles/oderStyle";
 
 function OderMain() {
   const { loading } = useLoading();
   const {
     closeToggle,
-    animate,
+    animate, subBarHide, 
     searchData,
     category,
     submit,
     handleChange,
-    onCloseToggle,
+    onCloseToggle, onSubBarClick, 
   } = useOderMain();
 
   return (
     <div className="Oder">
-      <SideNav clicked={closeToggle} visible={animate}>
+      <SideNav clicked={closeToggle} visible={animate} openSubBar={subBarHide}>
         {loading ? null : <h2>로드 중...</h2>}
         <NavLayout>
-          {/* 컨텐츠바 토글 */}
+          {/* 메인네비바 토글 */}
           <WrapBarCloseBtn onClick={onCloseToggle}>
             <BarCloseBtn clicked={closeToggle} />
           </WrapBarCloseBtn>
@@ -111,6 +111,31 @@ function OderMain() {
                     </BubbleFilterArea>
                 </BubbleFilterListWrap>
               </BubbleFilter>
+              {/* 메인바 컨텐츠, 서브네비바 */}
+              <BaseCard>
+                  <MainTopSpace>
+                    {/* 찾은 경로 텍스트로 보여줌 */}
+                    <SearchPathSpace>
+                      <PathView>
+                        "여기에서 -> 저기로"
+                      </PathView>
+                    </SearchPathSpace>
+                    {/* 여기다 데이터 입력데이터 보여줌 */}
+                    
+                  </MainTopSpace>
+                  {/* 버튼 누르면 히든 */}
+                  <SubNav clicked={subBarHide}>
+                    <EntryLayout>
+                      {/* 서브바 컨텐츠 */}
+                      <EntryPlaceBridge>
+
+                      </EntryPlaceBridge>
+                      <EntryCloseBtn onClick={onSubBarClick} openSubBar={closeToggle}>
+                        <EntryCloseBtnSpan>닫기</EntryCloseBtnSpan>
+                      </EntryCloseBtn>
+                    </EntryLayout>
+                  </SubNav>
+              </BaseCard>
             </PanelBase>
           </PanelWrap>
         </NavLayout>

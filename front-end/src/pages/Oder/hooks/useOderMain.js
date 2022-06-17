@@ -6,6 +6,7 @@ import { TmapApi } from "../../../api/TmapApi";
 
 function useOderMain() {
   const [closeToggle, setCloseToggle] = useState(true);
+  const [subBarHide, setSubBarHide] = useState(false)
   const [animate, setAnimate] = useState(false);
 
   const [userLocation, setUserLocation] = useState(null);
@@ -19,12 +20,19 @@ function useOderMain() {
     setCloseToggle((prev) => !prev)
   }
 
+  const onSubBarClick = () => {
+    setSubBarHide((prev) => !prev)
+  }
+
   useEffect(() => {
     if(!closeToggle && true){
+      // 메인바 닫을 때
       setAnimate(true);
+      // if(subBarHide && true) setSubBarHide(false)
       setTimeout(() => setAnimate(false), 300);
     }
-  }, [closeToggle])
+    console.log(subBarHide)
+  }, [closeToggle, subBarHide])
 
   function handleChange(e) {
     if (e != undefined) {
@@ -107,8 +115,8 @@ function useOderMain() {
   }, []);
 
   return {
-    map, closeToggle, animate, searchData, category, 
-    submit, handleChange, mapLoad, onCloseToggle
+    map, closeToggle, subBarHide, animate, searchData, category, 
+    submit, handleChange, mapLoad, onCloseToggle, onSubBarClick, 
   };
 }
 

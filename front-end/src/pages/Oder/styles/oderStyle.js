@@ -9,7 +9,9 @@ const SideNav = styled.nav`
   width: 390px;
   height: 100%;
   display: block;
-  transform: translatex(${(props) => props.clicked ? "0%" : "-100%" });
+  transform: translatex(${(props) => props.clicked ? "0%" : (
+    props.openSubBar ? "-100%" : "-200.3%"
+  ) });
   transition: transform 0.3s ease-in-out;
 `;
 
@@ -298,9 +300,152 @@ const BarCloseBtn = styled.button`
   vertical-align: top;
 `;
 
+const BaseCard = styled.div`
+  flex: 1 1 auto;
+  height: 100%;
+  position: relative;
+  display: flex;
+`;
+
+const MainTopSpace = styled.div`
+  position: relative;
+  display: flex;
+  width: 390px;
+  flex: none;
+  flex-direction: column;
+  background: #fff;
+  padding-top: 76px;
+`;
+
+const SearchPathSpace = styled.div`
+  user-select: none;
+  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
+  display: block;
+  margin: 0 25px 20px 25px;
+  flex: none;
+  border-bottom: 1px solid #dbdee0;
+`;
+
+const PathView = styled.div`
+  padding-bottom: 27px;
+`;
+
+const CombinedSearchList = styled.div`
+  position: relative;
+  display: block;
+  flex: 1 1 auto;
+  overflow: hidden;
+  height: 100%;
+  visibility: visible;
+`;
+
+const SaltSearchList = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  visibility: visible;
+`;
+
+
+const ExternalFrameBridge = styled.div`
+  height: 100%;
+`;
+
+const SubNav = styled.div`
+  position: relative;
+  display: ${(props) => props.clicked ? "flex" : "none" };
+  width: 390px;
+  flex: none;
+  flex-direction: column;
+  background: #fff;
+  border-left: 1px solid #ddd;
+  z-index: 5;
+`;
+
+const EntryLayout = styled.div`
+  user-select: none;
+  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
+  display: flex;
+  flex-direction: column;
+  width: 390px;
+  height: 100%;
+  background-color: #fff;
+  box-sizing: border-box;
+  padding-top: 0px;
+`;
+
+const EntryPlaceBridge = styled.div`
+  user-select: none;
+  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
+  background-color: #fff;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  flex-direction: column;
+  height: 100%;
+  z-index: 10;
+`;
+
+const EntryCloseBtn = styled.button`
+  margin: 0;
+  padding: 0;
+  appearance: none;
+  color: inherit;
+  position: absolute;
+  right: -43px;
+  top: 24px;
+  width: 43px;
+  height: 44px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.2);
+  border-left: 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 1px;
+  line-height: 1px;
+  box-shadow: 0 3px 7px 0 rgba(0,0,0,.2);
+  cursor: pointer;
+  display: ${(props) => props.openSubBar ? "block" : "none" };
+  
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    background: hsla(0,0%,87.8%,.3);
+    content: "";
+  }
+  &:after {
+    overflow: hidden;
+    display: inline-block;
+    left: 10px;
+    width: 14px;
+    height: 14px;
+    color: transparent;
+    vertical-align: top;
+    background-position: -40px -158px;
+    background-image: url(https://ssl.pstatic.net/static/maps/v5/pc/20220512184234/search.png);
+    background-size: 194px 190px;
+    content: "";
+  }
+`;
+
+const EntryCloseBtnSpan = styled.span`
+  line-height: 1px;
+  cursor: pointer;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  font-size: 1px;
+  color: transparent;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+`;
+
 export { 
   SideNav, NavLayout, PanelWrap, PanelBase, SearchBarBox, 
   BubbleFilter, BubbleFilterListWrap, BubbleFilterArea, BubbleFilterList, BubbleFilterItem, BubbleFilterBtn, MoreGroupWrap, MoreGroupBtn, MoreGroupBtnSpan, 
   AppendixFilterArea, AppendixFilterWrap, AppendixFilterInner, AppendixFilterListUl, AppendixFilterListLi, AppendixFilterListBtn, AppendixFilterListImg, 
-  WrapBarCloseBtn, BarCloseBtn 
+  BaseCard, MainTopSpace, SearchPathSpace, PathView, 
+  SubNav, EntryLayout,EntryPlaceBridge, EntryCloseBtn, EntryCloseBtnSpan, WrapBarCloseBtn, BarCloseBtn 
 }
