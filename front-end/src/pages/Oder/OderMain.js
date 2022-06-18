@@ -15,7 +15,7 @@ import {
   SideNav, NavLayout, PanelWrap, PanelBase, SearchBarBox,
   BubbleFilter, BubbleFilterListWrap, BubbleFilterArea, BubbleFilterList, BubbleFilterItem, BubbleFilterBtn, MoreGroupWrap, MoreGroupBtn, MoreGroupBtnSpan, 
   AppendixFilterArea, AppendixFilterWrap, AppendixFilterInner, AppendixFilterListUl, AppendixFilterListLi, AppendixFilterListBtn, AppendixFilterListImg, 
-  BaseCard, MainTopSpace, SearchPathSpace, PathView, 
+  BaseCard, MainTopSpace, SearchPathSpace, PathView, CombinedSearchList, SaltSearchList, ExternalFrameBridge, SearchFrame, PlaceWrap, PlaceRoot, 
   SubNav, EntryLayout,EntryPlaceBridge, EntryCloseBtn, EntryCloseBtnSpan, WrapBarCloseBtn, BarCloseBtn,
 } from "./styles/oderStyle";
 
@@ -117,11 +117,23 @@ function OderMain() {
                     {/* 찾은 경로 텍스트로 보여줌 */}
                     <SearchPathSpace>
                       <PathView>
-                        "여기에서 -> 저기로"
+                        {/* "여기에서 -> 저기로" */}
                       </PathView>
                     </SearchPathSpace>
-                    {/* 여기다 데이터 입력데이터 보여줌 */}
-                    
+                    {/* 여기다 입력데이터 보여줌 */}
+                    <CombinedSearchList>
+                      <SaltSearchList>
+                        <ExternalFrameBridge>
+                          <SearchFrame>
+                            <PlaceWrap>
+                              <PlaceRoot>
+                                
+                              </PlaceRoot>
+                            </PlaceWrap>
+                          </SearchFrame>
+                        </ExternalFrameBridge>
+                      </SaltSearchList>
+                    </CombinedSearchList>
                   </MainTopSpace>
                   {/* 버튼 누르면 히든 */}
                   <SubNav clicked={subBarHide}>

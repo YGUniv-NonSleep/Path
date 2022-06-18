@@ -342,14 +342,76 @@ const CombinedSearchList = styled.div`
 const SaltSearchList = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
-  visibility: visible;
-`;
-
+`; // height: 100%;
 
 const ExternalFrameBridge = styled.div`
+  pointer-events: auto;
+  border: none;
+  overflow: auto;
+`; // width: 100%; height: 100%;
+
+const SearchFrame = styled.div`
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system,BlinkMacSystemFont,helvetica,Apple SD Gothic Neo,sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: -0.3px;
+  line-height: 2rem;
+  color: rgba(var(--place-color-text1), 1);
+  word-break: break-all;
+  word-wrap: break-word;
+  -webkit-text-size-adjust: none;
+  height: 100%;
+  background-color: rgba(var(--place-color-bg1), 1);
+`;
+
+const PlaceWrap = styled.div`
+  transition: opacity .3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  opacity: 1;
+`; // height: 100%;
+
+const PlaceRoot = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100%;
 `;
+
+const SortBoxWrap = styled.div`
+  position: relative;
+  border-bottom: 1px solid;
+  border-color: #ecf0f2;
+  margin: -6px 0 -1px;
+`;
+
+const SortBoxInner = styled.div`
+  overflow: hidden;
+  display: block;
+`;
+
+const SortBoxSpace = styled.div`
+  white-space: normal;
+  position: relative;
+`;
+
+const FlickingViewport = styled.div`
+  position: static;
+  z-index: 20;
+  padding: 0 25px 15px;
+`;
+
+const FlickingCamera = styled.div`
+  will-change: transform;
+  display: block;
+`;
+
+// 반복
+const FilterItem = styled.span`
+  padding-left: 0;
+  margin-top: 6px;
+  margin-right: 6px;
+  display: inline-block;
+  vertical-align: top;
+`; // first-child -> padding-left: 18px;
 
 const SubNav = styled.div`
   position: relative;
@@ -446,6 +508,6 @@ export {
   SideNav, NavLayout, PanelWrap, PanelBase, SearchBarBox, 
   BubbleFilter, BubbleFilterListWrap, BubbleFilterArea, BubbleFilterList, BubbleFilterItem, BubbleFilterBtn, MoreGroupWrap, MoreGroupBtn, MoreGroupBtnSpan, 
   AppendixFilterArea, AppendixFilterWrap, AppendixFilterInner, AppendixFilterListUl, AppendixFilterListLi, AppendixFilterListBtn, AppendixFilterListImg, 
-  BaseCard, MainTopSpace, SearchPathSpace, PathView, 
+  BaseCard, MainTopSpace, SearchPathSpace, PathView, CombinedSearchList, SaltSearchList, ExternalFrameBridge, SearchFrame, PlaceWrap, PlaceRoot, 
   SubNav, EntryLayout,EntryPlaceBridge, EntryCloseBtn, EntryCloseBtnSpan, WrapBarCloseBtn, BarCloseBtn 
 }
