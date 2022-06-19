@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString
 @SequenceGenerator(
         name = "MOBILITY_RESERVE_SEQ_GENERATOR",
         sequenceName = "MOBILITY_RESERVE_SEQ",
