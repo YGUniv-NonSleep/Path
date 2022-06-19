@@ -47,9 +47,6 @@ public class Member extends BaseTimeEntity {
     @Column(name = "MEM_PHONE")
     private String phone;
 
-    @Column(name = "MEM_POST_ID")
-    private int postId;
-
     @Column(name = "MEM_ADDR")
     private String addr;
 
@@ -58,6 +55,9 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "MEM_ADDR_EXTRA")
     private String addrExtra;
+
+    @Column(name = "MEM_POST_ID")
+    private int postId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "MEM_GENDER")
