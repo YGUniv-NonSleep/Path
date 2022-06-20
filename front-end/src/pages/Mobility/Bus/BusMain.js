@@ -127,12 +127,13 @@ const BusBtn = styled.button`
   left: 15px;
   width: 180px;
   height: 40px;
-  background-color: white;
   border: 1px solid #ccc;
-  border-radius: 7px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  background-color: white;
   &:hover {
-    color: blue;
-  }
+    background-color: #91C8FE;
+  };
 `;
 
 const BusStopBtn = styled.button`
@@ -141,12 +142,13 @@ const BusStopBtn = styled.button`
   left: 195px;
   width: 180px;
   height: 40px;
-  background-color: white;
   border: 1px solid #ccc;
-  border-radius: 7px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  border-radius: 5px;
+  background-color: white;
   &:hover {
-    color: blue;
-  }
+    background-color: #91C8FE;
+  };
 `;
 
 const BusStopList = styled.div`

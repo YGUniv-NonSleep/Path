@@ -43,20 +43,36 @@ const Ul = styled.ul`
 
 const TimeBtn = styled.button`
   position: absolute;
-  top: 140px;
+  top: 145px;
   left: 10px;
   width: 182px;
   height: 40px;
   font-size: 12px;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  background-color: white;
+  &:hover {
+    background-color: #E8F0FE;
+  };
 `;
 
 const ExitBtn1 = styled.button`
   position: absolute;
-  top: 140px;
+  top: 145px;
   left: 200px;
   width: 180px;
   height: 40px;
   font-size: 12px;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  background-color: white;
+  &:hover {
+    background-color: #E8F0FE;
+  };
 `;
 
 const BackBtn = styled.button`
