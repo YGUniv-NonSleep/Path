@@ -6,6 +6,8 @@ import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
+import com.capstone.pathproject.dto.company.FindCompanyDto;
+import com.capstone.pathproject.dto.company.LocationDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.company.CompMemberRepository;
@@ -13,11 +15,12 @@ import com.capstone.pathproject.repository.company.CompanyRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +68,8 @@ public class CompanyService {
 
         if (findCompany.isPresent()){
             Company result = findCompany.get();
-            CompanyDTO companyDTO = result.toDTO();
+//            CompanyDTO companyDTO = result.toDTO();
+            CompanyDTO companyDTO = new CompanyDTO(result);
 
             return Message.<CompanyDTO>builder()
                     .header(StatusEnum.OK)
@@ -83,7 +87,7 @@ public class CompanyService {
     public Message<List<CompanyDTO>> companyDetailByMember(Long memId){
         List<Company> result = companyRepository.findByMemberId(memId);
         ArrayList<CompanyDTO> companyDTOList = new ArrayList<>();
-        result.stream().map(Company::toDTO).forEach(companyDTOList::add);
+        result.stream().map(company -> new CompanyDTO(company)).forEach(companyDTO -> companyDTOList.add(companyDTO));
         return Message.<List<CompanyDTO>>builder()
                 .message("업체 조회 성공")
                 .body(companyDTOList)
@@ -139,37 +143,40 @@ public class CompanyService {
     }
 
 
-    public Message<?> findCompany(CompCategory category) {
-
+    public Message<?> findCompany(FindCompanyDto findCompanyDto) {
         ArrayList<CompanyDTO> companyDTOArrayList = new ArrayList<>();
-        List<Company> companyList;
+        List<Company> companyList = new ArrayList<>();
+        if (findCompanyDto != null){
 
-        if (category != null){
-             companyList= companyRepository.findByCategory(category);
+            if (findCompanyDto.getCategory() == null){
+                System.out.println("findCompanyDto.getCategory() = " + findCompanyDto.getCategory());
+                for (LocationDto locationDto : findCompanyDto.getLocationList()) {
+                    List<Company> companies = companyRepository.findLocationCompanies(locationDto.getX(), locationDto.getY());
+                    for (Company company: companies) {
+                        companyList.add(company);
+                    }
+                }
+
+            }else{
+                for (LocationDto locationDto : findCompanyDto.getLocationList()) {
+                    List<Company> companies = companyRepository.findLocationCategoryCompanies(locationDto.getX(), locationDto.getY(), findCompanyDto.getCategory());
+                    for (Company company: companies) {
+                        companyList.add(company);
+                    }
+                }
+            }
+
+            
+            companyList.stream().distinct().collect(Collectors.toList());
         }else{
             companyList = companyRepository.findAll();
         }
-
-        companyList.stream().map(company -> CompanyDTO.createCompanyDTD()
-                        .thumbnail(company.getThumbnail())
-                        .id(company.getId())
-                        .name(company.getName())
-                        .phone(company.getPhone())
-                        .mail(company.getMail())
-                        .longitude(company.getLongitude())
-                        .latitude(company.getLatitude())
-                        .category(company.getCategory())
-                        .addr(company.getAddr())
-                        .addrDetail(company.getAddrDetail())
-                        .open(company.getOpen())
-                        .close(company.getClose())
-                        .build())
-                .forEach(companyDTOArrayList::add);
+        companyList.stream().map(CompanyDTO::new).forEach(companyDTOArrayList::add);
 
         return Message.<List<CompanyDTO>>builder()
                 .body(companyDTOArrayList)
                 .header(StatusEnum.OK)
-                .message( category + " list find success")
+                .message("list find success")
                 .build();
     }
 }

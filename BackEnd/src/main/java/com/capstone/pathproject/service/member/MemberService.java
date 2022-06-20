@@ -43,7 +43,7 @@ public class MemberService {
         if (isValidateDuplicateMember(signupFormDto.getLoginId())) {
             return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
-                    .message("회원이 존재함")
+                    .message("회원 아이디가 이미 존재하고 있습니다.")
                     .body("").build();
         }
         Member member = signupFormDto.toEntity();
@@ -51,7 +51,7 @@ public class MemberService {
         memberRepository.save(member);
         return Message.<String>builder()
                 .header(StatusEnum.OK)
-                .message("회원 가입 성공")
+                .message("회원 가입 성공하였습니다.")
                 .body("").build();
     }
 
@@ -190,7 +190,6 @@ public class MemberService {
         LocalDateTime startLocalDateTime = startLocalDate.atTime(0, 0);
         LocalDate endLocalDate = LocalDate.parse(endDate);
         LocalDateTime endLocalDateTime = endLocalDate.atTime(LocalTime.MAX);
-
         Slice<MemberPaymentDto> memberPaymentDtos = paymentQueryRepository.findMemberPaymentsBetweenDate(memberId, startLocalDateTime, endLocalDateTime, pageable);
         Map<Long, List<OrderItemQueryDto>> orderItemMap = getOrderItemMap(toOrderIds(memberPaymentDtos));
         memberPaymentDtos.forEach(p -> p.setOrderItems(orderItemMap.get(p.getOrderId())));

@@ -1,28 +1,25 @@
 import { useEffect, useState } from "react";
+import Map from "../../components/Map";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import useLoading from '../../hooks/useLoading';
 import useOderMain from './hooks/useOderMain';
 
-const OderCon = styled.div`
-    width: 390px;
-    height: 100%;
-`;
-
-const OderSubCon = styled.div`
-    margin-left: 130px;
-`;
+import { SideNav, WrapBarCloseBtn, BarCloseBtn } from './styles/oderStyle'
 
 function OderMain() {
     const { loading } = useLoading()
+    const { closeToggle, animate, onCloseToggle } = useOderMain()
 
     return (
         <div className="Oder">
-            <OderCon>
-                <OderSubCon>
-                { loading ? <p>오더 화면 나왔다</p> : <h2>로드 중...</h2> }
-                </OderSubCon>
-            </OderCon>            
+            <SideNav clicked={closeToggle} visible={animate}>
+                { loading ? null : <h2>로드 중...</h2> }
+                <WrapBarCloseBtn onClick={onCloseToggle}>
+                    <BarCloseBtn clicked={closeToggle} />
+                </WrapBarCloseBtn>
+            </SideNav>
+            <Map />
         </div>
     )
 }

@@ -17,6 +17,7 @@ public class SaveOrderDto {
     private String tossOrderId;
     private String method;
     private Long memberId;
+    private String request;
     private List<SaveOrderCompositionDto> orderCompositionList;
 
 

@@ -11,7 +11,12 @@ function useBusInfo(){
     const [busList, setBusList] = useState([]);
     const [busStop, setBusStop] = useState([]);
     const [toggleValue, setToggleValue] = useState("bus");
-    const [busStopValue, setBusStopValue] = useState("");
+    const [searchValue, setSearchValue] = useState("");
+    const [busStopValue, setBusStopValue] = useState(null);
+    const [busValue, setBusValue] = useState("");
+    const [busStopInfo, setBusStopInfo] = useState("");
+    const [busStopClickList, setBusStopClickList] = useState("");
+    const [busLineDetail, setBusLineDetail] = useState("");
   
     async function mapLoad() {
       try {
@@ -50,14 +55,54 @@ function useBusInfo(){
       }
     }
 
-    function busStopClick(e){
-      console.log(e.target.value);
+    async function busClickValue(paramY, paramX, e) {
+      e.preventDefault();
+      console.log(paramY, paramX);
+      if(e.target.value != undefined){
+        setBusValue("stopValue");
+      }else {
+        return 0;
+      }
+    }
+
+    async function busStopClick(params, e){
+      e.preventDefault();
+      console.log(params);
+      if(e.target.value != undefined){
+        let stopID = params;
+        let busStopID = await MobilityApi.getBusStationInfo(stopID).catch((error) => console.log(error));
+        console.log(busStopID);
+        setBusStopInfo(busStopID);
+        setBusStopValue("busStopClick");
+      } else {
+        return 0;
+      }
+    }
+
+    async function busStopList(params, e){ 
+      e.preventDefault();
+      console.log(params);
+      if(e.target.value != undefined){
+      let busID = params;
+      let busLineDetail = await MobilityApi.getBusDetailLine(busID).catch((error) => console.log(error));
+      setBusLineDetail(busLineDetail);
+      setBusStopClickList("busStopList");
+      }
+    }
+
+    function backClick() {
+      setBusStopValue(null);
+    }
+
+    function clickBack(){
+      setBusStopClickList("");
     }
   
     function submit(e) {
       e.preventDefault();
       console.log(busNo);
       busInfo(busNo);
+      setSearchValue(busNo);
     }
     
     async function busInfo(data) {
@@ -66,13 +111,13 @@ function useBusInfo(){
       if (poly != "") {
         removeGraphics();
       }
+
       let busNo = data;
-  
       //정류장
       let busStay = await MobilityApi.getBusStay(busNo).catch((error) =>console.log(error));
       console.log(busStay);
       setBusStop(busStay);
-  
+
       const array1 = busStay;
       //console.log(array1);
   
@@ -90,7 +135,6 @@ function useBusInfo(){
           setStayMarker((current) => [...current, mark]);
           bound.extend(busStayMark);
         }
-  
         map.setBounds(bound);
       }
   
@@ -103,7 +147,6 @@ function useBusInfo(){
   
       const array = busDetailInfo.result.station;
       console.log(array)
-      
       setBusList(busStayDetail)
   
       const bPoly = await MapApi().drawKakaoBusPolyLine(
@@ -161,7 +204,9 @@ function useBusInfo(){
 
     return {
         busNo, busList, busStop, toggleValue, 
-        mapLoad, onChanged, submit, busInfo, onToggle, busStopClick
+        mapLoad, onChanged, submit, busInfo, onToggle, 
+        busStopClick, busStopValue, searchValue, busClickValue, busValue, backClick, clickBack,
+        busStopInfo, busStopList, busStopClickList, busLineDetail
     }
 }
 

@@ -35,25 +35,16 @@ public class InitOrderService {
         for (int i = 1; i <=5 ; i++){
             Order order = createOrder(k, i);
             orderRepository.save(order);
-
             for (int j = 1; j <=5 ; j++){
                 OrderItem orderItem = createOrderItem(order.getId(), (long) j);
                 orderItemRepository.save(orderItem);
-
                 for (int h=1; h<=5 ; h++){
                     OrderItemOption orderItemOption = createOrderItemOption((long) h, orderItem.getId());
                     orderItemOptionRepository.save(orderItemOption);
-
-
                 }
-
-
             }
             Payment payment = createPayment(order.getId());
             paymentRepository.save(payment);
-
-
-
         }
     }
 
@@ -90,6 +81,7 @@ public class InitOrderService {
                 .state(OrderState.ACCEPTED)
                 .price((int) (3000 * a))
                 .member(memberRepository.findById(memberId).get())
+                .request("1회용 수저가 "+ a +"개 필요해요!")
                 .build();
 
     }

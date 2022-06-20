@@ -47,9 +47,6 @@ public class Member extends BaseTimeEntity {
     @Column(name = "MEM_PHONE")
     private String phone;
 
-    @Column(name = "MEM_POST_ID")
-    private int postId;
-
     @Column(name = "MEM_ADDR")
     private String addr;
 
@@ -58,6 +55,9 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "MEM_ADDR_EXTRA")
     private String addrExtra;
+
+    @Column(name = "MEM_POST_ID")
+    private int postId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "MEM_GENDER")
@@ -72,8 +72,14 @@ public class Member extends BaseTimeEntity {
     @Column(name = "MEM_SCORE")
     private int score;
 
+    @Column(name = "MEM_PROVIDER")
+    private String provider;
+
+    @Column(name = "MEM_PROVIDER_ID")
+    private String providerId;
+
     @Builder
-    public Member(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, MemberGender gender, LocalDate birthday, String account, int score) {
+    public Member(Long id, Role role, String loginId, String password, String mail, String name, String phone, int postId, String addr, String addrDetail, String addrExtra, MemberGender gender, LocalDate birthday, String account, int score, String provider, String providerId) {
         this.id = id;
         this.role = role;
         this.loginId = loginId;
@@ -89,7 +95,8 @@ public class Member extends BaseTimeEntity {
         this.birthday = birthday;
         this.account = account;
         this.score = score;
-
+        this.provider = provider;
+        this.providerId = providerId;
     }
 
     public void updateMail(String mail) {
@@ -119,6 +126,4 @@ public class Member extends BaseTimeEntity {
     public void updateEncodePassword(String encodePassword) {
         this.password = encodePassword;
     }
-
-
 }

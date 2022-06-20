@@ -25,7 +25,9 @@ const OrdersList = ({ payment }) => {
       <TableCell>{company}</TableCell>
       <TableCell>{productName}</TableCell>
       <TableCell>{payment.method}</TableCell>
-      <TableCell align="right">{`${payment.price}원`}</TableCell>
+      <TableCell align="right">{`${payment.price.toLocaleString(
+        'ko-KR'
+      )}원`}</TableCell>
     </TableRow>
   );
 };

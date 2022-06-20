@@ -35,7 +35,7 @@ function useItemBasic() {
 
     let inputImageFiles = e.target.imgFile.files;
 
-    const imageformData = new FormData();
+    const imageFormData = new FormData();
     let images = null;
 
     if(inputImageFiles.length == 0) {
@@ -46,11 +46,11 @@ function useItemBasic() {
     } else {
       // FormData에 Key:Value 넣기
       for (var i = 0; i < inputImageFiles.length; i++) {
-        imageformData.append("multipartFile", inputImageFiles[i]);
+        imageFormData.append("multipartFile", inputImageFiles[i]);
       }
 
       images = await axios
-        .post(process.env.REACT_APP_SPRING_API + `/api/image`, imageformData, {
+        .post(process.env.REACT_APP_SPRING_API + `/api/image`, imageFormData, {
           headers: {
             "Content-Type": `multipart/form-data`,
           },

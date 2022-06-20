@@ -42,26 +42,26 @@ public class Option {
 
     public Option() {}
 
-    public OptionDTO toDTO(){
-        return OptionDTO.createOptionDTO()
-                .detailOptionList(toDtoList(detailOptionList))
-                .id(id)
-                .name(name)
-                .proId(proId)
-                .build();
-    }
+//    public OptionDTO toDTO(){
+//        return OptionDTO.createOptionDTO()
+//                .detailOptionList(toDtoList(detailOptionList))
+//                .id(id)
+//                .name(name)
+//                .proId(proId)
+//                .build();
+//    }
 
 
 
 
-    private List<DetailOptionDTO> toDtoList(List<DetailOption> entityList){
-        ArrayList<DetailOptionDTO> detailOptionList = new ArrayList<>();
-
-        entityList.stream().map(detailOption -> detailOption.toDTO()).forEach(detailOptionDTO -> detailOptionList.add(detailOptionDTO));
-
-        return detailOptionList;
-
-    }
+//    private List<DetailOptionDTO> toDtoList(List<DetailOption> entityList){
+//        ArrayList<DetailOptionDTO> detailOptionList = new ArrayList<>();
+//
+//        entityList.stream().map(detailOption -> detailOption.toDTO()).forEach(detailOptionDTO -> detailOptionList.add(detailOptionDTO));
+//
+//        return detailOptionList;
+//
+//    }
 
     public void addDetailOptions(ArrayList<DetailOption> detailOptions) {
         this.detailOptionList = detailOptions;

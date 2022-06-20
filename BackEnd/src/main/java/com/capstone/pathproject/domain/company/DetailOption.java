@@ -38,13 +38,13 @@ public class DetailOption {
 
     public DetailOption(){}
 
-    public DetailOptionDTO toDTO(){
-        return DetailOptionDTO.createDetailOptionDTO()
-                .id(id)
-                .optionId(optionId)
-                .name(name)
-                .price(price)
-                .build();
-    }
+//    public DetailOptionDTO toDTO(){
+//        return DetailOptionDTO.createDetailOptionDTO()
+//                .id(id)
+//                .optionId(optionId)
+//                .name(name)
+//                .price(price)
+//                .build();
+//    }
 
 }

@@ -1,8 +1,12 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import MapApi from "../../../api/MapApi";
+import scooter from "../../../assets/images/electric-scooter.png";
+import Modal from "../../../components/Modal";
 
 function useScooterIcon(){
   const [map, settingMap] = useState(null);
+  // const [mobilities, setMobilities] = useState([]);
 
   async function mapLoad() {
     try {
@@ -14,7 +18,31 @@ function useScooterIcon(){
     }
   }
 
+  //== 모달 창 제어 ==//
+  const [open, setOpen] = useState(false);
+  const handleOpen = (e) => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    if (open === true) return setOpen(false);
+  };
+
   function ScooterIcon() {
+    // // 임시 고정 좌표 37.5561146977415, 126.937382888804
+    // axios.get(process.env.REACT_APP_SPRING_API+"/api/mobilities",{
+    //   params :{
+    //     x: "128.62269785225394",
+    //     y: "35.89624784236353",
+    //    type: KICKBOARD, //KICKBOARD, BIKE
+    // }})
+    // .then((result)=>{
+    //   console.log(result);
+      
+    // })
+    // .catch((err)=>{
+    //   console.error(err);
+    // })
+
     var positions = [
       { latlng: new kakao.maps.LatLng(37.5561146977415, 126.937382888804) },
       { latlng: new kakao.maps.LatLng(37.5550163763589, 126.939094978874) },
@@ -27,9 +55,8 @@ function useScooterIcon(){
       { latlng: new kakao.maps.LatLng(37.5537013413484, 126.93817257614) },
     ];
 
-    let imageSrc =
-      "https://cdn-icons.flaticon.com/png/512/3212/premium/3212700.png?token=exp=1652346742~hmac=f2e0f95e5995ab458d1217810dae7e07";
-    let imageSize = new kakao.maps.Size(50, 55);
+    let imageSrc = scooter
+    let imageSize = new kakao.maps.Size(55, 55);
 
     for (var i = 0; i < positions.length; i++) {
       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
@@ -41,16 +68,7 @@ function useScooterIcon(){
         image: markerImage,
       });
 
-      console.log(positions[i].latlng);
-
-      let iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-        iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-      // 인포윈도우를 생성합니다
-      var infowindow = new kakao.maps.InfoWindow({
-        content: iwContent,
-        removable: iwRemoveable,
-      });
+      
 
       // 마커에 클릭이벤트를 등록합니다
       kakao.maps.event.addListener(marker, "click", function () {
@@ -69,7 +87,7 @@ function useScooterIcon(){
   }, [map]);
 
   return {
-    mapLoad, ScooterIcon
+    mapLoad, ScooterIcon, handleOpen, handleClose, open
   }
 }
 

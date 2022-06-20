@@ -6,5 +6,16 @@ import SignUp from './SignUp/SignUpMain';
 import UpdateMem from './Update/UpdateMemMain';
 import SearchId from './SearchId/SearchIdMain';
 import SearchPw from './SearchPw/SearchPwMain';
+import Payment from './Payment/PaymentMain';
 
-export { Member, Card, Cars, Login, SignUp, UpdateMem, SearchId, SearchPw };
+export {
+  Member,
+  Card,
+  Cars,
+  Login,
+  SignUp,
+  UpdateMem,
+  SearchId,
+  SearchPw,
+  Payment,
+};

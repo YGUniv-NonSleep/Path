@@ -4,6 +4,7 @@ import MIcon from "../MIcon";
 import Map from "../../../components/Map";
 import useLoading from '../../../hooks/useLoading';
 import useScooterIcon from '../hooks/useScooterIcon';
+import Modal from "../../../components/Modal";
 
 const SideNav = styled.nav`
   position: fixed;
@@ -24,15 +25,19 @@ const BarContainer = styled.div`
 
 function ScooterMain() {
   const { loading } = useLoading();
-  const {} = useScooterIcon();
+  const { open, handleClose } = useScooterIcon();
 
   return (
     <div className="Mobility">
       <SideNav>
         <BarContainer>
           <MIcon />
+          
         </BarContainer>
+
+        
       </SideNav>
+     
       <Map />
     </div>
   );

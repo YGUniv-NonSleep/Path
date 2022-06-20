@@ -12,19 +12,14 @@ import {
   Container,
   FormControl,
   FormHelperText,
+  Stack,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import useLogin from '../hooks/useLogin';
-
-const FormHelperTexts = styled(FormHelperText)`
-  width: 100%;
-  padding-left: 16px;
-  font-weight: 700;
-  color: #d32f2f;
-`;
+import { green, indigo, yellow, grey } from '@mui/material/colors';
 
 function Copyright(props) {
   return (
@@ -99,32 +94,164 @@ function LoginMain() {
                     onChange={handleInput}
                   />
                 </Grid>
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                />
               </Grid>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 5, fontWeight: 'bold' }}
                 size="large"
               >
-                Sign In
+                로그인
               </Button>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  mt: 2,
+                  bgcolor: 'background.paper',
+                  borderRadius: 1,
+                }}
+              >
+                <Button
+                  type="button"
+                  onClick={() =>
+                    (location.href =
+                      'https://localhost:8080/oauth2/authorization/google')
+                  }
+                  fullWidth
+                  variant="outlined"
+                  sx={{
+                    bgcolor: grey[0],
+                    maxWidth: '50%',
+                    mr: '5px',
+                    '&:hover': { bgcolor: grey[300] },
+                    fontWeight: 'bold',
+                  }}
+                  size="large"
+                >
+                  Google
+                </Button>
+                <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  onClick={() =>
+                    (location.href =
+                      'https://localhost:8080/oauth2/authorization/facebook')
+                  }
+                  sx={{
+                    bgcolor: indigo[500],
+                    ml: '5px',
+                    maxWidth: '50%',
+                    '&:hover': {
+                      bgcolor: indigo[700],
+                    },
+                    fontWeight: 'bold',
+                  }}
+                  size="large"
+                >
+                  FACKBOOK
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  mt: '10px',
+                  mb: '20px',
+                  bgcolor: 'background.paper',
+                  borderRadius: 1,
+                }}
+              >
+                <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  onClick={() =>
+                    (location.href =
+                      'https://localhost:8080/oauth2/authorization/naver')
+                  }
+                  sx={{
+                    mr: '5px',
+                    maxWidth: '50%',
+                    bgcolor: green[500],
+                    '&:hover': {
+                      bgcolor: green[700],
+                    },
+                    fontWeight: 'bold',
+                  }}
+                  size="large"
+                >
+                  Naver
+                </Button>
+                <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  onClick={() =>
+                    (location.href =
+                      'https://localhost:8080/oauth2/authorization/kakao')
+                  }
+                  sx={{
+                    ml: '5px',
+                    maxWidth: '50%',
+                    color: 'text.primary',
+                    bgcolor: yellow[500],
+                    '&:hover': {
+                      bgcolor: yellow[700],
+                    },
+                    fontWeight: 'bold',
+                  }}
+                  size="large"
+                >
+                  KAKAO
+                </Button>
+              </Box>
             </FormControl>
-            <Grid container spacing={3}>
-              <Grid item xs={4}>
+            <Box
+              sx={{
+                mt: 3,
+                display: 'flex',
+                justifyContent: 'center',
+                bgcolor: 'background.paper',
+                borderRadius: 1,
+              }}
+            >
+              <Grid
+                item
+                xs={4}
+                sx={{
+                  maxWidth: '33%',
+                  mr: 2,
+                  ml: 2,
+                }}
+              >
                 <Link to="/searchId">아이디 찾기</Link>
               </Grid>
-              <Grid item xs={4}>
+              <Grid
+                item
+                xs={4}
+                sx={{
+                  maxWidth: '33%',
+                  mr: 2,
+                  ml: 2,
+                }}
+              >
                 <Link to="/searchPw">비밀번호 찾기</Link>
               </Grid>
-              <Grid item xs={4}>
+              <Grid
+                item
+                xs={4}
+                sx={{
+                  maxWidth: '33%',
+                  mr: 2,
+                  ml: 2,
+                }}
+              >
                 <Link to="/signup">회원가입</Link>
               </Grid>
-            </Grid>
+            </Box>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
