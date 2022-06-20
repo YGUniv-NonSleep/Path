@@ -43,7 +43,7 @@ function useBoardHook() {
   const [faqState, setFaqState] = useState(false);
 
   const [buttonState, setButtonState] = useState(true);
-  
+ 
 
   const token = useTokenReissue();
 
@@ -53,7 +53,6 @@ function useBoardHook() {
     var data = {
       keyword: e.target.keyword.value,
     };
-    console.log(e.target)
     console.log(data);
 
     axios
@@ -84,10 +83,10 @@ function useBoardHook() {
   };
 
 
-  const noticePaging = (e,value) => {
+  const noticePaging = (e) => {
     e.preventDefault();
     var data = {
-      page : value-1,
+      page: e.target.value - 1,
       type: "NOTICE",
     };
     console.log(data);
@@ -120,11 +119,11 @@ function useBoardHook() {
       });
   };
 
-  const QnAPaging = (e,value) => {
+  const QnAPaging = (e) => {
     e.preventDefault();
     var data = {
-      page: value-1,
-      type: "QNA"
+      page: e.target.value - 1,
+      type: "QNA",
     };
     console.log(data);
 
@@ -154,10 +153,10 @@ function useBoardHook() {
       });
   };
 
-  const ComplaintPaging = (e,value) => {
+  const ComplaintPaging = (e) => {
     e.preventDefault();
     var data = {
-      page: value-1 ,
+      page: e.target.value - 1,
       type: "COMPLAINT",
     };
     console.log(data);
@@ -188,10 +187,10 @@ function useBoardHook() {
       });
   };
 
-  const FaQPaging = (e,value) => {
+  const FaQPaging = (e) => {
     e.preventDefault();
     var data = {
-      page: value-1,
+      page: e.target.value - 1,
       type: "FAQ",
     };
     console.log(data);
@@ -296,11 +295,11 @@ function useBoardHook() {
   // }, [formInfo]);
 
   return { 
-    formInfo, board, keyword, searched, paging, pageState,
+    formInfo, board, keyword, searched, paging, pageState, 
     paging2, pageState2, paging3, pageState3, paging4, pageState4, 
     numbering, notice, noticeState, QNA, qnaState, 
     complaint, comState, FAQ, faqState, buttonState, category,token,
-    keywordSubmit, categoryType,setSearched,
+    keywordSubmit, categoryType, 
     noticePaging, QnAPaging, ComplaintPaging, FaQPaging, 
     setBoard, setBoardState, setNumbering, setButtonState, 
     postId 

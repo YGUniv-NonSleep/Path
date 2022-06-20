@@ -3,23 +3,11 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import useLoading from '../../hooks/useLoading'
 import useBoardHook from "./hooks/useBoardHook";
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import Pagination from '@mui/material/Pagination';
-import { PostAdd } from "@mui/icons-material";
+
 
 
 const CommuCon = styled.div`
-  width: 100%;
+  width: 390px;
   height: 100%;
 `;
 const CommuSubCon = styled.div`
@@ -42,14 +30,8 @@ const MousePointer = styled.button`
   }
 `;
 
-
-
 function CommunityMain() {
- 
-  const [noticepage, setNoticePage] = React.useState(1);
-  const [qnapage, setQnaPage] = React.useState(1);
-  const [compage, setComPage] = React.useState(1);
-  const [faqpage, setFaqPage] = React.useState(1);
+
   const { loading } = useLoading();
   const { 
     keyword, searched, numbering, 
@@ -59,142 +41,188 @@ function CommunityMain() {
     noticeState, qnaState, comState, faqState,
     keywordSubmit, categoryType,
     noticePaging, QnAPaging, ComplaintPaging, FaQPaging, 
-    setBoardState, setNumbering, setButtonState,setSearched
+    setBoardState, setNumbering, setButtonState
   } = useBoardHook();
-  const handleChangeNotice = (e,value) => {
-    setNoticePage(value);
-    noticePaging(e,value);
-  };
-  const handleChangeQnA = (e,value) => {
-    setQnaPage(value)
-    QnAPaging(e,value)
-  }
-  const handleChangeCom = (e,value) => {
-    setComPage(value)
-    ComplaintPaging(e,value)
-  }
-  const handleChangeFaQ = (e,value) => {
-    setFaqPage(value)
-    FaQPaging(e,value)
-  }
-
 
   return (
     <div className="Community">
       <CommuCon>
         <CommuSubCon>
-          {loading ? <h2>고객센터입니다</h2> : <h2>로드 중...</h2>}<br></br>
+          {loading ? <h2>고객센터입니다</h2> : <h2>로드 중...</h2>}
           <>
-          <Stack direction="row" spacing={2}>
-          <Button  size="small" onClick={categoryType} value="NOTICE">공지사항</Button>
-          <Button  size="small" onClick={categoryType} value="QNA">QNA</Button>
-          <Button  size="small" onClick={categoryType} value="COMPLAINT">불만사항</Button>
-          <Button  size="small" onClick={categoryType} value="FAQ">FAQ</Button>
-        </Stack>
+            <button onClick={categoryType} value="NOTICE">
+              공지사항
+            </button>
+            <button onClick={categoryType} value="QNA">
+              QNA
+            </button>
+            <button onClick={categoryType} value="COMPLAINT">
+              불만접수
+            </button>
+            <button onClick={categoryType} value="FAQ">
+              FAQ
+            </button>
           </>
- 
           <form onSubmit={keywordSubmit} align="right">
-              <TextField
-                hiddenLabel
-                id="filled-hidden-label-small"
-                size="small"
-                type="text"
-                placeholder="검색어를 입력하세요"
-                name="keyword"
-              />
-            <Button type="submit">찾기</Button>
+            <input
+              type="text"
+              placeholder="검색어를 입력하세요"
+              name="keyword"
+            />
+            <button type="submit">찾기</button>
           </form>
           <hr></hr>
 
           {noticeState ? (
             <>
-            <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {notice.body.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {post.id}
-                    </TableCell>
-                    
-                    <TableCell align="right"><Link to={{ pathname: `/community/${post.id}` }}>
-                      {post.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{post.loginId}</TableCell>
-                    <TableCell align="right">{post.view}</TableCell>
-                    <TableCell align="right">{post.date}</TableCell>
-                    <TableCell align="right">{post.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-              {/* {numbering ? (
-                   <Stack spacing={2}>  
-                   <Pagination count={10} page={page} onChange={handleChange} />             
-                  </Stack>      
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(notice == null) | (notice == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>탭을 눌러주세요</NullCommuBoard>
+                  </tr>
+                ) : (
+                  notice.body.map((post) => {
+                    return (
+                      <tr key={post.id}>
+                        <CommuBoard2>{post.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${post.id}`,
+                            }}
+                          >
+                            {post.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{post.loginId}</CommuBoard2>
+                        <CommuBoard2>{post.view}</CommuBoard2>
+                        <CommuBoard2>{post.writeDate}</CommuBoard2>
+                        <CommuBoard2>{post.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
+              {numbering ? (
+                <div className="noticePage">
+                  <MousePointer onClick={noticePaging} value="1">
+                    1&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="2">
+                    2&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="3">
+                    3&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="4">
+                    4&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="5">
+                    5&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="6">
+                    6&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="7">
+                    7&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="8">
+                    8&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="9">
+                    9&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="10">
+                    10&nbsp;&nbsp;
+                  </MousePointer>
+                </div>
               ) : (
                 ""
-              )} */}
-              <Stack spacing={2}>  
-                   <Pagination count={10} page={noticepage} onChange={handleChangeNotice} />             
-              </Stack>  
+              )}
             </>
           ) : (
             ""
           )}
           {pageState ? (
             <div>
-            <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {paging.map((result) => (
-                  <TableRow
-                    key={result.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {result.id}
-                    </TableCell>
-                    <TableCell align="right"><Link to={{ pathname: `/community/${result.id}` }}>
-                      {result.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{result.loginId}</TableCell>
-                    <TableCell align="right">{result.view}</TableCell>
-                    <TableCell align="right">{result.date}</TableCell>
-                    <TableCell align="right">{result.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(paging == null) | (paging == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>게시글 없음</NullCommuBoard>
+                  </tr>
+                ) : (
+                  paging.map((result) => {
+                    console.log(result);
+                    return (
+                      <tr key={result.id}>
+                        <CommuBoard2>{result.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${result.id}`,
+                            }}
+                          >
+                            {result.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{result.loginId}</CommuBoard2>
+                        <CommuBoard2>{result.view}</CommuBoard2>
+                        <CommuBoard2>{result.writeDate}</CommuBoard2>
+                        <CommuBoard2>{result.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
               {numbering ? (
-                  <Stack spacing={2}>  
-                  <Pagination count={10} page={noticepage} onChange={handleChangeNotice} />             
-                 </Stack>
+                <div className="noticePage">
+                  <MousePointer onClick={noticePaging} value="1">
+                    1&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="2">
+                    2&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="3">
+                    3&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="4">
+                    4&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="5">
+                    5&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="6">
+                    6&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="7">
+                    7&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="8">
+                    8&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="9">
+                    9&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={noticePaging} value="10">
+                    10&nbsp;&nbsp;
+                  </MousePointer>
+                </div>
               ) : (
                 ""
               )}
@@ -205,98 +233,157 @@ function CommunityMain() {
 
           {qnaState ? (
             <>
-              <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {QNA.body.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {post.id}
-                    </TableCell>
-                    <TableCell align="right"><Link to={{ pathname: `/community/${post.id}` }}>
-                      {post.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{post.loginId}</TableCell>
-                    <TableCell align="right">{post.view}</TableCell>
-                    <TableCell align="right">{post.date}</TableCell>
-                    <TableCell align="right">{post.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-              {/* {numbering ? (
-                  <Stack spacing={2}>  
-                  <Pagination count={10} page={qnapage} onChange={handleChangeQnA} />             
-                 </Stack>
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(QNA == null) | (QNA == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>아직 없음.</NullCommuBoard>
+                  </tr>
+                ) : (
+                  QNA.body.map((post) => {
+                    return (
+                      <tr key={post.id}>
+                        <CommuBoard2>{post.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${post.id}`,
+                            }}
+                          >
+                            {post.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{post.loginId}</CommuBoard2>
+                        <CommuBoard2>{post.view}</CommuBoard2>
+                        <CommuBoard2>{post.writeDate}</CommuBoard2>
+                        <CommuBoard2>{post.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
+              {numbering ? (
+                <div className="qnapaging">
+                  <MousePointer onClick={QnAPaging} value="1">
+                    1&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="2">
+                    2&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="3">
+                    3&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="4">
+                    4&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="5">
+                    5&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="6">
+                    6&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="7">
+                    7&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="8">
+                    8&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="9">
+                    9&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="10">
+                    10&nbsp;&nbsp;
+                  </MousePointer>
+                </div>
               ) : (
                 ""
-              )} */}
-               <Stack spacing={2}>  
-                  <Pagination count={10} page={qnapage} onChange={handleChangeQnA} />             
-                 </Stack>
+              )}
             </>
           ) : (
             ""
           )}
           {pageState2 ? (
             <div>
-            <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {paging2.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {post.id}
-                    </TableCell>
-                    <TableCell align="right"><Link to={{ pathname: `/community/${post.id}` }}>
-                      {post.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{post.loginId}</TableCell>
-                    <TableCell align="right">{post.view}</TableCell>
-                    <TableCell align="right">{post.date}</TableCell>
-                    <TableCell align="right">{post.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-              {/* {numbering ? (
-                  <Stack spacing={2}>  
-                  <Pagination count={10} page={qnapage} onChange={handleChangeQnA} />             
-                 </Stack>
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(paging2 == null) | (paging2 == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>게시글 없음</NullCommuBoard>
+                  </tr>
+                ) : (
+                  paging2.map((result) => {
+                    console.log(result);
+                    return (
+                      <tr key={result.id}>
+                        <CommuBoard2>{result.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${result.id}`,
+                            }}
+                          >
+                            {result.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{result.loginId}</CommuBoard2>
+                        <CommuBoard2>{result.view}</CommuBoard2>
+                        <CommuBoard2>{result.writeDate}</CommuBoard2>
+                        <CommuBoard2>{result.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
+              {numbering ? (
+                <div className="qnapaging">
+                  <MousePointer onClick={QnAPaging} value="1">
+                    1&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="2">
+                    2&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="3">
+                    3&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="4">
+                    4&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="5">
+                    5&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="6">
+                    6&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="7">
+                    7&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="8">
+                    8&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="9">
+                    9&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={QnAPaging} value="10">
+                    10&nbsp;&nbsp;
+                  </MousePointer>
+                </div>
               ) : (
                 ""
-              )} */}
-               <Stack spacing={2}>  
-                  <Pagination count={10} page={qnapage} onChange={handleChangeQnA} />             
-                 </Stack>
+              )}
             </div>
           ) : (
             ""
@@ -304,98 +391,157 @@ function CommunityMain() {
 
           {comState ? (
             <>
-               <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {complaint.body.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {post.id}
-                    </TableCell>
-                    <TableCell align="right"><Link to={{ pathname: `/community/${post.id}` }}>
-                      {post.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{post.loginId}</TableCell>
-                    <TableCell align="right">{post.view}</TableCell>
-                    <TableCell align="right">{post.date}</TableCell>
-                    <TableCell align="right">{post.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-              {/* {numbering ? (
-                 <Stack spacing={2}>  
-                 <Pagination count={10} page={compage} onChange={handleChangeCom} />             
-                </Stack>
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(complaint == null) | (complaint == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>아직 없음.</NullCommuBoard>
+                  </tr>
+                ) : (
+                  complaint.body.map((post) => {
+                    return (
+                      <tr key={post.id}>
+                        <CommuBoard2>{post.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${post.id}`,
+                            }}
+                          >
+                            {post.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{post.loginId}</CommuBoard2>
+                        <CommuBoard2>{post.view}</CommuBoard2>
+                        <CommuBoard2>{post.writeDate}</CommuBoard2>
+                        <CommuBoard2>{post.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
+              {numbering ? (
+                <div className="complaintpaging">
+                  <MousePointer onClick={ComplaintPaging} value="1">
+                    1&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="2">
+                    2&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="3">
+                    3&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="4">
+                    4&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="5">
+                    5&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="6">
+                    6&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="7">
+                    7&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="8">
+                    8&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="9">
+                    9&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="10">
+                    10&nbsp;&nbsp;
+                  </MousePointer>
+                </div>
               ) : (
                 ""
-              )} */}
-               <Stack spacing={2}>  
-                 <Pagination count={10} page={compage} onChange={handleChangeCom} />             
-                </Stack>
+              )}
             </>
           ) : (
             ""
           )}
           {pageState3 ? (
             <div>
-            <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {paging3.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {post.id}
-                    </TableCell>
-                    <TableCell align="right"><Link to={{ pathname: `/community/${post.id}` }}>
-                      {post.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{post.loginId}</TableCell>
-                    <TableCell align="right">{post.view}</TableCell>
-                    <TableCell align="right">{post.date}</TableCell>
-                    <TableCell align="right">{post.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-              {/* {numbering ? (
-                 <Stack spacing={2}>  
-                 <Pagination count={10} page={page} onChange={handleChange} />             
-                </Stack>
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(paging3 == null) | (paging3 == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>게시글 없음</NullCommuBoard>
+                  </tr>
+                ) : (
+                  paging3.map((result) => {
+                    console.log(result);
+                    return (
+                      <tr key={result.id}>
+                        <CommuBoard2>{result.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${result.id}`,
+                            }}
+                          >
+                            {result.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{result.loginId}</CommuBoard2>
+                        <CommuBoard2>{result.view}</CommuBoard2>
+                        <CommuBoard2>{result.writeDate}</CommuBoard2>
+                        <CommuBoard2>{result.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
+              {numbering ? (
+                <div className="complaintpaging">
+                  <MousePointer onClick={ComplaintPaging} value="1">
+                    1&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="2">
+                    2&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="3">
+                    3&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="4">
+                    4&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="5">
+                    5&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="6">
+                    6&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="7">
+                    7&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="8">
+                    8&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="9">
+                    9&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={ComplaintPaging} value="10">
+                    10&nbsp;&nbsp;
+                  </MousePointer>
+                </div>
               ) : (
                 ""
-              )} */}
-               <Stack spacing={2}>  
-                 <Pagination count={10} page={compage} onChange={handleChangeCom} />             
-                </Stack>
+              )}
             </div>
           ) : (
             ""
@@ -403,98 +549,157 @@ function CommunityMain() {
 
           {faqState ? (
             <>
-              <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {FAQ.body.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {post.id}
-                    </TableCell>
-                    <TableCell align="right"><Link to={{ pathname: `/community/${post.id}` }}>
-                      {post.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{post.loginId}</TableCell>
-                    <TableCell align="right">{post.view}</TableCell>
-                    <TableCell align="right">{post.date}</TableCell>
-                    <TableCell align="right">{post.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-              {/* {numbering ? (
-                  <Stack spacing={2}>  
-                  <Pagination count={10} page={faqpage} onChange={handleChangeFaQ} />             
-                 </Stack>
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(FAQ == null) | (FAQ == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>아직 없음.</NullCommuBoard>
+                  </tr>
+                ) : (
+                  FAQ.body.map((post) => {
+                    return (
+                      <tr key={post.id}>
+                        <CommuBoard2>{post.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${post.id}`,
+                            }}
+                          >
+                            {post.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{post.loginId}</CommuBoard2>
+                        <CommuBoard2>{post.view}</CommuBoard2>
+                        <CommuBoard2>{post.writeDate}</CommuBoard2>
+                        <CommuBoard2>{post.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
+              {numbering ? (
+                <div className="faqpaging">
+                  <MousePointer onClick={FaQPaging} value="1">
+                    1&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="2">
+                    2&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="3">
+                    3&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="4">
+                    4&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="5">
+                    5&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="6">
+                    6&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="7">
+                    7&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="8">
+                    8&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="9">
+                    9&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="10">
+                    10&nbsp;&nbsp;
+                  </MousePointer>
+                </div>
               ) : (
                 ""
-              )} */}
-              <Stack spacing={2}>  
-                  <Pagination count={10} page={faqpage} onChange={handleChangeFaQ} />             
-                 </Stack>
+              )}
             </>
           ) : (
             ""
           )}
           {pageState4 ? (
             <div>
-               <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {paging4.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {post.id}
-                    </TableCell>
-                    <TableCell align="right"><Link to={{ pathname: `/community/${post.id}` }}>
-                      {post.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{post.loginId}</TableCell>
-                    <TableCell align="right">{post.view}</TableCell>
-                    <TableCell align="right">{post.date}</TableCell>
-                    <TableCell align="right">{post.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-              {/* {numbering ? (
-                 <Stack spacing={2}>  
-                 <Pagination count={10} page={page} onChange={handleChange} />             
-                </Stack>
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(paging4 == null) | (paging4 == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>게시글 없음</NullCommuBoard>
+                  </tr>
+                ) : (
+                  paging4.map((result) => {
+                    console.log(result);
+                    return (
+                      <tr key={result.id}>
+                        <CommuBoard2>{result.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${result.id}`,
+                            }}
+                          >
+                            {result.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{token.token.name}</CommuBoard2>
+                        <CommuBoard2>{result.view}</CommuBoard2>
+                        <CommuBoard2>{result.writeDate}</CommuBoard2>
+                        <CommuBoard2>{result.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
+              {numbering ? (
+                <div className="faqpaging">
+                  <MousePointer onClick={FaQPaging} value="1">
+                    1&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="2">
+                    2&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="3">
+                    3&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="4">
+                    4&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="5">
+                    5&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="6">
+                    6&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="7">
+                    7&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="8">
+                    8&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="9">
+                    9&nbsp;&nbsp;
+                  </MousePointer>
+                  <MousePointer onClick={FaQPaging} value="10">
+                    10&nbsp;&nbsp;
+                  </MousePointer>
+                </div>
               ) : (
                 ""
-              )} */}
-              <Stack spacing={2}>  
-                  <Pagination count={10} page={faqpage} onChange={handleChangeFaQ} />             
-                 </Stack>
+              )}
             </div>
           ) : (
             ""
@@ -502,58 +707,62 @@ function CommunityMain() {
 
           {searched ? (
             <div>
-              <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 1000 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>게시글 번호</TableCell>
-                  <TableCell align="right">제목</TableCell>
-                  <TableCell align="right">작성자</TableCell>
-                  <TableCell align="right">조회수</TableCell>
-                  <TableCell align="right">날짜</TableCell>
-                  <TableCell align="right">게시글 타입</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {keyword.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {post.id}
-                    </TableCell>
-                    <TableCell align="right"><Link to={{ pathname: `/community/${post.id}` }}>
-                      {post.title}
-                    </Link></TableCell>
-                    <TableCell align="right">{post.loginId}</TableCell>
-                    <TableCell align="right">{post.view}</TableCell>
-                    <TableCell align="right">{post.date}</TableCell>
-                    <TableCell align="right">{post.type}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-              <Button
+              <table>
+                <tr>
+                  <CommuBoard>게시글번호</CommuBoard>
+                  <CommuBoard>제목</CommuBoard>
+                  <CommuBoard>작성자</CommuBoard>
+                  <CommuBoard>조회수</CommuBoard>
+                  <CommuBoard>날짜</CommuBoard>
+                  <CommuBoard>게시글타입</CommuBoard>
+                </tr>
+                {(keyword == null) | (keyword == "") ? (
+                  <tr>
+                    <NullCommuBoard colSpan={6}>검색 결과 없음</NullCommuBoard>
+                  </tr>
+                ) : (
+                  keyword.map((result) => {
+                    console.log(result);
+                    return (
+                      <tr key={result.id}>
+                        <CommuBoard2>{result.id}</CommuBoard2>
+                        <CommuBoard2>
+                          <Link
+                            to={{
+                              pathname: `/community/${result.id}`,
+                            }}
+                          >
+                            {result.title}
+                          </Link>
+                        </CommuBoard2>
+                        <CommuBoard2>{result.loginId}</CommuBoard2>
+                        <CommuBoard2>{result.view}</CommuBoard2>
+                        <CommuBoard2>{result.writeDate}</CommuBoard2>
+                        <CommuBoard2>{result.type}</CommuBoard2>
+                      </tr>
+                    );
+                  })
+                )}
+              </table>
+              <button
                 className="post-view-go-list-btn"
                 onClick={() => {
-                  //setBoardState(true),
+                  setBoardState(true),
                   setSearched(false),
                   setNumbering(true),
                   setButtonState(true);
                 }}
               >
                 목록으로 돌아가기
-              </Button>
+              </button>
             </div>
           ) : (
             ""
           )}
 
-          <Button>
+          <button>
             <Link to={{ pathname: "/community/add" }}>등록하기</Link>
-          </Button>
+          </button>
         </CommuSubCon>
       </CommuCon>
     </div>

@@ -19,9 +19,6 @@ import { Community, CommunityContents, CommunityAdd } from '../pages/Community';
 import { CarPool, CarPoolContents, CarPoolAdd } from '../pages/CarPool';
 import { Company, CompStore, CompCreate, ItemBasic } from '../pages/Company';
 import { CompManage, CompEdit, ItemEdit, Items, Resign } from '../pages/Company/CompManage';
-
-import Confirmation from '../pages/Member/Confirmation/Confirmation';
-=======
 import {
   Member,
   Card,
@@ -123,29 +120,6 @@ function Router() {
         <Route path="/searchId" element={<SearchId />} />
         <Route path="/searchPw" element={<SearchPw />} />
         <Route path="/signup" element={<SignUp />} />
-
-        <Route path="/member" element={<Member />} />
-        <Route path="/member/update" element={<UpdateMem />} />
-        <Route path="/member/card" element={<Card />} />
-        <Route path="/member/cars" element={<Cars />} />
-        <Route path="/member/confirmation" element={<Confirmation />} />
-      </Routes>
-      <Routes>
-        <Route path="/company" element={<Company />} />
-        <Route path="/company/store" element={<CompStore />} />
-        <Route path="/company/create" element={<CompCreate />} />
-        <Route path="/company/basic" element={<ItemBasic />} />
-        <Route path="/company/manage/:comId" element={<CompManage />}>
-          {/* 없으면 업체 등록하라고 팝업창, 마이 업체 경로 타고 들어온거 아니면 첫 번째 업체 관리로 들어옴 */}
-          <Route path="items" element={<Items />}>
-            <Route path="itemEdit" element={<ItemEdit />} />
-          </Route>
-          <Route path="compEdit" element={<CompEdit />} />
-          <Route path="resign" element={<Resign />} />
-        </Route>
-      </Routes>
-      <Routes>
-
 
         {/* oder 주문은 회원만 */}
         <Route path="/oder" element={<Oder />} />

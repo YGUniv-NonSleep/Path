@@ -7,7 +7,6 @@ import CompRouteElement from './CompRouteElement';
 import useTokenReissue from '../hooks/useTokenReissue';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { pink } from '@mui/material/colors';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -38,9 +37,6 @@ const BtnUl = styled.ul`
   display: flex-inline;
   align-items: center;
   width: 100%;
-  position: absolute;
-  top: 80%;
-`;
   position: relative;
   bottom: ${(props) => { 
     return props.h === 'ROLE_ANONYMOUS' ? "-40%" : (
@@ -50,7 +46,6 @@ const BtnUl = styled.ul`
     )
   }};
 `; // -48%
-
 
 const Image = styled.div`
   background: url(${pathLogo}) no-repeat center center;
@@ -152,9 +147,6 @@ const Menubar = () => {
 
   useEffect(() => {
     tokenReissue();
-    console.log(state);
-  }, [state]); 
-=======
     console.log(userState);
   }, [userState]);
 
