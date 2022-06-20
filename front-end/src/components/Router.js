@@ -25,7 +25,7 @@ import {
   Items,
   Resign,
 } from '../pages/Company/CompManage';
-import Confirmation from '../pages/Member/Confirmation/Confirmation';
+import Confirmation from '../pages/Confirmation/Confirmation';
 import {
   Member,
   Card,
@@ -38,6 +38,7 @@ import {
   Payment,
 } from '../pages/Member';
 import TossPayments from '../pages/TosspaymentsTest';
+
 
 // https://kyung-a.tistory.com/36
 
@@ -130,6 +131,7 @@ function Router() {
         <Route path="/searchId" element={<SearchId />} />
         <Route path="/searchPw" element={<SearchPw />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/member/confirmation" element={<Confirmation />} />
       </Routes>
 
       <Routes>
