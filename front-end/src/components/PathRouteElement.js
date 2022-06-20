@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { NavLink, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { useSelector } from 'react-redux';
 
 const Ul = styled.ul`
   display: flex-inline;

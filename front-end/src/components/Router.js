@@ -15,6 +15,7 @@ import { CarPool, CarPoolContents, CarPoolAdd } from '../pages/CarPool';
 import { Company, CompStore, CompCreate, ItemBasic } from '../pages/Company';
 import { CompManage, CompEdit, ItemEdit, Items, Resign } from '../pages/Company/CompManage';
 import { Member, Card, Cars, Login, SignUp, UpdateMem, SearchId, SearchPw } from '../pages/Member';
+import Confirmation from '../pages/Member/Confirmation/Confirmation';
 import TossPayments from '../pages/TosspaymentsTest';
 
 // https://kyung-a.tistory.com/36
@@ -44,6 +45,7 @@ function Router() {
         <Route path="/member/update" element={<UpdateMem />} />
         <Route path="/member/card" element={<Card />} />
         <Route path="/member/cars" element={<Cars />} />
+        <Route path="/member/confirmation" element={<Confirmation />} />
       </Routes>
       <Routes>
         <Route path="/company" element={<Company />} />

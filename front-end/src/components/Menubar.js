@@ -9,6 +9,7 @@ import useTokenReissue from '../hooks/useTokenReissue';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeUser } from '../store';
 import { useNavigate } from 'react-router';
+import { pink } from '@mui/material/colors';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -40,7 +41,7 @@ const BtnUl = styled.ul`
   align-items: center;
   width: 100%;
   position: absolute;
-  top: 85%;
+  top: 80%;
 `;
 
 const Image = styled.div`
@@ -125,8 +126,7 @@ const Menubar = () => {
   useEffect(() => {
     tokenReissue();
     console.log(state);
-  }, [state]);
-
+  }, [state]); 
   return (
     <NavContainer>
       <Ul>

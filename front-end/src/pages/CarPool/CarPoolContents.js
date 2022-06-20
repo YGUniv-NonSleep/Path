@@ -49,7 +49,7 @@ const CarPoolContents = () => {
   const { loading } = useLoading();
   const { 
     effectState, tDistance, tTime, taxiFare, showPtag, showModal, 
-    isStartOpen, isArrivedOpen, startAddr, arriveAddr,request,
+    isStartOpen, isArrivedOpen, startAddr, arriveAddr,request,alarmCount,
     Close, PatchModal, Patch, FindWay,requestCarpool,
     openStartCode, handleComplete, openArriveCode, handleComplete2,RequestCreate
   } = useCarPoolContents();
