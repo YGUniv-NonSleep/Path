@@ -2,6 +2,7 @@ package com.capstone.pathproject.repository.company;
 
 import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.company.Company;
+import com.capstone.pathproject.domain.member.Member;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,7 +31,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
             "where (c.longitude between :x - 0.0055 and :x + 0.0055) " +
             "and (c.latitude between :y - 0.00475 and :y + 0.00475) " +
             "and (c.category = :category)"
-            )
+    )
     List<Company> findLocationCategoryCompanies(@Param("x") double x, @Param("y") double y, @Param("category") CompCategory category);
 
     @Query("select c " +
@@ -38,6 +39,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
             "where (c.longitude between :x - 0.0055 and :x + 0.0055) " +
             "and (c.latitude between :y - 0.00475 and :y + 0.00475) "
     )
-    List<Company> findLocationCompanies(@Param("x") double x, @Param("y") double y );
+    List<Company> findLocationCompanies(@Param("x") double x, @Param("y") double y);
 
+    List<Company> findByMember(Member member);
 }

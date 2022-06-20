@@ -1,12 +1,15 @@
 package com.capstone.pathproject.service.member;
 
+import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.member.Member;
+import com.capstone.pathproject.domain.member.Role;
 import com.capstone.pathproject.dto.member.*;
 import com.capstone.pathproject.dto.order.AmountByDayDto;
 import com.capstone.pathproject.dto.order.MemberPaymentDto;
 import com.capstone.pathproject.dto.order.OrderItemQueryDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
+import com.capstone.pathproject.repository.company.CompanyRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.repository.order.query.OrderItemQueryRepository;
 import com.capstone.pathproject.repository.order.query.PaymentQueryRepository;
@@ -33,9 +36,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final OrderItemQueryRepository orderItemQueryRepository;
-    private final PaymentQueryRepository paymentQueryRepository;
     private final MemberRepository memberRepository;
+    private final CompanyRepository companyRepository;
+    private final PaymentQueryRepository paymentQueryRepository;
+    private final OrderItemQueryRepository orderItemQueryRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 회원가입
@@ -121,12 +125,22 @@ public class MemberService {
                     .message("회원이 없습니다.")
                     .body("").build();
         }
-        memberRepository.delete(member);
+        return memberDelete(member);
+    }
+
+    public Message<String> memberDelete(Member member) {
+        member.delete();
+        if (member.getRole() == Role.ROLE_BUSINESS) {
+            List<Company> Companies = companyRepository.findByMember(member);
+            if (Companies.size() > 0)
+                Companies.forEach(Company::delete);
+        }
         return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("회원 탈퇴하였습니다.")
                 .body("").build();
     }
+
 
     // 아이디 찾기
     public Message<Object> forgotLoginId(ForgotLoginIdDto forgotLoginIdDto) {
