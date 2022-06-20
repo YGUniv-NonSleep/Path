@@ -61,20 +61,21 @@ public class Company {
     @Column(name = "COM_ADDR_DETAIL")
     private String addrDetail;
 
-    @Column(name="COM_OPEN")
+    @Column(name = "COM_OPEN")
     private LocalTime open;
 
-    @Column(name="COM_CLOSE")
+    @Column(name = "COM_CLOSE")
     private LocalTime close;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
     private Member member;
 
-    public Company(){}
+    public Company() {
+    }
 
     @Builder(builderMethodName = "createCompany")
-    public Company(Long id,LocalTime open,LocalTime close, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, double latitude, double longitude, Member member, String thumbnail, String addr, String addrDetail) {
+    public Company(Long id, LocalTime open, LocalTime close, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, double latitude, double longitude, Member member, String thumbnail, String addr, String addrDetail) {
         this.id = id;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
@@ -91,6 +92,23 @@ public class Company {
         this.close = close;
         this.member = member;
 
+    }
+
+    public void delete() {
+        this.companyNumber = null;
+        this.openDate = null;
+        this.category = null;
+        this.name = null;
+        this.mail = null;
+        this.phone = null;
+        this.latitude = 0;
+        this.longitude = 0;
+        this.thumbnail = null;
+        this.addr = null;
+        this.addrDetail = null;
+        this.open = null;
+        this.close = null;
+        this.member = null;
     }
 
 }
