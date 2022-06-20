@@ -1,10 +1,10 @@
 package com.capstone.pathproject.service.product;
 
 import com.capstone.pathproject.domain.company.*;
-import com.capstone.pathproject.dto.product.DetailOptionDTO;
-import com.capstone.pathproject.dto.product.OptionDTO;
-import com.capstone.pathproject.dto.product.ProdBasicDTO;
-import com.capstone.pathproject.dto.product.ProductDTO;
+import com.capstone.pathproject.dto.company.CompanyDTO;
+import com.capstone.pathproject.dto.company.FindCompanyDto;
+import com.capstone.pathproject.dto.company.LocationDto;
+import com.capstone.pathproject.dto.product.*;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.company.CompanyRepository;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -248,6 +249,44 @@ public class ProductService {
     public Message<DetailOptionDTO> DetailOptionByOption(OptionDTO optionDTO){
         return null;
     }
+
+    public Message<?> findProduct(FindProductDto findProductDto) {
+        ArrayList<ProductDTO> productDTOArrayList = new ArrayList<>();
+        List<Product> productList = new ArrayList<>();
+        if (findProductDto != null){
+
+            if (findProductDto.getCategory() == null){
+                System.out.println("findCompanyDto.getCategory() = " + findProductDto.getCategory());
+                for (LocationDto locationDto : findProductDto.getLocationList()) {
+                    List<Product> products = productRepository.findLocationProducts(locationDto.getX(), locationDto.getY(), findProductDto.getName());
+                    for (Product product: products) {
+                        productList.add(product);
+                    }
+                }
+
+            }else{
+                for (LocationDto locationDto : findProductDto.getLocationList()) {
+                    List<Product> products = productRepository.findLocationAndCategoryProducts(locationDto.getX(), locationDto.getY(),findProductDto.getName(), findProductDto.getCategory());
+                    for (Product product: products) {
+                        productList.add(product);
+                    }
+                }
+            }
+
+
+            productList.stream().distinct().collect(Collectors.toList());
+        }else{
+            productList = productRepository.findAll();
+        }
+        productList.stream().map(ProductDTO::new).forEach(productDTOArrayList::add);
+
+        return Message.<List<ProductDTO>>builder()
+                .body(productDTOArrayList)
+                .header(StatusEnum.OK)
+                .message("list find success")
+                .build();
+    }
+
 
 
 

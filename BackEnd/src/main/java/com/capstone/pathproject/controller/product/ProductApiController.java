@@ -1,11 +1,10 @@
 package com.capstone.pathproject.controller.product;
 
-import com.capstone.pathproject.dto.product.DetailOptionDTO;
-import com.capstone.pathproject.dto.product.OptionDTO;
-import com.capstone.pathproject.dto.product.ProdBasicDTO;
-import com.capstone.pathproject.dto.product.ProductDTO;
+import com.capstone.pathproject.dto.company.FindCompanyDto;
+import com.capstone.pathproject.dto.product.*;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.service.product.ProductService;
+import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,7 @@ import java.util.List;
 public class ProductApiController {
 
     private final ProductService productService;
+    private final ResponseUtil responseUtil;
 
     @PostMapping("/basic")
     public ResponseEntity<Message<ProdBasicDTO>> createBasic(@RequestBody ProdBasicDTO prodBasicDTO){
@@ -136,6 +136,12 @@ public class ProductApiController {
         Message message = productService.updateDetailOption(detailOptionDTO);
         System.out.println(message);
         return null;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> findProduct(@RequestBody(required = false) FindProductDto findProductDto ) {
+        Message<?> message = productService.findProduct(findProductDto);
+        return responseUtil.createResponseEntity(message);
     }
 
 
