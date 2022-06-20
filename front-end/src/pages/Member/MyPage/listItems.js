@@ -76,6 +76,12 @@ function SecondaryListItems(props) {
         </ListItemIcon>
         <ListItemText primary="차량 관리" />
       </ListItemButton>
+      <ListItemButton component={Link} to="/member/Confirmation">
+        <ListItemIcon>
+          <DirectionsCarIcon />
+        </ListItemIcon>
+        <ListItemText primary="카풀 신청서" />
+      </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
           <DeleteForeverIcon />

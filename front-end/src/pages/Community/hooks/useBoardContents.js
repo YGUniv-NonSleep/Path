@@ -110,6 +110,7 @@ function useBoardContents() {
       content : e.target.content.value,
       type : e.target.type.value,
     }
+    var postId = e.target.id.value;
     console.log(data);
     var formData = new FormData();
     formData.append("userfile", e.target.userfile.files[0]);
@@ -117,7 +118,7 @@ function useBoardContents() {
       "key",
       new Blob([JSON.stringify(data)], { type: "application/json" })
     );
-    axios.patch(process.env.REACT_APP_SPRING_API + `/api/post/${content.id}`,formData,
+    axios.patch(process.env.REACT_APP_SPRING_API + `/api/post/${postId}`,formData,
     {
       headers : {
         "Content-Type": `multipart/form-data`,

@@ -8,6 +8,9 @@ import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.member.MemberDto;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Setter
 @ToString
@@ -20,10 +23,11 @@ public class PostDto {
     private int view;
     private String photoName;
     private String loginId;
+    private String date;
 
 
     @Builder(builderMethodName = "createPostDto")
-    public PostDto(Long id, PostType type, String title, String content, int view, String photoName,String loginId){
+    public PostDto(Long id, PostType type, String title, String content, int view, String photoName,String loginId, LocalDateTime date){
         this.id = id;
         this.type = type;
         this.title = title;
@@ -31,6 +35,7 @@ public class PostDto {
         this.view = view;
         this.photoName = photoName;
         this.loginId = loginId;
+        this.date = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public PostDto(Post post) {
@@ -41,6 +46,7 @@ public class PostDto {
         this.view = post.getView();
         this.photoName = post.getPhotoName();
         this.loginId = post.getCreatedBy();
+        this.date = post.getCreatedDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
 
