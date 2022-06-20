@@ -65,7 +65,6 @@ public class PostService {
                 .type(post.getType())
                 .title(post.getTitle())
                 .loginId(post.getCreatedBy())
-                .date(post.getCreatedDateTime())
                 .build();
 
 
@@ -82,8 +81,7 @@ public class PostService {
     public Message<List<PostDto>> search(String keyword, Pageable pageable) {
         List<Post> postList = postRepository.findByTitleContaining(keyword, pageable);
         ArrayList<PostDto> listPDT = new ArrayList<PostDto>();
-        postList.stream().map(post -> new PostDto(post)).forEach(postDTO -> listPDT.add(postDTO));
-
+        postList.stream().map(post -> post.toDTO()).forEach(postDTO -> listPDT.add(postDTO));
         return Message.<List<PostDto>>builder()
                 .header(StatusEnum.OK)
                 .message("검색완료")
@@ -102,7 +100,6 @@ public class PostService {
                 .photoName(post.get().getPhotoName())
                 .content(post.get().getContent())
                 .title(post.get().getTitle())
-                .date(post.get().getCreatedDateTime())
                 .build();
         return Message.<PostDto>builder()
                 .header(StatusEnum.OK)

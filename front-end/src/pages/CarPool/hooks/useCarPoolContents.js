@@ -1,11 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
 
 function useCarPoolContents(){
   let navigate = useNavigate();
-  let state = useSelector((state) => state);
   const { postId } = useParams();
   
   const [effectState, setEffectState] = useState(null);
@@ -32,7 +30,6 @@ function useCarPoolContents(){
   const [arriveLocal2, setArriveLocal2] = useState(null);
 
   const [request, setRequestCarpool] = useState(false);
-  const [alarmCount,setAlarmCount] = useState(null);
 
   const UpdateStartLocal1 = () =>{
     if(startLocal1 == null){
@@ -83,26 +80,18 @@ function useCarPoolContents(){
     console.log(data);
     axios.post(process.env.REACT_APP_SPRING_API + "/api/request",data)
     .then((res)=>{
-      console.log(res.data);
-      alert(res.data.message);
-      Close(e);
+      console.log(res.data)
     })
     .catch((err)=>{
-      console.log(err)
+      console.log(err.data)
     })
   }
 
-
   var geocoder = new kakao.maps.services.Geocoder();
   var map, markerInfo;
-	var lonlat;
-	var markers = [];
-  var markers2 = [];
 
   //출발지,도착지 마커
   var marker_s, marker_e, marker_p;
-
- 
 
   //경로그림정보
   var drawInfoArr = [];
@@ -656,14 +645,12 @@ function useCarPoolContents(){
       iconSize: new Tmapv2.Size(24, 38),
       map: map,
     });
-
-    map.addListener("click", onClick); //map 클릭 이벤트를 등록합니다.
   };
 
   const Map2 = (data1, data2, data3, data4) => {
     map = new Tmapv2.Map("request_map", {
       center: new Tmapv2.LatLng(data1, data2),
-      width: "100%",
+      width: "750px",
       height: "350px",
       zoom: 13,
       zoomControl: true,
@@ -676,7 +663,7 @@ function useCarPoolContents(){
       map: map,
     });
 
-    //도착  
+    //도착
     marker_e = new Tmapv2.Marker({
       position: new Tmapv2.LatLng(data3, data4),
       icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
@@ -684,35 +671,9 @@ function useCarPoolContents(){
       map: map,
     });
     FindWay(data1,data2,data3,data4);
-};
-
-function onClick(e){
-  removeMarkers();
-  lonlat = e.latLng;
-  lonlat = e.latLng;
-		//Marker 객체 생성.
-	var marker = new Tmapv2.Marker({
-			position: new Tmapv2.LatLng(lonlat.lat(),lonlat.lng()), //Marker의 중심좌표 설정.
-			map: map //Marker가 표시될 Map 설정.
-		});
+  };
   
-  var marker2 = new Tmapv2.Marker({
-    position : new Tmapv2.LatLng(lonlat.lat(),lonlat.lng()),
-    map : map
-  });
-		  
-		markers.push(marker);
-    markers.push(marker2);
-	}
-
-
-  function removeMarkers() {
-		for (var i = 0; i < markers.length; i++) {
-			markers[i].setMap(null);
-		}
-		markers = [];
-	}
-
+ 
   function resettingMap() {
     //기존마커는 삭제
     marker_s.setMap(null);
@@ -739,7 +700,7 @@ function onClick(e){
   return {
     effectState, drawLineState, tDistance, tTime, taxiFare, showPtag, showModal, 
     isStartOpen, startX, startY, startLocal1,startLocal2, isArrivedOpen, arriveX, arriveY, 
-    arriveLocal1,arriveLocal2, startAddr, arriveAddr,request,alarmCount,
+    arriveLocal1,arriveLocal2, startAddr, arriveAddr,request,
     getCoords, getArrivedCoords, Close, PatchModal, Patch, 
     openStartCode, handleComplete, openArriveCode, handleComplete2, 
     FindWay, addMarkers, drawLine, Map, resettingMap,requestCarpool,Map2,RequestCreate

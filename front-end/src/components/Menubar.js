@@ -7,7 +7,6 @@ import CompRouteElement from './CompRouteElement';
 import useTokenReissue from '../hooks/useTokenReissue';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { pink } from '@mui/material/colors';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -38,17 +37,13 @@ const BtnUl = styled.ul`
   display: flex-inline;
   align-items: center;
   width: 100%;
-  position: absolute;
-  top: 80%;
   position: relative;
-  bottom: ${(props) => {
-    return props.h === 'ROLE_ANONYMOUS'
-      ? '-40%'
-      : props.h === 'ROLE_BUSINESS'
-      ? props.compView
-        ? '-48.1%'
-        : '-30%'
-      : '-35%';
+  bottom: ${(props) => { 
+    return props.h === 'ROLE_ANONYMOUS' ? "-40%" : (
+      props.h === 'ROLE_BUSINESS' ? (
+        props.compView ? "-48.1%" : "-30%"
+      ) : "-35%"
+    )
   }};
 `; // -48%
 
@@ -109,7 +104,9 @@ const Button = styled.button`
   }
 `;
 
-const BtnLiEm = styled.em``;
+const BtnLiEm = styled.em`
+
+`;
 
 const ScLink = styled(NavLink)`
   height: 70px;
@@ -131,11 +128,11 @@ const Menubar = () => {
   let userState = useSelector((state) => state);
   // let dispatch = useDispatch();
 
-  function isBusiness() {
-    if (currLocation != null) {
+  function isBusiness(){
+    if(currLocation != null){
       // 경로 이동했을 때 company가 포함되는지의 여부
-      if (currLocation.includes('company') == true) return setCompChk(true);
-      else return setCompChk(false);
+      if(currLocation.includes("company") == true) return setCompChk(true)
+      else return setCompChk(false)
       // 회원 role이 비즈니스이면 창이 보이도록
     }
   }
@@ -145,8 +142,8 @@ const Menubar = () => {
   }, [location]);
 
   useEffect(() => {
-    isBusiness();
-  }, [currLocation]);
+    isBusiness()
+  }, [currLocation])
 
   useEffect(() => {
     tokenReissue();
@@ -161,15 +158,15 @@ const Menubar = () => {
         </Image>
       </Ul>
       {userState.user.role != 'ROLE_BUSINESS' ? (
-        <PathRouteElement></PathRouteElement>
-      ) : (
-        <>
-          {compChk != true ? (
-            <PathRouteElement></PathRouteElement>
-          ) : (
-            <CompRouteElement></CompRouteElement>
-          )}
-        </>
+        <PathRouteElement></PathRouteElement>  
+        ) : (
+          <>
+            {compChk != true ? (
+              <PathRouteElement></PathRouteElement>
+              ) : (
+                <CompRouteElement></CompRouteElement>
+            )}
+          </>
       )}
       <BtnUl h={userState.user.role} compView={compChk}>
         {userState.user.loginId != 'anonymous' ? (
@@ -178,11 +175,13 @@ const Menubar = () => {
               <>
                 {compChk != true ? (
                   <Button onClick={() => navigate('/company')}>내 업체</Button>
-                ) : (
-                  <Button onClick={() => navigate('/')}>패스 콕</Button>
+                  ) : (
+                    <Button onClick={() => navigate('/')}>패스 콕</Button>
                 )}
               </>
-            ) : null}
+              ) : (
+                null
+            )}
             <Button onClick={() => navigate('/member')}>내 정보</Button>
             <Button onClick={userLogOut}>
               <BtnLiEm>로그아웃</BtnLiEm>
