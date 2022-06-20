@@ -39,7 +39,6 @@ import {
 } from '../pages/Member';
 import TossPayments from '../pages/TosspaymentsTest';
 
-
 // https://kyung-a.tistory.com/36
 
 function Router() {
@@ -117,7 +116,7 @@ function Router() {
 
       <Routes>
         {/* 404 rounte */}
-        <Route path="/*" element={<PageNotFound />} />
+        {/* <Route path="/*" element={<PageNotFound />} /> */}
 
         {/* path */}
         <Route path="/" element={<Path />} />
