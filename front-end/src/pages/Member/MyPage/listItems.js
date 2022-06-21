@@ -17,14 +17,14 @@ import { Link } from 'react-router-dom';
 function MainListItems(props) {
   return (
     <React.Fragment>
-      <ListItemButton component={Link} to="/member">
+      <ListItemButton>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="마이페이지" />
       </ListItemButton>
 
-      <ListItemButton component={Link} to="/member/payments">
+      <ListItemButton>
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
@@ -75,6 +75,12 @@ function SecondaryListItems(props) {
           <DirectionsCarIcon />
         </ListItemIcon>
         <ListItemText primary="차량 관리" />
+      </ListItemButton>
+      <ListItemButton component={Link} to="/member/Confirmation">
+        <ListItemIcon>
+          <DirectionsCarIcon />
+        </ListItemIcon>
+        <ListItemText primary="카풀 신청서" />
       </ListItemButton>
       <ListItemButton>
         <ListItemIcon>
