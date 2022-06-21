@@ -19,11 +19,6 @@ function MapApi() {
   function setCurrentLocation() {
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
     if (navigator.geolocation) {
-      // let watchID = new Promise((success, error)=>{
-      //   watchID = navigator.geolocation.watchPosition(success, error);
-      //   console.log(watchID)
-      // })
-      
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       return new Promise((res, rej)=>{
         navigator.geolocation.getCurrentPosition(res, rej)
@@ -35,6 +30,81 @@ function MapApi() {
       const locPosition = new kakao.maps.LatLng(37.55525165729346, 126.93737555322481);
       return locPosition
     }
+  }
+
+  async function keywordSearch(data, callback) {
+    if(!data.keyword.replace(/^\s+|\s+$/g, '')){
+      alert('키워드를 입력해주세요!');
+      return false
+
+    }
+    // 장소 검색 객체를 생성합니다
+    const ps = new kakao.maps.services.Places();
+
+    // 처음 입력 받을 땐 카테고리 분류 없이.
+    // 위치 정보 있으면 위치정보 받기
+    let options = {
+      size: 10, // 한 페이지에 보여질 갯수
+      page: data.page, // 페이지 값 1~x
+    }
+
+    if(data.category != "") {
+      if(data.category == "대형마트") options.category_group_code = "MT1"
+      if(data.category == "편의점") options.category_group_code = "CS2"
+      if(data.category == "음식점") options.category_group_code = "FD6"
+      if(data.category == "카페") options.category_group_code = "CE7"
+      if(data.category == "병원") options.category_group_code = "HP8"
+      if(data.category == "약국") options.category_group_code = "PM9"
+    }
+
+    if(data.userLoc != undefined && data.userLoc != null){
+      options.location = data.userLoc,
+      // options.y = data.userLoc.y,
+      options.radius = 1000 // 1000당 1km
+    }
+
+    if(data.sort == 'right'){
+      options.sort = "accuracy" // distance 또는 accuracy (기본값: accuracy)
+    } else if(data.sort == 'left') options.sort = "distance"
+
+    return new Promise(() => {
+      ps.keywordSearch(data.keyword, callback, options)
+    });
+
+  }
+
+  function categorySearch(data, map, callback) {
+    // 장소 검색 객체를 생성합니다
+    const ps = new kakao.maps.services.Places(map);
+    console.log(data)
+    let categoryGroupCode = "";
+    let options = {
+      size: 10, // 한 페이지에 보여질 갯수
+      page: 1, // 페이지 값 1~x
+      useMapBounds:true,
+    }
+    
+    if(data.category != "") {
+      if(data.category == "대형마트") categoryGroupCode = "MT1"
+      if(data.category == "편의점") categoryGroupCode = "CS2"
+      if(data.category == "음식점") categoryGroupCode = "FD6"
+      if(data.category == "카페") categoryGroupCode = "CE7"
+      if(data.category == "병원") categoryGroupCode = "HP8"
+      if(data.category == "약국") categoryGroupCode = "PM9"
+    } else return;
+
+    if(data.location != undefined && data.location != null){
+      options.location = data.location,
+      options.radius = 1000 // 1000당 1km
+    }
+
+    if(data.sort == 'right'){
+      options.sort = "accuracy" // distance 또는 accuracy (기본값: accuracy)
+    } else if(data.sort == 'left') options.sort = "distance"
+
+    return new Promise(() => { // options
+      ps.categorySearch(categoryGroupCode, callback, options);
+    });
   }
 
   function setController(map) {
@@ -101,9 +171,32 @@ function MapApi() {
   //     return latlng
   // }
 
+
+  function currentLocMarker(data) {
+    let imageSrc = '';
+    let imageSize = new kakao.maps.Size(32, 32);
+    let markerImage = null;
+
+    let ob = {
+      position: new kakao.maps.LatLng(33.450701, 126.570667), // 마커 표시 위치
+      clickable: true // 마커 클릭 이벤트 설정 여부
+    }
+
+    if(data.image != '') {
+      imageSrc = data.image
+      markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+      ob.image = markerImage
+    }
+    console.log(ob)
+    
+    let marker = new kakao.maps.Marker(ob);
+    return marker;
+  }
+
   // 지도위 마커 표시해주는 함수
   function drawKakaoMarker(x, y) {
     // console.log(x, y)
+
     let marker = new kakao.maps.Marker({
       // 마커 생성
       position: new kakao.maps.LatLng(y, x), // 마커 표시 위치
@@ -217,8 +310,11 @@ function MapApi() {
   return {
     createMap,
     setCurrentLocation,
+    keywordSearch, 
+    categorySearch, 
     setController,
     getInfo, //getLatLng,
+    currentLocMarker,
     drawKakaoMarker,
     drawKakaoPolyLine,
     drawKakaoBusPolyLine,
