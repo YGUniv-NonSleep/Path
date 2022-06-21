@@ -18,6 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,5 +63,40 @@ public class CarPostRequestService {
                 .header(StatusEnum.OK)
                 .message("신청 완료")
                 .body("").build();
+    }
+
+    public Message<List<CarPostRequestDTO>> requestFind(Long memberId) {
+        //List<CarPostRequest> requests = carPostRequestRepository.findByCarPostId(postId);
+        List<CarPostRequest> requests = carPostRequestRepository.findByCarPostMemberId(memberId);
+        ArrayList<CarPostRequestDTO> arrayList = new ArrayList<CarPostRequestDTO>();
+        requests.stream().map(request -> new CarPostRequestDTO(request)).forEach(carPostRequestDTO -> arrayList.add(carPostRequestDTO));
+        System.out.println(arrayList.toString());
+        return Message.<List<CarPostRequestDTO>>builder()
+                .header(StatusEnum.OK)
+                .message("신청서 확인")
+                .body(arrayList).build();
+    }
+
+    public Message<CarPostRequestDTO> findList(Long requestId) {
+        Optional<CarPostRequest> findRequest = carPostRequestRepository.findById(requestId);
+
+        CarPostRequest carPostRequest = findRequest.orElse(null);
+
+        if(carPostRequest == null){
+            return Message.<CarPostRequestDTO>builder()
+                    .header(StatusEnum.OK)
+                    .message("신청이 없습니다.")
+                    .build();
+        }
+
+        CarPostRequestDTO carPostRequestDTO = CarPostRequestDTO.createRequestDTO()
+                .content(carPostRequest.getContent())
+                .passenger(carPostRequest.getPassenger())
+                .price(carPostRequest.getPrice())
+                .build();
+        return Message.<CarPostRequestDTO>builder()
+                .header(StatusEnum.OK)
+                .message("신청서 확인")
+                .body(carPostRequestDTO).build();
     }
 }

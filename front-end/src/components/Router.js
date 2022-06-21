@@ -117,7 +117,7 @@ function Router() {
 
       <Routes>
         {/* 404 rounte */}
-        <Route path="/*" element={<PageNotFound />} />
+        {/* <Route path="/*" element={<PageNotFound />} /> */}
 
         {/* path */}
         <Route path="/" element={<Path />} />
