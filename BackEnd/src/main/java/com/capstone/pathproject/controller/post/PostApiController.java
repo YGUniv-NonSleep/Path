@@ -33,50 +33,16 @@ public class PostApiController {
     private final ResponseUtil responseUtil;
 
 
-    ///Post Controller///
     @PostMapping("")
-    public ResponseEntity<Message<?>> create(@Valid @RequestPart(value = "key", required = false) CreatePostDto postDto,
-                                             @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                             HttpServletRequest request)
-    {
-        String fileName;
-        if (file == null) {
-            fileName = "";
-        } else {
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "post\\";
-
-            try {
-                file.transferTo(new File(filePath + fileName));
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Message<String> message = postService.create(postDto, fileName);
+    public ResponseEntity<Message<?>> create(@Valid @RequestBody CreatePostDto postDto){
+        Message<String> message = postService.create(postDto);
         return responseUtil.createResponseEntity(message);
     }
 
 
     @PatchMapping("/{postId}")
-    public ResponseEntity<Message<?>> update(@PathVariable Long postId,
-                                             @Valid @RequestPart(value = "key", required = false) UpdatePostDto postDto,
-                                             @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                             HttpServletRequest request) {
-
-        String fileName;
-        if (file == null) {
-            fileName = "";
-        } else {
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "post\\";
-            try {
-                file.transferTo(new File(filePath + fileName));
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        Message<String> message = postService.update(postId, postDto, fileName);
+    public ResponseEntity<Message<?>> update(@PathVariable("postId") Long postId,@Valid @RequestBody UpdatePostDto postDto){
+        Message<String> message = postService.update(postId,postDto);
         return responseUtil.createResponseEntity(message);
     }
 
@@ -114,51 +80,17 @@ public class PostApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-
     @PostMapping("/reply")
-    public ResponseEntity<Message<?>> repcreate(@Valid @RequestPart(value = "key", required = false) ReplyCreatePostDto postDto,
-                                                @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                                HttpServletRequest request) {
-        String fileName;
-        if (file == null) {
-            fileName = "";
-        } else {
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "post\\";
-            try {
-                file.transferTo(new File(filePath + fileName));
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Message<String> message = postService.repcreate(postDto, fileName);
+    public ResponseEntity<Message<?>> repcreate(@Valid @RequestBody ReplyCreatePostDto postDto){
+        Message<String> message = postService.repcreate(postDto);
         return responseUtil.createResponseEntity(message);
-
     }
-
 
     @PatchMapping("/reply/{postId}")
-    public ResponseEntity<Message<?>> repupdate(@PathVariable Long postId,
-                                                @Valid@RequestPart(value = "key", required = false) ReplyUpdatePostDto postDto,
-                                                @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                                HttpServletRequest request) {
-        String fileName;
-        if (file == null) {
-            fileName = "";
-        } else {
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "post\\";
-            try {
-                file.transferTo(new File(filePath + fileName));
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Message<String> message = postService.repupdate(postId,postDto,fileName);
+    public ResponseEntity<Message<?>> repupdate(@PathVariable("postId")Long postId,@RequestBody ReplyUpdatePostDto postDto){
+        Message<String> message = postService.repupdate(postId,postDto);
         return responseUtil.createResponseEntity(message);
-
     }
-
 
     @DeleteMapping("/reply/{postId}")
     public ResponseEntity<Message<?>> repdelete(@PathVariable("postId") Long postId) {

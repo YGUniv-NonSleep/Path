@@ -109,6 +109,9 @@ const CarPoolContents = () => {
               <label>{effectState.cars.carKind}</label>
               <br></br>
             </div>
+            <div>
+            <img src={`${process.env.REACT_APP_SPRING_API}/api/image/${effectState.photoName}`} style={{width : "750px",height:"350px"}}></img><br></br>
+            </div>
             <div className="post-view-row">
               <label>회원정보 : </label>
               <br></br>

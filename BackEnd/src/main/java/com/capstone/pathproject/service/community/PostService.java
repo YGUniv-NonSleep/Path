@@ -110,11 +110,9 @@ public class PostService {
                 .body(postDTO).build();
     }
 
-
-    public Message<String> create(CreatePostDto postDTO, String fileName) {
-
+    public Message<String> create(CreatePostDto postDto){
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member member = principalDetails.getMember(); // 로그인한 사람 찾아오기
+        Member member = principalDetails.getMember();
         Optional<Member> findMember = memberRepository.findById(member.getId());
 
         if(findMember == null){
@@ -126,10 +124,10 @@ public class PostService {
         Post post = Post.createPost()
                 .member(member)
                 .view(0)
-                .content(postDTO.getContent())
-                .photoName(fileName)
-                .type(postDTO.getType())
-                .title(postDTO.getTitle())
+                .content(postDto.getContent())
+                .photoName(postDto.getPhotoName())
+                .type(postDto.getType())
+                .title(postDto.getTitle())
                 .build();
         postRepository.save(post);
         return Message.<String>builder()
@@ -138,12 +136,11 @@ public class PostService {
                 .body("").build();
     }
 
-
-    public Message<String> update(Long postId, UpdatePostDto postDto, String fileName) {
-        // 게시글 조회
+    public Message<String> update(Long postId, UpdatePostDto postDto){
         Optional<Post> findPost = postRepository.findById(postId);
         Post post = findPost.orElse(null);
-        if (post == null) {
+
+        if(post == null) {
             return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("수정할 게시글이 없습니다.")
@@ -156,7 +153,7 @@ public class PostService {
                     .message("현재 사용자가 게시글 작성자가 아닙니다.")
                     .body("").build();
         }
-        // 내용이 있는지 체크 후 변경
+
         if (StringUtils.isNotBlank(postDto.getTitle())) {
             post.updateTitle(postDto.getTitle());
         }
@@ -212,24 +209,20 @@ public class PostService {
                 .build();
     }
 
-
-    public Message<String> repcreate(ReplyCreatePostDto postDTO, String fileName) {
+      public Message<String> repcreate(ReplyCreatePostDto postDto){
 
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
 
-        if (member.getRole() != Role.ROLE_ADMIN) {
+        if(member.getRole() != Role.ROLE_ADMIN) {
             return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("관리자만 등록할 수 있습니다.")
                     .build();
         }
-
-        Optional<Post> findPost = postRepository.findById(postDTO.getPostId());
-        System.out.println("============================");
-        System.out.println(findPost.toString());
+        Optional<Post> findPost = postRepository.findById(postDto.getPostId());
         Post post = findPost.orElse(null);
-        if (post == null) {
+        if(post == null){
             return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("게시글이 존재하지 않습니다.")
@@ -237,29 +230,57 @@ public class PostService {
         }
 
         Post reply = Post.createPost()
-                .type(postDTO.getType())
+                .type(postDto.getType())
                 .member(member)
-                .content(postDTO.getContent())
-                .title(postDTO.getTitle())
+                .content(postDto.getContent())
+                .title(postDto.getTitle())
                 .parent(post)
-                .photoName(fileName)
+                .photoName(postDto.getPhotoName())
                 .build();
+          postRepository.save(reply);
+          return Message.<String>builder()
+                    .header(StatusEnum.OK)
+                    .message("등록완료")
+                    .body("").build();
+      }
 
-
-
-        postRepository.save(reply);
-        return Message.<String>builder()
-                .header(StatusEnum.OK)
-                .message("등록완료")
-                .body("").build();
-
-
-    }
-
-
-    public Message<String> repupdate(Long postId, ReplyUpdatePostDto postDto, String fileName) {
+//    public Message<String> repupdate(Long postId, ReplyUpdatePostDto postDto, String fileName) {
+//        Optional<Post> findPost = postRepository.findByParentId(postId);
+//        Post post = findPost.orElse(null);
+//        if (post == null) {
+//            return Message.<String>builder()
+//                    .header(StatusEnum.BAD_REQUEST)
+//                    .message("수정할 게시글이 없습니다.")
+//                    .body("").build();
+//        }
+//        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Member member = principalDetails.getMember();
+//
+//        if (member.getRole() != Role.ROLE_ADMIN) {
+//            return Message.<String>builder()
+//                    .header(StatusEnum.BAD_REQUEST)
+//                    .message("관리자만 등록할 수 있습니다.")
+//                    .build();
+//        }
+//        if (StringUtils.isNotBlank(postDto.getTitle())) {
+//            post.updateTitle(postDto.getTitle());
+//        }
+//        if (StringUtils.isNotBlank(postDto.getContent())) {
+//            post.updateContent(postDto.getContent());
+//        }
+//        if (StringUtils.isNotBlank(postDto.getPhotoName())) {
+//            post.updatePhotoName(postDto.getPhotoName());
+//        }
+//        post.updateType(postDto.getType());
+//
+//        return Message.<String>builder()
+//                .header(StatusEnum.OK)
+//                .message("수정이 완료되었습니다.")
+//                .body("").build();
+//    }
+    public Message<String> repupdate(Long postId, ReplyUpdatePostDto postDto){
         Optional<Post> findPost = postRepository.findByParentId(postId);
-        Post post = findPost.orElse(null);
+        Post post =findPost.orElse(null);
         if (post == null) {
             return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)

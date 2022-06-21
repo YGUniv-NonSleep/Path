@@ -143,60 +143,96 @@ function useCarPoolAdd() {
     setChoiceCarNum(cars.carNum);
     alert("선택완료");
     closeCarsModal(e);
-    //console.log(e.target.carKind.value)
   }
 
 
-  const createCarPost = (e) => {
-    e.preventDefault();
-  
-    var data = {
-      title: e.target.title.value,
-      content: e.target.content.value,
-      recruit: e.target.recruit.value,
-      sdate: e.target.sdate.value,
-      edate: e.target.edate.value,
-      stime: e.target.stime.value + ":00",
-      startLatitude : startX,
-      startLongitude : startY,
-      arriveLatitude : arriveX,
-      arriveLongitude : arriveY,
-      startLocal1 : startLocal1,
-      startLocal2 : startLocal2,
-      arriveLocal1 : arriveLocal1,
-      arriveLocal2 : arriveLocal2,
-      cars : {
-        id : carsId
-      }
-    };
-    console.log(data);
 
-    var formData = new FormData();
-    formData.append("userfile", e.target.userfile.files[0]);
-    formData.append(
-      "key",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-    axios
-      .post(
-        process.env.REACT_APP_SPRING_API + "/api/carpost/create",
-        formData,
-        {
-          headers: {
-            "Content-Type": `multipart/form-data`,
+
+  const createCarPost = (e) =>{
+    e.preventDefault();
+    const data = {
+          title: e.target.title.value,
+          content: e.target.content.value,
+          recruit: e.target.recruit.value,
+          sdate: e.target.sdate.value,
+          edate: e.target.edate.value,
+          stime: e.target.stime.value + ":00",
+          startLatitude : startX,
+          startLongitude : startY,
+          arriveLatitude : arriveX,
+          arriveLongitude : arriveY,
+          startLocal1 : startLocal1,
+          startLocal2 : startLocal2,
+          arriveLocal1 : arriveLocal1,
+          arriveLocal2 : arriveLocal2,
+          cars : {
+            id : carsId
+          }
+        };
+
+    let formData = new FormData();
+        const multipartFile = e.target.userfile.files[0];
+        formData.append('multipartFile',multipartFile);
+
+        axios.post(process.env.REACT_APP_SPRING_API + '/api/image',formData,{
+          withCredentials : true,
+          headers : {
+            'Content-Type': 'multipart/form-data',
           },
-        }
-      )
-      .then((res) => {
-        console.log(res.data.body);
-        setDataSet(res.data.body);
-        alert(res.data.message);
-        navigate(-1);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        })
+        .then((res)=>{
+          console.log(res);
+          const imageName = res.data;
+          console.log(imageName);
+          return imageName;
+        })
+        .then(async (imageName) =>{
+          const result = await carPostCreate(imageName,data);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+
   };
+
+  const carPostCreate = async(imageName,data) => {
+
+    const createData = {
+          title: data.title,
+          content: data.content,
+          recruit: data.recruit,
+          sdate: data.sdate,
+          edate: data.edate,
+          stime: data.stime,
+          startLatitude : data.startLatitude,
+          startLongitude : data.startLongitude,
+          arriveLatitude : data.arriveLatitude,
+          arriveLongitude : data.arriveLongitude,
+          startLocal1 : data.startLocal1,
+          startLocal2 : data.startLocal2,
+          arriveLocal1 : data.arriveLocal1,
+          arriveLocal2 : data.arriveLocal2,
+          cars : {
+            id : data.cars.id
+          },
+          photoName : imageName
+    }
+
+    await axios.post(process.env.REACT_APP_SPRING_API + '/api/carpost',createData,{
+      withCredentials : true,
+    })
+    .then((res)=>{
+      console.log(res.data);
+      setDataSet(res.data.body);
+      alert(res.data.message);
+      navigate(-1);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
+
+
 
   return { 
     isStartOpen, isArrivedOpen, dataset, startAddr, arriveAddr, memberCars,caropenModal,choiceCarKind,choiceCarNum,
