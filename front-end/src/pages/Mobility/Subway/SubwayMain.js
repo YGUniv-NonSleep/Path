@@ -256,7 +256,7 @@ position: absolute;
 const ExitNum = styled.div`
 margin-top: 5px;
 width: 20px;
-height: 100px;
+height: 150px;
 border-bottom: 1px solid rgb(184, 184, 184);
 `;
 
@@ -264,7 +264,7 @@ const ExitGate = styled.div`
 margin-left: 20px;
 margin-top: -16px;
 width: 300px;
-height: 100px;
+height: 150px;
 border-bottom: 1px solid rgb(184, 184, 184);
 
 `;
@@ -280,7 +280,7 @@ overflow:scroll;
 
 const PrevStop = styled.div`
 position:fixed;
-top:240px;
+top:280px;
 left:104px;
 width:185px;
 height:70px;
@@ -297,7 +297,7 @@ border-bottom: 1px solid rgb(184, 184, 184);
 
 const NextStop = styled.div`
 position:fixed;
-top:240px;
+top:280px;
 left:289px;
 width:185px;
 height:70px;
@@ -312,6 +312,15 @@ border-top: 1px solid rgb(184, 184, 184);
 border-bottom: 1px solid rgb(184, 184, 184);
 `;
 
+const StopObj = styled.div`
+position:absolute;
+top: 352px;
+left: 10px;
+width: 380px;
+height: 68%;
+overflow:scroll;
+`;
+
 const SubwayTimeName = styled.div`
 position: absolute;
 top: 200px;
@@ -320,15 +329,7 @@ font-size: 20px;
 font-weight:bold;
 `;
 
-const StopObj = styled.div`
-position:absolute;
-top: 310px;
-left: 10px;
-width: 380px;
-height: 68%;
-overflow:scroll;
-// background-color: red;
-`;
+
 
 const TimeListDown = styled.div`
 position: relative;
@@ -401,7 +402,93 @@ width: 60px;
 height: 90%;
 word-break: break-all;
 line-height : 20px;
+`;
 
+const OrdBtn = styled.button`
+position: relative;
+top: 110px;
+left: 10px;
+width: 110px;
+height: 30px;
+border:none;
+outline:none;
+border-radius: 10px;
+background-color: #00CCB2;
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+&:hover {
+  background-color: #00BBA1
+};
+`;
+
+const OrdBtn1 = styled.button`
+position: relative;
+top: 110px;
+left: 10px;
+width: 110px;
+height: 30px;
+border:none;
+outline:none;
+border-radius: 10px;
+background-color: #00BBA1;
+box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+`;
+
+const SatBtn = styled.button`
+position: relative;
+top:110px;
+left: 25px;
+width: 110px;
+height: 30px;
+border: none;
+outline:none;
+border-radius: 10px;
+background-color: #00CCB2;
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+&:hover {
+  background-color: #00BBA1
+};
+`;
+
+const SatBtn1 = styled.button`
+position: relative;
+top:110px;
+left: 25px;
+width: 110px;
+height: 30px;
+border: none;
+outline:none;
+border-radius: 10px;
+background-color: #00BBA1;
+box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+`;
+
+const SunBtn = styled.button`
+position: relative;
+top: 110px;
+left: 40px;
+width:110px;
+height:30px;
+border:none;
+outline:none;
+border-radius:10px;
+background-color: #00CCB2;
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+&:hover {
+  background-color: #00BBA1
+};
+`;
+
+const SunBtn1 = styled.button`
+position: relative;
+top: 110px;
+left: 40px;
+width:110px;
+height:30px;
+border:none;
+outline:none;
+border-radius:10px;
+background-color: #00BBA1;
+box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 `;
 
 function SubwayMain() {
@@ -412,9 +499,14 @@ function SubwayMain() {
   const [staInfo, setStaInfo] = useState([]);
   const [subTimeUp, setSubTimeUp] = useState([]);
   const [subTimeDown, setSubTimeDown] =useState([]);
+  const [satListUp, setSatListUp] =useState([]);
+  const [satListDown, setSatListDown] =useState([]);
+  const [sunListUp, setSunListUp] = useState([]);
+  const [sunListDown, setSunListDown] = useState([]);
   const [subExit, setSubExit] = useState([]);
   const [toggleValue, setToggleValue] = useState(null);
   const [subTimeInfo, setSubTimeInfo] = useState([]);
+  const [dayClicks, setDayClicks] = useState("a");
 
   async function mapLoad() {
     try {
@@ -454,6 +546,18 @@ function SubwayMain() {
     setToggleValue(null);
   }
 
+  function dayClick(e){
+    // console.log(e.target.value);
+    if(e.target.value == "a"){
+      setDayClicks("a");
+    } else if(e.target.value == "b"){
+      setDayClicks("b");
+    } else if(e.target.value == "c"){
+      setDayClicks("c");
+    }
+
+  }
+
 
   function submit(e) {
     e.preventDefault();
@@ -486,10 +590,15 @@ function SubwayMain() {
 
 
     let subTime = await SubwayApi.getSubTime(stationInfo.stationID);
-    console.log(subTime)
-    setSubTimeInfo(subTime)
-    setSubTimeUp(subTime.OrdList.up.time)
-    setSubTimeDown(subTime.OrdList.down.time)
+    console.log(subTime);
+    setSubTimeInfo(subTime);
+    setSubTimeUp(subTime.OrdList.up.time);
+    setSubTimeDown(subTime.OrdList.down.time);
+    setSatListUp(subTime.SatList.up.time);
+    setSatListDown(subTime.SatList.down.time);
+    setSunListUp(subTime.SunList.up.time);
+    setSunListDown(subTime.SunList.down.time);
+
     
 
     let points = [new kakao.maps.LatLng(stationInfo.y, stationInfo.x)];
@@ -624,13 +733,38 @@ function SubwayMain() {
              <ExitBtn1 onClick={onToggle} value="exit">출구정보</ExitBtn1>
              <BackBtn1 onClick={backClick} value="back"><ArrowBackIosNewIcon/></BackBtn1>
              <SubwayTimeName>{staInfo.stationName} {staInfo.laneName} (시간표)</SubwayTimeName>
+             {dayClicks == "a" ? 
+             <>
+             <OrdBtn1 onClick={dayClick} value= "a">평일</OrdBtn1>
+             <SatBtn onClick={dayClick} value= "b">토요일</SatBtn>
+             <SunBtn onClick={dayClick} value= "c">휴일</SunBtn>
+             </> 
+             :(dayClicks == "b" ? 
+             <>
+             <OrdBtn onClick={dayClick} value= "a">평일</OrdBtn>
+             <SatBtn1 onClick={dayClick} value= "b">토요일</SatBtn1>
+             <SunBtn onClick={dayClick} value= "c">휴일</SunBtn>
+             </> 
+             :(dayClicks == "c" ? 
+             <>
+             <OrdBtn onClick={dayClick} value= "a">평일</OrdBtn>
+             <SatBtn onClick={dayClick} value= "b">토요일</SatBtn>
+             <SunBtn1 onClick={dayClick} value= "c">휴일</SunBtn1>
+             </> 
+             :(
+             <>
+             <OrdBtn onClick={dayClick} value= "a">평일</OrdBtn>
+             <SatBtn onClick={dayClick} value= "b">토요일</SatBtn>
+             <SunBtn onClick={dayClick} value= "c">휴일</SunBtn>
+             </>)))}
+             
              <StopObj>
-             <PrevStop> {staInfo.prevOBJ.station[0].stationName} 방향 
-             </PrevStop>
-             <NextStop> {staInfo.nextOBJ.station[0].stationName} 방향 
-             </NextStop>
+             <PrevStop> {staInfo.prevOBJ.station[0].stationName} 방향</PrevStop>
+             <NextStop> {staInfo.nextOBJ.station[0].stationName} 방향</NextStop>
+             {dayClicks == "a" ? 
+             <>
+             {console.log("a")}
              <TimetableBox>
-              {console.log(subTimeUp)}
              {
                subTimeUp.map((item) => {
                  const num = () => {
@@ -660,7 +794,6 @@ function SubwayMain() {
                  )
                })
              }
-
              </TimetableBox>
              <TimetableBox1> 
                {
@@ -694,6 +827,141 @@ function SubwayMain() {
                  })
                }
              </TimetableBox1>
+             </> : (dayClicks == "b" ? 
+             <> {console.log("b")}
+             <TimetableBox>
+             {
+               satListUp.map((item) => {
+                 const num = () => {
+                  var testString = item.list;
+                  var regex = /[^0-9]/g;
+                  var result = testString.replace(regex, " ");
+                  return result;
+                 }
+
+                 const str = () => {
+                  var testString = item.list;
+                  var regex = /[0-9]/g;
+                  var word = testString.replace(regex, "a");
+                  var regex = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+                  var result = word.replace(regex,"");
+                  return result;
+                 }
+
+                 return (
+                  <div>
+                  <UpDownContain>
+                  <TimeListUp>{item.Idx}</TimeListUp>
+                  <MinutesListUp>{num()}</MinutesListUp>
+                  <UpDownWay>{str()}</UpDownWay>
+                  </UpDownContain>
+                  </div>
+                 )
+               })
+             } 
+             </TimetableBox>
+             <TimetableBox1> 
+               {
+                 satListDown.map((item) => {
+                  const num = () => {
+                    var testString = item.list;
+                    var regex = /[^0-9]/g;
+                    var result = testString.replace(regex, " ");
+                    return result;
+                  }
+
+                  const str = () => {
+                    var testString = item.list;
+                    var regex = /[0-9]/g;
+                    var word = testString.replace(regex, "");
+                    var regex = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+                    
+                    var result = word.replace(regex,"");
+                    return result;
+                   }
+
+                   return (
+                    <div>
+                    <UpDownContain>
+                    <TimeListDown>{item.Idx}</TimeListDown>
+                    <MinutesListDown>{num()}</MinutesListDown>
+                    <UpDownWay1>{str()}</UpDownWay1>
+                    </UpDownContain>
+                    </div>
+                   )
+                 })
+               }
+             </TimetableBox1>
+             </> 
+             
+             : (
+             <>{console.log("c")}
+             <TimetableBox>
+             {
+               sunListUp.map((item) => {
+                 const num = () => {
+                  var testString = item.list;
+                  var regex = /[^0-9]/g;
+                  var result = testString.replace(regex, " ");
+                  return result;
+                 }
+
+                 const str = () => {
+                  var testString = item.list;
+                  var regex = /[0-9]/g;
+                  var word = testString.replace(regex, "a");
+                  var regex = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+                  var result = word.replace(regex,"");
+                  return result;
+                 }
+
+                 return (
+                  <div>
+                  <UpDownContain>
+                  <TimeListUp>{item.Idx}</TimeListUp>
+                  <MinutesListUp>{num()}</MinutesListUp>
+                  <UpDownWay>{str()}</UpDownWay>
+                  </UpDownContain>
+                  </div>
+                 )
+               })
+             } 
+             </TimetableBox>
+             <TimetableBox1> 
+               {
+                 sunListDown.map((item) => {
+                  const num = () => {
+                    var testString = item.list;
+                    var regex = /[^0-9]/g;
+                    var result = testString.replace(regex, " ");
+                    return result;
+                  }
+
+                  const str = () => {
+                    var testString = item.list;
+                    var regex = /[0-9]/g;
+                    var word = testString.replace(regex, "");
+                    var regex = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+                    
+                    var result = word.replace(regex,"");
+                    return result;
+                   }
+
+                   return (
+                    <div>
+                    <UpDownContain>
+                    <TimeListDown>{item.Idx}</TimeListDown>
+                    <MinutesListDown>{num()}</MinutesListDown>
+                    <UpDownWay1>{str()}</UpDownWay1>
+                    </UpDownContain>
+                    </div>
+                   )
+                 })
+               }
+             </TimetableBox1>
+             
+             </>)) }
+             
              </StopObj>
              
 
@@ -718,13 +986,8 @@ function SubwayMain() {
                 else return;
                }
                     return (
-                        <ExitNum>
-                          {item.gateNo}
-                          <ExitGate>
-                            {
-                              arr()
-                            }
-                          </ExitGate>
+                        <ExitNum> {item.gateNo}
+                          <ExitGate>{arr()}</ExitGate>
                         </ExitNum>
                     );
                   })

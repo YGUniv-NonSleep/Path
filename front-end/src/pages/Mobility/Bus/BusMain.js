@@ -132,7 +132,7 @@ const BusBtn = styled.button`
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   background-color: white;
   &:hover {
-    background-color: #91C8FE;
+    background-color: #E8F0FE;
   };
 `;
 
@@ -147,7 +147,7 @@ const BusStopBtn = styled.button`
   border-radius: 5px;
   background-color: white;
   &:hover {
-    background-color: #91C8FE;
+    background-color: #E8F0FE;
   };
 `;
 
