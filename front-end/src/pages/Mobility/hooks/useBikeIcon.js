@@ -5,6 +5,7 @@ import useScooterIcon from "./useScooterIcon";
 
 function useBikeIcon() {
   const [map, settingMap] = useState(null);
+  const [modal, setModal] = useState(null);
 
   async function mapLoad() {
     try {
@@ -43,19 +44,20 @@ function useBikeIcon() {
       });
 
       kakao.maps.event.addListener(marker, "click", function () {
-        axios.get(process.env.REACT_APP_SPRING_API+"/api/mobilities",{
-          id: 1,
-          x: "128.62269785225394",
-          y: "35.89624784236353",
-          type: scooter,
-        })
-        .then((result)=>{
-          console.log(result);
+        setModal("open");
+        // axios.get(process.env.REACT_APP_SPRING_API+"/api/mobilities",{
+        //   id: 1,
+        //   x: "128.62269785225394",
+        //   y: "35.89624784236353",
+        //   type: scooter,
+        // })
+        // .then((result)=>{
+        //   console.log(result);
           
-        })
-        .catch((err)=>{
-          console.error(err);
-        })
+        // })
+        // .catch((err)=>{
+        //   console.error(err);
+        // })
       });
     }
     marker.setMap(map);
@@ -77,7 +79,7 @@ function useBikeIcon() {
   }, [map]);
 
   return {
-    mapLoad, BikeIcon
+    mapLoad, BikeIcon, modal
   }
 }
 

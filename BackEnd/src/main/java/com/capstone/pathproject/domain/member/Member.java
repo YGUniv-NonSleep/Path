@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -125,5 +126,22 @@ public class Member extends BaseTimeEntity {
 
     public void updateEncodePassword(String encodePassword) {
         this.password = encodePassword;
+    }
+
+    public void delete() {
+        this.loginId = String.valueOf(loginId.substring(0, 3) + UUID.randomUUID());
+        this.mail = null;
+        this.name = null;
+        this.phone = null;
+        this.postId = 0;
+        this.addr = null;
+        this.addrDetail = null;
+        this.addrExtra = null;
+        this.gender = null;
+        this.birthday = null;
+        this.account = null;
+        this.score = 0;
+        this.provider = null;
+        this.providerId = null;
     }
 }

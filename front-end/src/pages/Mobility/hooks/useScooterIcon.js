@@ -2,10 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import MapApi from "../../../api/MapApi";
 import scooter from "../../../assets/images/electric-scooter.png";
-import Modal from "../../../components/Modal";
 
 function useScooterIcon(){
   const [map, settingMap] = useState(null);
+  const [modal, setModal] = useState(null);
   // const [mobilities, setMobilities] = useState([]);
 
   async function mapLoad() {
@@ -72,7 +72,8 @@ function useScooterIcon(){
 
       // 마커에 클릭이벤트를 등록합니다
       kakao.maps.event.addListener(marker, "click", function () {
-        
+        setModal("open");
+        console.log(modal);
       });
     }
     marker.setMap(map);
@@ -87,7 +88,7 @@ function useScooterIcon(){
   }, [map]);
 
   return {
-    mapLoad, ScooterIcon, handleOpen, handleClose, open
+    mapLoad, ScooterIcon, handleOpen, handleClose, open, modal
   }
 }
 

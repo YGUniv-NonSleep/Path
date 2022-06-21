@@ -19,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "and (c.company.latitude between :y - 0.00475 and :y + 0.00475) " +
             "and (c.prodBasic.name like %:name%)"
     )
-    List<Product> findLocationProducts(@Param("x") double x, @Param("y") double y, @Param("category") String name );
+    List<Product> findLocationProducts(@Param("x") double x, @Param("y") double y, @Param("name") String name );
 
 
     @Query("select c " +
@@ -29,6 +29,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "and (c.prodBasic.name like %:name%)"+
             "and (c.company.category = :category)"
     )
-    List<Product> findLocationAndCategoryProducts(@Param("x") double x, @Param("y") double y, @Param("category") String name, @Param("category")CompCategory category);
+    List<Product> findLocationAndCategoryProducts(@Param("x") double x, @Param("y") double y, @Param("name") String name, @Param("category")CompCategory category);
 
 }
