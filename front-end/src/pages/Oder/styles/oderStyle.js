@@ -10,7 +10,7 @@ const SideNav = styled.nav`
   height: 100%;
   display: block;
   transform: translatex(${(props) => props.clicked ? "0%" : (
-    props.openSubBar ? "-100%" : "-200.3%"
+    props.openSubBar ? "-200.3%" : "-100%"
   ) });
   transition: transform 0.3s ease-in-out;
 `;
@@ -52,13 +52,13 @@ const SearchBarBox = styled.div`
 const BubbleFilter = styled.div`
   user-select: none;
   font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  visibility: visible;
+  visibility: ${(props) => props.subBarOpen ? "hidden;" : "visible" };
 `;
 
 const BubbleFilterListWrap = styled.div`
   user-select: none;
   font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  visibility: visible;
+  visibility: inherit;
   position: absolute;
   left: 405px;
   top: 15px;
@@ -67,7 +67,7 @@ const BubbleFilterListWrap = styled.div`
 `;
 
 const BubbleFilterArea = styled.div`
-  visibility: visible;
+  visibility: inherit;
   background: #fff;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,.12);
   border-radius: 4px;
@@ -81,7 +81,7 @@ const BubbleFilterArea = styled.div`
 `;
 
 const BubbleFilterList = styled.ul`
-  visibility: visible;
+  visibility: inherit;
   font-size: 0;
   white-space: nowrap;
   margin: 0;
@@ -91,7 +91,7 @@ const BubbleFilterList = styled.ul`
 `;
 
 const BubbleFilterItem = styled.li`
-  visibility: visible;
+  visibility: inherit;
   font-size: 0;
   white-space: nowrap;
   margin: 0;
@@ -102,7 +102,7 @@ const BubbleFilterItem = styled.li`
 `;
 
 const BubbleFilterBtn = styled.button`
-  visibility: visible;
+  visibility: inherit;
   white-space: nowrap;
   list-style: none;
   margin: 0;
@@ -120,141 +120,8 @@ const BubbleFilterBtn = styled.button`
   color: #242424;
 `;
 
-const MoreGroupWrap = styled.div`
-  user-select: none;
-  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  visibility: visible;
-  font-size: 0;
-  white-space: nowrap;
-  display: inline-block;
-  vertical-align: top;
-`;
-
-const MoreGroupBtn = styled.button`
-  user-select: none;
-  visibility: visible;
-  white-space: nowrap;
-  margin: 0;
-  border: 0;
-  padding: 0;
-  appearance: none;
-  background-color: transparent;
-  cursor: pointer;
-  color: inherit;
-  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  height: 55px;
-  width: 55px;
-  border-left: 1px solid #ededed;
-  font-size: 1px;
-  line-height: 3px;
-  vertical-align: top;
-  border-radius: 0 4px 4px 0;
-
-  &:before {
-    overflow: hidden;
-    display: inline-block;
-    width: 15px;
-    height: 3px;
-    font-size: 0;
-    color: transparent;
-    vertical-align: top;
-    background-position: -468px -441px;
-    background-image: url(https://ssl.pstatic.net/static/maps/v5/pc/20220512184234/home.png);
-    content: "";
-  }
-  &:hover {
-    background: #f7f9fa;
-  }
-`;
-
-const MoreGroupBtnSpan = styled.span`
-  user-select: none;
-  visibility: visible;
-  white-space: nowrap;
-  cursor: pointer;
-  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  line-height: 3px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  font-size: 1px;
-  color: transparent;
-  position: absolute;
-  width: 1px;
-  height: 1px;
-`;
-
-const AppendixFilterArea = styled.div`
-  user-select: none;
-  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  visibility: visible;
-  font-size: 0;
-  white-space: nowrap;
-  position: absolute;
-  right: -1px;
-  top: 100%;
-`;
-
-const AppendixFilterWrap = styled.div`
-  visibility: visible;
-  font-size: 0;
-  white-space: nowrap;
-  margin-top: 8px;
-  border: 1px solid rgba(0,0,0,.05);
-  border-radius: 4px;
-`;
-
-const AppendixFilterInner = styled.div`
-  visibility: visible;
-  padding: 0 10px;
-  background: #fff;
-  border-radius: 4px;
-  font-size: 0;
-  white-space: nowrap;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,.12);
-`;
-
-const AppendixFilterListUl = styled.ul`
-  visibility: visible;
-  font-size: 0;
-  white-space: nowrap;
-  margin: 0;
-  list-style: none;
-  display: inline-block;
-  vertical-align: top;
-  padding: 17px 0 16px;
-`;
-
-const AppendixFilterListLi = styled.li`
-  visibility: visible;
-  font-size: 0;
-  white-space: nowrap;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-`;
-
-const AppendixFilterListBtn = styled.button`
-  visibility: visible;
-  white-space: nowrap;
-  list-style: none;
-  margin: 0;
-  border: 0;
-  appearance: none;
-  background-color: transparent;
-  cursor: pointer;
-  border-radius: 0;
-  position: relative;
-  line-height: 19px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #242424;
-  width: 100%;
-  padding: 13px 15px 14px;
-  text-align: left;
-`;
-
 const AppendixFilterListImg = styled.img`
-  visibility: visible;
+  visibility: inherit;
   white-space: nowrap;
   list-style: none;
   cursor: pointer;
@@ -342,13 +209,15 @@ const CombinedSearchList = styled.div`
 const SaltSearchList = styled.div`
   position: absolute;
   width: 100%;
-`; // height: 100%;
+  height: 100%;
+`;
 
 const ExternalFrameBridge = styled.div`
   pointer-events: auto;
   border: none;
-  overflow: auto;
-`; // width: 100%; height: 100%;
+  width: 100%; 
+  height: 100%;
+`;
 
 const SearchFrame = styled.div`
   margin: 0;
@@ -368,19 +237,121 @@ const SearchFrame = styled.div`
 const PlaceWrap = styled.div`
   transition: opacity .3s cubic-bezier(0.22, 0.61, 0.36, 1);
   opacity: 1;
-`; // height: 100%;
-
-const PlaceRoot = styled.div`
-  display: flex;
-  flex-direction: column;
   height: 100%;
 `;
 
+const PlaceRoot = styled.div`
+  display: flex;
+  overflow: hidden;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  border-top: 1px solid;
+  border-color: #ecf0f2;
+`;
+
+// 검색 결과
+const SearchBoxWrap = styled.div`
+  display: block;
+  overflow: hidden;
+  overflow-y: auto;
+  flex: 1;
+`;
+
+const SearchBox = styled.div`
+  overflow-y: auto;
+  display: block;
+`;
+
+const SearchList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
+const SearchItem = styled.li`
+  margin: 0;
+  position: relative;
+  padding: 18px 25px 20px;
+  display: list-item;
+  cursor: pointer;
+  &:before {
+    position: absolute;
+    top: -1px;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: rgba(0,0,0,0.2);
+    content: "";
+  }
+`;
+
+const SearchItemInfo = styled.div`
+  display: block;
+  text-decoration: none;
+`;
+
+const SearchItemTitle = styled.div`
+  display: -webkit-box;
+  overflow: hidden;
+  max-height: 4.6rem;
+  line-height: 2.3rem;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  text-decoration: none;
+`;
+
+const ItemBlueText = styled.span`
+  margin-right: 6px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+`;
+
+const ItemCategoryText = styled.span`
+  display: inline-block;
+  vertical-align: left;
+  font-size: 1.1rem;
+  color: #8f8f8f;
+`;
+
+const SearchItemSub = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 2px;
+  font-size: 0.9rem;
+  color: #8f8f8f;
+  letter-spacing: -0.2px;
+`; // color: rgba(var(--place-color-text5), 1);
+
+// 페이지네이션 레이아웃
+const SearchBoxPagination = styled.div`
+  position: relative;
+  padding: 8px 0 8px;
+  box-sizing: border-box;
+  
+  display: block;
+  
+  &:before {
+    position: absolute;
+    top: -1px;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: rgba(0,0,0,0.2);
+    content: "";
+  }
+`;
+
+// 정렬 창
 const SortBoxWrap = styled.div`
   position: relative;
   border-bottom: 1px solid;
   border-color: #ecf0f2;
-  margin: -6px 0 -1px;
+  margin: 0px 0 -1px;
 `;
 
 const SortBoxInner = styled.div`
@@ -437,16 +408,102 @@ const EntryLayout = styled.div`
 `;
 
 const EntryPlaceBridge = styled.div`
-  user-select: none;
-  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
-  background-color: #fff;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin-top: 150px;
+  z-index: 10;
+`; // height: 100%;
+
+const PlaceDataImageArea = styled.div`;
+  position: relative;
+`;
+
+const ImageArea = styled.div`
   display: flex;
   position: relative;
-  overflow: hidden;
-  flex-direction: column;
-  height: 100%;
-  z-index: 10;
+  height: 187px;
+  background: #fff;
+  justify-content: center;
 `;
+
+// 여기서 자식들을 받을거임
+const PlaceDataArea = styled.div`
+  margin-top: 0;
+  margin-bottom: 7px;
+  border-top: 0;
+  border-bottom: 1px solid;
+  border-color: #e2e5e8;
+  background-color: #fff;
+`;
+
+// 제목
+const PlaceData = styled.div`
+  padding: 16px 18px 14px;
+  text-align: center;
+`;
+
+const PlaceDataTitle = styled.div`
+  line-height: 2.5rem;
+  display: block;
+`;
+
+const PlaceDataTitleName = styled.div`
+  font-weight: 700;
+  letter-spacing: -1px;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 6px;
+  font-size: 2.1rem;
+  color: #000;
+`;
+
+const PlaceDataTitleCate = styled.div`
+  font-size: 1.4rem;
+  display: inline-block;
+  vertical-align: top;
+  color: #8f8f8f;
+`;
+
+const PlaceDataPlus = styled.div`
+  min-height: 872px;
+  display: block;
+`;
+
+const PlaceDataPlusSection = styled.div`
+  margin-top: 0;
+  border-color: #e2e5e8;
+  background-color: #fff;
+`; // border-bottom: 1px solid;
+
+const PlusSectionUl = styled.ul`
+  padding: 4px 18px 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const PlusSectionLi = styled.li`
+  position: relative;
+  padding: 10px 0;
+  margin: 0;
+  display: list-item;
+`;
+
+const PlusSection = styled.div`
+  overflow: hidden;
+  font-size: 1rem;
+  color: #424242;
+  line-height: 2.2rem;
+`; // display: block;
+
+const PlusSectionContent = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 8px;
+`; // color: inherit;
 
 const EntryCloseBtn = styled.button`
   margin: 0;
@@ -504,10 +561,22 @@ const EntryCloseBtnSpan = styled.span`
   height: 1px;
 `;
 
+const EmphasizeRedText = styled.em`
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 10;
+  padding-left: 6px;
+  color: #ff5757;
+  font-style: normal;
+`;
+
 export { 
-  SideNav, NavLayout, PanelWrap, PanelBase, SearchBarBox, 
-  BubbleFilter, BubbleFilterListWrap, BubbleFilterArea, BubbleFilterList, BubbleFilterItem, BubbleFilterBtn, MoreGroupWrap, MoreGroupBtn, MoreGroupBtnSpan, 
-  AppendixFilterArea, AppendixFilterWrap, AppendixFilterInner, AppendixFilterListUl, AppendixFilterListLi, AppendixFilterListBtn, AppendixFilterListImg, 
+  SideNav, NavLayout, PanelWrap, PanelBase, SearchBarBox, EmphasizeRedText, 
+  BubbleFilter, BubbleFilterListWrap, BubbleFilterArea, BubbleFilterList, BubbleFilterItem, BubbleFilterBtn, AppendixFilterListImg, 
   BaseCard, MainTopSpace, SearchPathSpace, PathView, CombinedSearchList, SaltSearchList, ExternalFrameBridge, SearchFrame, PlaceWrap, PlaceRoot, 
-  SubNav, EntryLayout,EntryPlaceBridge, EntryCloseBtn, EntryCloseBtnSpan, WrapBarCloseBtn, BarCloseBtn 
+  SortBoxWrap, SortBoxInner, SortBoxSpace, FlickingViewport, FlickingCamera, FilterItem, SearchBoxWrap, SearchBox, 
+  SearchList, SearchItem, SearchItemInfo, SearchItemTitle, ItemBlueText, ItemCategoryText, SearchItemSub, 
+  SearchBoxPagination, SubNav, EntryLayout,EntryPlaceBridge, EntryCloseBtn, EntryCloseBtnSpan, WrapBarCloseBtn, BarCloseBtn, 
+  PlaceDataImageArea, ImageArea, PlaceDataArea, PlaceData, PlaceDataTitle, PlaceDataTitleName, PlaceDataTitleCate, 
+  PlaceDataPlus, PlaceDataPlusSection, PlusSectionUl, PlusSectionLi, PlusSection, PlusSectionContent, 
 }
