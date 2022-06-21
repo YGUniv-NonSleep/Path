@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class MobilityReserve extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBILITY_RESERVATION_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBILITY_RESERVE_SEQ_GENERATOR")
     @Column(name = "MOBIL_RESER_ID")
     private Long id;
 
