@@ -30,11 +30,11 @@ public class CarsService {
 
     //CRUD
     @Transactional
-    public Message<Object> create(CarsDto carsDto) {
+    public Message<String> create(CarsDto carsDto) {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
         if (member == null) {
-            return Message.builder()
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("회원이 존재하지 않습니다.")
                     .body("").build();
@@ -47,10 +47,10 @@ public class CarsService {
                 .build();
         carsRepository.save(car);
         CarsDto result = new CarsDto(car);
-        return Message.<Object>builder()
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("등록완료")
-                .body(result).build();
+                .body("").build();
     }
 
     @Transactional
@@ -82,15 +82,21 @@ public class CarsService {
     }
 
     @Transactional
-    public Message<CarsDto> delete(Long carsId) {
+    public Message<String> delete(Long carsId) {
         Optional<Cars> result = carsRepository.findById(carsId);
-        Long rs = result.get().getId();
-        if (result.isPresent()) {
-            carsRepository.deleteById(rs);
+        Cars cars = result.orElse(null);
+        if(cars == null){
+            return Message.<String>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("차량이 존재하지 않습니다.")
+                    .build();
         }
-        return Message.<CarsDto>builder()
+
+        carsRepository.deleteById(carsId);
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("삭제완료")
+                .body("")
                 .build();
     }
 

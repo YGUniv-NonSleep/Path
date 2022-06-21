@@ -103,112 +103,169 @@ function useBoardContents() {
       });
   };
 
-  const PatchPostContents = (e) => {
+  const PatchPostContents = (e) =>{
     e.preventDefault();
-    var data = {
+    const postId = e.target.id.value;
+    const data = {
       title : e.target.title.value,
       content : e.target.content.value,
-      type : e.target.type.value,
+      type : e.target.type.value
     }
-    var postId = e.target.id.value;
-    console.log(data);
-    var formData = new FormData();
-    formData.append("userfile", e.target.userfile.files[0]);
-    formData.append(
-      "key",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-    axios.patch(process.env.REACT_APP_SPRING_API + `/api/post/${postId}`,formData,
-    {
+
+    let formData = new FormData();
+    const multipartFile = e.target.userfile.files[0];
+    formData.append('multipartFile',multipartFile);
+
+    axios.post(process.env.REACT_APP_SPRING_API + '/api/image',formData,{
+      withCredentials : true,
       headers : {
-        "Content-Type": `multipart/form-data`,
+        'Content-Type': 'multipart/form-data',
       },
     })
     .then((res)=>{
-      console.log(res.data) ;
-      setUpdate(res.data.body);
-      alert(res.data.message);
-      // window.location.reload();
+      console.log(res);
+      const imageName = res.data;
+      console.log(imageName);
+      return imageName;
+    })
+    .then(async (imageName) =>{
+      const result = await updatePostContents(imageName,data,postId);
     })
     .catch((err)=>{
-      console.log(err)
+      console.log(err);
     })
-
   }
+  
+  const updatePostContents = async(imageName,data,postId) => {
+
+    const patchData = {
+      title : data.title,
+      content : data.content,
+      type : data.type,
+      photoName : imageName
+    }
+    const patchPostId = postId;
+    await axios.patch(process.env.REACT_APP_SPRING_API + `/api/post/${patchPostId}`,patchData,{
+      withCredentials : true,
+    })
+    .then((res)=>{
+      console.log(res);
+      setUpdate(res.data.body);
+      alert(res.data.message);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
+
 
   const RepCreate = (e) => {
     e.preventDefault();
     var data = {
       postId : content.id,
-      title: e.target.title.value,
-      content: e.target.content.value,
-      type: e.target.type.value,
-    };
+      title : e.target.title.value,
+      content : e.target.content.value,
+      type : e.target.type.value
+    }
+    let formData = new FormData();
+    const multipartFile = e.target.userfile.files[0];
+    formData.append('multipartFile',multipartFile);
 
-    console.log(data);
-    var formData = new FormData();
-    formData.append("userfile", e.target.userfile.files[0]);
-    formData.append(
-      "key",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-    axios
-      .post(
-        process.env.REACT_APP_SPRING_API + "/api/post/reply",
-        formData,
-        {
-          headers: {
-            "Content-Type": `multipart/form-data`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setSub(res.data.body);
-        alert(res.data.message);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert(err.data.message)
-      });
-  };
+    axios.post(process.env.REACT_APP_SPRING_API + '/api/image',formData,{
+      withCredentials : true,
+      headers : {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((res)=>{
+      console.log(res);
+      const imageName = res.data;
+      console.log(imageName);
+      return imageName;
+    })
+    .then(async (imageName) =>{
+      const result = await createReply(imageName,data);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
+  
+  const createReply = async (imageName,data) => {
+    const replyData = {
+      postId : data.postId,
+      title : data.title,
+      content : data.content,
+      type : data.type,
+      photoName : imageName
+    }
+    await axios.post(process.env.REACT_APP_SPRING_API + "/api/post/reply",replyData,{
+      withCredentials : true,
+    })
+    .then((res)=>{
+      console.log(res);
+      setSub(res.data.body);
+      alert(res.data.message);
+    })
+    .catch((err)=>{
+      console.log(err);
+      console.log(err);
+      alert(err.data.message);
+    })
+  }
 
-  const RepUpdate = (e) => {
+
+  const RepUpdate = (e) =>{
     e.preventDefault();
     var data = {
-      title: e.target.title.value,
-      content: e.target.content.value,
-      type: e.target.type.value,
-    };
-    console.log(data);
+          title: e.target.title.value,
+          content: e.target.content.value,
+          type: e.target.type.value,
+        };
+        let formData = new FormData();
+    const multipartFile = e.target.userfile.files[0];
+    formData.append('multipartFile',multipartFile);
 
-    var formData = new FormData();
-    formData.append("userfile", e.target.userfile.files[0]);
-    formData.append(
-      "key",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-    axios
-      .patch(
-        process.env.REACT_APP_SPRING_API + `/api/post/reply/${postId}`,
-        formData,
-        {
-          //withCredentials: true,
-          headers: {
-            "Content-Type": `multipart/form-data`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setSubUpdate(res.data.body);
-        alert(res.data.message);
-        navigate(-1);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    axios.post(process.env.REACT_APP_SPRING_API + '/api/image',formData,{
+      withCredentials : true,
+      headers : {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((res)=>{
+      console.log(res);
+      const imageName = res.data;
+      console.log(imageName);
+      return imageName;
+    })
+    .then(async (imageName) =>{
+      const result = await updateReply(imageName,data);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
+
+  const updateReply = async(imageName,data) => {
+    const updateReplyData = {
+            title: data.title,
+            content: data.content,
+            type: data.type,
+            photoName : imageName
+          };
+  await axios.patch(process.env.REACT_APP_SPRING_API + `/api/post/reply/${postId}`,updateReplyData,{
+            withCredentials : true,
+   })
+  .then((res)=>{
+    console.log(res);
+    setSubUpdate(res.data.body);
+    alert(res.data.message);
+    navigate(-1);
+   })
+   .catch((err)=>{
+    console.log(err);
+   })      
+  }
 
   const RepDelete = (e) => {
     e.preventDefault();

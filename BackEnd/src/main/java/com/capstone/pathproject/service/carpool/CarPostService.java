@@ -3,15 +3,18 @@ package com.capstone.pathproject.service.carpool;
 
 import com.capstone.pathproject.domain.carpool.CarPost;
 import com.capstone.pathproject.domain.carpool.Cars;
+import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.carpool.CarPostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.carpool.CarPostRepository;
 import com.capstone.pathproject.repository.carpool.CarsRepository;
+import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +28,55 @@ import java.util.Optional;
 public class CarPostService {
     private final CarPostRepository carPostRepository;
     private final CarsRepository carsRepository;
+    private final MemberRepository memberRepository;
 //CRUD
+//    @Transactional
+//    public Message<CarPostDTO> create(CarPostDTO carPostDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails){
+//        CarPostDTO result = CarPostDTO.createCarPostDTO()
+//                .id(carPostDTO.getId())
+//                .member(principalDetails.getMember())
+//                .cars(carPostDTO.getCars())
+//                .title(carPostDTO.getTitle())
+//                .content(carPostDTO.getContent())
+//                .photoName(fileName)
+//                .arriveLongitude(carPostDTO.getArriveLongitude())
+//                .arriveLatitude(carPostDTO.getArriveLatitude())
+//                .sdate(carPostDTO.getSdate())
+//                .edate(carPostDTO.getEdate())
+//                .recruit(carPostDTO.getRecruit())
+//                .stime(carPostDTO.getStime())
+//                .startLongitude(carPostDTO.getStartLongitude())
+//                .startLatitude(carPostDTO.getStartLatitude())
+//                .startLocal1(carPostDTO.getStartLocal1())
+//                .startLocal2(carPostDTO.getStartLocal2())
+//                .arriveLocal1(carPostDTO.getArriveLocal1())
+//                .arriveLocal2(carPostDTO.getArriveLocal2())
+//                .price(carPostDTO.getPrice())
+//                .build();
+//        carPostRepository.save(result.toEntity());
+//        return Message.<CarPostDTO>builder()
+//                .header(StatusEnum.OK)
+//                .message("등록완료")
+//                .body(result).build();
+//    }
     @Transactional
-    public Message<CarPostDTO> create(CarPostDTO carPostDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        CarPostDTO result = CarPostDTO.createCarPostDTO()
-                .id(carPostDTO.getId())
-                .member(principalDetails.getMember())
+    public Message<String> create(CarPostDTO carPostDTO){
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+        Optional<Member> findMember = memberRepository.findById(member.getId());
+
+        if(findMember == null){
+            return Message.<String>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("사용자 없음")
+                    .body("").build();
+        }
+        CarPost carPost = CarPost.createCarPost()
+                .member(member)
                 .cars(carPostDTO.getCars())
                 .title(carPostDTO.getTitle())
                 .content(carPostDTO.getContent())
-                .photoName(fileName)
+                .photoName(carPostDTO.getPhotoName())
                 .arriveLongitude(carPostDTO.getArriveLongitude())
                 .arriveLatitude(carPostDTO.getArriveLatitude())
                 .sdate(carPostDTO.getSdate())
@@ -49,11 +91,11 @@ public class CarPostService {
                 .arriveLocal2(carPostDTO.getArriveLocal2())
                 .price(carPostDTO.getPrice())
                 .build();
-        carPostRepository.save(result.toEntity());
-        return Message.<CarPostDTO>builder()
+        carPostRepository.save(carPost);
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
                 .message("등록완료")
-                .body(result).build();
+                .body("").build();
     }
 
     @Transactional

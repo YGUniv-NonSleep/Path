@@ -5,6 +5,7 @@ import com.capstone.pathproject.dto.carpool.CarPostDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
 import com.capstone.pathproject.service.carpool.CarPostService;
+import com.capstone.pathproject.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,30 +26,35 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarPoolPostApiController {
     private final CarPostService carPostService;
-
+    private final ResponseUtil responseUtil;
     //CRUD
-    @PostMapping("/create")
-    public ResponseEntity<Message<CarPostDTO>> create(@Valid @RequestPart(value="key",required = false)CarPostDTO carPostDTO,
-                                                      @RequestPart(value="userfile",required = false) MultipartFile file,
-                                                      HttpServletRequest request,
-                                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
-        String fileName;
-        if(file == null){
-            fileName = "";
-        }else{
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "carpost\\";
-
-            try {
-                file.transferTo(new File(filePath + fileName));
-                System.out.println("업로드 완료");
-            }catch (IllegalStateException | IOException e){
-                System.out.println("업로드 실패");
-                e.printStackTrace();
-            }
-        }
-        Message<CarPostDTO> message = carPostService.create(carPostDTO, fileName,principalDetails);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+//    @PostMapping("/create")
+//    public ResponseEntity<Message<CarPostDTO>> create(@Valid @RequestPart(value="key",required = false)CarPostDTO carPostDTO,
+//                                                      @RequestPart(value="userfile",required = false) MultipartFile file,
+//                                                      HttpServletRequest request,
+//                                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
+//        String fileName;
+//        if(file == null){
+//            fileName = "";
+//        }else{
+//            fileName = file.getOriginalFilename();
+//            String filePath = request.getSession().getServletContext().getRealPath("") + "carpost\\";
+//
+//            try {
+//                file.transferTo(new File(filePath + fileName));
+//                System.out.println("업로드 완료");
+//            }catch (IllegalStateException | IOException e){
+//                System.out.println("업로드 실패");
+//                e.printStackTrace();
+//            }
+//        }
+//        Message<CarPostDTO> message = carPostService.create(carPostDTO, fileName,principalDetails);
+//        return new ResponseEntity<>(message, HttpStatus.OK);
+//    }
+    @PostMapping("")
+    public ResponseEntity<Message<?>> create(@Valid @RequestBody CarPostDTO carPostDTO){
+        Message<String> message = carPostService.create(carPostDTO);
+        return responseUtil.createResponseEntity(message);
     }
 
     @PatchMapping("/update")

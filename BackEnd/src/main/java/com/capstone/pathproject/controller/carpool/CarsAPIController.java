@@ -30,9 +30,9 @@ public class CarsAPIController {
 
     //CRUD
     @PostMapping("")
-    public ResponseEntity<Message<Object>> create(@RequestBody CarsDto carsDto) {
-        Message<Object> message = carsService.create(carsDto);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> create(@RequestBody CarsDto carsDto) {
+        Message<?> message = carsService.create(carsDto);
+        return responseUtil.createResponseEntity(message);
     }
 
 
@@ -56,10 +56,10 @@ public class CarsAPIController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Message<CarsDto>> delete(@RequestParam("carsId") Long carsId) {
-        Message<CarsDto> message = carsService.delete(carsId);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+    @DeleteMapping("/{carsId}")
+    public ResponseEntity<Message<?>> delete(@PathVariable("carsId") Long carsId) {
+        Message<?> message = carsService.delete(carsId);
+        return responseUtil.createResponseEntity(message);
     }
 
 

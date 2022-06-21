@@ -80,10 +80,10 @@ function useCarPoolContents(){
     console.log(data);
     axios.post(process.env.REACT_APP_SPRING_API + "/api/request",data)
     .then((res)=>{
-      console.log(res.data)
+      console.log(res)
     })
     .catch((err)=>{
-      console.log(err.data)
+      console.log(err)
     })
   }
 

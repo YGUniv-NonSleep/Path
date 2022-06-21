@@ -15,17 +15,7 @@ import {
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { border } from "@mui/system";
 
 const CommuCon = styled.div`
   width: 390px;
@@ -185,6 +175,7 @@ const CommunityContents = () => {
                  </div>
                </Box>
                 <br></br>
+                <img src={`${process.env.REACT_APP_SPRING_API}/api/image/${content.photoName}`} style={{width : "750px",height:"350px"}}></img><br></br>
                 {content.content}
                 <br></br><br></br>
                 <Button onClick={handleOpen3}>수정하기</Button>
@@ -282,7 +273,7 @@ const CommunityContents = () => {
                               <form
                                 id="myForm"
                                 name="myForm"
-                                onSubmit={PatchPostContents}
+                                onSubmit={RepUpdate}
                                 encType="multipart/form-data"
                               >
                               <input
@@ -346,6 +337,7 @@ const CommunityContents = () => {
                       ) : (
                         ""
                       )}
+                      <img src={`${process.env.REACT_APP_SPRING_API}/api/image/${reply.photoName}`} style={{width : "750px",height:"350px"}}></img><br></br>
                       {reply.content}
                       <br></br>
                       {}
