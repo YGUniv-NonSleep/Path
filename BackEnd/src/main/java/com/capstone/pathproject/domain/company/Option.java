@@ -16,6 +16,7 @@ import java.util.List;
         initialValue = 1, allocationSize = 1
 )
 @Getter
+@Table(name = "PRODUCT_OPTION")
 public class Option {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "OPTION_SEQUENCE_GENERATOR")
