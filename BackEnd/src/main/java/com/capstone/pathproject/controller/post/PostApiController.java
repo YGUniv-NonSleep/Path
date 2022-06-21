@@ -36,8 +36,8 @@ public class PostApiController {
     ///Post Controller///
     @PostMapping("")
     public ResponseEntity<Message<?>> create(@Valid @RequestPart(value = "key", required = false) CreatePostDto postDto,
-                                             @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                             HttpServletRequest request)
+                                                  @RequestPart(value = "userfile", required = false) MultipartFile file,
+                                                  HttpServletRequest request)
     {
         String fileName;
         if (file == null) {
@@ -117,8 +117,8 @@ public class PostApiController {
 
     @PostMapping("/reply")
     public ResponseEntity<Message<?>> repcreate(@Valid @RequestPart(value = "key", required = false) ReplyCreatePostDto postDto,
-                                                @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                                HttpServletRequest request) {
+                                                      @RequestPart(value = "userfile", required = false) MultipartFile file,
+                                                      HttpServletRequest request) {
         String fileName;
         if (file == null) {
             fileName = "";
@@ -141,7 +141,7 @@ public class PostApiController {
     public ResponseEntity<Message<?>> repupdate(@PathVariable Long postId,
                                                 @Valid@RequestPart(value = "key", required = false) ReplyUpdatePostDto postDto,
                                                 @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                                HttpServletRequest request) {
+                                                      HttpServletRequest request) {
         String fileName;
         if (file == null) {
             fileName = "";

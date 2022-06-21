@@ -55,39 +55,27 @@ function MainListItems(props) {
 function SecondaryListItems(props) {
   return (
     <React.Fragment>
-
       <ListSubheader component="div" inset>
         환경 설정
       </ListSubheader>
-
       <ListItemButton component={Link} to="/member/update">
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="정보 수정" />
       </ListItemButton>
-
       <ListItemButton component={Link} to="/member/card">
         <ListItemIcon>
           <AddCardIcon />
         </ListItemIcon>
         <ListItemText primary="카드 관리" />
       </ListItemButton>
-
       <ListItemButton component={Link} to="/member/cars">
         <ListItemIcon>
           <DirectionsCarIcon />
         </ListItemIcon>
         <ListItemText primary="차량 관리" />
       </ListItemButton>
-
-      <ListItemButton component={Link} to="/member/confirmation">
-        <ListItemIcon>
-          <DirectionsCarIcon />
-        </ListItemIcon>
-        <ListItemText primary="카풀 신청서" />
-      </ListItemButton>
-
       <ListItemButton>
         <ListItemIcon>
           <DeleteForeverIcon />

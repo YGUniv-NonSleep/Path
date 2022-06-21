@@ -40,20 +40,6 @@ public class CarPostRequestDTO {
         this.approval = approval;
     }
 
-    public CarPostRequestDTO(CarPostRequest carPostRequest){
-        this.id = carPostRequest.getId();
-        this.member = carPostRequest.getMember();
-        this.carPost= carPostRequest.getCarPost();
-        this.content = carPostRequest.getContent();
-        this.price = carPostRequest.getPrice();
-        this.startLongitude = carPostRequest.getStartLongitude();
-        this.startLatitude = carPostRequest.getStartLatitude();
-        this.arriveLongitude = carPostRequest.getArriveLongitude();
-        this.arriveLatitude = carPostRequest.getArriveLatitude();
-        this.passenger = carPostRequest.getPassenger();
-        this.approval = carPostRequest.getApproval();
-    }
-
     public CarPostRequest toEntity(){
         return CarPostRequest.createRequest()
                 .id(id)
