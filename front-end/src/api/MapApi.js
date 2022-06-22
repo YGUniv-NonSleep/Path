@@ -172,14 +172,15 @@ function MapApi() {
   // }
 
 
-  function currentLocMarker(data) {
+  async function currentLocMarker(data) {
     let imageSrc = '';
     let imageSize = new kakao.maps.Size(32, 32);
     let markerImage = null;
 
     let ob = {
       position: new kakao.maps.LatLng(33.450701, 126.570667), // 마커 표시 위치
-      clickable: true // 마커 클릭 이벤트 설정 여부
+      clickable: true, // 마커 클릭 이벤트 설정 여부
+      zIndex: 15,
     }
 
     if(data.image != '') {
@@ -195,7 +196,6 @@ function MapApi() {
 
   // 지도위 마커 표시해주는 함수
   function drawKakaoMarker(x, y) {
-    // console.log(x, y)
 
     let marker = new kakao.maps.Marker({
       // 마커 생성

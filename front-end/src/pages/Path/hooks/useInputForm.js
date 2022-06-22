@@ -227,7 +227,7 @@ function useInputForm() {
       // 0(지하철+버스), 1(지하철), 2(버스)
       // 나중에 정보 받을 예정
     }).catch((err)=>{
-      console.log(err) 
+      console.log(err)
       return;
     })
 
@@ -252,6 +252,7 @@ function useInputForm() {
     
     // 나중에 pathList에서 출발지, 도착지 x, y 좌표 받아서 쓰기
     const sp = await MapApi().drawKakaoMarker(pathList[idx].startPos.x, pathList[idx].startPos.y);
+    console.log(sp)
     sp.setMap(map);
     setMarkerData((current) => [...current, sp])
 

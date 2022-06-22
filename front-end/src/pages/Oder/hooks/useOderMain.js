@@ -66,11 +66,11 @@ function useOderMain() {
   }, [searchData, category]);
 
   const handleAlignment = (e) => {
+    if(e.target.value == alignment) return;
     if(userLocation == null) {
       alert("현재 위치 정보 없을 경우 거리순 조회가 제한됩니다.");
       return;
     }
-    if(e.target.value == alignment) return;
     setAlignment(e.target.value);
   };
 
@@ -200,33 +200,41 @@ function useOderMain() {
     let result = await MapApi().setCurrentLocation()
     .catch((err)=>console.log(err.message))
 
-    let locPosition, createMap, markerData
+    let locPosition, lat, lng
+    let uLocChk = false
     if(result != undefined) {
-      locPosition = new kakao.maps.LatLng(result.coords.latitude, result.coords.longitude);
-      createMap = await MapApi().createMap(locPosition);
-      markerData = {
-        posX: parseFloat(result.coords.longitude),
-        posY: parseFloat(result.coords.latitude),
-        image: currentLoc
-      }
-      settingMap(createMap)
+      lat = result.coords.latitude, lng = result.coords.longitude;
+      locPosition = new kakao.maps.LatLng(lat, lng);
+      uLocChk = true
       setUserLocation(locPosition)
 
+    } else {
+      // 기본 중심 좌표
+      lat = 37.55525165729346, lng = 126.93737555322481;
+      locPosition = new kakao.maps.LatLng(lat, lng);
     }
 
-    let marker = await MapApi().currentLocMarker(markerData);
-    console.log(marker)
-    marker.setMap(map)
+    if(uLocChk == true) {
+      let markerData = {
+        posX: parseFloat(lng),
+        posY: parseFloat(lat),
+        image: currentLoc
+      }
+  
+      let marker = await MapApi().currentLocMarker(markerData);
+      console.log(marker)
+      marker.setMap(map)
+    }
     
     let data = {
       keyword: "카페",
-      userLoc: null,
+      userLoc: locPosition,
       category: "",
       page: 1,
       sort: alignment
     }
-    // console.log(locPosition)
-    if(locPosition != undefined) data.userLoc = locPosition
+
+    // if(locPosition != undefined) data.userLoc = locPosition
     await MapApi().keywordSearch(data, callback)
 
     function callback(result, status) {
