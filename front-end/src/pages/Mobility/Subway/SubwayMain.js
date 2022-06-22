@@ -107,19 +107,19 @@ font-weight:bold;
 
 const LocationIcon = styled.div`
 position: absolute;
-top: 220px;
+top: 265px;
 left: 20px;
 `;
 
 const CallIcon = styled.div`
 position: absolute;
-top: 285px;
+top: 347px;
 left: 20px;
 `;
 
 const Address = styled.div`
 position: absolute;
-top: 220px;
+top: 270px;
 left: 60px;
 width: 250px;
 height: 30px;
@@ -129,7 +129,7 @@ color: rgb(32, 32, 32);
 
 const NewAddress = styled.div`
 position: absolute;
-top: 230px;
+top: 280px;
 left: 100px;
 width: 250px;
 height: 30px;
@@ -152,13 +152,13 @@ border: 1px solid rgb(172, 172, 172);
 
 const CallNum = styled.div`
 position: absolute;
-top: 290px;
+top: 350px;
 left: 60px;
 `;
 
 const Line = styled.hr`
   position: absolute;
-  top: 320px;
+  top: 400px;
   left: 10px;
   width: 370px;
   height: 1px;
@@ -178,7 +178,7 @@ const HeadLine = styled.hr`
 
 const SubInfo = styled.div`
   position: absolute;
-  top: 360px;
+  top: 440px;
   left: 10px;
   font-weight: bold;
   font-size: 15px;
@@ -186,7 +186,7 @@ const SubInfo = styled.div`
 
 const Info = styled.div`
 position: absolute;
-top: 400px;
+top: 480px;
 left: 10px;
 font-size: 11px;
 font-weight: bold;
@@ -195,7 +195,7 @@ color: rgb(138, 138, 138);
 
 const DetailInfo = styled.div`
 position: absolute;
-top: 400px;
+top: 480px;
 left: 110px;
 font-size: 11px;
 color: rgb(138, 138, 138);
@@ -203,7 +203,7 @@ color: rgb(138, 138, 138);
 
 const InfoIcon = styled.div`
 position: absolute;
-top: 395px;
+top: 477px;
 left: 80px;
 `;
 
@@ -491,6 +491,15 @@ background-color: #00BBA1;
 box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 `;
 
+const SubWaySearchName = styled.div`
+position: relative;
+top: 80px;
+left: 20px;
+font-size: 22px;
+font-weight: bold;
+color: #00A98F;
+`;
+
 function SubwayMain() {
   const [map, settingMap] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -678,6 +687,7 @@ function SubwayMain() {
           
           { toggleValue == null && staInfo != undefined && staInfo.length !=0 ? (
             <>
+            <SubWaySearchName>{staInfo.stationName} {staInfo.laneName}</SubWaySearchName>
             <LocationIcon><RoomIcon/></LocationIcon>
             <CallIcon><LocalPhoneIcon/></CallIcon>
               <Address>{staInfo.defaultInfo.address}</Address>
