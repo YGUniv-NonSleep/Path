@@ -407,6 +407,23 @@ const EntryLayout = styled.div`
   padding-top: 0px;
 `;
 
+const EntryStoreWrap = styled.div`
+  position: relative;
+  display: block;
+  z-index: 10;
+`; // overflow: hidden;
+
+const StoreDataArea = styled.div`
+  margin-top: 0;
+  margin-bottom: 7px;
+  border-top: 0;
+  border-bottom: 2px solid;
+  border-color: #e2e5e8;
+  background-color: #fff;
+`;
+
+
+
 const EntryPlaceBridge = styled.div`
   position: relative;
   display: block;

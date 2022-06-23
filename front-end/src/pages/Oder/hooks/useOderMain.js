@@ -9,6 +9,7 @@ function useOderMain() {
   const [closeToggle, setCloseToggle] = useState(true);
   const [subBarHide, setSubBarHide] = useState(false)
   const [animate, setAnimate] = useState(false);
+  const [showStore, setShowStore] = useState(false);
 
   const [userLocation, setUserLocation] = useState(null);
   const [map, settingMap] = useState(null);
@@ -21,6 +22,8 @@ function useOderMain() {
   const [searchData, setSearchData] = useState(''); // 사용자 입력 값
   const [alignment, setAlignment] = useState(null);
 
+  const [uLocMarker, setULocMarker] = useState(null);
+
   // 검색창 토글 버튼
   const onCloseToggle = () => {
     setCloseToggle((prev) => !prev)
@@ -28,12 +31,22 @@ function useOderMain() {
 
   const onSubBarClick = (chk) => {
     if(chk==true) {
-      if(subBarHide == true) return;
-      else setSubBarHide((prev) => !prev)
+      if(subBarHide == true && showStore == false) 
+        return;
+      else if(subBarHide == true && showStore == true)
+        setShowStore(false);
+      else 
+        setSubBarHide((prev) => !prev);
     }
     else {
       setSubBarHide((prev) => !prev)
+      setShowStore(false)
     }
+  }
+  
+  const handleShowStore = () => {
+    setShowStore((prev) => !prev)
+    console.log(showStore)
   }
 
   useEffect(() => {
@@ -111,7 +124,7 @@ function useOderMain() {
 
   function keywordSetting(e) {
     e.preventDefault();
-    setAlignment('right')
+    setAlignment('right');
     keywordSubmit();
     setPage(1);
   }
@@ -151,6 +164,7 @@ function useOderMain() {
   
   useEffect(()=>{
     if(page != 0) {
+      setSubBarHide(false)
       keywordSubmit()
     }
   }, [page])
@@ -203,16 +217,17 @@ function useOderMain() {
     let locPosition, lat, lng
     let uLocChk = false
     if(result != undefined) {
+      // 사용자 위치 받아오는 좌표가 문제임
       lat = result.coords.latitude, lng = result.coords.longitude;
-      locPosition = new kakao.maps.LatLng(lat, lng);
       uLocChk = true
-      setUserLocation(locPosition)
 
     } else {
       // 기본 중심 좌표
-      lat = 37.55525165729346, lng = 126.93737555322481;
-      locPosition = new kakao.maps.LatLng(lat, lng);
+      lat = 37.56682420267543, lng = 126.978652258823;
     }
+
+    locPosition = new kakao.maps.LatLng(lat, lng);
+    setUserLocation(locPosition)
 
     if(uLocChk == true) {
       let markerData = {
@@ -222,8 +237,7 @@ function useOderMain() {
       }
   
       let marker = await MapApi().currentLocMarker(markerData);
-      console.log(marker)
-      marker.setMap(map)
+      setULocMarker(marker) 
     }
     
     let data = {
@@ -244,6 +258,14 @@ function useOderMain() {
     }
 
   }
+
+  // 현재 위치 마커 찍기
+  useEffect(()=>{
+    if (uLocMarker != null) {
+      map.panTo(userLocation)
+      uLocMarker.setMap(map)
+    }
+  }, [uLocMarker])
   
   // 맵 로드
   async function mapLoad() {
@@ -272,7 +294,7 @@ function useOderMain() {
   }, []);
 
   return {
-    map, closeToggle, subBarHide, animate, searchData, category, placeList, pagiObj, page, searchPath, alignment, place, 
+    map, closeToggle, subBarHide, animate, searchData, category, placeList, pagiObj, page, searchPath, alignment, place, showStore, handleShowStore, 
     pageSetting, placeTarget, sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, handleChange, mapLoad, onCloseToggle, onSubBarClick
   };
 }

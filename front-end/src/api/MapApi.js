@@ -3,7 +3,7 @@ function MapApi() {
     const mapContainer = document.getElementById('map'); // 지도 표시 div 탐색
 
     if(latLng == null || latLng == undefined)
-      latLng = new kakao.maps.LatLng(37.55525165729346, 126.93737555322481);
+      latLng = new kakao.maps.LatLng(37.56682420267543, 126.978652258823);
     
     let mapOption = {
       center: latLng, // 지도의 중심좌표
@@ -19,17 +19,36 @@ function MapApi() {
   function setCurrentLocation() {
     // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
     if (navigator.geolocation) {
+      // 정확도 옵션을 사용해도 geolocation의 한계 때문에 정확하지 않다
+      const options = {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 10000
+      }
+
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       return new Promise((res, rej)=>{
-        navigator.geolocation.getCurrentPosition(res, rej)
+        navigator.geolocation.getCurrentPosition(res, rej, options)
       });
     
     } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-      console.log('geolocation을 사용할수 없어요..')
+      alert('geolocation을 사용할수 없어요..')
       // geolocation 사용할 수 없을 때 기본 설정된 좌표 값
-      const locPosition = new kakao.maps.LatLng(37.55525165729346, 126.93737555322481);
+      const locPosition = new kakao.maps.LatLng(37.56682420267543, 126.978652258823);
       return locPosition
     }
+  }
+
+  function getBoundary(points) {
+    let bounds = new kakao.maps.LatLngBounds();
+
+    // 좌표 객체들 (1~n개)
+    for (var i = 0; i < points.length; i++) {
+      bounds.extend(points[i]);
+    }
+    // console.log(bounds)
+    // map.setBounds(bounds);
+    return bounds
   }
 
   async function keywordSearch(data, callback) {
@@ -174,21 +193,23 @@ function MapApi() {
 
   async function currentLocMarker(data) {
     let imageSrc = '';
-    let imageSize = new kakao.maps.Size(32, 32);
+    let imageSize = new kakao.maps.Size(30, 32);
+    let options = {
+      offset: new kakao.maps.Point(13, 30)
+    }
     let markerImage = null;
 
-    let ob = {
-      position: new kakao.maps.LatLng(33.450701, 126.570667), // 마커 표시 위치
+    let ob = {                    // data.posY, data.posX
+      position: new kakao.maps.LatLng(data.posY, data.posX), // 마커 표시 위치
       clickable: true, // 마커 클릭 이벤트 설정 여부
       zIndex: 15,
     }
 
     if(data.image != '') {
       imageSrc = data.image
-      markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+      markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, options);
       ob.image = markerImage
     }
-    console.log(ob)
     
     let marker = new kakao.maps.Marker(ob);
     return marker;
@@ -309,6 +330,7 @@ function MapApi() {
 
   return {
     createMap,
+    getBoundary,
     setCurrentLocation,
     keywordSearch, 
     categorySearch, 
