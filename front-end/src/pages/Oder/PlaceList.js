@@ -7,6 +7,7 @@ import {
     ItemBlueText,
     ItemCategoryText,
 } from "./styles/oderStyle";
+
 function PlaceList({item, target, clicked}) {
   return (
     <SearchItem
@@ -16,9 +17,7 @@ function PlaceList({item, target, clicked}) {
       }}
       key={item.id}
     >
-      <SearchItemInfo
-      // onClick={() => onSubBarClick(true)}
-      >
+      <SearchItemInfo>
         {/* 타이틀 */}
         <SearchItemTitle>
           <ItemBlueText>{item.place_name}</ItemBlueText>

@@ -367,8 +367,8 @@ const SortBoxSpace = styled.div`
 const FlickingViewport = styled.div`
   position: static;
   z-index: 20;
-  padding: 0 25px 15px;
-`;
+  padding: 10px 25px;
+`; // 
 
 const FlickingCamera = styled.div`
   will-change: transform;
@@ -413,14 +413,61 @@ const EntryStoreWrap = styled.div`
   z-index: 10;
 `; // overflow: hidden;
 
-const StoreDataArea = styled.div`
+const StoreTab = styled.div`
+  position: relative;
+  width: 100%;
+`; // padding: 8px 0 8px;
+
+const StoreTabInfo = styled.div`
+  margin: 10px 15px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StoreInfoArea = styled.div`
+  overflow: hidden;
+  overflow-y: auto;
+  height: 860px;
+`;
+
+const StoreInfo = styled.div`
+  position: relative;
+  overflow: hidden;
+`;
+
+const StoreInfoTwo = styled.div`
+  margin: 0;
+  position: relative;
+  padding: 10px 15px 5px;
+  display: list-item;
+`;
+
+const StoreInfoItemKey = styled.div`
   margin-top: 0;
   margin-bottom: 7px;
-  border-top: 0;
-  border-bottom: 2px solid;
-  border-color: #e2e5e8;
-  background-color: #fff;
+  margin-right: 11px;
+  display: inline-flex;
 `;
+
+const StoreInfoItemValue = styled.div`
+  margin-top: 0;
+  margin-bottom: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-flex;
+`;
+
+// const StoreDataArea = styled.div`
+//   margin-top: 0;
+//   margin-bottom: 7px;
+//   border-top: 0;
+//   border-bottom: 2px solid;
+//   border-color: #e2e5e8;
+//   background-color: #fff;
+// `;
 
 
 
@@ -592,7 +639,8 @@ export {
   BubbleFilter, BubbleFilterListWrap, BubbleFilterArea, BubbleFilterList, BubbleFilterItem, BubbleFilterBtn, AppendixFilterListImg, 
   BaseCard, MainTopSpace, SearchPathSpace, PathView, CombinedSearchList, SaltSearchList, ExternalFrameBridge, SearchFrame, PlaceWrap, PlaceRoot, 
   SortBoxWrap, SortBoxInner, SortBoxSpace, FlickingViewport, FlickingCamera, FilterItem, SearchBoxWrap, SearchBox, 
-  SearchList, SearchItem, SearchItemInfo, SearchItemTitle, ItemBlueText, ItemCategoryText, SearchItemSub, 
+  SearchList, SearchItem, SearchItemInfo, SearchItemTitle, ItemBlueText, ItemCategoryText, SearchItemSub, EntryStoreWrap, StoreTab, StoreTabInfo, StoreInfoArea, StoreInfo, 
+  StoreInfoTwo, StoreInfoItemKey, StoreInfoItemValue, 
   SearchBoxPagination, SubNav, EntryLayout,EntryPlaceBridge, EntryCloseBtn, EntryCloseBtnSpan, WrapBarCloseBtn, BarCloseBtn, 
   PlaceDataImageArea, ImageArea, PlaceDataArea, PlaceData, PlaceDataTitle, PlaceDataTitleName, PlaceDataTitleCate, 
   PlaceDataPlus, PlaceDataPlusSection, PlusSectionUl, PlusSectionLi, PlusSection, PlusSectionContent, 

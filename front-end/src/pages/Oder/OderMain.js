@@ -239,7 +239,7 @@ function OderMain() {
                     {/* 서브바 컨텐츠 */}
                     {place != null ? (
                                   // 나중에 가게 상품 정보도 넘겨줌
-                      showStore ? <StoreMenu place={place} />
+                      showStore ? <StoreMenu place={place} outStore={handleShowStore} />
                       : <StoreInfo place={place} showStore={handleShowStore}/>
                     ) : null}
                     <EntryCloseBtn
