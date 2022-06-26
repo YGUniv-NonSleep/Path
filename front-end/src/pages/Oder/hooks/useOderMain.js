@@ -23,6 +23,20 @@ function useOderMain() {
   const [alignment, setAlignment] = useState(null);
 
   const [uLocMarker, setULocMarker] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [count, setCount] = useState(1);
+  
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+  
+  // useEffect(()=>{
+
+  // }, [dialogOpen])
 
   // 검색창 토글 버튼
   const onCloseToggle = () => {
@@ -294,8 +308,11 @@ function useOderMain() {
   }, []);
 
   return {
-    map, closeToggle, subBarHide, animate, searchData, category, placeList, pagiObj, page, searchPath, alignment, place, showStore, handleShowStore, 
-    pageSetting, placeTarget, sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, handleChange, mapLoad, onCloseToggle, onSubBarClick
+    map, closeToggle, subBarHide, animate, searchData, category, placeList, 
+    pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, setCount, 
+    handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
+    sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, 
+    handleChange, mapLoad, onCloseToggle, onSubBarClick
   };
 }
 

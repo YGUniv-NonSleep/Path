@@ -447,7 +447,7 @@ const StoreInfoTwo = styled.div`
 const StoreInfoItemKey = styled.div`
   margin-top: 0;
   margin-bottom: 7px;
-  margin-right: 11px;
+  margin-right: 9px;
   display: inline-flex;
 `;
 

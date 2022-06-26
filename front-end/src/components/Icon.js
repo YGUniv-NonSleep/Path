@@ -27,6 +27,7 @@ const Li = styled.li`
 `;
 
 const Icon = () => {
+  // 통합, 대중교통, 모빌리티, 도보, 자동차 하나씩만 선택하고, 결과에서 필터
   return (
     <Ul>
       <Li>

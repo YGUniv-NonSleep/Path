@@ -10,7 +10,10 @@ import {
   Pagination,
   ToggleButtonGroup,
   ToggleButton,
+  IconButton, 
 } from "@mui/material";
+import Badge from '@mui/material/Badge';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import SearchIcon from "@mui/icons-material/Search";
@@ -71,6 +74,8 @@ function OderMain() {
     pagiObj,
     showStore, 
     handleShowStore, 
+    handleDialogOpen, 
+    handleDialogClose, 
     placeTarget,
     handleAlignment,
     keywordSetting,
@@ -203,6 +208,7 @@ function OderMain() {
                                   {placeList.map((item) => {
                                     return (
                                       <PlaceList 
+                                        key={item.id}
                                         item={item} 
                                         target={()=>placeTarget(item)} 
                                         clicked={()=>onSubBarClick(true)} 
@@ -239,7 +245,23 @@ function OderMain() {
                     {/* 서브바 컨텐츠 */}
                     {place != null ? (
                                   // 나중에 가게 상품 정보도 넘겨줌
-                      showStore ? <StoreMenu place={place} outStore={handleShowStore} />
+                      showStore ? (
+                        <>
+                          <StoreMenu place={place} outStore={handleShowStore} />
+                          {/* 메뉴 */}
+
+                          <IconButton 
+                            aria-label="cart" 
+                            sx={{ zIndex: '100', position: 'absolute', left: '300px;', top: '890px;' }}
+                            onClick={()=>alert("cart")}
+                          >
+                            <Badge badgeContent={4} color="warning">
+                              <ShoppingCartIcon sx={{width:'42px', height: '42px'}} />
+                            </Badge>
+                          </IconButton>
+                          {/* 장바구니 */} {/* 리덕스 툴킷에 보관 예정 */}
+                        </>
+                      )
                       : <StoreInfo place={place} showStore={handleShowStore}/>
                     ) : null}
                     <EntryCloseBtn
