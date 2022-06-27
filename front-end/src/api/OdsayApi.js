@@ -8,6 +8,7 @@ const key = process.env.REACT_APP_ODSAY_API;
 
 export const PathApi = {
   getTransPath: async (data) => {
+    console.log(data)
     const response = await axios
       .get(
         process.env.REACT_APP_SPRING_API + "/odsay/paths",
