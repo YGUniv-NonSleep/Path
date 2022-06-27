@@ -25,16 +25,17 @@ function CompStoreMain() {
   } = useCompStore();
 
   return (
-    <CompStoreCon>
-      { loading ? 
-        <Typography variant='h3' sx={{
-          display: 'absolute;', 
-          justifyContent: 'center;', 
-          fontWeight: 500, 
-          margin: '0 auto',
+    <>
+    { loading ? 
+      <Typography variant='h3' sx={{
+        display: 'fixed', 
+        justifyContent: 'center;', 
+        fontWeight: 500, 
+        paddingTop: '12px'
 
-        }}>마이 업체 화면</Typography> 
-        : <Typography>로드 중...</Typography> }
+      }}>마이 업체 화면</Typography> 
+      : <Typography>로드 중...</Typography> }
+    <CompStoreCon>
       {myStore != null || myStore != undefined ? (
         myStore.map((item, idx) => {
           if (item.length == 0) {
@@ -72,7 +73,7 @@ function CompStoreMain() {
                 <ListItemButton
                   alignItems="flex-start"
                   onClick={()=>handleOpen(idx)}
-                  sx={{zIndex: '20'}}
+                  sx={{zIndex: '20', }}
                 >
                   <ListItemAvatar sx={{ margin: "auto 0" }}>
                     <Avatar
@@ -143,6 +144,7 @@ function CompStoreMain() {
       </Link>
       <Outlet></Outlet>
     </CompStoreCon>
+    </>
   );
 }
 
