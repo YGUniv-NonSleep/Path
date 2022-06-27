@@ -252,7 +252,7 @@ function OderMain() {
 
                           <IconButton 
                             aria-label="cart" 
-                            sx={{ zIndex: '100', position: 'absolute', left: '300px;', top: '890px;' }}
+                            sx={{ zIndex: '100', position: 'absolute', left: '300px;', top: '870px;' }}
                             onClick={()=>alert("cart")}
                           >
                             <Badge badgeContent={4} color="warning">
