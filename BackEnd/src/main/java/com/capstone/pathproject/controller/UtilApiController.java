@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,16 +45,26 @@ public class UtilApiController {
     @GetMapping("/pay")
     public String tossPaymentsTest(@RequestParam("paymentKey") String paymentKey, @RequestParam("orderId") String orderId, @RequestParam("amount") String amount) {
 
-        String headerKey = "Basic "+apiKey + ":";
+        String headerKey = apiKey + ":";
         Encoder encoder = Base64.getEncoder();
+        Base64.Decoder decoder = Base64.getDecoder();
 
         byte[] apiByte = headerKey.getBytes(StandardCharsets.UTF_8);
         byte[] encodedByte = encoder.encode(apiByte);
         String encodedString = encoder.encodeToString(encodedByte);
 
+        String key = Arrays.toString(decoder.decode(encodedString));
+
+
+
+        System.out.println(Arrays.toString(apiByte));
+        System.out.println(Arrays.toString(encodedByte));
+        System.out.println(encodedString);
+        System.out.println(key);
+
         WebClient tossWebClient = WebClient.builder()
                 .baseUrl("https://api.tosspayments.com/")
-                .defaultHeader("Authorization", encodedString)
+                .defaultHeader("Authorization", "Basic dGVzdF9za19QMjR4TGVhNXpWQUU2Rzl2TGoyVlFBTVlOd1c2Og==")
                 .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
