@@ -33,9 +33,13 @@ public class MobilityService {
     private final MobilityReserveRepository mobilityReserveRepository;
 
     @Transactional(readOnly = true) // 경도, 위도
-    public Message<List<LocationMobilityDto>> getLocationMobility(MobilityType type, double x, double y) {
+    public Message<List<LocationMobilityDto>> getLocationMobility(String type, double x, double y) {
         List<LocationMobilityDto> locationMobilityDtos = new ArrayList<>();
-        List<Mobility> mobilities = mobilityRepository.findLocationMobilities(type, x, y);
+        List<Mobility> mobilities;
+        if (type.equals("ALL"))
+            mobilities = mobilityRepository.findLocationMobilities(x, y);
+        else
+            mobilities = mobilityRepository.findLocationMobilities(MobilityType.valueOf(type), x, y);
         String message;
         if (mobilities.size() == 0) {
             message = "근처에 퍼스널 모빌리티가 없습니다.";
@@ -67,7 +71,7 @@ public class MobilityService {
                     .body("").build();
         }
         Optional<MobilityReserve> reserveMobility = mobilityReserveRepository.findReserveMobility(member.getId());
-        if(reserveMobility.isPresent()) {
+        if (reserveMobility.isPresent()) {
             return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("예약중인 퍼스널 모빌리티가 있습니다.")

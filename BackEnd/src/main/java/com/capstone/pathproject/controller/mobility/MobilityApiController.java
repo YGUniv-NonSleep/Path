@@ -23,7 +23,7 @@ public class MobilityApiController {
     @GetMapping("/mobilities")
     public ResponseEntity<Message<?>> getLocationMobility(@RequestParam double x,
                                                           @RequestParam double y,
-                                                          @RequestParam("type") MobilityType type) {
+                                                          @RequestParam String type) {
         Message<List<LocationMobilityDto>> mobilityDTOs = mobilityService.getLocationMobility(type, x, y);
         return responseUtil.createResponseEntity(mobilityDTOs);
     }
