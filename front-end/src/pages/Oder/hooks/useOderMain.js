@@ -9,6 +9,7 @@ function useOderMain() {
   const [closeToggle, setCloseToggle] = useState(true);
   const [subBarHide, setSubBarHide] = useState(false)
   const [animate, setAnimate] = useState(false);
+  const [showStore, setShowStore] = useState(false);
 
   const [userLocation, setUserLocation] = useState(null);
   const [map, settingMap] = useState(null);
@@ -21,6 +22,22 @@ function useOderMain() {
   const [searchData, setSearchData] = useState(''); // 사용자 입력 값
   const [alignment, setAlignment] = useState(null);
 
+  const [uLocMarker, setULocMarker] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [count, setCount] = useState(1);
+  
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+  
+  // useEffect(()=>{
+
+  // }, [dialogOpen])
+
   // 검색창 토글 버튼
   const onCloseToggle = () => {
     setCloseToggle((prev) => !prev)
@@ -28,12 +45,22 @@ function useOderMain() {
 
   const onSubBarClick = (chk) => {
     if(chk==true) {
-      if(subBarHide == true) return;
-      else setSubBarHide((prev) => !prev)
+      if(subBarHide == true && showStore == false) 
+        return;
+      else if(subBarHide == true && showStore == true)
+        setShowStore(false);
+      else 
+        setSubBarHide((prev) => !prev);
     }
     else {
       setSubBarHide((prev) => !prev)
+      setShowStore(false)
     }
+  }
+  
+  const handleShowStore = () => {
+    setShowStore((prev) => !prev)
+    console.log(showStore)
   }
 
   useEffect(() => {
@@ -66,11 +93,11 @@ function useOderMain() {
   }, [searchData, category]);
 
   const handleAlignment = (e) => {
+    if(e.target.value == alignment) return;
     if(userLocation == null) {
       alert("현재 위치 정보 없을 경우 거리순 조회가 제한됩니다.");
       return;
     }
-    if(e.target.value == alignment) return;
     setAlignment(e.target.value);
   };
 
@@ -111,7 +138,7 @@ function useOderMain() {
 
   function keywordSetting(e) {
     e.preventDefault();
-    setAlignment('right')
+    setAlignment('right');
     keywordSubmit();
     setPage(1);
   }
@@ -151,6 +178,7 @@ function useOderMain() {
   
   useEffect(()=>{
     if(page != 0) {
+      setSubBarHide(false)
       keywordSubmit()
     }
   }, [page])
@@ -200,33 +228,41 @@ function useOderMain() {
     let result = await MapApi().setCurrentLocation()
     .catch((err)=>console.log(err.message))
 
-    let locPosition, createMap, markerData
+    let locPosition, lat, lng
+    let uLocChk = false
     if(result != undefined) {
-      locPosition = new kakao.maps.LatLng(result.coords.latitude, result.coords.longitude);
-      createMap = await MapApi().createMap(locPosition);
-      markerData = {
-        posX: parseFloat(result.coords.longitude),
-        posY: parseFloat(result.coords.latitude),
-        image: currentLoc
-      }
-      settingMap(createMap)
-      setUserLocation(locPosition)
+      // 사용자 위치 받아오는 좌표가 문제임
+      lat = result.coords.latitude, lng = result.coords.longitude;
+      uLocChk = true
 
+    } else {
+      // 기본 중심 좌표
+      lat = 37.56682420267543, lng = 126.978652258823;
     }
 
-    let marker = await MapApi().currentLocMarker(markerData);
-    console.log(marker)
-    marker.setMap(map)
+    locPosition = new kakao.maps.LatLng(lat, lng);
+    setUserLocation(locPosition)
+
+    if(uLocChk == true) {
+      let markerData = {
+        posX: parseFloat(lng),
+        posY: parseFloat(lat),
+        image: currentLoc
+      }
+  
+      let marker = await MapApi().currentLocMarker(markerData);
+      setULocMarker(marker) 
+    }
     
     let data = {
       keyword: "카페",
-      userLoc: null,
+      userLoc: locPosition,
       category: "",
       page: 1,
       sort: alignment
     }
-    // console.log(locPosition)
-    if(locPosition != undefined) data.userLoc = locPosition
+
+    // if(locPosition != undefined) data.userLoc = locPosition
     await MapApi().keywordSearch(data, callback)
 
     function callback(result, status) {
@@ -236,6 +272,14 @@ function useOderMain() {
     }
 
   }
+
+  // 현재 위치 마커 찍기
+  useEffect(()=>{
+    if (uLocMarker != null) {
+      map.panTo(userLocation)
+      uLocMarker.setMap(map)
+    }
+  }, [uLocMarker])
   
   // 맵 로드
   async function mapLoad() {
@@ -264,8 +308,11 @@ function useOderMain() {
   }, []);
 
   return {
-    map, closeToggle, subBarHide, animate, searchData, category, placeList, pagiObj, page, searchPath, alignment, place, 
-    pageSetting, placeTarget, sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, handleChange, mapLoad, onCloseToggle, onSubBarClick
+    map, closeToggle, subBarHide, animate, searchData, category, placeList, 
+    pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, setCount, 
+    handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
+    sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, 
+    handleChange, mapLoad, onCloseToggle, onSubBarClick
   };
 }
 

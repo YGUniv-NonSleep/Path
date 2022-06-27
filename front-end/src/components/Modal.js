@@ -1,6 +1,10 @@
 import { React, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  IconButton, 
+} from "@mui/material";
 
 const ModalWrapper = styled.div`
   box-sizing: border-box;
@@ -104,7 +108,10 @@ function Modal({
         visible={visible}
       >
         <ModalInner tabIndex="0" className="modal-inner">
-          {closable && <CloseButton className="modal-close" onClick={close}>X</CloseButton>}
+          { closable && 
+            <IconButton sx={{ position: 'fixed;', top: '5px;', right: '4px;' }} onClick={close} disableRipple={true}>
+              <CloseIcon />
+            </IconButton> }
           {children}
         </ModalInner>
       </ModalWrapper>

@@ -5,7 +5,7 @@ import {
     AppendixFilterListImg
 } from "./styles/oderStyle";
 
-function categoryList({clicked}) {
+function CategoryList({clicked}) {
     // 대형마트, 편의점, 음식점, 카페, 병원, 약국 순서
     const imageLink = ['00099', '00065', '00032', '00012', '00057', '00087'];
     const text = ['대형마트', '편의점', '음식점', '카페', '병원', '약국'];
@@ -29,4 +29,4 @@ function categoryList({clicked}) {
     return enumerate()
 }
 
-export default categoryList
+export default CategoryList
