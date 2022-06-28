@@ -33,4 +33,17 @@ export const TmapApi = {
       return error;
     }
   },
+
+  getMobilityPath: async (sx, sy, ex, ey, mobilId) => {
+    const data = { sx: sx, sy: sy, ex: ex, ey: ey, mobilityId: mobilId };
+
+    const result = await axios.get(
+      process.env.REACT_APP_SPRING_API + '/tmap/path/mobility',
+      {
+        params: data,
+        withCredencials: true,
+      }
+    );
+    return result.data;
+  },
 };
