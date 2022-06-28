@@ -69,13 +69,14 @@ function OderMain() {
     category,
     placeList,
     page,
+    affiliate,
     alignment,
     place,
     pagiObj,
-    showStore,
-    handleShowStore,
-    handleDialogOpen,
-    handleDialogClose,
+    showStore, 
+    prodList, 
+    compCateList, 
+    handleShowStore, 
     placeTarget,
     handleAlignment,
     keywordSetting,
@@ -205,16 +206,30 @@ function OderMain() {
                               <SearchBoxWrap>
                                 <SearchList>
                                   {/* SearchBox 반복 */}
-                                  {placeList.map((item) => {
-                                    return (
-                                      <PlaceList
-                                        key={item.id}
-                                        item={item}
-                                        target={() => placeTarget(item)}
-                                        clicked={() => onSubBarClick(true)}
-                                      />
-                                    );
-                                  })}
+                                  {/* 검색된 후에는 api 데이터 보여주고 그전엔 업체데이터 보여주기 */}
+                                  { placeList.length == 0 ? (
+                                    affiliate.map((item) => {
+                                      return (
+                                        <PlaceList 
+                                          key={item.id}
+                                          item={item}
+                                          target={()=>placeTarget(item)} 
+                                          clicked={()=>onSubBarClick(true)} 
+                                        />
+                                      );
+                                    })
+                                  ) : (
+                                    placeList.map((item) => {
+                                      return (
+                                        <PlaceList 
+                                          key={item.id}
+                                          item={item}
+                                          target={()=>placeTarget(item)} 
+                                          clicked={()=>onSubBarClick(true)} 
+                                        />
+                                      );
+                                    })
+                                  ) }
                                 </SearchList>
                               </SearchBoxWrap>
                               {/* 페이지네이션 컴포넌트 */}
@@ -247,7 +262,7 @@ function OderMain() {
                       // 나중에 가게 상품 정보도 넘겨줌
                       showStore ? (
                         <>
-                          <StoreMenu place={place} outStore={handleShowStore} />
+                          <StoreMenu place={place} prodList={prodList} compCateList={compCateList} outStore={handleShowStore} />
                           {/* 메뉴 */}
                           <IconButton
                             aria-label="cart"
