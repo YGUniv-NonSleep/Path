@@ -67,6 +67,9 @@ public class Company {
     @Column(name = "COM_CLOSE")
     private LocalTime close;
 
+    @Column(name = "COM_WAITTIME")
+    private int waitTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID")
     private Member member;
@@ -75,7 +78,7 @@ public class Company {
     }
 
     @Builder(builderMethodName = "createCompany")
-    public Company(Long id, LocalTime open, LocalTime close, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, double latitude, double longitude, Member member, String thumbnail, String addr, String addrDetail) {
+    public Company(Long id, LocalTime open, LocalTime close, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, double latitude, double longitude, Member member, String thumbnail, String addr, String addrDetail, int waitTime) {
         this.id = id;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
@@ -91,7 +94,7 @@ public class Company {
         this.open = open;
         this.close = close;
         this.member = member;
-
+        this.waitTime = waitTime;
     }
 
     public void delete() {
@@ -109,6 +112,7 @@ public class Company {
         this.open = null;
         this.close = null;
         this.member = null;
+        this.waitTime = 0;
     }
 
 }

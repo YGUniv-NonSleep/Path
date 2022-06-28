@@ -88,7 +88,7 @@ public class TmapService {
         String jsonMobilPath = walkPath(mobilityDto.getLongitude(), mobilityDto.getLatitude(), ex, ey, 15);
         WalkPathDto mobilPathDto = mapper.readValue(jsonMobilPath, WalkPathDto.class);
         List<Double[]> lastGraphPos = new ArrayList<>();
-        addGraphPos(mapper, lastGraphPos, walkPathDto);
+        addGraphPos(mapper, lastGraphPos, mobilPathDto);
         int mobilTimeSec = mobilPathDto.getFeatures().get(0).getProperties().getTotalTime();
         int mobilTimeMin = changeTimeSecToMin(mobilTimeSec);
         int payment = unlockFee + (mobilTimeMin * minuteFee);

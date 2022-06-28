@@ -1,40 +1,162 @@
 import { useParams, Link, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import useLoading from '../../../hooks/useLoading';
-import useCompManageMain from './hooks/useCompManageMain';
+import useLoading from "../../../hooks/useLoading";
+import useCompManageMain from "./hooks/useCompManageMain";
 
-const CompManageCon = styled.div`
-    width: 390px;
-    height: 100%;
-`;
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
 
-const CompManageSubCon = styled.div`
-    margin-left: 130px;
-`;
+const pages = ['상품 목록', '업체 수정', '업체 탈퇴'];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function CompManageMain() {
-    const { loading } = useLoading();
-    const { comId } = useParams();
-    const {  } = useCompManageMain();
+  const { loading } = useLoading();
+  const { comId } = useParams();
+  const {} = useCompManageMain();
 
-    return (
-        <CompManageCon>
-            <CompManageSubCon>
-                { loading ? <p>상품 관리 도화지</p> : <h2>로드 중...</h2> }
-                <div>여기서 관리를 시작하세요!</div>
-                <Link to="items"><button>상품 목록</button></Link>
-                <Link to="compEdit"><button>업체정보 수정</button></Link>
-                <Link to="resign"><button>업체 탈퇴</button></Link>
-                <Outlet context={comId}></Outlet>
-            </CompManageSubCon>
-        </CompManageCon>
-    )
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  return (
+    <AppBar position="static" style={
+        {marginLeft:'95px'}
+    }>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            회사이름
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
+              <Button
+                key={page}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page}
+              </Button>
+            ))}
+          </Box>
+
+
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
 }
 
 CompManageMain.propTypes = {
-    // ex) prop: PropTypes.type.isRequired,
-    loading: PropTypes.bool.isRequired,
+  // ex) prop: PropTypes.type.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
-export default CompManageMain
+export default CompManageMain;
+
+
+        {/* <Link to="items">
+          <button>상품 목록</button>
+        </Link>
+        <Link to="compEdit">
+          <button>업체정보 수정</button>
+        </Link>
+        <Link to="resign">
+          <button>업체 탈퇴</button>
+        </Link>
+        <Outlet context={comId}></Outlet> */}
