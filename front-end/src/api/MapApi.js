@@ -2,9 +2,9 @@ function MapApi() {
   function createMap(latLng) {
     const mapContainer = document.getElementById('map'); // 지도 표시 div 탐색
 
-    if(latLng == null || latLng == undefined)
+    if (latLng == null || latLng == undefined)
       latLng = new kakao.maps.LatLng(37.56682420267543, 126.978652258823);
-    
+
     let mapOption = {
       center: latLng, // 지도의 중심좌표
       level: 3, // 지도 확대 레벨
@@ -17,25 +17,28 @@ function MapApi() {
   }
 
   function setCurrentLocation() {
-    // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
+    // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
     if (navigator.geolocation) {
       // 정확도 옵션을 사용해도 geolocation의 한계 때문에 정확하지 않다
       const options = {
         enableHighAccuracy: true,
         maximumAge: 0,
-        timeout: 10000
-      }
+        timeout: 10000,
+      };
 
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-      return new Promise((res, rej)=>{
-        navigator.geolocation.getCurrentPosition(res, rej, options)
+      return new Promise((res, rej) => {
+        navigator.geolocation.getCurrentPosition(res, rej, options);
       });
-    
-    } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-      alert('geolocation을 사용할수 없어요..')
+    } else {
+      // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+      alert('geolocation을 사용할수 없어요..');
       // geolocation 사용할 수 없을 때 기본 설정된 좌표 값
-      const locPosition = new kakao.maps.LatLng(37.56682420267543, 126.978652258823);
-      return locPosition
+      const locPosition = new kakao.maps.LatLng(
+        37.56682420267543,
+        126.978652258823
+      );
+      return locPosition;
     }
   }
 
@@ -48,14 +51,13 @@ function MapApi() {
     }
     // console.log(bounds)
     // map.setBounds(bounds);
-    return bounds
+    return bounds;
   }
 
   async function keywordSearch(data, callback) {
-    if(!data.keyword.replace(/^\s+|\s+$/g, '')){
+    if (!data.keyword.replace(/^\s+|\s+$/g, '')) {
       alert('키워드를 입력해주세요!');
-      return false
-
+      return false;
     }
     // 장소 검색 객체를 생성합니다
     const ps = new kakao.maps.services.Places();
@@ -65,63 +67,62 @@ function MapApi() {
     let options = {
       size: 10, // 한 페이지에 보여질 갯수
       page: data.page, // 페이지 값 1~x
+    };
+
+    if (data.category != '') {
+      if (data.category == '대형마트') options.category_group_code = 'MT1';
+      if (data.category == '편의점') options.category_group_code = 'CS2';
+      if (data.category == '음식점') options.category_group_code = 'FD6';
+      if (data.category == '카페') options.category_group_code = 'CE7';
+      if (data.category == '병원') options.category_group_code = 'HP8';
+      if (data.category == '약국') options.category_group_code = 'PM9';
     }
 
-    if(data.category != "") {
-      if(data.category == "대형마트") options.category_group_code = "MT1"
-      if(data.category == "편의점") options.category_group_code = "CS2"
-      if(data.category == "음식점") options.category_group_code = "FD6"
-      if(data.category == "카페") options.category_group_code = "CE7"
-      if(data.category == "병원") options.category_group_code = "HP8"
-      if(data.category == "약국") options.category_group_code = "PM9"
+    if (data.userLoc != undefined && data.userLoc != null) {
+      (options.location = data.userLoc),
+        // options.y = data.userLoc.y,
+        (options.radius = 1000); // 1000당 1km
     }
 
-    if(data.userLoc != undefined && data.userLoc != null){
-      options.location = data.userLoc,
-      // options.y = data.userLoc.y,
-      options.radius = 1000 // 1000당 1km
-    }
-
-    if(data.sort == 'right'){
-      options.sort = "accuracy" // distance 또는 accuracy (기본값: accuracy)
-    } else if(data.sort == 'left') options.sort = "distance"
+    if (data.sort == 'right') {
+      options.sort = 'accuracy'; // distance 또는 accuracy (기본값: accuracy)
+    } else if (data.sort == 'left') options.sort = 'distance';
 
     return new Promise(() => {
-      ps.keywordSearch(data.keyword, callback, options)
+      ps.keywordSearch(data.keyword, callback, options);
     });
-
   }
 
   function categorySearch(data, map, callback) {
     // 장소 검색 객체를 생성합니다
     const ps = new kakao.maps.services.Places(map);
-    console.log(data)
-    let categoryGroupCode = "";
+    console.log(data);
+    let categoryGroupCode = '';
     let options = {
       size: 10, // 한 페이지에 보여질 갯수
       page: 1, // 페이지 값 1~x
-      useMapBounds:true,
-    }
-    
-    if(data.category != "") {
-      if(data.category == "대형마트") categoryGroupCode = "MT1"
-      if(data.category == "편의점") categoryGroupCode = "CS2"
-      if(data.category == "음식점") categoryGroupCode = "FD6"
-      if(data.category == "카페") categoryGroupCode = "CE7"
-      if(data.category == "병원") categoryGroupCode = "HP8"
-      if(data.category == "약국") categoryGroupCode = "PM9"
+      useMapBounds: true,
+    };
+
+    if (data.category != '') {
+      if (data.category == '대형마트') categoryGroupCode = 'MT1';
+      if (data.category == '편의점') categoryGroupCode = 'CS2';
+      if (data.category == '음식점') categoryGroupCode = 'FD6';
+      if (data.category == '카페') categoryGroupCode = 'CE7';
+      if (data.category == '병원') categoryGroupCode = 'HP8';
+      if (data.category == '약국') categoryGroupCode = 'PM9';
     } else return;
 
-    if(data.location != undefined && data.location != null){
-      options.location = data.location,
-      options.radius = 1000 // 1000당 1km
+    if (data.location != undefined && data.location != null) {
+      (options.location = data.location), (options.radius = 1000); // 1000당 1km
     }
 
-    if(data.sort == 'right'){
-      options.sort = "accuracy" // distance 또는 accuracy (기본값: accuracy)
-    } else if(data.sort == 'left') options.sort = "distance"
+    if (data.sort == 'right') {
+      options.sort = 'accuracy'; // distance 또는 accuracy (기본값: accuracy)
+    } else if (data.sort == 'left') options.sort = 'distance';
 
-    return new Promise(() => { // options
+    return new Promise(() => {
+      // options
       ps.categorySearch(categoryGroupCode, callback, options);
     });
   }
@@ -190,34 +191,33 @@ function MapApi() {
   //     return latlng
   // }
 
-
   async function currentLocMarker(data) {
     let imageSrc = '';
     let imageSize = new kakao.maps.Size(30, 32);
     let options = {
-      offset: new kakao.maps.Point(13, 30)
-    }
+      offset: new kakao.maps.Point(13, 30),
+    };
     let markerImage = null;
 
-    let ob = {                    // data.posY, data.posX
+    let ob = {
+      // data.posY, data.posX
       position: new kakao.maps.LatLng(data.posY, data.posX), // 마커 표시 위치
       clickable: true, // 마커 클릭 이벤트 설정 여부
       zIndex: 15,
+    };
+
+    if (data.image != '') {
+      imageSrc = data.image;
+      markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, options);
+      ob.image = markerImage;
     }
 
-    if(data.image != '') {
-      imageSrc = data.image
-      markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, options);
-      ob.image = markerImage
-    }
-    
     let marker = new kakao.maps.Marker(ob);
     return marker;
   }
 
   // 지도위 마커 표시해주는 함수
   function drawKakaoMarker(x, y) {
-
     let marker = new kakao.maps.Marker({
       // 마커 생성
       position: new kakao.maps.LatLng(y, x), // 마커 표시 위치
@@ -236,6 +236,17 @@ function MapApi() {
       strokeColor: '#FFAE00', // 선의 색깔입니다
       strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
       strokeStyle: 'solid', // 선의 스타일입니다
+    });
+    return polyline;
+  }
+
+  function drawKakaoMobilPolyLine(linePath) {
+    let polyline = new kakao.maps.Polyline({
+      path: linePath,
+      strokeWeight: 5, // 선의 두께 입니다
+      strokeColor: '#CC2EFA', // 선의 색깔입니다
+      strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+      strokeStyle: 'dash', // 선의 스타일입니다
     });
     return polyline;
   }
@@ -332,8 +343,8 @@ function MapApi() {
     createMap,
     getBoundary,
     setCurrentLocation,
-    keywordSearch, 
-    categorySearch, 
+    keywordSearch,
+    categorySearch,
     setController,
     getInfo, //getLatLng,
     currentLocMarker,
@@ -341,6 +352,7 @@ function MapApi() {
     drawKakaoPolyLine,
     drawKakaoBusPolyLine,
     drawKakaoWalkPolyLine,
+    drawKakaoMobilPolyLine,
   };
 }
 

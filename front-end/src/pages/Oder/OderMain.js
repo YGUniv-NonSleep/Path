@@ -1,7 +1,7 @@
-import Map from "../../components/Map";
-import PropTypes from "prop-types";
-import useLoading from "../../hooks/useLoading";
-import useOderMain from "./hooks/useOderMain";
+import Map from '../../components/Map';
+import PropTypes from 'prop-types';
+import useLoading from '../../hooks/useLoading';
+import useOderMain from './hooks/useOderMain';
 
 import {
   InputAdornment,
@@ -10,13 +10,13 @@ import {
   Pagination,
   ToggleButtonGroup,
   ToggleButton,
-  IconButton, 
-} from "@mui/material";
+  IconButton,
+} from '@mui/material';
 import Badge from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import SearchIcon from "@mui/icons-material/Search";
+import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   SideNav,
   NavLayout,
@@ -52,11 +52,11 @@ import {
   EntryCloseBtnSpan,
   WrapBarCloseBtn,
   BarCloseBtn,
-} from "./styles/oderStyle";
-import CategoryList from "./CategoryList";
+} from './styles/oderStyle';
+import CategoryList from './categoryList';
 import StoreInfo from './StoreInfo';
 import PlaceList from './PlaceList';
-import StoreMenu from "./StoreMenu";
+import StoreMenu from './StoreMenu';
 
 function OderMain() {
   const { loading } = useLoading();
@@ -72,10 +72,10 @@ function OderMain() {
     alignment,
     place,
     pagiObj,
-    showStore, 
-    handleShowStore, 
-    handleDialogOpen, 
-    handleDialogClose, 
+    showStore,
+    handleShowStore,
+    handleDialogOpen,
+    handleDialogClose,
     placeTarget,
     handleAlignment,
     keywordSetting,
@@ -105,7 +105,7 @@ function OderMain() {
                   sx={{ mt: 1 }}
                 >
                   <TextField
-                    sx={{ width: "340px" }}
+                    sx={{ width: '340px' }}
                     placeholder="장소, 상품 검색"
                     size="small"
                     id="store"
@@ -115,8 +115,8 @@ function OderMain() {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          {" "}
-                          <SearchIcon />{" "}
+                          {' '}
+                          <SearchIcon />{' '}
                         </InputAdornment>
                       ),
                     }}
@@ -142,7 +142,7 @@ function OderMain() {
                   <SearchPathSpace>
                     <PathView>
                       {searchPath != null ? (
-                        "여기에서 -> 저기로"
+                        '여기에서 -> 저기로'
                       ) : (
                         <SearchItemSub>
                           검색된 경로가 있을 경우 여기에 표시 됩니다.
@@ -164,7 +164,7 @@ function OderMain() {
                                       <FlickingCamera>
                                         {/* 정렬 기준 아이템 반복 */}
                                         {pagiObj == null ? (
-                                          "원클릭 오더"
+                                          '원클릭 오더'
                                         ) : (
                                           <ToggleButtonGroup
                                             value={alignment}
@@ -172,8 +172,8 @@ function OderMain() {
                                             onChange={handleAlignment}
                                             aria-label="text alignment"
                                             sx={{
-                                              flexDirection: "column",
-                                              width: "100%",
+                                              flexDirection: 'column',
+                                              width: '100%',
                                             }}
                                           >
                                             <ToggleButton
@@ -181,7 +181,7 @@ function OderMain() {
                                               aria-label="left aligned"
                                             >
                                               <ElectricBoltIcon
-                                                sx={{ marginRight: "5px" }}
+                                                sx={{ marginRight: '5px' }}
                                               />
                                               거리순
                                             </ToggleButton>
@@ -190,7 +190,7 @@ function OderMain() {
                                               aria-label="right aligned"
                                             >
                                               <TaskAltIcon
-                                                sx={{ marginRight: "5px" }}
+                                                sx={{ marginRight: '5px' }}
                                               />
                                               정확순
                                             </ToggleButton>
@@ -207,11 +207,11 @@ function OderMain() {
                                   {/* SearchBox 반복 */}
                                   {placeList.map((item) => {
                                     return (
-                                      <PlaceList 
+                                      <PlaceList
                                         key={item.id}
-                                        item={item} 
-                                        target={()=>placeTarget(item)} 
-                                        clicked={()=>onSubBarClick(true)} 
+                                        item={item}
+                                        target={() => placeTarget(item)}
+                                        clicked={() => onSubBarClick(true)}
                                       />
                                     );
                                   })}
@@ -227,7 +227,7 @@ function OderMain() {
                                     count={pagiObj.last}
                                     size="small"
                                     sx={{
-                                      margin: "0 120px",
+                                      margin: '0 120px',
                                     }}
                                   />
                                 </SearchBoxPagination>
@@ -244,25 +244,32 @@ function OderMain() {
                   <EntryLayout>
                     {/* 서브바 컨텐츠 */}
                     {place != null ? (
-                                  // 나중에 가게 상품 정보도 넘겨줌
+                      // 나중에 가게 상품 정보도 넘겨줌
                       showStore ? (
                         <>
                           <StoreMenu place={place} outStore={handleShowStore} />
                           {/* 메뉴 */}
-
-                          <IconButton 
-                            aria-label="cart" 
-                            sx={{ zIndex: '100', position: 'absolute', left: '300px;', top: '870px;' }}
-                            onClick={()=>alert("cart")}
+                          <IconButton
+                            aria-label="cart"
+                            sx={{
+                              zIndex: '100',
+                              position: 'absolute',
+                              left: '300px;',
+                              top: '870px;',
+                            }}
+                            onClick={() => alert('cart')}
                           >
                             <Badge badgeContent={4} color="warning">
-                              <ShoppingCartIcon sx={{width:'42px', height: '42px'}} />
+                              <ShoppingCartIcon
+                                sx={{ width: '42px', height: '42px' }}
+                              />
                             </Badge>
                           </IconButton>
                           {/* 장바구니 */} {/* 리덕스 툴킷에 보관 예정 */}
                         </>
+                      ) : (
+                        <StoreInfo place={place} showStore={handleShowStore} />
                       )
-                      : <StoreInfo place={place} showStore={handleShowStore}/>
                     ) : null}
                     <EntryCloseBtn
                       onClick={() => onSubBarClick(false)}
