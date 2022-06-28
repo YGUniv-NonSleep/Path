@@ -280,6 +280,8 @@ public class ProductService {
         }
         productList.stream().map(ProductDTO::new).forEach(productDTOArrayList::add);
 
+        System.out.println("productList = " + productList);
+
         return Message.<List<ProductDTO>>builder()
                 .body(productDTOArrayList)
                 .header(StatusEnum.OK)

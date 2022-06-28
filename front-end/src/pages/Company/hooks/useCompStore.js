@@ -10,9 +10,9 @@ function useCompStore(){
   //== 모달 창 제어 ==//
   const [open, setOpen] = useState(false);
 
-  const handleOpen = (e) => {
+  const handleOpen = (idx) => {
     setOpen(true);
-    setStoreDetail(myStore[e.target.value])
+    setStoreDetail(myStore[idx])
   };
 
   const handleClose = () => {

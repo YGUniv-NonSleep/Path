@@ -21,19 +21,20 @@ public class InitCompanyService {
     public void dbInitCompany(){
 
         int temp = 0;
+
         for (int i = 1; i<=5 ; i++){
             for (int j = 0; j<=5 ; j++){
                 System.out.println("!!!"+i);
-                companyRepository.save(createCafe("company"+temp++, (long) i));
+                companyRepository.save(createCafe("company"+temp++, (long) i,(long)j) );
 
             }
         }
     }
-
-    public Company createCafe(String name, Long id){
+    int t = 0;
+    public Company createCafe(String name, Long id, Long coId){
         return Company.createCompany()
-                .longitude(123.0)
-                .latitude(123.0)
+                .longitude(35.89910941386297 + 0.001*t++ )
+                .latitude(128.62159611841497 + 0.001*t++ )
                 .thumbnail("blankImage")
                 .phone("010-0000-0000")
                 .name(name)

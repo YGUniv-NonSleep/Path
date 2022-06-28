@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import Map from "../../components/Map";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import useLoading from "../../hooks/useLoading";
 import useOderMain from "./hooks/useOderMain";
@@ -12,16 +10,15 @@ import {
   Pagination,
   ToggleButtonGroup,
   ToggleButton,
-  Button
+  IconButton, 
 } from "@mui/material";
+import Badge from '@mui/material/Badge';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import SearchIcon from "@mui/icons-material/Search";
-import PhoneIcon from '@mui/icons-material/Phone';
-import MyLocationIcon from '@mui/icons-material/MyLocation';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {
-  EmphasizeRedText, 
   SideNav,
-  PlusSectionIcon, 
   NavLayout,
   PanelWrap,
   PanelBase,
@@ -45,42 +42,21 @@ import {
   SortBoxSpace,
   FlickingViewport,
   FlickingCamera,
-  FilterItem,
   SearchBoxWrap,
-  SearchBox,
   SearchList,
-  SearchItem,
-  SearchItemInfo,
-  SearchItemTitle,
-  ItemBlueText,
-  ItemCategoryText,
   SearchItemSub,
   SearchBoxPagination,
   SubNav,
   EntryLayout,
-  EntryPlaceBridge,
   EntryCloseBtn,
   EntryCloseBtnSpan,
   WrapBarCloseBtn,
   BarCloseBtn,
-  PlaceDataImageArea,
-  ImageArea,
-  PlaceDataArea,
-  PlaceData,
-  PlaceDataTitle,
-  PlaceDataTitleName,
-  PlaceDataTitleCate,
-  PlaceDataPlus,
-  PlaceDataPlusSection,
-  PlusSectionUl,
-  PlusSectionLi,
-  PlusSection,
-  PlusSectionContent,
 } from "./styles/oderStyle";
-import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import CategoryList from "./categoryList";
-import { Fragment } from "react";
+import CategoryList from "./CategoryList";
+import StoreInfo from './StoreInfo';
+import PlaceList from './PlaceList';
+import StoreMenu from "./StoreMenu";
 
 function OderMain() {
   const { loading } = useLoading();
@@ -96,13 +72,14 @@ function OderMain() {
     alignment,
     place,
     pagiObj,
+    showStore, 
+    handleShowStore, 
+    handleDialogOpen, 
+    handleDialogClose, 
     placeTarget,
-    sortSearch,
     handleAlignment,
     keywordSetting,
     pageSetting,
-    keywordSubmit,
-    categorySubmit,
     handleChange,
     onCloseToggle,
     onSubBarClick,
@@ -153,7 +130,7 @@ function OderMain() {
                     {/* 보이는 카테고리 */}
                     <BubbleFilterList>
                       {/* 카테고리 리스트 */}
-                      <CategoryList clicked={handleChange}></CategoryList>
+                      <CategoryList clicked={handleChange} />
                     </BubbleFilterList>
                   </BubbleFilterArea>
                 </BubbleFilterListWrap>
@@ -230,40 +207,12 @@ function OderMain() {
                                   {/* SearchBox 반복 */}
                                   {placeList.map((item) => {
                                     return (
-                                      <SearchItem
-                                        onClick={() => placeTarget(item)}
+                                      <PlaceList 
                                         key={item.id}
-                                      >
-                                        <SearchItemInfo
-                                          onClick={() => onSubBarClick(true)}
-                                        >
-                                          {/* 타이틀 */}
-                                          <SearchItemTitle>
-                                            <ItemBlueText>
-                                              {item.place_name}
-                                            </ItemBlueText>
-                                            <ItemCategoryText>
-                                              {item.category_group_name}
-                                            </ItemCategoryText>
-                                          </SearchItemTitle>
-                                          {/* 서브타이틀 */}
-                                          <SearchItemSub>
-                                            {item.address_name}
-                                          </SearchItemSub>
-                                          {item.distance != '' ? (
-                                            <SearchItemSub>
-                                              현재 위치로부터
-                                              <EmphasizeRedText>
-                                                {item.distance}m
-                                              </EmphasizeRedText>
-                                            </SearchItemSub>
-                                          ) : (
-                                            <SearchItemSub>
-                                              위치 정보가 있어야 표시됩니다.
-                                            </SearchItemSub>
-                                          )}
-                                        </SearchItemInfo>
-                                      </SearchItem>
+                                        item={item} 
+                                        target={()=>placeTarget(item)} 
+                                        clicked={()=>onSubBarClick(true)} 
+                                      />
                                     );
                                   })}
                                 </SearchList>
@@ -295,76 +244,25 @@ function OderMain() {
                   <EntryLayout>
                     {/* 서브바 컨텐츠 */}
                     {place != null ? (
-                      <EntryPlaceBridge>
-                        {/* 이미지 받을 공간 */}
-                        <PlaceDataImageArea>
-                          <ImageArea>
-                            <img src={process.env.PUBLIC_URL + "/noImage.png"} />
-                          </ImageArea>
-                        </PlaceDataImageArea>
-                        {/* 상세 내용 추가 */}
-                        <PlaceDataArea>
-                          <PlaceData>
-                            <PlaceDataTitle>
-                              <PlaceDataTitleName>
-                                {place.place_name}
-                              </PlaceDataTitleName>
-                              <PlaceDataTitleCate>
-                                {place.category_group_name}
-                              </PlaceDataTitleCate>
-                            </PlaceDataTitle>
-                            {/* 여러가지 추가적인 상세 정보들 */}
-                            <PlaceDataPlus>
-                              <PlaceDataPlusSection>
-                                <PlusSectionUl>
-                                  {/* 반복 */}
-                                  <PlusSectionLi>
-                                    <PlusSection>
-                                      <PlusSectionContent>
-                                        <PhoneIcon sx={{float: "left", margin: "6px 10px 0 0"}} />
-                                        {place.phone != '' ? place.phone : '전화번호 정보 없음' }
-                                      </PlusSectionContent>
-                                    </PlusSection>
-                                  </PlusSectionLi>
-                                  <PlusSectionLi>
-                                    <PlusSection>
-                                      <PlusSectionContent>
-                                        <MyLocationIcon sx={{float: "left", margin: "6px 10px 0 0"}} />
-                                        {place.distance != '' ? (
-                                          <Fragment>
-                                            현재 위치로부터
-                                            <EmphasizeRedText>
-                                              {place.distance}m
-                                            </EmphasizeRedText>
-                                          </Fragment>
-                                        ) : '현재 위치로 부터의 거리 정보 없음'}
-                                      </PlusSectionContent>
-                                    </PlusSection>
-                                  </PlusSectionLi>
-                                  <PlusSectionLi>
-                                    <PlusSection>
-                                      <PlusSectionContent>
-                                        <LocationOnIcon sx={{float: "left", margin: "6px 10px 0 0"}} />
-                                        {place.address_name}
-                                      </PlusSectionContent>
-                                    </PlusSection>
-                                  </PlusSectionLi>
-                                  {/* 제휴 업체만 버튼 보이기 */}
-                                  {/* <PlusSectionLi>
-                                    <PlusSection>
-                                      <PlusSectionContent>
-                                      <Button variant="contained" component="span" color="info">
-                                        주문 하기
-                                      </Button>
-                                      </PlusSectionContent>
-                                    </PlusSection>
-                                  </PlusSectionLi> */}
-                                </PlusSectionUl>
-                              </PlaceDataPlusSection>
-                            </PlaceDataPlus>
-                          </PlaceData>
-                        </PlaceDataArea>
-                      </EntryPlaceBridge>
+                                  // 나중에 가게 상품 정보도 넘겨줌
+                      showStore ? (
+                        <>
+                          <StoreMenu place={place} outStore={handleShowStore} />
+                          {/* 메뉴 */}
+
+                          <IconButton 
+                            aria-label="cart" 
+                            sx={{ zIndex: '100', position: 'absolute', left: '300px;', top: '870px;' }}
+                            onClick={()=>alert("cart")}
+                          >
+                            <Badge badgeContent={4} color="warning">
+                              <ShoppingCartIcon sx={{width:'42px', height: '42px'}} />
+                            </Badge>
+                          </IconButton>
+                          {/* 장바구니 */} {/* 리덕스 툴킷에 보관 예정 */}
+                        </>
+                      )
+                      : <StoreInfo place={place} showStore={handleShowStore}/>
                     ) : null}
                     <EntryCloseBtn
                       onClick={() => onSubBarClick(false)}

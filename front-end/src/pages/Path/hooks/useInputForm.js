@@ -281,6 +281,7 @@ function useInputForm() {
       pathList[idx].startPos.x,
       pathList[idx].startPos.y
     );
+
     sp.setMap(map);
     setMarkerData((current) => [...current, sp]);
 
