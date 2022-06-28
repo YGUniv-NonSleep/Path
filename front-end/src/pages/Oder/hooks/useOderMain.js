@@ -351,10 +351,10 @@ function useOderMain() {
 
   useEffect(() => {
     if(place != null) {
-      if(place.member != undefined) getCompProd(place);
-      else return 
-
-    } else return
+      // console.log(place.member) 
+      if(place.member != undefined) 
+        getCompProd(place);
+    }
   }, [place]);
 
   function categoryExtractor(place) {
@@ -380,9 +380,9 @@ function useOderMain() {
   }, [prodList])
 
   return {
-    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodList, compCateList, 
-    pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, setCount, 
-    handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
+    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, 
+    prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, 
+    setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
     sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, 
     handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, 
   };

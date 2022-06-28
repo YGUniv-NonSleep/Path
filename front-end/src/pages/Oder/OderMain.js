@@ -74,6 +74,8 @@ function OderMain() {
     place,
     pagiObj,
     showStore, 
+    prodList, 
+    compCateList, 
     handleShowStore, 
     placeTarget,
     handleAlignment,
@@ -260,7 +262,7 @@ function OderMain() {
                       // 나중에 가게 상품 정보도 넘겨줌
                       showStore ? (
                         <>
-                          <StoreMenu place={place} outStore={handleShowStore} />
+                          <StoreMenu place={place} prodList={prodList} compCateList={compCateList} outStore={handleShowStore} />
                           {/* 메뉴 */}
 
                           <IconButton 
