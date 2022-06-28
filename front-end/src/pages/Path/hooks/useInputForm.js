@@ -25,7 +25,8 @@ function useInputForm() {
   const [polyLineData, setPolyLineData] = useState([]); // 이동수단 경로 그래픽 데이터
   const [firstWalkLineData, setFirstWalkLineData] = useState([]); // 처음 도보 경로 그래픽 데이터
   const [firstMobilLineData, setFirstMobilLineData] = useState([]); // 처음 모빌리티 경로 그래픽 데이터
-  const [lastWalkLineData, setLastWalkLineData] = useState([]); // 도보 경로 그래픽 데이터
+  const [lastWalkLineData, setLastWalkLineData] = useState([]); // 마지막 도보 경로 그래픽 데이터
+  const [lastMobilLineData, setLastMobilLineData] = useState([]); // 마지막 모빌리티 경로 그래픽 데이터
   const [markerData, setMarkerData] = useState([]); // 마커 그래픽 데이터
   const [currentListNum, setCurrentListNum] = useState(''); // 현재 경로 리스트 중 선택한 번호
   const [markerMobil, setMarkerMobil] = useState([]);
@@ -36,9 +37,15 @@ function useInputForm() {
   const [timer, setTimer] = useState(null); // 사용자 입력후 시간을 주기위한 타이머
   const { firstMobilOpen, lastMobilOpen } = mobilOpen;
   const [firstMobilClick, setFirstMobilClick] = useState({
+    // 첫 퍼스널 모빌리티 클릭 여부
     click: false,
     marker: null,
-  }); // 퍼스널 모빌리티를 클릭했는가?
+  });
+  const [lastMobilClick, setLastMobilClick] = useState({
+    // 마지막 퍼스널 모빌리티 클릭 여부
+    click: false,
+    marker: null,
+  });
 
   // 카카오 지도를 불러오는 함수
   // MapApi 기능들 전부 함수화 시키기 호출할 때마다 필요 없는 것도 많이 호출 함.
@@ -356,15 +363,17 @@ function useInputForm() {
     }
     setFirstWalkLineData([]);
     setFirstMobilLineData([]);
-    console.log('============');
-    console.log(firstWalkLineData);
   }
 
   function removeLastWalkGraphics() {
-    lastWalkLineData[0].setMap(null);
+    for (let i = 0; i < lastWalkLineData.length; i++) {
+      lastWalkLineData[i].setMap(null);
+    }
+    for (let i = 0; i < lastMobilLineData.length; i++) {
+      lastMobilLineData[i].setMap(null);
+    }
     setLastWalkLineData([]);
-    console.log('=======라스트워크====');
-    console.log(lastWalkLineData);
+    setLastMobilLineData([]);
   }
 
   // 보행자 경로 검색해서 지도에 그리기
@@ -443,16 +452,23 @@ function useInputForm() {
 
   const handleMobilOpen = (select) => {
     if (select == 'first')
-      setMobilOpen({ ...mobilOpen, firstMobilOpen: !firstMobilOpen });
-    else setMobilOpen({ ...mobilOpen, lastMobilOpen: !lastMobilOpen });
+      setMobilOpen((prev) => {
+        return { ...prev, firstMobilOpen: !firstMobilOpen };
+      });
+    else
+      setMobilOpen((prev) => {
+        return { ...prev, lastMobilOpen: !lastMobilOpen };
+      });
   };
+  console.log(mobilOpen);
 
-  const removeMarkerMobil = async (marker) => {
-    markerMobil.map((m) => {
-      if (marker !== m) {
-        m.setMap(null);
+  const removeMarkerMobil = async (firstMarker, lastMarker) => {
+    const markerList = markerMobil.filter((m) => {
+      if (firstMarker !== m && lastMarker !== m) {
+        return m;
       }
     });
+    markerList.map((m) => m.setMap(null));
   };
 
   const firstPersonalMobility = async () => {
@@ -510,6 +526,74 @@ function useInputForm() {
         marker,
         'click',
         makeClickListener(
+          'first',
+          responseMobil.data.body[i].id,
+          marker,
+          normalImage,
+          clickImage
+        )
+      );
+      setMarkerMobil((prev) => [...prev, marker]);
+    }
+  };
+  console.log(pathList);
+
+  const lastPersonalMobility = async () => {
+    if (currentListNum == '') setCurrentListNum('0');
+    console.log(markerMobil);
+    removeLastWalkGraphics();
+    handleMobilOpen('last');
+
+    // 출발지점에서 500m내 퍼스널 모빌리티 위치 찾기
+    const x = pathList[currentListNum].endStation.x; // 마지막 정류장
+    const y = pathList[currentListNum].endStation.y; // 마지막 정류장
+    const responseMobil = await getMobilities('ALL', x, y);
+
+    console.log(responseMobil.data.body);
+    const overImage = new kakao.maps.MarkerImage(
+      scooter,
+      new kakao.maps.Size(29, 40)
+    );
+    const normalImage = new kakao.maps.MarkerImage(
+      scooter,
+      new kakao.maps.Size(24, 35)
+    );
+    const clickImage = new kakao.maps.MarkerImage(
+      clickScooter,
+      new kakao.maps.Size(29, 40)
+    );
+
+    for (var i = 0; i < responseMobil.data.body.length; i++) {
+      var marker = new kakao.maps.Marker({
+        map: map,
+        position: new kakao.maps.LatLng(
+          responseMobil.data.body[i].latitude,
+          responseMobil.data.body[i].longitude
+        ),
+        image: normalImage,
+      });
+      var infowindow = new kakao.maps.InfoWindow({
+        content: `<br><div>모빌리티 : ${responseMobil.data.body[i].id}번</div>
+                  <div>타입 : ${responseMobil.data.body[i].type}</div><br> `,
+      });
+
+      kakao.maps.event.addListener(
+        marker,
+        'mouseover',
+        makeOverListener(map, marker, infowindow, overImage)
+      );
+
+      kakao.maps.event.addListener(
+        marker,
+        'mouseout',
+        makeOutListener(marker, infowindow, normalImage)
+      );
+
+      kakao.maps.event.addListener(
+        marker,
+        'click',
+        makeClickListener(
+          'last',
           responseMobil.data.body[i].id,
           marker,
           normalImage,
@@ -534,18 +618,21 @@ function useInputForm() {
     };
   };
 
-  const makeClickListener = (id, marker, normalImage, clickImage) => {
+  const makeClickListener = (select, id, marker, normalImage, clickImage) => {
     return () => {
-      setFirstMobilClick({ click: true, marker: marker });
+      if (select === 'first')
+        setFirstMobilClick({ click: true, marker: marker });
+      else setLastMobilClick({ click: true, marker: marker });
       marker.setImage(clickImage);
-      usePersonalMobility(id, 'first');
+      usePersonalMobility(id, select);
+      handleMobilOpen(select);
     };
   };
 
   // 퍼스널 모빌리티 경로 조회 및 그리기
   const usePersonalMobility = (id, select) => {
+    // 처음에 타기
     if (select == 'first') {
-      // 처음에 타기
       createWalkMobilPath(
         'first',
         pathList[currentListNum].startPos.x,
@@ -554,12 +641,20 @@ function useInputForm() {
         pathList[currentListNum].startStation.y,
         id
       );
-    } else if (select == 'last') {
-      // 마지막에만 타기
+    }
+    // 마지막에만 타기
+    else {
+      createWalkMobilPath(
+        'last',
+        pathList[currentListNum].endStation.x,
+        pathList[currentListNum].endStation.y,
+        pathList[currentListNum].endPos.x,
+        pathList[currentListNum].endPos.y,
+        id
+      );
     }
   };
 
-  const [mobilities, setMobilities] = useState([]);
   // 도보를 퍼스널모빌리티 타는 경로 조회 및 그리기
   const createWalkMobilPath = async (
     select,
@@ -614,10 +709,11 @@ function useInputForm() {
       console.log('first 에 저장시작함');
       setFirstWalkLineData([walkResult]);
       setFirstMobilLineData([mobilResult]);
-    } else setLastWalkLineData([walkResult, mobilResult]);
+    } else {
+      setLastWalkLineData([walkResult]);
+      setLastMobilLineData([mobilResult]);
+    }
   };
-  console.log(firstWalkLineData);
-  console.log(lastWalkLineData);
 
   // x,y 좌표값 약 500m 내 퍼스널 모빌리티 조회
   const getMobilities = async (type, x, y) => {
@@ -680,9 +776,19 @@ function useInputForm() {
   // 퍼스널 모빌리티를 클릭했다면 나머지 마커 삭제
   useEffect(() => {
     if (firstMobilClick.click == true) {
-      removeMarkerMobil(firstMobilClick.marker);
+      removeMarkerMobil(firstMobilClick.marker, null);
+      setFirstMobilClick((prev) => {
+        return { ...prev, click: false };
+      });
+      handleMobilOpen('last');
     }
-  }, [firstMobilClick]);
+    if (lastMobilClick.click == true) {
+      removeMarkerMobil(firstMobilClick.marker, lastMobilClick.marker);
+      setLastMobilClick((prev) => {
+        return { ...prev, click: false };
+      });
+    }
+  }, [firstMobilClick, lastMobilClick]);
 
   return {
     map,
@@ -721,6 +827,7 @@ function useInputForm() {
     mobilOpen,
     handleMobilOpen,
     firstPersonalMobility,
+    lastPersonalMobility,
   };
 }
 
