@@ -17,6 +17,7 @@ function useOderMain() {
   const [placeList, setPlaceList] = useState([]);
   const [prodList, setProdList] = useState([]);
   const [compCateList, setCompCateList] = useState(null);
+  const [prodInfo, setProdInfo] = useState(null);
   const [place, setPlace] = useState(null);
   const [pagiObj, setPagiObj] = useState(null);
   const [page, setPage] = useState(0);
@@ -27,8 +28,17 @@ function useOderMain() {
   const [uLocMarker, setULocMarker] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [count, setCount] = useState(1);
-  
-  const handleDialogOpen = () => {
+
+  const [optionPrice, setOptionPrice] = useState(0);
+
+  const calculOpt = (e) => {
+    console.log(e.target.name)
+    console.log(e.target.value)
+  }
+
+  const handleDialogOpen = (pInfo) => {
+    // console.log(pInfo)
+    setProdInfo(pInfo)
     setDialogOpen(true);
   };
 
@@ -380,10 +390,10 @@ function useOderMain() {
   }, [prodList])
 
   return {
-    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, 
+    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodInfo, optionPrice, 
     prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, 
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
-    sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, 
+    sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, calculOpt, 
     handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, 
   };
 }
