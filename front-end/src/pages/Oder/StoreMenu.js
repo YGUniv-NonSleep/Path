@@ -71,22 +71,24 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
     return list
   }
 
-  function test() {
+  function test(list, keyGetter) {
     let sameCateMenu = new Map();
 
-    for (var i = 0; i < prodList.length; i++) {
-      // prodList[i].prodBasic.category
-      sameCateMenu.set(prodList, `${prodList[i].prodBasic.category}`)
-    }
-    // console.log(sameCateMenu)
-    // console.log(sameCateMenu.get(prodList))
-    for (let prodList of sameCateMenu.keys()) {
-      prodList.map((item)=>{
-        console.log(item.prodBasic)
-      })
-    }
+    list.forEach((item) => {
+      const key = keyGetter(item);
+      const collection = sameCateMenu.get(key);
+      if (!collection) {
+        sameCateMenu.set(key, [item]);
+      } else {
+          collection.push(item);
+      }
+    });
+    console.log(sameCateMenu.keys())
+    console.log(sameCateMenu.values())
+    // console.log(sameCateMenu.entries())
+    // return sameCateMenu;
   }
-  test()
+  test(prodList, prod => prod.prodBasic.category)
 
   function menu() {
     let list = [];
@@ -299,7 +301,6 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
         </StoreInfo>
 
         {/* 카테고리별 상품 */}
-        {/* {cate()} */}
         { compCateList != null ? 
           compCateList.map((item)=>{
             return (

@@ -53,7 +53,7 @@ import {
   WrapBarCloseBtn,
   BarCloseBtn,
 } from './styles/oderStyle';
-import CategoryList from './categoryList';
+import CategoryList from './CategoryList';
 import StoreInfo from './StoreInfo';
 import PlaceList from './PlaceList';
 import StoreMenu from './StoreMenu';
