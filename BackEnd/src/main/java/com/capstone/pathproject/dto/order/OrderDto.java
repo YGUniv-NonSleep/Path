@@ -16,7 +16,7 @@ public class OrderDto {
     private Long memberId;
 
     @Builder(builderMethodName = "createOrderDto")
-    public OrderDto(Long id, int price, OrderState state, Long memberId){
+    public OrderDto(Long id, int price, OrderState state, Long memberId, int waitTime){
         this.id = id;
         this.memberId = memberId;
         this.price = price;

@@ -75,8 +75,17 @@ public class InitProductService {
     }
 
     public ProdBasic createProdBasic(Long name) {
+
+        String category = null;
+        switch ((int) (name%10)){
+            case 1: case 2: case 3: category = "커피"; break;
+            case 4: case 5: case 6: category = "과자"; break;
+            case 7: case 8: case 9: category = "한식"; break;
+            default: category="중식";
+        }
+
         return ProdBasic.createProdBasic()
-                .category("커피")
+                .category(category)
                 .image("blankImage")
                 .name("Product Basic" + name)
                 .detail("커피")
@@ -100,11 +109,15 @@ public class InitProductService {
     }
 
     public Product createProduct(String name, long compId, long prodBasicId) {
+
+        boolean exposure =true;
+        if (prodBasicId%2==0) exposure = false;
+
         return Product.createProduct()
                 .price((int) (1000*prodBasicId))
                 .stock(300)
                 .discount(10)
-                .exposure(true)
+                .exposure(   exposure  )
                 .prodBasic(prodBasicRepository.findById(prodBasicId).get())
                 .company(companyRepository.findById(compId).get())
                 .build();
