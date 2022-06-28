@@ -466,6 +466,8 @@ function useInputForm() {
     const markerList = markerMobil.filter((m) => {
       if (firstMarker !== m && lastMarker !== m) {
         return m;
+      } else {
+        m.setClickable(false);
       }
     });
     markerList.map((m) => m.setMap(null));
@@ -490,10 +492,6 @@ function useInputForm() {
     const normalImage = new kakao.maps.MarkerImage(
       scooter,
       new kakao.maps.Size(24, 35)
-    );
-    const clickImage = new kakao.maps.MarkerImage(
-      clickScooter,
-      new kakao.maps.Size(29, 40)
     );
 
     for (var i = 0; i < responseMobil.data.body.length; i++) {
@@ -525,13 +523,7 @@ function useInputForm() {
       kakao.maps.event.addListener(
         marker,
         'click',
-        makeClickListener(
-          'first',
-          responseMobil.data.body[i].id,
-          marker,
-          normalImage,
-          clickImage
-        )
+        makeClickListener('first', responseMobil.data.body[i].id, marker)
       );
       setMarkerMobil((prev) => [...prev, marker]);
     }
@@ -558,10 +550,6 @@ function useInputForm() {
       scooter,
       new kakao.maps.Size(24, 35)
     );
-    const clickImage = new kakao.maps.MarkerImage(
-      clickScooter,
-      new kakao.maps.Size(29, 40)
-    );
 
     for (var i = 0; i < responseMobil.data.body.length; i++) {
       var marker = new kakao.maps.Marker({
@@ -592,13 +580,7 @@ function useInputForm() {
       kakao.maps.event.addListener(
         marker,
         'click',
-        makeClickListener(
-          'last',
-          responseMobil.data.body[i].id,
-          marker,
-          normalImage,
-          clickImage
-        )
+        makeClickListener('last', responseMobil.data.body[i].id, marker)
       );
       setMarkerMobil((prev) => [...prev, marker]);
     }
@@ -618,12 +600,11 @@ function useInputForm() {
     };
   };
 
-  const makeClickListener = (select, id, marker, normalImage, clickImage) => {
+  const makeClickListener = (select, id, marker) => {
     return () => {
       if (select === 'first')
         setFirstMobilClick({ click: true, marker: marker });
       else setLastMobilClick({ click: true, marker: marker });
-      marker.setImage(clickImage);
       usePersonalMobility(id, select);
       handleMobilOpen(select);
     };
