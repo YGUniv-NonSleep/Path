@@ -40,16 +40,18 @@ public class CompanyDTO {
     private LocalTime open;
     private LocalTime close;
     private String thumbnail;
+    private int waitTime;
 
 
 
     @Builder
-    public CompanyDTO(Long id,LocalTime open, LocalTime close,String addr,String addrDetail, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, Double latitude, Double longitude, MemberDto member, String thumbnail) {
+    public CompanyDTO(Long id,LocalTime open, LocalTime close,String addr,String addrDetail, String name, String companyNumber, LocalDate openDate, CompCategory category, String mail, String phone, Double latitude, Double longitude, MemberDto member, String thumbnail,int waitTime) {
         this.id = id;
         this.name = name;
         this.companyNumber = companyNumber;
         this.openDate = openDate;
         this.category = category;
+        this.waitTime = waitTime;
         this.mail = mail;
         this.phone = phone;
         this.longitude = longitude;
@@ -80,6 +82,7 @@ public class CompanyDTO {
                 .addrDetail(addrDetail)
                 .open(open)
                 .close(close)
+                .waitTime(waitTime)
                 .build();
     }
 
@@ -99,6 +102,7 @@ public class CompanyDTO {
                 this.addrDetail=company.getAddrDetail();
                 this.open=company.getOpen();
                 this.close=company.getClose();
+                this.waitTime=company.getWaitTime();
     }
 
     public void addMember(MemberDto member){

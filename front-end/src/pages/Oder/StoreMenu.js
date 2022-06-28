@@ -48,33 +48,57 @@ import {
 import { Fragment } from "react";
 import useOderMain from "./hooks/useOderMain";
 
-function StoreMenu({ place, outStore }) {
+function StoreMenu({ place, prodList, compCateList, outStore }) {
   // console.log(place);
-  const { dialogOpen, count, setCount, handleDialogOpen, handleDialogClose } = useOderMain();
-
+  const { 
+    dialogOpen, count, setCount, handleDialogOpen, handleDialogClose, 
+  } = useOderMain();
 
   function sInfo() {
     let list = [];
-    let value = [`${'가게명'}`, `약 ${61}분`, `${1000}m`, '카드결제, 현장결제(카드/현금)'];
+    let value = [`${place.name != '' ? place.name : '업체명'}`, `약 ${'나중에 받을거임'}분`, `${'나중에 받으려나?'}m`, '카드결제, 현장결제(카드/현금)'];
     const title = ['가게이름', '대기시간', '가게위치', '결제방법'];
 
     for (var i = 0; i < 4; i++) {
-        list.push(
-            <div>
-              <StoreInfoItemKey>{title[i]}</StoreInfoItemKey>
-              <StoreInfoItemValue>{value[i]}</StoreInfoItemValue>
-            </div>
-        )
+      list.push(
+        <div>
+          <StoreInfoItemKey>{title[i]}</StoreInfoItemKey>
+          <StoreInfoItemValue>{value[i]}</StoreInfoItemValue>
+        </div>
+      )
     }
 
     return list
   }
 
+  function test() {
+    let sameCateMenu = new Map();
+
+    for (var i = 0; i < prodList.length; i++) {
+      // prodList[i].prodBasic.category
+      sameCateMenu.set(prodList, `${prodList[i].prodBasic.category}`)
+    }
+    // console.log(sameCateMenu)
+    // console.log(sameCateMenu.get(prodList))
+    for (let prodList of sameCateMenu.keys()) {
+      prodList.map((item)=>{
+        console.log(item.prodBasic)
+      })
+    }
+  }
+  test()
+
   function menu() {
     let list = [];
 
     // 메뉴 수 만큼 반복
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < prodList.length; i++) {
+      // 카테고리 겹치는것끼리 합치고
+      // console.log(prodList[i].prodBasic.category)
+
+      // 노출여부 확인해서 break;
+      // console.log(prodList[i].exposure)
+      
       list.push(
         <>
           <ListItemButton alignItems="flex-start" onClick={handleDialogOpen}>
@@ -117,42 +141,6 @@ function StoreMenu({ place, outStore }) {
           </ListItemButton>
           <Divider variant="inset" component="li" />
         </>
-      );
-    }
-
-    return list;
-  }
-
-  function cate() {
-    let list = [];
-
-    // 카테고리 수 만큼 반복
-    for (var i = 0; i < 3; i++) {
-      list.push(
-        <Accordion defaultExpanded={true} disableGutters={true}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography>카테고리 이름</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              {/* 메뉴 */}
-              <List
-                sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
-                }}
-              >
-                {menu()}
-              </List>
-            </Typography>
-          </AccordionDetails>
-          <Divider />
-        </Accordion>
       );
     }
 
@@ -249,9 +237,10 @@ function StoreMenu({ place, outStore }) {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
+                    fontWeight: 600
                   }}
                 >
-                  가게명
+                  {place.name != '' ? place.name : '업체명'}
                 </Typography>
                 <IconButton
                   aria-label="search"
@@ -284,8 +273,12 @@ function StoreMenu({ place, outStore }) {
                       }}
                     >
                       {/* 카테고리 수 만큼 반복 */}
-                      <Chip label="카테1" variant="filled" onClick={() => alert("카테1")} />
-                      <Chip label="카테2" variant="outlined" onClick={() => alert("카테2")} />
+                      { compCateList != null
+                        ? compCateList.map((item)=>{
+                          //console.log(item) // // variant='outlined'
+                          return <Chip label={`${item}`} variant="filled" onClick={() => alert(`${item}`)} />
+                        }) 
+                        : null }
                     </Stack>
                   </Tooltip>
                 </FlickingCamera>
@@ -304,8 +297,39 @@ function StoreMenu({ place, outStore }) {
           </StoreInfoTwo>
           <Divider />
         </StoreInfo>
+
         {/* 카테고리별 상품 */}
-        {cate()}
+        {/* {cate()} */}
+        { compCateList != null ? 
+          compCateList.map((item)=>{
+            return (
+              <Accordion defaultExpanded={true} disableGutters={true}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>{item}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    {/* 메뉴 */}
+                    <List
+                      sx={{
+                        width: "100%",
+                        maxWidth: 360,
+                        bgcolor: "background.paper",
+                      }}
+                    >
+                      { menu() }
+                    </List>
+                  </Typography>
+                </AccordionDetails>
+                <Divider />
+              </Accordion>
+            )
+          })
+         : null }
 
         <Typography
           variant={"body2"}
