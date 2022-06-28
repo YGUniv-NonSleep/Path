@@ -72,12 +72,12 @@ function PathMain() {
     mobilOpen,
     handleMobilOpen,
     firstPersonalMobility,
-    closeOverlay,
+    lastPersonalMobility,
   } = useInputForm();
   // console.log(pathList)
   // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
 
-  const SelectMobil = () => {
+  const FirstSelectMobil = () => {
     return (
       <Dialog
         open={mobilOpen.firstMobilOpen}
@@ -88,12 +88,41 @@ function PathMain() {
         <DialogTitle>{'퍼스널 모빌리티 탑승 여부'}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            첫 정류장까지 퍼스널 모빌리티를 타고 가시겠습니까?
+            출발지에서 첫 정류장까지 퍼스널 모빌리티를 타고 가시겠습니까?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleMobilOpen('first')}>취소</Button>
+          <Button
+            onClick={() => {
+              handleMobilOpen('first');
+              handleMobilOpen('last');
+            }}
+          >
+            취소
+          </Button>
           <Button onClick={firstPersonalMobility}>확인</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  const LastSelectMobil = () => {
+    return (
+      <Dialog
+        open={mobilOpen.lastMobilOpen}
+        onClose={() => handleMobilOpen('last')}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>{'퍼스널 모빌리티 탑승 여부'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            마지막 정류장에서 목적지까지 퍼스널 모빌리티를 타고 가시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleMobilOpen('last')}>취소</Button>
+          <Button onClick={lastPersonalMobility}>확인</Button>
         </DialogActions>
       </Dialog>
     );
@@ -190,7 +219,8 @@ function PathMain() {
                     mobilOpen={mobilOpen}
                     handleMobilOpen={handleMobilOpen}
                   ></PathList>
-                  <SelectMobil></SelectMobil>
+                  <FirstSelectMobil></FirstSelectMobil>
+                  <LastSelectMobil></LastSelectMobil>
                 </SearchResultList>
               </ScrollInner>
               {/* bookmark -> favorites 기능, 요약 정보 컴포넌트 */}
