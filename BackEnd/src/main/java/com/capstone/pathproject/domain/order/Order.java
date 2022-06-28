@@ -32,7 +32,7 @@ public class Order extends BaseTimeEntity {
 
     @Column(name = "ORDER_REQUEST")
     private String request;
-
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "ORDER_STATE")
     private OrderState state;
