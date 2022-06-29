@@ -36,7 +36,7 @@ import {
   Button,
 } from '@mui/material';
 
-function PathList({ list, click, mobilOpen, handleMobilOpen }) {
+function PathList({ list, click, handleMobilOpen }) {
   const transitSection = (item, idx) => {
     let transit = [];
     let section = item.routeSection.length;

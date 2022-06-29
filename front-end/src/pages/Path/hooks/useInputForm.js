@@ -21,6 +21,10 @@ function useInputForm() {
   const [insertPoint, setInsertPoint] = useState(''); // 입력에 반응하는 창 state
 
   const [pathList, setPathList] = useState([]); // 검색된 경로 정보들
+  const [isUpdatePathList, setIsUpdatePathList] = useState(false); // 경로 수정 여부
+  const [mobilityPrice, setMobilityPrice] = useState(0); // 퍼스널 모빌리티를 탄 가격
+  const [pathWalkTime, setPathWalkTime] = useState(0); // 현재 경로 도보 시간
+  const [pathMobilityTime, setPathMobilityTime] = useState(0); // 현재 경로 모빌리티 시간
   const [historyList, setHistoryList] = useState([]); // 최근 검색 기록
   const [polyLineData, setPolyLineData] = useState([]); // 이동수단 경로 그래픽 데이터
   const [firstWalkLineData, setFirstWalkLineData] = useState([]); // 처음 도보 경로 그래픽 데이터
@@ -264,81 +268,107 @@ function useInputForm() {
   }
 
   // 서버에서 받은 경로 그리기
-  async function pathDrawing(idx) {
-    setCurrentListNum(idx);
-    if (idx == undefined) idx = 0;
-    if (markerData.length != 0) removeMarkers();
-    if (polyLineData != '') removeGraphics();
-    if (firstWalkLineData.length != 0) removeFirstWalkGraphics();
-    if (lastWalkLineData.length != 0) removeLastWalkGraphics();
-    if (markerMobil.length != 0) removeMarkerMobil();
+  async function pathDrawing(idx, select) {
+    if (select !== 'update') {
+      const mobilPay = mobilityPrice;
+      setMobilityPrice(0);
+      const mobilTime = pathMobilityTime;
+      setPathMobilityTime(0);
+      const walkTime = pathWalkTime;
+      setPathWalkTime(0);
+      if (mobilPay === 0 || mobilTime === 0 || walkTime === 0) {
+        setCurrentListNum(idx);
+        if (idx == undefined) idx = 0;
+        if (markerData.length != 0) removeMarkers();
+        if (polyLineData != '') removeGraphics();
+        if (firstWalkLineData.length != 0) removeFirstWalkGraphics();
+        if (lastWalkLineData.length != 0) removeLastWalkGraphics();
+        if (markerMobil.length != 0) removeMarkerMobil();
 
-    // 나중에 pathList에서 출발지, 도착지 x, y 좌표 받아서 쓰기
-    const sp = await MapApi().drawKakaoMarker(
-      pathList[idx].startPos.x,
-      pathList[idx].startPos.y
-    );
+        // 나중에 pathList에서 출발지, 도착지 x, y 좌표 받아서 쓰기
+        const sp = await MapApi().drawKakaoMarker(
+          pathList[idx].startPos.x,
+          pathList[idx].startPos.y
+        );
 
-    sp.setMap(map);
-    setMarkerData((current) => [...current, sp]);
+        sp.setMap(map);
+        setMarkerData((current) => [...current, sp]);
 
-    const ap = await MapApi().drawKakaoMarker(
-      pathList[idx].endPos.x,
-      pathList[idx].endPos.y
-    );
-    ap.setMap(map);
-    setMarkerData((current) => [...current, ap]);
+        const ap = await MapApi().drawKakaoMarker(
+          pathList[idx].endPos.x,
+          pathList[idx].endPos.y
+        );
+        ap.setMap(map);
+        setMarkerData((current) => [...current, ap]);
 
-    // pathList 얻어와서 polyline을 그리는 단계
-    // 사용자의 입력(idx)에 따라 다른 polyline 드로잉
-    const dkpl = MapApi().drawKakaoPolyLine(
-      pathList[idx].routeGraphic.result.lane
-    );
-    // console.log(dkpl);
+        // pathList 얻어와서 polyline을 그리는 단계
+        // 사용자의 입력(idx)에 따라 다른 polyline 드로잉
+        const dkpl = MapApi().drawKakaoPolyLine(
+          pathList[idx].routeGraphic.result.lane
+        );
+        // console.log(dkpl);
 
-    dkpl.polyline.setMap(map);
-    setPolyLineData(dkpl.polyline);
+        dkpl.polyline.setMap(map);
+        setPolyLineData(dkpl.polyline);
 
-    // console.log(pathList[0].boundary) // 사용자의 입력(idx)에 따른 boundary 변화
-    if (pathList[idx].routeGraphic.result.boundary) {
-      let points = [
-        new kakao.maps.LatLng(
-          pathList[idx].startPos.y,
-          pathList[idx].startPos.x
-        ),
-        new kakao.maps.LatLng(pathList[idx].endPos.y, pathList[idx].endPos.x),
-      ];
-      // points 실행순서 수정 필요
+        // console.log(pathList[0].boundary) // 사용자의 입력(idx)에 따른 boundary 변화
+        if (pathList[idx].routeGraphic.result.boundary) {
+          let points = [
+            new kakao.maps.LatLng(
+              pathList[idx].startPos.y,
+              pathList[idx].startPos.x
+            ),
+            new kakao.maps.LatLng(
+              pathList[idx].endPos.y,
+              pathList[idx].endPos.x
+            ),
+          ];
+          // points 실행순서 수정 필요
 
-      for (var i = 0; i < dkpl.lineArray.length; i++) {
-        points.push(
-          new kakao.maps.LatLng(dkpl.lineArray[i].Ma, dkpl.lineArray[i].La)
+          for (var i = 0; i < dkpl.lineArray.length; i++) {
+            points.push(
+              new kakao.maps.LatLng(dkpl.lineArray[i].Ma, dkpl.lineArray[i].La)
+            );
+          }
+
+          // 보행자 경로 생성 및 그리기
+          createWalkPath(
+            'first',
+            pathList[idx].startPos.x,
+            pathList[idx].startPos.y,
+            points[2].La,
+            points[2].Ma
+          );
+
+          createWalkPath(
+            'last',
+            points[points.length - 1].La,
+            points[points.length - 1].Ma,
+            pathList[idx].endPos.x,
+            pathList[idx].endPos.y
+          );
+
+          // 사용자 지도 위치 영역에 맞추기
+          let bounds = new kakao.maps.LatLngBounds();
+          for (var i = 0; i < points.length; i++) {
+            bounds.extend(points[i]);
+          }
+          map.setBounds(bounds);
+        }
+      } else {
+        // 기존 경로 값에 퍼스널모빌리티 가격 제거
+        setPathList(
+          pathList.map((path) =>
+            path === pathList[currentListNum]
+              ? {
+                  ...path,
+                  payment: path.payment - mobilPay,
+                  totalTime: path.totalTime + walkTime - mobilTime,
+                }
+              : path
+          )
         );
       }
-
-      // 보행자 경로 생성 및 그리기
-      createWalkPath(
-        'first',
-        pathList[idx].startPos.x,
-        pathList[idx].startPos.y,
-        points[2].La,
-        points[2].Ma
-      );
-
-      createWalkPath(
-        'last',
-        points[points.length - 1].La,
-        points[points.length - 1].Ma,
-        pathList[idx].endPos.x,
-        pathList[idx].endPos.y
-      );
-
-      // 사용자 지도 위치 영역에 맞추기
-      let bounds = new kakao.maps.LatLngBounds();
-      for (var i = 0; i < points.length; i++) {
-        bounds.extend(points[i]);
-      }
-      map.setBounds(bounds);
     }
   }
 
@@ -460,7 +490,6 @@ function useInputForm() {
         return { ...prev, lastMobilOpen: !lastMobilOpen };
       });
   };
-  console.log(mobilOpen);
 
   const removeMarkerMobil = async (firstMarker, lastMarker) => {
     const markerList = markerMobil.filter((m) => {
@@ -483,8 +512,8 @@ function useInputForm() {
     const x = pathList[currentListNum].startPos.x; // 출발지점
     const y = pathList[currentListNum].startPos.y; // 출발지점
     const responseMobil = await getMobilities('ALL', x, y);
+    console.log(responseMobil);
 
-    console.log(responseMobil.data.body);
     const overImage = new kakao.maps.MarkerImage(
       scooter,
       new kakao.maps.Size(29, 40)
@@ -504,8 +533,10 @@ function useInputForm() {
         image: normalImage,
       });
       var infowindow = new kakao.maps.InfoWindow({
-        content: `<br><div>모빌리티 : ${responseMobil.data.body[i].id}번</div>
-                  <div>타입 : ${responseMobil.data.body[i].type}</div><br> `,
+        content: `<br><div> 모빌리티 : ${responseMobil.data.body[i].id}번</div>
+                  <div> 타입 : ${responseMobil.data.body[i].type}</div>
+                  <div> 잠금해제비용 : ${responseMobil.data.body[i].mobilityCompany.unlockFee}원</div>
+                  <div> 분당비용 : ${responseMobil.data.body[i].mobilityCompany.minuteFee}원</div><br>`,
       });
 
       kakao.maps.event.addListener(
@@ -540,8 +571,8 @@ function useInputForm() {
     const x = pathList[currentListNum].endStation.x; // 마지막 정류장
     const y = pathList[currentListNum].endStation.y; // 마지막 정류장
     const responseMobil = await getMobilities('ALL', x, y);
+    console.log(responseMobil);
 
-    console.log(responseMobil.data.body);
     const overImage = new kakao.maps.MarkerImage(
       scooter,
       new kakao.maps.Size(29, 40)
@@ -561,8 +592,10 @@ function useInputForm() {
         image: normalImage,
       });
       var infowindow = new kakao.maps.InfoWindow({
-        content: `<br><div>모빌리티 : ${responseMobil.data.body[i].id}번</div>
-                  <div>타입 : ${responseMobil.data.body[i].type}</div><br> `,
+        content: `<br><div> 모빌리티 : ${responseMobil.data.body[i].id}번</div>
+                  <div> 타입 : ${responseMobil.data.body[i].type}</div>
+                  <div> 잠금해제비용 : ${responseMobil.data.body[i].mobilityCompany.unlockFee}원</div>
+                  <div> 분당비용 : ${responseMobil.data.body[i].mobilityCompany.minuteFee}원</div><br>`,
       });
 
       kakao.maps.event.addListener(
@@ -655,7 +688,58 @@ function useInputForm() {
       endY,
       mobilId
     );
+    console.log('=========');
     console.log(mobilityPath);
+    setIsUpdatePathList(true);
+    setMobilityPrice(mobilityPrice + mobilityPath.payment);
+    if (select === 'first') {
+      setPathWalkTime(
+        (prev) => prev + pathList[currentListNum].routeSection[0].sectionTime
+      );
+    } else {
+      setPathWalkTime(
+        (prev) =>
+          prev +
+          pathList[currentListNum].routeSection[
+            pathList[currentListNum].routeSection.length - 1
+          ].sectionTime
+      );
+    }
+
+    setPathMobilityTime(mobilityPath.totalTime);
+
+    // 기존 경로 값에 퍼스널모빌리티 가격 추가
+    if (select === 'first') {
+      setPathList(
+        pathList.map((path) =>
+          path === pathList[currentListNum]
+            ? {
+                ...path,
+                payment: path.payment + mobilityPath.payment,
+                totalTime:
+                  path.totalTime -
+                  path.routeSection[0].sectionTime +
+                  mobilityPath.totalTime,
+              }
+            : path
+        )
+      );
+    } else {
+      setPathList(
+        pathList.map((path) =>
+          path === pathList[currentListNum]
+            ? {
+                ...path,
+                payment: path.payment + mobilityPath.payment,
+                totalTime:
+                  path.totalTime -
+                  path.routeSection[path.routeSection.length - 1].sectionTime +
+                  mobilityPath.totalTime,
+              }
+            : path
+        )
+      );
+    }
 
     // mobilityPath.firstPath : 도보 경로
     // mobilityPath.lastPath : 퍼스널 모빌리티 경로
@@ -747,10 +831,23 @@ function useInputForm() {
   // 서버에서 경로를 받아왔을 때 실행
   useEffect(() => {
     if (pathList.length != 0) {
-      // 검색된 경로 리스트를 토대로 경로를 드로잉
-      pathDrawing().catch((err) =>
-        console.log('경로 리스트를 받아오는데 문제가 발생하였습니다.\n' + err)
-      );
+      if (
+        isUpdatePathList ||
+        mobilityPrice !== 0 ||
+        pathWalkTime !== 0 ||
+        pathMobilityTime
+      ) {
+        // 검색된 경로 리스트를 토대로 경로를 드로잉
+        pathDrawing(currentListNum, 'update').catch((err) =>
+          console.log('경로 리스트를 받아오는데 문제가 발생하였습니다.\n' + err)
+        );
+        setIsUpdatePathList(false);
+      } else {
+        // 검색된 경로 리스트를 토대로 경로를 드로잉
+        pathDrawing().catch((err) =>
+          console.log('경로 리스트를 받아오는데 문제가 발생하였습니다.\n' + err)
+        );
+      }
     } else return;
   }, [pathList]);
 
