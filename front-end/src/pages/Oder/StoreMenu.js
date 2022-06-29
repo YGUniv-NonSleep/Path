@@ -216,23 +216,23 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
               ) : null }
 
               <ButtonGroup sx={{ display: 'flex', justifyContent: 'flex-end;', marginLeft: 'auto' }}> 
-                  <Button
-                      aria-label="reduce"
-                      onClick={() => {
-                          setCount(Math.max(count - 1, 1));
-                      }}
-                  >
-                      <RemoveIcon fontSize="small" />
-                  </Button>
-                  <Button>{count}</Button>
-                  <Button
-                      aria-label="increase"
-                      onClick={() => {
-                          setCount(count + 1);
-                      }}
-                  >
-                      <AddIcon fontSize="small" />
-                  </Button>
+                <Button
+                    aria-label="reduce"
+                    onClick={() => {
+                        setCount(Math.max(count - 1, 1));
+                    }}
+                >
+                    <RemoveIcon fontSize="small" />
+                </Button>
+                <Button>{count}</Button>
+                <Button
+                    aria-label="increase"
+                    onClick={() => {
+                        setCount(count + 1);
+                    }}
+                >
+                    <AddIcon fontSize="small" />
+                </Button>
               </ButtonGroup>
 
               <div style={{ display: 'flex', marginTop: '15px' }}>

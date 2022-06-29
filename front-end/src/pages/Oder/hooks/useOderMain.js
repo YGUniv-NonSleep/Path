@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import MapApi from "../../../api/MapApi";
 import currentLoc from '../../../assets/images/placeholder.png';
+import { addCart } from "../../../store/cart";
 
 function useOderMain() {
   // '업체' 회원만 오더에서 업체 조회가 되고 있다
@@ -35,7 +36,6 @@ function useOderMain() {
 
   const [optionPrice, setOptionPrice] = useState(0);
   const [optionCalcul, setOptionCalcul] = useState([]);
-  const [cart, setCart] = useState([]);
 
   const calculOpt = (dOpid) => {
     // console.log(dOpid) // 카트에 옵션 정보 담을거임
@@ -67,13 +67,28 @@ function useOderMain() {
   // console.log(optionCalcul)
 
   const putCart = (pid, price, count) => {
-    // 상품의 옵션 정보
-    // console.log(optionPrice, optionCalcul)
+    // let cartData = {
+    //   totalAmount: 
+    //   suppliedAmount: 
+    //   orderCompositionList: {
+    //     productId: 
+    //     quantity: 
+    //     price: 
+    //     detailOptionList: []
+    //   }
+    // }
     
     // 맴버 정보는 리덕스에서 받아옴 0
+    // memberInfo
     // 상품 합계 (나중에 합산)
-    // 업체 상품 아이디, 수량, 가격, 세부옵션 아이디들
+    // 업체 상품 아이디, 수량, 가격, 세부옵션 아이디들 0
     console.log(pid, count, price, optionCalcul)
+    let opList = []
+    optionCalcul.map((opt)=>{
+      opList.push(opt.oId)
+      console.log(opList)
+    })
+    // dispatch(addCart())
     // handleDialogClose()
   }
 
