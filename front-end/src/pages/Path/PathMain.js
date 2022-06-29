@@ -73,6 +73,7 @@ function PathMain() {
     handleMobilOpen,
     firstPersonalMobility,
     lastPersonalMobility,
+    setSearchType,
   } = useInputForm();
   // console.log(pathList)
   // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
@@ -133,7 +134,7 @@ function PathMain() {
       {loading ? null : <h2>로드 중...</h2>}
       <SideNav>
         <SearchArea>
-          <Icon></Icon>
+          <Icon setSearchType={setSearchType}></Icon>
           <Autocomplete
             value={SPoint}
             onInputChange={onchangeSP}
@@ -172,7 +173,7 @@ function PathMain() {
                     다시입력
                   </Typography>
                 </Button>
-                <Button
+                {/* <Button
                   variant="outlined"
                   sx={{ width: 80, height: 35 }}
                   startIcon={<AddIcon sx={{ marginLeft: -1 }} />}
@@ -180,7 +181,7 @@ function PathMain() {
                   <Typography variant="inherit" sx={{ fontSize: 10 }}>
                     경유지
                   </Typography>
-                </Button>
+                </Button> */}
               </Grid>
               <Grid>
                 <Button
@@ -189,7 +190,7 @@ function PathMain() {
                     backgroundColor: '#3396ff',
                     width: 80,
                     height: 35,
-                    marginLeft: '84px',
+                    marginLeft: '150px',
                     paddingLeft: '13px',
                   }}
                   endIcon={<ChevronRightIcon sx={{ marginRight: -2 }} />}
