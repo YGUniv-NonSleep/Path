@@ -232,10 +232,10 @@ function MapApi() {
   function drawKakaoWalkPolyLine(linePath) {
     let polyline = new kakao.maps.Polyline({
       path: linePath,
-      strokeWeight: 5, // 선의 두께 입니다
-      strokeColor: '#FFAE00', // 선의 색깔입니다
-      strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-      strokeStyle: 'solid', // 선의 스타일입니다
+      strokeWeight: 7, // 선의 두께 입니다
+      strokeColor: '#6c757d', // 선의 색깔입니다
+      strokeOpacity: 0.9, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+      strokeStyle: 'shortdash', // 선의 스타일입니다
     });
     return polyline;
   }
@@ -243,10 +243,10 @@ function MapApi() {
   function drawKakaoMobilPolyLine(linePath) {
     let polyline = new kakao.maps.Polyline({
       path: linePath,
-      strokeWeight: 5, // 선의 두께 입니다
-      strokeColor: '#CC2EFA', // 선의 색깔입니다
-      strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-      strokeStyle: 'dash', // 선의 스타일입니다
+      strokeWeight: 7, // 선의 두께 입니다
+      strokeColor: '#9b5de5', // 선의 색깔입니다
+      strokeOpacity: 0.8, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+      strokeStyle: 'shortdash', // 선의 스타일입니다
     });
     return polyline;
   }
@@ -258,10 +258,10 @@ function MapApi() {
     let polyline = new kakao.maps.Polyline({
       //map: data.map,
       //path: [],
-      strokeWeight: 5,
-      strokeColor: '#FF00FF',
-      strokeOpacity: 0.8,
-      strokeStyle: 'dashed',
+      strokeWeight: 7,
+      strokeColor: '#003566',
+      strokeOpacity: 0.7,
+      strokeStyle: 'shortdash',
     });
 
     // console.log(data)

@@ -87,9 +87,10 @@ public class TmapService {
         // 퍼스널 모빌리티 -> 목적지 조회
         String jsonMobilPath = walkPath(mobilityDto.getLongitude(), mobilityDto.getLatitude(), ex, ey, 15);
         WalkPathDto mobilPathDto = mapper.readValue(jsonMobilPath, WalkPathDto.class);
+        System.out.println("mobilPathDto = " + mobilPathDto);
         List<Double[]> lastGraphPos = new ArrayList<>();
         addGraphPos(mapper, lastGraphPos, mobilPathDto);
-        int mobilTimeSec = mobilPathDto.getFeatures().get(0).getProperties().getTotalTime();
+        int mobilTimeSec = (int) (Integer.parseInt(mobilPathDto.getFeatures().get(0).getProperties().getTotalDistance()) / 4.166);
         int mobilTimeMin = changeTimeSecToMin(mobilTimeSec);
         int payment = unlockFee + (mobilTimeMin * minuteFee);
         int mobilDistance = Integer.parseInt(mobilPathDto.getFeatures().get(0).getProperties().getTotalDistance());

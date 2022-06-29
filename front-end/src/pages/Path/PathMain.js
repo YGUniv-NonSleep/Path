@@ -216,7 +216,6 @@ function PathMain() {
                   <PathList
                     list={pathList}
                     click={pathDrawing}
-                    mobilOpen={mobilOpen}
                     handleMobilOpen={handleMobilOpen}
                   ></PathList>
                   <FirstSelectMobil></FirstSelectMobil>
