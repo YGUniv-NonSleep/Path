@@ -50,6 +50,7 @@ function useInputForm() {
     click: false,
     marker: null,
   });
+  const [searchType, setSearchType] = useState(0);
 
   // 카카오 지도를 불러오는 함수
   // MapApi 기능들 전부 함수화 시키기 호출할 때마다 필요 없는 것도 많이 호출 함.
@@ -193,22 +194,32 @@ function useInputForm() {
   }
 
   // 경로 검색
-  async function pathSearch() {
+  async function pathSearch(type) {
     // === 서버에서 출발지와 도착지를 요청하고 노선 그래프 경로 가져오기 === //
-    let searchType = 0;
+    let pathSearchType = type;
 
-    const pathData = await PathApi.getTransPath({
-      sx: way[0].x,
-      sy: way[0].y,
-      ex: way[1].x,
-      ey: way[1].y,
-      searchPathType: searchType,
-      // 0(지하철+버스), 1(지하철), 2(버스)
-      // 나중에 정보 받을 예정
-    }).catch((err) => {
-      console.log(err);
-      return;
-    });
+    let pathData;
+    // 통합, 지하철, 버스일 때
+    if (pathSearchType === 0 || pathSearchType === 1 || pathSearchType === 2) {
+      pathData = await PathApi.getTransPath({
+        sx: way[0].x,
+        sy: way[0].y,
+        ex: way[1].x,
+        ey: way[1].y,
+        searchPathType: pathSearchType,
+        // 0(지하철+버스), 1(지하철), 2(버스)
+        // 나중에 정보 받을 예정
+      }).catch((err) => {
+        console.log(err);
+        return;
+      });
+    }
+    // 킥보드, 자전거일 때
+    else if (pathSearchType === 3 || pathSearchType === 4) {
+    }
+    // 도보일 때
+    else {
+    }
 
     console.log(pathData);
 
@@ -822,7 +833,7 @@ function useInputForm() {
   useEffect(() => {
     if (way.length == 2) {
       // 출발지, 도착지의 위도, 경도를 통한 경로 검색
-      pathSearch().catch(
+      pathSearch(searchType).catch(
         (err) => console.log('경로 검색에 문제가 발생하였습니다.\n') + err
       );
     } else return;
@@ -868,6 +879,8 @@ function useInputForm() {
     }
   }, [firstMobilClick, lastMobilClick]);
 
+  console.log(searchType);
+
   return {
     map,
     way,
@@ -906,6 +919,7 @@ function useInputForm() {
     handleMobilOpen,
     firstPersonalMobility,
     lastPersonalMobility,
+    setSearchType,
   };
 }
 
