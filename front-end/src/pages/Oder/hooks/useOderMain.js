@@ -1,10 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import MapApi from "../../../api/MapApi";
 import currentLoc from '../../../assets/images/placeholder.png';
 
 function useOderMain() {
   // '업체' 회원만 오더에서 업체 조회가 되고 있다
+  const memberInfo = useSelector((state) => state.user.id); // 맴버의 아이디 0 아닌지 체크
+  const dispatch = useDispatch();
+
   const [closeToggle, setCloseToggle] = useState(true);
   const [subBarHide, setSubBarHide] = useState(false)
   const [animate, setAnimate] = useState(false);
@@ -30,10 +34,47 @@ function useOderMain() {
   const [count, setCount] = useState(1);
 
   const [optionPrice, setOptionPrice] = useState(0);
+  const [optionCalcul, setOptionCalcul] = useState([]);
+  const [cart, setCart] = useState([]);
 
-  const calculOpt = (e) => {
-    console.log(e.target.name)
-    console.log(e.target.value)
+  const calculOpt = (dOpid) => {
+    // console.log(dOpid) // 카트에 옵션 정보 담을거임
+    let data = {
+      oId: dOpid.optionId,
+      oPrice: dOpid.price,
+    }
+    
+    if (optionCalcul.length == 0) {
+      setOptionCalcul([data]);
+      setOptionPrice((prev) => prev + parseInt(data.oPrice))
+    }
+    else {
+      let op = optionCalcul; // 이전 데이터
+      let result = op.filter((v) => v.oId != data.oId) // 필터 후 데이터
+      result.push(data);
+      result.sort(function(a, b) { return a.oId - b.oId })
+      //console.log(result)
+
+      let sum = 0
+      result.map((item)=>{
+        sum += parseInt(item.oPrice)
+      })
+
+      setOptionPrice(sum)
+      setOptionCalcul(result)
+    }
+  }
+  // console.log(optionCalcul)
+
+  const putCart = (pid, price, count) => {
+    // 상품의 옵션 정보
+    // console.log(optionPrice, optionCalcul)
+    
+    // 맴버 정보는 리덕스에서 받아옴 0
+    // 상품 합계 (나중에 합산)
+    // 업체 상품 아이디, 수량, 가격, 세부옵션 아이디들
+    console.log(pid, count, price, optionCalcul)
+    // handleDialogClose()
   }
 
   const handleDialogOpen = (pInfo) => {
@@ -394,7 +435,7 @@ function useOderMain() {
     prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, 
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
     sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, calculOpt, 
-    handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, 
+    handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, putCart, 
   };
 }
 

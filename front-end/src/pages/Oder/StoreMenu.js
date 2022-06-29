@@ -51,12 +51,12 @@ import useOderMain from "./hooks/useOderMain";
 function StoreMenu({ place, prodList, compCateList, outStore }) {
   // console.log(place);
   const { 
-    dialogOpen, count, prodInfo, optionPrice, setCount, handleDialogOpen, handleDialogClose, calculOpt, 
+    dialogOpen, count, prodInfo, optionPrice, setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart
   } = useOderMain();
 
   function sInfo() {
     let list = [];
-    console.log(place)
+    
     let value = [`${place.name != '' ? place.name : '업체명'}`, `약 ${'나중에 받을거임'}분`, `${'나중에 받으려나?'}m`, '카드결제, 현장결제(카드/현금)'];
     const title = ['가게이름', '대기시간', '가게위치', '결제방법'];
 
@@ -182,13 +182,6 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
               id="scroll-dialog-description"
               tabIndex={-1}
             >
-              {/* {[...new Array(50)].map(() => 
-                  `Cras mattis consectetur purus sit amet fermentum.
-                  Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-                  Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                  Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-              ).join("\n")} */}
-
               {/* 상품 옵션 */}
               { prodInfo.optionList.length != 0 ? (
                 prodInfo.optionList.map((option) => 
@@ -196,7 +189,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                     <FormLabel id="item-option-label">{option.name}</FormLabel>
                     <RadioGroup
                       aria-labelledby="item-detail-option-group-label"
-                      defaultValue={`${option.detailOptionList[0].price}`}
+                      // defaultValue={`${option.detailOptionList[0].price}`}
                       name="radio-buttons-group"
                     >
                         {/* 세부 옵션 */}
@@ -207,8 +200,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                               control={<Radio />} 
                               label={`${od.name}`} // 화면에 보이는 값
                               sx={{ display: 'inline-block' }} 
-                              name={`${od.optionId}`}
-                              onChange={(e)=>calculOpt(e)}
+                              onChange={()=>calculOpt(od)}
                             />
                             <Typography 
                               sx={{ display: 'inline-flex', alignItems: 'center', marginLeft: 'auto' }}
@@ -245,14 +237,14 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
 
               <div style={{ display: 'flex', marginTop: '15px' }}>
                 <Typography sx={{ display: 'inline-block', marginRight: "auto" }}>총 주문금액</Typography>
-                <Typography sx={{ display: 'inline-flex', marginLeft: "auto" }}>{prodInfo.price * count}원</Typography>
+                <Typography sx={{ display: 'inline-flex', marginLeft: "auto" }}>{(prodInfo.price + optionPrice) * count}원</Typography>
               </div>
 
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleDialogClose}>뒤로가기</Button>
-            <Button onClick={handleDialogClose}>장바구니 추가</Button>
+            <Button onClick={()=>putCart(prodInfo.id, (prodInfo.price + optionPrice), count)}>장바구니 추가</Button>
           </DialogActions>
         </Dialog>
       ) : null }
