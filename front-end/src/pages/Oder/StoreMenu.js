@@ -49,7 +49,6 @@ import { Fragment } from "react";
 import useOderMain from "./hooks/useOderMain";
 
 function StoreMenu({ place, prodList, compCateList, outStore }) {
-  // console.log(place);
   const { 
     dialogOpen, count, prodInfo, optionPrice, setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart
   } = useOderMain();
@@ -219,7 +218,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                 <Button
                     aria-label="reduce"
                     onClick={() => {
-                        setCount(Math.max(count - 1, 1));
+                      setCount(Math.max(count - 1, 1));
                     }}
                 >
                     <RemoveIcon fontSize="small" />
@@ -228,7 +227,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                 <Button
                     aria-label="increase"
                     onClick={() => {
-                        setCount(count + 1);
+                      setCount(count + 1);
                     }}
                 >
                     <AddIcon fontSize="small" />
@@ -244,7 +243,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleDialogClose}>뒤로가기</Button>
-            <Button onClick={()=>putCart(prodInfo.id, (prodInfo.price + optionPrice), count)}>장바구니 추가</Button>
+            <Button onClick={()=>putCart(prodInfo.company.id, prodInfo.id, (prodInfo.price + optionPrice), count)}>장바구니 추가</Button>
           </DialogActions>
         </Dialog>
       ) : null }

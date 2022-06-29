@@ -10,6 +10,7 @@ import {
 
 function PlaceList({item, target, clicked}) {
   // 로딩 중 제휴업체 이름 보이는거 수정하기
+  
   return (
     <SearchItem
       onClick={() => {

@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import MapApi from "../../../api/MapApi";
 import currentLoc from '../../../assets/images/placeholder.png';
-import { addCart } from "../../../store/cart";
+import { addCart, clearCart } from "../../../store/cart";
 
 function useOderMain() {
   // '업체' 회원만 오더에서 업체 조회가 되고 있다
-  const memberInfo = useSelector((state) => state.user.id); // 맴버의 아이디 0 아닌지 체크
+  const cartState = useSelector((state) => state.cart); // 맴버의 아이디 0 아닌지 체크
   const dispatch = useDispatch();
 
   const [closeToggle, setCloseToggle] = useState(true);
@@ -32,16 +32,18 @@ function useOderMain() {
 
   const [uLocMarker, setULocMarker] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const [count, setCount] = useState(1);
 
   const [optionPrice, setOptionPrice] = useState(0);
   const [optionCalcul, setOptionCalcul] = useState([]);
 
   const calculOpt = (dOpid) => {
-    // console.log(dOpid) // 카트에 옵션 정보 담을거임
+    console.log(dOpid) // 카트에 옵션 정보 담을거임
     let data = {
       oId: dOpid.optionId,
       oPrice: dOpid.price,
+      id: dOpid.id
     }
     
     if (optionCalcul.length == 0) {
@@ -66,40 +68,70 @@ function useOderMain() {
   }
   // console.log(optionCalcul)
 
-  const putCart = (pid, price, count) => {
-    // let cartData = {
-    //   totalAmount: 
-    //   suppliedAmount: 
-    //   orderCompositionList: {
-    //     productId: 
-    //     quantity: 
-    //     price: 
-    //     detailOptionList: []
-    //   }
-    // }
-    
-    // 맴버 정보는 리덕스에서 받아옴 0
-    // memberInfo
-    // 상품 합계 (나중에 합산)
-    // 업체 상품 아이디, 수량, 가격, 세부옵션 아이디들 0
-    console.log(pid, count, price, optionCalcul)
+  const putCart = (comId, pid, price, count) => {
+    let cartData = {
+      comId: comId,
+      total: price * count,
+      orderCompositionList: {
+        productId: pid,
+        quantity: count,
+        price: price * count, // 갯수 곱한건가?
+      }
+    }
+
     let opList = []
     optionCalcul.map((opt)=>{
-      opList.push(opt.oId)
-      console.log(opList)
+      opList.push(opt.id)
     })
-    // dispatch(addCart())
-    // handleDialogClose()
+    opList.sort((a, b)=>{return a-b})
+
+    let carts = cartState.orderCompositionList;
+    let chk = false; // duplicate check
+
+    carts.map((item)=>{
+      if (item.productId === pid) {
+        if (item.detailOptionList.toString() === opList.toString()) {
+          chk = true
+          // alert("해당 상품과 같은 옵션의 상품이 장바구니에 이미 있습니다.")
+        }
+      }
+    })
+
+    if(chk) return alert("해당 상품과 같은 옵션의 상품이 장바구니에 이미 있습니다.")
+    if(cartState.comId != 0) {
+      if(cartState.comId != cartData.comId) {
+        alert("다른 업체 상품이 장바구니에 등록되어있습니다")
+        if(confirm("새 업체의 상품을 등록하시겠습니까?")) dispatch(clearCart())
+        else return 
+      }
+    }
+
+    cartData.orderCompositionList.detailOptionList = opList
+    console.log(cartData)
+    dispatch(addCart(cartData))
+    handleDialogClose()
   }
+
+  const handleCartOpen = () => {
+    setCartOpen(true)
+  };
+  
+  const handleCartClose = () => {
+    setCartOpen(false)
+  };
 
   const handleDialogOpen = (pInfo) => {
     // console.log(pInfo)
     setProdInfo(pInfo)
     setDialogOpen(true);
+    setOptionCalcul([])
+    setCount(1)
   };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+    setOptionCalcul([])
+    setCount(1)
   };
 
   // 검색창 토글 버튼
@@ -447,7 +479,8 @@ function useOderMain() {
 
   return {
     map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodInfo, optionPrice, 
-    prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, 
+    prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, cartState, cartOpen, 
+    handleCartOpen, handleCartClose, 
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
     sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, calculOpt, 
     handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, putCart, 
