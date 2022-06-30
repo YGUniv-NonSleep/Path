@@ -6,7 +6,7 @@ import { TmapApi } from '../../../api/TmapApi';
 import useLoading from '../../../hooks/useLoading';
 import axios from 'axios';
 import scooter from '../../../assets/images/electric-scooter.png';
-import clickScooter from '../../../assets/images/electric-scooter2.png';
+import bicycle from '../../../assets/images/bicycle2(64x64).png';
 
 function useInputForm() {
   const { loading } = useLoading();
@@ -153,7 +153,7 @@ function useInputForm() {
               return item.place_name === string;
             });
             setWay((cur) => [...cur, k[0]]);
-          } else return console.log('몬가... 몬가... 잘못됨..');
+          } else return console.log('입력한 출발지와 도착지가 잘못되었습니다.');
         });
       } else {
         await ps.keywordSearch(prevStr, function (result, status, pagination) {
@@ -162,7 +162,7 @@ function useInputForm() {
               return item.place_name === prevStr;
             });
             setWay((cur) => [...cur, k[0]]);
-          } else return console.log('몬가... 몬가... 잘못됨..');
+          } else return console.log('입력한 출발지와 도착지가 잘못되었습니다.');
         });
       }
     }
@@ -256,12 +256,14 @@ function useInputForm() {
       responseMobil = await getMobilities(str, way[0].x, way[0].y);
       // 선택 후 길찾기
 
+      const image = pathSearchType === 3 ? scooter : bicycle;
+
       const overImage = new kakao.maps.MarkerImage(
-        scooter,
+        image,
         new kakao.maps.Size(29, 40)
       );
       const normalImage = new kakao.maps.MarkerImage(
-        scooter,
+        image,
         new kakao.maps.Size(24, 35)
       );
 
@@ -661,17 +663,21 @@ function useInputForm() {
     const x = pathList[currentListNum].startPos.x; // 출발지점
     const y = pathList[currentListNum].startPos.y; // 출발지점
     const responseMobil = await getMobilities('ALL', x, y);
-
-    const overImage = new kakao.maps.MarkerImage(
-      scooter,
-      new kakao.maps.Size(29, 40)
-    );
-    const normalImage = new kakao.maps.MarkerImage(
-      scooter,
-      new kakao.maps.Size(24, 35)
-    );
+    console.log(responseMobil);
 
     for (var i = 0; i < responseMobil.data.body.length; i++) {
+      const image =
+        responseMobil.data.body[i].type === 'KICKBOARD' ? scooter : bicycle;
+
+      const overImage = new kakao.maps.MarkerImage(
+        image,
+        new kakao.maps.Size(29, 40)
+      );
+      const normalImage = new kakao.maps.MarkerImage(
+        image,
+        new kakao.maps.Size(24, 35)
+      );
+
       var marker = new kakao.maps.Marker({
         map: map,
         position: new kakao.maps.LatLng(
