@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import MapApi from "../../../api/MapApi";
-import { PathApi } from "../../../api/OdsayApi";
-import { TmapApi } from "../../../api/TmapApi";
 import currentLoc from '../../../assets/images/placeholder.png';
 
 function useOderMain() {
+  // '업체' 회원만 오더에서 업체 조회가 되고 있다
   const [closeToggle, setCloseToggle] = useState(true);
   const [subBarHide, setSubBarHide] = useState(false)
   const [animate, setAnimate] = useState(false);
@@ -14,7 +13,10 @@ function useOderMain() {
   const [userLocation, setUserLocation] = useState(null);
   const [map, settingMap] = useState(null);
   const [searchPath, setSearchPath] = useState(null);
+  const [affiliate, setAffiliate] = useState([]);
   const [placeList, setPlaceList] = useState([]);
+  const [prodList, setProdList] = useState([]);
+  const [compCateList, setCompCateList] = useState(null);
   const [place, setPlace] = useState(null);
   const [pagiObj, setPagiObj] = useState(null);
   const [page, setPage] = useState(0);
@@ -33,10 +35,6 @@ function useOderMain() {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
-  
-  // useEffect(()=>{
-
-  // }, [dialogOpen])
 
   // 검색창 토글 버튼
   const onCloseToggle = () => {
@@ -60,7 +58,7 @@ function useOderMain() {
   
   const handleShowStore = () => {
     setShowStore((prev) => !prev)
-    console.log(showStore)
+    // console.log(showStore)
   }
 
   useEffect(() => {
@@ -216,8 +214,10 @@ function useOderMain() {
         categorySubmit()
       }, 500)
     }
+    return setPlaceList([]);
   }, [category])
 
+  // 업체 상세 정보
   function placeTarget(data) {
     // console.log(data)
     setPlace(data)
@@ -267,7 +267,8 @@ function useOderMain() {
 
     function callback(result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        setPlaceList(result)
+        // 현재 위치 근처의 키워드 카페인 업체들 -> api로 수집한 데이터
+        // setPlaceList(result)
       }
     }
 
@@ -307,12 +308,83 @@ function useOderMain() {
     // 위치 정보 제거 기능 추가하기
   }, []);
 
+  async function getCurLocComp() {
+    try {
+      let data = {
+        locationList: {
+          x: userLocation.La,
+          y: userLocation.Ma
+        },
+        category: null
+      }
+      let result = await axios.get(
+        `${process.env.REACT_APP_SPRING_API}/api/company/`, 
+        { params: data }
+      )
+      // console.log(result)
+      setAffiliate(result.data.body)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{
+    if(userLocation != null) {
+      getCurLocComp()
+    }
+  }, [userLocation]);
+
+  async function getCompProd(comp) {
+    try {
+      // compId 파라미터로 업체 아이디 받기
+      let result = await axios.get(
+        `${process.env.REACT_APP_SPRING_API}/api/product/comp/${comp.id}`
+      );
+      // console.log(result.data.body);
+      setProdList(result.data.body);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if(place != null) {
+      // console.log(place.member) 
+      if(place.member != undefined) 
+        getCompProd(place);
+    }
+  }, [place]);
+
+  function categoryExtractor(place) {
+    try {
+      let arr = [];
+      place.map((item)=>{
+        arr.push(item.prodBasic.category)
+      })
+
+      let result = arr.filter((v, i) => arr.indexOf(v) === i);
+      // console.log(result.sort());
+      setCompCateList(result.sort());
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{
+    if(prodList.length != 0) {
+      categoryExtractor(prodList)
+    }
+  }, [prodList])
+
   return {
-    map, closeToggle, subBarHide, animate, searchData, category, placeList, 
-    pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, setCount, 
-    handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
+    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, 
+    prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, 
+    setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
     sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, 
-    handleChange, mapLoad, onCloseToggle, onSubBarClick
+    handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, 
   };
 }
 
