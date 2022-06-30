@@ -8,16 +8,14 @@ const key = process.env.REACT_APP_ODSAY_API;
 
 export const PathApi = {
   getTransPath: async (data) => {
-    console.log(data)
     const response = await axios
       .get(
-        process.env.REACT_APP_SPRING_API + "/odsay/paths",
+        process.env.REACT_APP_SPRING_API + '/odsay/paths',
         { params: data },
         { withCredentials: true }
       )
       .catch((err) => console.log(err));
-      // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
-       console.log(response)
+    // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
     return response.data;
   },
 };
@@ -49,9 +47,10 @@ export const MobilityApi = {
     return response.data;
   },
 
-  getBusDetailLine : async(busID) => {
-    const response = await odsayApi.get(`/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`)
-    .catch((error)=>console.log(error));
+  getBusDetailLine: async (busID) => {
+    const response = await odsayApi
+      .get(`/busLaneDetail?lang=0&busID=${busID}&apiKey=${key}`)
+      .catch((error) => console.log(error));
     return response.data.result;
   },
 
@@ -64,12 +63,13 @@ export const MobilityApi = {
   },
 
   getBusStationInfo: async (stopID) => {
-    console.log(stopID)
-    const response = await odsayApi.get(`/busStationInfo?lang=0&stationID=${stopID}&apiKey=${key}`)
-    .catch((error) => console.log(error));
+    console.log(stopID);
+    const response = await odsayApi
+      .get(`/busStationInfo?lang=0&stationID=${stopID}&apiKey=${key}`)
+      .catch((error) => console.log(error));
     //console.log(response.data.result)
     return response.data.result;
-  }
+  },
 };
 
 export const SubwayApi = {

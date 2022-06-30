@@ -107,7 +107,6 @@ function useInputForm() {
       // 장소 검색 객체를 생성합니다
       const ps = new kakao.maps.services.Places();
       ps.keywordSearch(insertPoint, function (result, status, pagination) {
-        console.log(result);
         if (status === daum.maps.services.Status.OK) {
           let k = result.map((item) => {
             const data = {
@@ -162,7 +161,6 @@ function useInputForm() {
             let k = result.filter((item) => {
               return item.place_name === prevStr;
             });
-            console.log(`k = ${k}`);
             setWay((cur) => [...cur, k[0]]);
           } else return console.log('몬가... 몬가... 잘못됨..');
         });
@@ -232,7 +230,6 @@ function useInputForm() {
         console.log(err);
         return;
       });
-      console.log(pathData);
 
       let data = {
         start: way[0],
@@ -258,8 +255,6 @@ function useInputForm() {
       // 출발지 근처 500m 내 퍼스널 모빌리티 표시
       responseMobil = await getMobilities(str, way[0].x, way[0].y);
       // 선택 후 길찾기
-      console.log('============');
-      console.log(responseMobil);
 
       const overImage = new kakao.maps.MarkerImage(
         scooter,
@@ -341,7 +336,6 @@ function useInputForm() {
       way[1].y,
       mobilId
     );
-    console.log(mobilityPath);
 
     // mobilityPath.firstPath : 도보 경로
     // mobilityPath.lastPath : 퍼스널 모빌리티 경로
@@ -533,9 +527,6 @@ function useInputForm() {
     setMarkerData([]);
   }
 
-  console.log('polyLineData');
-  console.log(polyLineData);
-
   function removeGraphics() {
     for (let i = 0; i < polyLineData.length; i++) {
       polyLineData[i].setMap(null);
@@ -544,7 +535,6 @@ function useInputForm() {
   }
 
   function removeFirstWalkGraphics() {
-    console.log(firstWalkLineData);
     for (let i = 0; i < firstWalkLineData.length; i++) {
       firstWalkLineData[i].setMap(null);
     }
@@ -664,7 +654,6 @@ function useInputForm() {
 
   const firstPersonalMobility = async () => {
     if (currentListNum == '') setCurrentListNum('0');
-    console.log(markerMobil);
     removeFirstWalkGraphics();
     handleMobilOpen('first');
 
@@ -672,7 +661,6 @@ function useInputForm() {
     const x = pathList[currentListNum].startPos.x; // 출발지점
     const y = pathList[currentListNum].startPos.y; // 출발지점
     const responseMobil = await getMobilities('ALL', x, y);
-    console.log(responseMobil);
 
     const overImage = new kakao.maps.MarkerImage(
       scooter,
@@ -719,11 +707,9 @@ function useInputForm() {
       setMarkerMobil((prev) => [...prev, marker]);
     }
   };
-  console.log(pathList);
 
   const lastPersonalMobility = async () => {
     if (currentListNum == '') setCurrentListNum('0');
-    console.log(markerMobil);
     removeLastWalkGraphics();
     handleMobilOpen('last');
 
@@ -731,7 +717,6 @@ function useInputForm() {
     const x = pathList[currentListNum].endStation.x; // 마지막 정류장
     const y = pathList[currentListNum].endStation.y; // 마지막 정류장
     const responseMobil = await getMobilities('ALL', x, y);
-    console.log(responseMobil);
 
     const overImage = new kakao.maps.MarkerImage(
       scooter,
@@ -848,8 +833,6 @@ function useInputForm() {
       endY,
       mobilId
     );
-    console.log('=========');
-    console.log(mobilityPath);
     setIsUpdatePathList(true);
     setMobilityPrice(mobilityPrice + mobilityPath.payment);
     if (select === 'first') {
@@ -926,7 +909,6 @@ function useInputForm() {
     );
     mobilResult.setMap(map);
     if (select === 'first') {
-      console.log('first 에 저장시작함');
       setFirstWalkLineData([walkResult]);
       setFirstMobilLineData([mobilResult]);
     } else {
@@ -1022,8 +1004,6 @@ function useInputForm() {
       });
     }
   }, [firstMobilClick, lastMobilClick]);
-
-  console.log(searchType);
 
   return {
     map,
