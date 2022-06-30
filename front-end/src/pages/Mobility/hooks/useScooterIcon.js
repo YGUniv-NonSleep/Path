@@ -22,7 +22,7 @@ function useScooterIcon(){
   const [open, setOpen] = useState(false);
   const handleOpen = (e) => {
     setOpen(true);
-  };
+  }; 
 
   const handleClose = () => {
     if (open === true) return setOpen(false);
