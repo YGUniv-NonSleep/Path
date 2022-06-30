@@ -131,9 +131,18 @@ const BusBtn = styled.button`
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   background-color: white;
-  &:hover {
-    background-color: #E8F0FE;
-  };
+`;
+
+const BusBtn1 = styled.button`
+  position: absolute;
+  top: 95px;
+  left: 15px;
+  width: 180px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: white;
+  background-color: #1976D2;
 `;
 
 const BusStopBtn = styled.button`
@@ -146,9 +155,18 @@ const BusStopBtn = styled.button`
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   border-radius: 5px;
   background-color: white;
-  &:hover {
-    background-color: #E8F0FE;
-  };
+`;
+
+const BusStopBtn1 = styled.button`
+  position: absolute;
+  top: 95px;
+  left: 195px;
+  width: 180px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: white;
+  background-color: #1976D2;
 `;
 
 const BusStopList = styled.div`
@@ -523,6 +541,7 @@ function BusMain() {
           </Box>
           {toggleValue == "bus" && busList != undefined && busList.length != 0 ? (
             <>
+            <BusBtn1></BusBtn1>
               <BusNum>{busList.busNo}</BusNum>
               <BusIcon>
                 <DirectionsBusIcon color="primary" />
@@ -537,25 +556,29 @@ function BusMain() {
                 {busList.bus_Interval_Sat}분
               </BusStep1>
               <Line2 />
-
               <BusStopList>
                 {busList.station.map((item) => {
                   return (
                     <div>
-                      <BusListBtn onClick={(e) => { busClickValue(item.y, item.x, e);}} value="stopValue">
+                      <BusListBtn onClick={(e) => { busStopList(item.stationID, e);}} value="stopValue">
                         {item.stationName}
                       </BusListBtn>
-                      {busValue == "stopValue" && busList != undefined && busList.length != 0 ? (
-                        <div> {} </div>
-                      ) : (
-                        <> </>
-                      )}
                     </div>
                   );
                 })}
               </BusStopList>
+
+              {busStopClickList == "busStopList" ? (
+              <>
+              <div></div>
+              </>
+              )
+              :(
+              <></>
+              )}
+
             </>
-          ) : busStopValue == "busStopClick" && toggleValue == "busStop" && busStop != undefined && busStop.length != 0 ? (
+          ) : toggleValue == "busStop" && busStopValue == "busStopClick" && busStop != undefined && busStop.length != 0 ? (
             <>
               { busStopClickList == "busStopList" ? 
                 <BusStayClick> 
@@ -568,9 +591,7 @@ function BusMain() {
                   <BusDetailRunTime1> 첫차 {busLineDetail.busFirstTime}, 막차 {busLineDetail.busLastTime}</BusDetailRunTime1>
                     <BusDetailStep>배차간격</BusDetailStep>
                     <BusDetailStep1> 평일 {busLineDetail.bus_Interval_Week}분, 주말{" "} {busLineDetail.bus_Interval_Sat}분 </BusDetailStep1>
-                  
                   </BusDetailInfoBox>
-                  
                   <BusLineDetailBox>
  
                     { busLineDetail.station.map((item) => {
@@ -619,7 +640,7 @@ function BusMain() {
                 </>
                 )}
             </>
-          ) : busStopValue != "busStopClick" &&busStop.length != 0 && toggleValue == "busStop" && busStop.length != 0 ? (
+          ) : toggleValue == "busStop" && busStopValue != "busStopClick" &&busStop.length != 0 && busStop.length != 0 ? (
             <>
               <SearchResult>
                 '{busStop[0].do} {busStop[0].gu}' 중심의 '{searchValue}' 정류장
@@ -658,12 +679,38 @@ function BusMain() {
               <Line1></Line1>
             </>
           )}
-          <BusBtn onClick={onToggle} value="bus">
-            버스
-          </BusBtn>
-          <BusStopBtn onClick={onToggle} value="busStop">
-            버스 정류장
-          </BusStopBtn>
+          {toggleValue == "bus" ? 
+          <>
+          <BusBtn1 onClick={onToggle} value="bus">버스</BusBtn1>
+          <BusStopBtn onClick={onToggle} value="busStop">버스 정류장</BusStopBtn>
+          </> 
+          
+          :(toggleValue == "busStop" ? 
+          <>
+          <BusBtn onClick={onToggle} value="bus">버스</BusBtn>
+          <BusStopBtn1 onClick={onToggle} value="busStop">버스 정류장</BusStopBtn1>
+          </> 
+          
+          :( toggleValue == "bus" && busStop != undefined && busStop.length != 0 ? 
+          <>
+          <BusBtn1 onClick={onToggle} value="bus">버스</BusBtn1>
+            <BusStopBtn onClick={onToggle} value="busStop">버스 정류장</BusStopBtn>
+            <Text>최근 검색</Text>
+              <Line></Line>
+              <Text1>즐겨찾기한 목록</Text1>
+              <Line1></Line1>
+          </> 
+          
+          :(
+          <>
+          <BusBtn onClick={onToggle} value="bus">버스</BusBtn>
+          <BusStopBtn onClick={onToggle} value="busStop">버스 정류장</BusStopBtn>
+          <Text>최근 검색</Text>
+              <Line></Line>
+              <Text1>즐겨찾기한 목록</Text1>
+              <Line1></Line1>
+          </>)
+          ))}
         </BarContainer>
       </SideNav>
       <Map />

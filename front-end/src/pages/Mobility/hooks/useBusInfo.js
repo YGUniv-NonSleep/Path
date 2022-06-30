@@ -1,3 +1,4 @@
+import { CollectionsBookmarkOutlined } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import MapApi from "../../../api/MapApi";
 import { MobilityApi } from "../../../api/OdsayApi";
@@ -55,11 +56,13 @@ function useBusInfo(){
       }
     }
 
-    async function busClickValue(paramY, paramX, e) {
+    async function busClickValue(data, e) { 
       e.preventDefault();
-      console.log(paramY, paramX);
+      console.log(data);
       if(e.target.value != undefined){
-        setBusValue("stopValue");
+        let stopID = data;
+        let busStopID = await MobilityApi.getBusStationBus(stopID).catch((error) => console.log(error));
+        setBusValue(busStopID);
       }else {
         return 0;
       }
@@ -74,6 +77,7 @@ function useBusInfo(){
         console.log(busStopID);
         setBusStopInfo(busStopID);
         setBusStopValue("busStopClick");
+
       } else {
         return 0;
       }
