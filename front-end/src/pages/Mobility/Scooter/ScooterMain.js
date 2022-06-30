@@ -122,7 +122,6 @@ function ScooterMain() {
           <MIcon />
         </BarContainer>
         {modal == "open" ? 
-        
         <Modal>
           <ScootNum>#19995</ScootNum>
           <Battery><BatteryIcon sx={{fontSize: 30, color: "#00A98F"}} /><Num>60%</Num></Battery>

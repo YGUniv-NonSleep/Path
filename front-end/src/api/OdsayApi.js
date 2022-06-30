@@ -68,7 +68,7 @@ export const MobilityApi = {
     .catch((error) => console.log(error));
     //console.log(response.data.result)
     return response.data.result;
-  }
+  },
 };
 
 export const SubwayApi = {
