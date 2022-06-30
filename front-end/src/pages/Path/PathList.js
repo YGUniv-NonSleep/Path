@@ -184,18 +184,25 @@ function PathList({ list, click, handleMobilOpen }) {
                     <UnitValue>분</UnitValue>
                   </ReadableDuration>
                   <SummaryInfo>{item.payment}원</SummaryInfo>
-                  <span style={{ marginLeft: '15px' }}>
-                    <Button onClick={() => handleMobilOpen('first')}>
-                      퍼스널 모빌리티 타기
-                    </Button>
-                  </span>
+                  {item.mobility === undefined ? (
+                    <span style={{ marginLeft: '15px' }}>
+                      <Button onClick={() => handleMobilOpen('first')}>
+                        퍼스널 모빌리티 타기
+                      </Button>
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                 </DurationTime>
               </RouteSummaryInfoArea>
             </RouteSummaryBox>
             <StepInfoWrap>
               <StepInfoList>
-                {/* 리스트 */}
-                {transitSection(item, idx)}
+                {item.mobility === undefined ? (
+                  <>{transitSection(item, idx)}</>
+                ) : (
+                  <div>퍼스널 모빌리티 타고감</div>
+                )}
               </StepInfoList>
             </StepInfoWrap>
 
