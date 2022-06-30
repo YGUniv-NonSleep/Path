@@ -395,7 +395,7 @@ function useInputForm() {
     // info 정보와 localHistory의 정보 중 type, startName, goalName 일치하면 제거하고 다시 저장
     for (let i = 0; i < history.length; i++) {
       if (
-        history[i].type == info.type &&
+        // history[i].type == info.type &&
         history[i].startId == info.startId &&
         history[i].goalId == info.goalId
       ) {
@@ -620,7 +620,7 @@ function useInputForm() {
     for (let i = 0; i < history.length; i++) {
       // type, startId, goalId 비교
       if (
-        history[i].type == type &&
+        // history[i].type == type &&
         history[i].startId == startId &&
         history[i].goalId == goalId
       ) {
