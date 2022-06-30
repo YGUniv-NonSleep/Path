@@ -54,6 +54,7 @@ import PathList from './PathList';
 
 function PathMain() {
   const {
+    way,
     SPoint,
     APoint,
     jusoOption,
@@ -219,6 +220,7 @@ function PathMain() {
                     list={pathList}
                     click={pathDrawing}
                     handleMobilOpen={handleMobilOpen}
+                    way={way}
                   ></PathList>
                   <FirstSelectMobil></FirstSelectMobil>
                   <LastSelectMobil></LastSelectMobil>
