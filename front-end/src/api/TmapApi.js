@@ -46,4 +46,13 @@ export const TmapApi = {
     );
     return result.data;
   },
+
+  getWalkPath: async (sx, sy, ex, ey, speed) => {
+    const data = { sx: sx, sy: sy, ex: ex, ey: ey, speed: speed };
+    const result = await axios.get(
+      process.env.REACT_APP_SPRING_API + '/tmap/path',
+      { params: data, withCredencials: true }
+    );
+    return result.data;
+  },
 };

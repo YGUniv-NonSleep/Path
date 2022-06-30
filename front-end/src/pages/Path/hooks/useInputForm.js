@@ -305,6 +305,7 @@ function useInputForm() {
     }
     // 도보일 때
     else {
+      createWalkPath('first', way[0].x, way[0].y, way[1].x, way[1].y, true);
     }
   }
   const [mobilClick, setMobilClick] = useState({
@@ -559,7 +560,14 @@ function useInputForm() {
   }
 
   // 보행자 경로 검색해서 지도에 그리기
-  const createWalkPath = async (select, startX, startY, endX, endY) => {
+  const createWalkPath = async (
+    select,
+    startX,
+    startY,
+    endX,
+    endY,
+    isWalkPath
+  ) => {
     let walkCoordinate = [];
 
     let startPedestrianPath = await TmapApi.getPedestrianPath(
@@ -568,6 +576,10 @@ function useInputForm() {
       endX,
       endY
     );
+
+    if (isWalkPath !== undefined) {
+      setPathList([startPedestrianPath]);
+    }
 
     for (var i in startPedestrianPath.features) {
       let geometry = startPedestrianPath.features[i].geometry;
