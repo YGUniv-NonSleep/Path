@@ -26,6 +26,8 @@ import busIcon from '../../assets/images/bus(16x16).png';
 import subwayIcon from '../../assets/images/train(16x16).png';
 import bicycleIcon from '../../assets/images/bicycle(16x16).png';
 import microScooterIcon from '../../assets/images/micro-scooter(16x16).png';
+import ElectricScooterIcon from '@mui/icons-material/ElectricScooter';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import circleIcon from '../../assets/images/radio-button.png';
 import {
   Dialog,
@@ -34,9 +36,10 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  SvgIcon,
 } from '@mui/material';
 
-function PathList({ list, click, handleMobilOpen }) {
+function PathList({ list, click, handleMobilOpen, way }) {
   const transitSection = (item, idx) => {
     let transit = [];
     let section = item.routeSection.length;
@@ -165,13 +168,78 @@ function PathList({ list, click, handleMobilOpen }) {
     return transit;
   };
 
+  const MobilityInfo = () => {
+    let placeName = new Array();
+    if (way.length > 0) {
+      for (let i = 0; i < way.length; i++) {
+        placeName.push(way[i].place_name);
+      }
+    } else {
+      placeName = [];
+    }
+    return (
+      <>
+        <StepInfoItem key="0">
+          <IconWrap>
+            <IconArea>
+              <DirectionsWalkIcon color="action"></DirectionsWalkIcon>
+            </IconArea>
+            <VehicleTypeArea>
+              <VehicleTypeLabel fontColor="#484848">도보</VehicleTypeLabel>
+            </VehicleTypeArea>
+          </IconWrap>
+          <StepInfoArea>
+            <StepTitleArea>
+              <StepTitle>{placeName[0]}</StepTitle>
+              <AppendixBtnArea>{/* 공간 채우기 */}</AppendixBtnArea>
+            </StepTitleArea>
+          </StepInfoArea>
+        </StepInfoItem>
+        <StepInfoItem key="0">
+          <IconWrap>
+            <IconArea>
+              <ElectricScooterIcon color="primary"></ElectricScooterIcon>
+            </IconArea>
+            <VehicleTypeArea>
+              <VehicleTypeLabel fontColor="#356de9">
+                {list[0].mobility.type === 'KICKBOARD' ? '킥보드' : '자전거'}
+              </VehicleTypeLabel>
+            </VehicleTypeArea>
+          </IconWrap>
+          <StepInfoArea>
+            <StepTitleArea>
+              <StepTitle>퍼스널 모빌리티 탑승</StepTitle>
+              <AppendixBtnArea>{/* 공간 채우기 */}</AppendixBtnArea>
+            </StepTitleArea>
+          </StepInfoArea>
+        </StepInfoItem>
+        <StepInfoItem key="0">
+          <IconWrap>
+            <IconArea>
+              <IconSpan img={circleIcon}>icon</IconSpan>
+            </IconArea>
+            <VehicleTypeArea>
+              <VehicleTypeLabel fontColor="#484848">도착</VehicleTypeLabel>
+            </VehicleTypeArea>
+          </IconWrap>
+          <StepInfoArea>
+            <StepTitleArea>
+              <StepTitle>&nbsp;&nbsp;{placeName[1]}</StepTitle>
+              <AppendixBtnArea>{/* 공간 채우기 */}</AppendixBtnArea>
+            </StepTitleArea>
+          </StepInfoArea>
+        </StepInfoItem>
+      </>
+    );
+  };
+
   return (
     <>
       {list.map((item, idx) => (
         <PathInserted key={`list${idx}`}>
           <DirectionSummaryItemTransit onClick={() => click(idx)}>
             <RouteSummaryBox>
-              {idx == 0 ? (
+              {idx === 0 ? (
                 <RouteType>
                   {/* 최적, 최소 시간, 환승, 도보 표시 컴포넌트 */}
                   최적
@@ -201,7 +269,7 @@ function PathList({ list, click, handleMobilOpen }) {
                 {item.mobility === undefined ? (
                   <>{transitSection(item, idx)}</>
                 ) : (
-                  <div>퍼스널 모빌리티 타고감</div>
+                  <MobilityInfo></MobilityInfo>
                 )}
               </StepInfoList>
             </StepInfoWrap>
