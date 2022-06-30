@@ -5,7 +5,12 @@ import { useOutletContext } from "react-router-dom";
 function useCompItems() {
   const [myItems, setMyItems] = useState([]);
   const [prodForm, setProdForm] = useState(null);
+  const [detailForm, setDetailForm] = useState(null);
   const companyId = useOutletContext();
+
+  function changeDetailForm(form){
+    setDetailForm(form);
+  }
 
   // 상품 입력 폼
   function productForm(e){
@@ -119,10 +124,11 @@ function useCompItems() {
   }, []);
 
   return {
-    myItems,
+    myItems,detailForm,
     productForm, 
     registProduct,
     getProduct,
+    changeDetailForm
   };
 }
 

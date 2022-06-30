@@ -4,36 +4,62 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import useLoading from '../../../../hooks/useLoading';
 import useCompItems from "../hooks/useCompItems";
+import blankImage from "../../../../assets/images/gift.png";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 const ItemCon = styled.div`
-  width: 390px;
+  width: 100%;
   height: 100%;
 `;
 
 const ItemSubCon = styled.div`
   margin-left: 130px;
+  width: 100%;
+`;
+
+const ItemListCon = styled.div`
+scrollbar-width: none;
+scrollbar-height: none;
+width: 30%;
+overflow: auto;
+float:left;
+`;
+
+const DetailCon = styled.div`
+scrollbar-width: none;
+scrollbar-height: none;
+width: 30%;
+float:left;
 `;
 
 function ItemsMain() {
   const { loading } = useLoading();
   const { 
-    myItems, 
+    myItems, detailForm,
     productForm
   } = useCompItems()
 
   return (
     <ItemCon>
       <ItemSubCon>
+        <ItemListCon>
+        
         <Outlet context={23}></Outlet>
-        {loading ? <p>상품 목록 화면</p> : <h2>로드 중...</h2>}
+        {loading ? <p></p> : <h2>로드 중...</h2>}
         {/* 상품 아이디에 맞게 띄우도록.. 도메인에는 안보이게 onClick 함수로 등록 */}
-        <button onClick={productForm}>
+        <Button onClick={productForm}>
           가게 상품 등록
-        </button>
+        </Button>
         <Link to={"/company/basic"}>
-          <button>
+          <Button>
             기본 상품 등록
-          </button>
+          </Button>
         </Link>
         {myItems == null ? (
           console.log("데이터 잘못넘어옴")
@@ -42,24 +68,93 @@ function ItemsMain() {
             // console.log("조회된 데이터가 없음")
             <div>조회된 상품이 없습니다 상품을 추가해주세요</div>
           ) : (
-            myItems.map((it, index) => {
+
+            myItems.map((product, index) => {
               // console.log(it);
               return (
                 <Fragment key={index}>
-                  <div>상품이름: {it.prodBasic.name}</div>
-                  {/* <div>상품 판매 여부: {it.exposure}</div> */}
-                  <div>상품가격: {it.price}</div>
-                  <div>상품재고: {it.stock}</div>
-                  <Link to="itemEdit"><button>상품 상세 정보</button></Link>
+                  {/* <div>상품이름: {product.prodBasic.name}</div>                
+                  <div>상품가격: {product.price}</div>
+                  <div>상품재고: {product.stock}</div>
+                  <Link to="itemEdit"><button>상품 상세 정보</button></Link> */}
                   <br/>
-                  {/* <div>상품옵션이름: {it.optionList[0].name}</div> */}
-                  {/* <div>상품상세옵션이름: {it.optionList[0].detailOptionList[0].name}</div>
-                      <div>상품상세옵션가격: {it.optionList[0].detailOptionList[0].price}</div> */}
+
+                  <ListItemButton
+                  alignItems="flex-start"
+                  onClick={()=>handleOpen(idx)}
+                  sx={{zIndex: '20', }}
+                >
+                  <ListItemAvatar sx={{ margin: "auto 0" }}>
+                    <Avatar
+                      alt="item"
+                      variant="rounded"
+                      sx={{
+                        height: "74px",
+                        width: "74px",
+                        marginRight: "10px",
+                      }}
+                      src={
+                        product.prodBasic.image != "blankImage"
+                          ? `${process.env.REACT_APP_SPRING_API}/api/image/${product.prodBasic.image}`
+                          : blankImage
+                      }
+                    />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={
+                      <>
+                        <Typography sx={{display: 'inline-block'}}>
+                          상품명
+                        </Typography>
+                        <Typography sx={{display: 'inline-flex', marginLeft: '12px'}}>
+                          {product.prodBasic.name}
+                        </Typography>
+                      </>
+                    }
+                    sx={{
+                      display: "block",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      margin: "auto 0",
+                    }}
+                    secondary={
+                      <Fragment sx={{marginLeft: '9px'}}>
+                        <div>
+                          <Typography sx={{display: 'inline-block'}} variant="body2" color="text.primary">
+                            가격
+                          </Typography>
+                          <Typography sx={{display: 'inline-flex', marginLeft: '9px'}} variant="button" component="span">
+                            {product.price}원
+                          </Typography>
+                        </div>
+                        <div>
+                          <Typography sx={{display: 'inline-block'}} variant="body2" color="text.primary">
+                            재고
+                          </Typography>
+                          <Typography sx={{display: 'inline-flex', marginLeft: '9px'}} variant="button" component="span">
+                            {product.discount}
+                          </Typography>
+                        </div>
+                      </Fragment>
+                    }
+                  />
+                </ListItemButton>
                 </Fragment>
               );
             })
           )
         )}
+        </ItemListCon>
+
+        <DetailCon>
+          {detailForm == null ? <p>fdfd</p> : <h2>로드 중...</h2>}
+        </DetailCon>
+
+        
+
+
+
+
       </ItemSubCon>
     </ItemCon>
   );
