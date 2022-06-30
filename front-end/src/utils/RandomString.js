@@ -3,15 +3,16 @@
  */
 
 function RandomString() {
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz!@#$%^&*()_+-='
-    const stringLength = parseInt(Math.random() * (64-6)) + 6
-    let randomString = ''
-    for (let i = 0; i < stringLength; i++) {
-      const rNum = Math.floor(Math.random() * chars.length)
-      randomString += chars.substring(rNum, rNum + 1)
-    }
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz!@#$%^&*()_+-='
+  const stringLength = parseInt(Math.random() * (64-6)) + 6
+  let randomString = ''
+  
+  for (let i = 0; i < stringLength; i++) {
+    const rNum = Math.floor(Math.random() * chars.length)
+    randomString += chars.substring(rNum, rNum + 1)
+  }
 
-    return randomString
+  return randomString
 }
 
 export default RandomString

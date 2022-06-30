@@ -68,14 +68,17 @@ function useOderMain() {
   }
   // console.log(optionCalcul)
 
-  const putCart = (comId, pid, price, count) => {
+  const putCart = (prodInfo, price, count) => {
+    console.log(prodInfo)
     let cartData = {
-      comId: comId,
+      comId: prodInfo.company.id,
+      comName: prodInfo.company.name,
       total: price * count,
       orderCompositionList: {
-        productId: pid,
+        productId: prodInfo.id,
         quantity: count,
         price: price * count, // 갯수 곱한건가?
+        name: prodInfo.prodBasic.name
       }
     }
 
@@ -89,7 +92,7 @@ function useOderMain() {
     let chk = false; // duplicate check
 
     carts.map((item)=>{
-      if (item.productId === pid) {
+      if (item.productId === prodInfo.id) {
         if (item.detailOptionList.toString() === opList.toString()) {
           chk = true
           // alert("해당 상품과 같은 옵션의 상품이 장바구니에 이미 있습니다.")

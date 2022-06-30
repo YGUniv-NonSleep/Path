@@ -55,8 +55,8 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
 
   function sInfo() {
     let list = [];
-    
-    let value = [`${place.name != '' ? place.name : '업체명'}`, `약 ${'나중에 받을거임'}분`, `${'나중에 받으려나?'}m`, '카드결제, 현장결제(카드/현금)'];
+
+    let value = [`${place.name != '' ? place.name : '업체명'}`, `약 ${`${place.waitTime}`}분`, `${'나중에 받으려나?'}m`, '카드결제, 현장결제(카드/현금)'];
     const title = ['가게이름', '대기시간', '가게위치', '결제방법'];
 
     for (var i = 0; i < 4; i++) {
@@ -119,7 +119,11 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                         alt="item"
                         variant="rounded"
                         sx={{ height: "74px", width: "74px", marginRight: "10px" }}
-                        src="/static/images/avatar/1.jpg"
+                        src={ 
+                          item.prodBasic.image != "blankImage" && item.prodBasic.image != undefined 
+                          ? `${process.env.REACT_APP_SPRING_API}/api/image/${item.prodBasic.image}`
+                          : `${process.env.PUBLIC_URL}/noImage.png`
+                        }
                       />
                     </ListItemAvatar>
                     <ListItemText
@@ -161,7 +165,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
         </Accordion>
       )
     }
-
+    
     return arr
   }
 
@@ -191,23 +195,23 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                       // defaultValue={`${option.detailOptionList[0].price}`}
                       name="radio-buttons-group"
                     >
-                        {/* 세부 옵션 */}
-                        { option.detailOptionList.map((od) => 
-                          <div style={{ display: 'flex' }}>
-                            <FormControlLabel 
-                              value={`${od.price}`}
-                              control={<Radio />} 
-                              label={`${od.name}`} // 화면에 보이는 값
-                              sx={{ display: 'inline-block' }} 
-                              onChange={()=>calculOpt(od)}
-                            />
-                            <Typography 
-                              sx={{ display: 'inline-flex', alignItems: 'center', marginLeft: 'auto' }}
-                            >
-                              +{od.price}원
-                            </Typography>
-                          </div>
-                        ) }
+                      {/* 세부 옵션 */}
+                      { option.detailOptionList.map((od) => 
+                        <div style={{ display: 'flex' }}>
+                          <FormControlLabel 
+                            value={`${od.price}`}
+                            control={<Radio />} 
+                            label={`${od.name}`} // 화면에 보이는 값
+                            sx={{ display: 'inline-block' }} 
+                            onChange={()=>calculOpt(od)}
+                          />
+                          <Typography 
+                            sx={{ display: 'inline-flex', alignItems: 'center', marginLeft: 'auto' }}
+                          >
+                            +{od.price}원
+                          </Typography>
+                        </div>
+                      ) }
                     </RadioGroup>
                     <Divider sx={{ marginTop: '5px' }} />
                 </FormControl>  
@@ -216,12 +220,12 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
 
               <ButtonGroup sx={{ display: 'flex', justifyContent: 'flex-end;', marginLeft: 'auto' }}> 
                 <Button
-                    aria-label="reduce"
-                    onClick={() => {
-                      setCount(Math.max(count - 1, 1));
-                    }}
+                  aria-label="reduce"
+                  onClick={() => {
+                    setCount(Math.max(count - 1, 1));
+                  }}
                 >
-                    <RemoveIcon fontSize="small" />
+                  <RemoveIcon fontSize="small" />
                 </Button>
                 <Button>{count}</Button>
                 <Button
@@ -243,7 +247,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleDialogClose}>뒤로가기</Button>
-            <Button onClick={()=>putCart(prodInfo.company.id, prodInfo.id, (prodInfo.price + optionPrice), count)}>장바구니 추가</Button>
+            <Button onClick={()=>putCart(prodInfo, (prodInfo.price + optionPrice), count)}>장바구니 추가</Button>
           </DialogActions>
         </Dialog>
       ) : null }
