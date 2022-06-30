@@ -22,7 +22,7 @@ function useScooterIcon(){
   const [open, setOpen] = useState(false);
   const handleOpen = (e) => {
     setOpen(true);
-  }; 
+  };
 
   const handleClose = () => {
     if (open === true) return setOpen(false);
@@ -45,15 +45,16 @@ function useScooterIcon(){
 
   async function ScooterIcon() {
 
-    const responseMobil = await getMobilities('KICKBOARD', 128.62155, 35.8953251);
+    const responseMobil = await getMobilities('KICKBOARD', 128.621635, 35.89581752);
     console.log(responseMobil);
-   
-    let imageSrc = scooter
-    let imageSize = new kakao.maps.Size(55, 55);
     
-    var positions = [
-     
-    ];
+    let imageSrc = scooter
+
+    const normalImage = new kakao.maps.MarkerImage(
+      imageSrc,
+      new kakao.maps.Size(45,45)
+    );
+
     for (var i = 0; i < responseMobil.data.body.length; i++) {
       var marker = new kakao.maps.Marker({
         map: map,
@@ -63,41 +64,14 @@ function useScooterIcon(){
         ),
         image: normalImage,
       });
-
-      var infowindow = new kakao.maps.InfoWindow({
-        content: `<br><div>모빌리티 : ${responseMobil.data.body[i].id}번</div>
-                  <div>타입 : ${responseMobil.data.body[i].type}</div><br> `,
-      });
-
-      kakao.maps.event.addListener(
-        marker,
-        'mouseover',
-        makeOverListener(map, marker, infowindow, overImage)
-      );
-      kakao.maps.event.addListener(
-        marker,
-        'mouseout',
-        makeOutListener(marker, infowindow, normalImage)
-      );
-      setMarkerMobil((prev) => [...prev, marker]);
+      
     }
-
-    // for (var i = 0; i < positions.length; i++) {
-    //   var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-    //   var marker = new kakao.maps.Marker({
-    //     map: map, // 마커를 표시할 지도
-    //     position: positions[i].latlng,
-    //     clickable: true, // 마커를 표시할 위치
-    //     image: markerImage,
-    //   });
-
-    //   // 마커에 클릭이벤트를 등록합니다
-    //   kakao.maps.event.addListener(marker, "click", function () {
-    //     setModal("open");
-    //     console.log(modal);
-    //   });
-    // }
-    // marker.setMap(map);
+      // 마커에 클릭이벤트를 등록합니다
+      kakao.maps.event.addListener(marker, "click", function () {
+        setModal("open");
+        console.log(open);
+      });
+    marker.setMap(map);
   }
 
   useEffect(() => {
