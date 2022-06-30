@@ -21,14 +21,14 @@ function useBusInfo(){
   
     async function mapLoad() {
       try {
-        let createMap = await MapApi().createMap();
+        let createMap = await MapApi().createMap(new kakao.maps.LatLng(35.8953251, 128.62155));
         let setController = await MapApi().setController(createMap);
         settingMap(setController);
-        setLoading(true);
       } catch (error) {
         console.log(error);
       }
     }
+  
   
     function onChanged(e) {
       if (e != undefined) {
