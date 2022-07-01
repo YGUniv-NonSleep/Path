@@ -2,6 +2,7 @@ import Map from '../../components/Map';
 import PropTypes from 'prop-types';
 import useLoading from '../../hooks/useLoading';
 import useOderMain from './hooks/useOderMain';
+import { useSelector } from 'react-redux';
 
 import {
   InputAdornment,
@@ -57,9 +58,11 @@ import CategoryList from './CategoryList';
 import StoreInfo from './StoreInfo';
 import PlaceList from './PlaceList';
 import StoreMenu from './StoreMenu';
+import Cart from "./Cart";
 
 function OderMain() {
   const { loading } = useLoading();
+  const cartState = useSelector((state) => state.cart);
   const {
     closeToggle,
     animate,
@@ -76,6 +79,9 @@ function OderMain() {
     showStore, 
     prodList, 
     compCateList, 
+    cartOpen, 
+    handleCartOpen, 
+    handleCartClose, 
     handleShowStore, 
     placeTarget,
     handleAlignment,
@@ -272,15 +278,17 @@ function OderMain() {
                               left: '300px;',
                               top: '870px;',
                             }}
-                            onClick={() => alert('cart')}
+                            onClick={handleCartOpen}
                           >
-                            <Badge badgeContent={4} color="warning">
+                            <Badge badgeContent={cartState.orderCompositionList.length} color="warning">
                               <ShoppingCartIcon
                                 sx={{ width: '42px', height: '42px' }}
                               />
                             </Badge>
                           </IconButton>
-                          {/* 장바구니 */} {/* 리덕스 툴킷에 보관 예정 */}
+                          
+                          { cartOpen ? <Cart openChk={cartOpen} handleClose={handleCartClose} /> : null }
+                          {/* 장바구니 */}
                         </>
                       ) : (
                         <StoreInfo place={place} showStore={handleShowStore} />

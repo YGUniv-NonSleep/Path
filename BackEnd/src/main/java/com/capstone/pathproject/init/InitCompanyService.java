@@ -32,6 +32,9 @@ public class InitCompanyService {
     }
     int t = 0;
     public Company createCafe(String name, Long id, Long coId){
+
+        double waitTime = Math.random() * 60;
+
         return Company.createCompany()
                 .longitude(35.89910941386297 + 0.001*t++ )
                 .latitude(128.62159611841497 + 0.001*t++ )
@@ -45,6 +48,7 @@ public class InitCompanyService {
                 .open(LocalTime.of(9,10))
                 .close(LocalTime.of(20,30))
                 .member(memberRepository.findById(id).get())
+                .waitTime((int) waitTime)
                 .build();
     }
 
