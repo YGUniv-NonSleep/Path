@@ -12,6 +12,7 @@ import axios from 'axios';
 import PageNotFound from './PageNotFound';
 import Menubar from './Menubar';
 
+import { Success, Fail } from '../pages/PaymentResult';
 import { Path, WalkPath } from '../pages/Path';
 import { Oder } from '../pages/Oder';
 import { Bus, Subway, Scooter, Bike } from '../pages/Mobility';
@@ -168,6 +169,9 @@ function Router() {
         <Route path="/carpool/:postId" element={<CarPoolContents />} />
         <Route path="/carpool/add" element={<CarPoolAdd />} />
         {/* <Route path="/carpool/:postId" element={<CarPoolContents />} /> */}
+
+        <Route path="/pay/success" element={<Success />} />
+        <Route path="/pay/fail" element={<Fail />} />
 
         {userInfo.role != 'ROLE_ANONYMOUS' ? (
           // 로그인되었는지 확인

@@ -1,6 +1,5 @@
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Typography from "@mui/material/Typography";
-import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import IconButton from "@mui/material/IconButton";
 import Dialog from '@mui/material/Dialog';
@@ -9,25 +8,18 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
-import ListItemButton from "@mui/material/ListItemButton";
-import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Fragment } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCart, clearCart } from '../../store/cart';
-import RandomString from "../../utils/RandomString";
+import useOderMain from "./hooks/useOderMain";
 
 function Cart({ openChk, handleClose }) {
   const cart = useSelector((state) => state.cart); // 맴버의 아이디 0 아닌지 체크
   const dispatch = useDispatch();
-  console.log(cart)
+  const { openTossWindow } = useOderMain();
 
   return (
       <Dialog
@@ -67,7 +59,7 @@ function Cart({ openChk, handleClose }) {
                     <>
                       <ListItem alignItems="flex-start">
                         <ListItemText
-                          primary={<Typography>상품명 {item.name}</Typography>}
+                          primary={<Typography>{item.name}</Typography>}
                           sx={{
                             display: "block",
                             overflow: "hidden",
@@ -82,7 +74,7 @@ function Cart({ openChk, handleClose }) {
                                 variant="body2"
                                 color="text.primary"
                               >
-                                {` 상품 옵션 설명 `}
+                                {`${item.OptName}`}
                               </Typography>
                               <Typography
                                 sx={{ display: "block" }}
@@ -110,7 +102,7 @@ function Cart({ openChk, handleClose }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ display: 'flex', flexDirection: 'column;' }}>
-          <Button onClick={()=>alert("ㅇㅇ")} disabled={cart.orderCompositionList.length != 0 ? false : true}>
+          <Button onClick={openTossWindow} disabled={cart.orderCompositionList.length != 0 ? false : true}>
             {` 총 ${cart.orderCompositionList.length}개 `} 
             <Divider orientation="vertical" variant="5px" flexItem={false} sx={{ margin: "0 3px" }} />
             {` ${cart.totalAmount}원 결제하기 `} 

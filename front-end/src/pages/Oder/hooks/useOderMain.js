@@ -2,13 +2,17 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import MapApi from "../../../api/MapApi";
+import TossPayments from "../../../api/TossPayments";
 import currentLoc from '../../../assets/images/placeholder.png';
 import { addCart, clearCart } from "../../../store/cart";
 
 function useOderMain() {
   // '업체' 회원만 오더에서 업체 조회가 되고 있다
   const cartState = useSelector((state) => state.cart); // 맴버의 아이디 0 아닌지 체크
+  const member = useSelector((state) => state.user)
+  
   const dispatch = useDispatch();
+  const [toss, setToss] = useState(false);
 
   const [closeToggle, setCloseToggle] = useState(true);
   const [subBarHide, setSubBarHide] = useState(false)
@@ -38,28 +42,44 @@ function useOderMain() {
   const [optionPrice, setOptionPrice] = useState(0);
   const [optionCalcul, setOptionCalcul] = useState([]);
 
+  const openTossWindow = () => {
+    setToss(true)
+  }
+
+  async function tossCreate() {
+    let rs = await TossPayments(member, cartState);
+  }
+
+  useEffect(()=>{
+    try {
+      if(toss == true) {
+        tossCreate()
+      }
+      setToss(false)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }, [toss])
+
   const calculOpt = (dOpid) => {
     console.log(dOpid) // 카트에 옵션 정보 담을거임
-    let data = {
-      oId: dOpid.optionId,
-      oPrice: dOpid.price,
-      id: dOpid.id
-    }
+    let data = dOpid;
     
     if (optionCalcul.length == 0) {
       setOptionCalcul([data]);
-      setOptionPrice((prev) => prev + parseInt(data.oPrice))
+      setOptionPrice((prev) => prev + parseInt(data.price))
     }
     else {
       let op = optionCalcul; // 이전 데이터
-      let result = op.filter((v) => v.oId != data.oId) // 필터 후 데이터
+      let result = op.filter((v) => v.optionId != data.optionId) // 필터 후 데이터
       result.push(data);
-      result.sort(function(a, b) { return a.oId - b.oId })
+      result.sort(function(a, b) { return a.optionId - b.optionId })
       //console.log(result)
 
       let sum = 0
       result.map((item)=>{
-        sum += parseInt(item.oPrice)
+        sum += parseInt(item.price)
       })
 
       setOptionPrice(sum)
@@ -81,11 +101,14 @@ function useOderMain() {
         name: prodInfo.prodBasic.name
       }
     }
-
+    
+    let optName = [];
     let opList = []
     optionCalcul.map((opt)=>{
+      optName.push(opt.name)
       opList.push(opt.id)
     })
+    cartData.orderCompositionList.OptName = optName
     opList.sort((a, b)=>{return a-b})
 
     let carts = cartState.orderCompositionList;
@@ -483,7 +506,7 @@ function useOderMain() {
   return {
     map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodInfo, optionPrice, 
     prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, cartState, cartOpen, 
-    handleCartOpen, handleCartClose, 
+    handleCartOpen, handleCartClose, openTossWindow, 
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
     sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, calculOpt, 
     handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, putCart, 
