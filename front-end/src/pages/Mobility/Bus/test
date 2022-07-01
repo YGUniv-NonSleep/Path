@@ -51,3 +51,53 @@ const imageSrc = scooter;
       );
       setMarkerMobil((prev) => [...prev, marker]);
     }
+
+
+
+
+
+
+
+
+
+
+
+    async function ScooterIcon() {
+    const responseMobil = await getMobilities('KICKBOARD', 128.621635, 35.89581752);
+    console.log(responseMobil);
+    
+    let imageSrc = scooter;
+
+    const normalImage = new kakao.maps.MarkerImage(
+      imageSrc,
+      new kakao.maps.Size(45,45)
+    );
+
+    for (var i = 0; i < responseMobil.data.body.length; i++) {
+      var marker = new kakao.maps.Marker({
+        map: map,
+        position: new kakao.maps.LatLng(
+          responseMobil.data.body[i].latitude,
+          responseMobil.data.body[i].longitude
+        ),
+        image: normalImage,
+        clickable: true,
+      });
+
+      var mobilData = responseMobil.data.body[i];
+
+    // 마커에 클릭이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, "click", makeClickListener(map, marker, mobilData));
+    setMobilMarker((prev) => [...prev, marker]);
+  }
+
+    marker.setMap(map);
+  }
+
+  const makeClickListener = (map, marker, mobilData) => {
+    return () => {
+      setMobilData(mobilData)
+      setModal("open");
+      // infowindow.open(map, marker); 
+    };
+  };

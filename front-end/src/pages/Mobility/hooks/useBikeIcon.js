@@ -6,6 +6,8 @@ import bike from "../../../assets/images/bicycle2(64x64).png";
 function useBikeIcon() {
   const [map, settingMap] = useState(null);
   const [modal, setModal] = useState(null);
+  const [mobilData, setMobilData] = useState([]);
+  const [mobilMarker, setMobilMarker] = useState([]);
 
   async function mapLoad() {
     try {
@@ -40,35 +42,68 @@ function useBikeIcon() {
     let imageSrc = bike;
 
     const normalImage = new kakao.maps.MarkerImage(
-      imageSrc, 
+      imageSrc,
       new kakao.maps.Size(45,45)
     );
 
     for (var i = 0; i < responseMobil.data.body.length; i++) {
       var marker = new kakao.maps.Marker({
         map: map,
-        clickable: true,
         position: new kakao.maps.LatLng(
           responseMobil.data.body[i].latitude,
           responseMobil.data.body[i].longitude
         ),
         image: normalImage,
+        clickable: true,
       });
-      
-    }
 
-      kakao.maps.event.addListener(marker, "click", function () {
-        setModal("open");
+      var mobilData = responseMobil.data.body[i];
+
+      var infowindow = new kakao.maps.InfoWindow({
+        content: `<br><div>모빌리티 : ${responseMobil.data.body[i].id}번</div>
+                  <div>타입 : ${responseMobil.data.body[i].type}</div><br> `,
       });
+
+      kakao.maps.event.addListener(
+        marker,
+        'mouseover',
+        makeOverListener(map, marker, infowindow, normalImage)
+      );
+
+      kakao.maps.event.addListener(
+        marker,
+        'mouseout',
+        makeOutListener(marker, infowindow, normalImage)
+      );
+
+    // 마커에 클릭이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, "click", makeClickListener(map, marker, mobilData));
+    setMobilMarker((prev) => [...prev, marker]);
+  }
+
     marker.setMap(map);
   }
 
-  
-  const test = () => {
-    //신호보내고 받음
-    var res;
-    res.body[0].battery;
-  }
+  const makeOverListener = (map, marker, infowindow, normalImage) => {
+    return () => {
+      infowindow.open(map, marker);
+      marker.setImage(normalImage);
+    };
+  };
+
+  const makeOutListener = (marker, infowindow, normalImage) => {
+    return () => {
+      infowindow.close();
+      marker.setImage(normalImage);
+    };
+  };
+
+  const makeClickListener = (map, marker, mobilData) => {
+    return () => {
+      setMobilData(mobilData)
+      setModal("open");
+    };
+  };
 
   useEffect(() => {
     mapLoad();
@@ -79,7 +114,7 @@ function useBikeIcon() {
   }, [map]);
 
   return {
-    mapLoad, BikeIcon, modal
+    mapLoad, BikeIcon, modal, mobilData
   }
 }
 
