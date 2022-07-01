@@ -6,7 +6,9 @@ import scooter from "../../../assets/images/electric-scooter.png";
 function useScooterIcon(){
   const [map, settingMap] = useState(null);
   const [modal, setModal] = useState(null);
-  const [mobilities, setMobilities] = useState([]);
+  const [saveData, setSaveData] = useState('');
+  const [mobilData, setMobilData] = useState([]);
+  const [mobilMarker, setMobilMarker] = useState([]);
 
   async function mapLoad() {
     try {
@@ -44,11 +46,10 @@ function useScooterIcon(){
   };
 
   async function ScooterIcon() {
-
     const responseMobil = await getMobilities('KICKBOARD', 128.621635, 35.89581752);
     console.log(responseMobil);
     
-    let imageSrc = scooter
+    let imageSrc = scooter;
 
     const normalImage = new kakao.maps.MarkerImage(
       imageSrc,
@@ -63,16 +64,56 @@ function useScooterIcon(){
           responseMobil.data.body[i].longitude
         ),
         image: normalImage,
+        clickable: true,
       });
-      
-    }
-      // 마커에 클릭이벤트를 등록합니다
-      kakao.maps.event.addListener(marker, "click", function () {
-        setModal("open");
-        console.log(open);
+
+      var mobilData = responseMobil.data.body[i];
+
+      var infowindow = new kakao.maps.InfoWindow({
+        content: `<br><div>모빌리티 : ${responseMobil.data.body[i].id}번</div>
+                  <div>타입 : ${responseMobil.data.body[i].type}</div><br> `,
       });
+
+      kakao.maps.event.addListener(
+        marker,
+        'mouseover',
+        makeOverListener(map, marker, infowindow, normalImage)
+      );
+
+      kakao.maps.event.addListener(
+        marker,
+        'mouseout',
+        makeOutListener(marker, infowindow, normalImage)
+      );
+
+    // 마커에 클릭이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, "click", makeClickListener(map, marker, mobilData));
+    setMobilMarker((prev) => [...prev, marker]);
+  }
+
     marker.setMap(map);
   }
+
+  const makeOverListener = (map, marker, infowindow, normalImage) => {
+    return () => {
+      infowindow.open(map, marker);
+      marker.setImage(normalImage);
+    };
+  };
+
+  const makeOutListener = (marker, infowindow, normalImage) => {
+    return () => {
+      infowindow.close();
+      marker.setImage(normalImage);
+    };
+  };
+
+  const makeClickListener = (map, marker, mobilData) => {
+    return () => {
+      setMobilData(mobilData)
+      setModal("open");
+    };
+  };
 
   useEffect(() => {
     mapLoad();
@@ -83,7 +124,7 @@ function useScooterIcon(){
   }, [map]);
 
   return {
-    mapLoad, ScooterIcon, handleOpen, handleClose, open, modal
+    mapLoad, ScooterIcon, handleOpen, handleClose, open, modal, mobilData
   }
 }
 
