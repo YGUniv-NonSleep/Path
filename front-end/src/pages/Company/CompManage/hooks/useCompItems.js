@@ -6,10 +6,49 @@ function useCompItems() {
   const [myItems, setMyItems] = useState([]);
   const [prodForm, setProdForm] = useState(null);
   const [detailForm, setDetailForm] = useState(null);
+  const [productDetail, setProductDetail] = useState(null);
+  const [detailOptionVisible, setDetailOptionVisible] = useState([])
   const companyId = useOutletContext();
 
   function changeDetailForm(form){
     setDetailForm(form);
+  }
+
+  function changeDetailOptionVisible(index){
+    // console.log(index)
+    const arr = [...detailOptionVisible]
+    arr[index] = !arr[index]
+    setDetailOptionVisible(arr);
+  }
+
+  function setDetailOptionLength(length){
+    var arr = new array(length)
+    for (let index = 0; index < length; index++) {
+      arr[index] = false;      
+    }
+    setDetailOptionVisible(arr);
+  }
+
+  // function getDetailForm(){
+  //   return productDetail
+  // }
+
+  function openDetailForm(productId){
+    console.log(productId);
+    setDetailForm("detail")
+
+    axios.get(process.env.REACT_APP_SPRING_API + "/api/product/"+productId)
+    .then((res)=>{
+      console.log(res.data.body)
+      setProductDetail(res.data.body)
+      setDetailOptionLength(null)
+      setDetailOptionLength(res.data.optionList.length)
+
+      console.log(productDetail)
+    }).catch((err)=>{
+
+    })
+
   }
 
   // 상품 입력 폼
@@ -124,11 +163,13 @@ function useCompItems() {
   }, []);
 
   return {
-    myItems,detailForm,
+    myItems,detailForm,productDetail,detailOptionVisible,
     productForm, 
     registProduct,
     getProduct,
-    changeDetailForm
+    changeDetailForm,
+    openDetailForm,
+    changeDetailOptionVisible
   };
 }
 

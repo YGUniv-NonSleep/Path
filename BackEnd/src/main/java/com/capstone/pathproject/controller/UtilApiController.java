@@ -55,8 +55,6 @@ public class UtilApiController {
 
         String key = Arrays.toString(decoder.decode(encodedString));
 
-
-
         System.out.println(Arrays.toString(apiByte));
         System.out.println(Arrays.toString(encodedByte));
         System.out.println(encodedString);
@@ -77,7 +75,11 @@ public class UtilApiController {
                         .build())
                 .bodyValue(data)
                 .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
+
+        System.out.println("mono = " + mono);
+        System.out.println("mono.block() = " + mono.block());
         return mono.block();
+
     }
 
 
