@@ -77,8 +77,18 @@ function Success() {
                 }}
             >
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                <Button sx={{fontSize: "23px"}} color="success" onClick={()=>navigate("/oder")}>오더로 되돌아가기</Button>
-                <Button sx={{fontSize: "23px"}} color="success" onClick={()=>navigate("/member/payments")}>구매내역으로 이동하기</Button>
+                <Button 
+                  sx={{fontSize: "23px", width: "225px"}} 
+                  variant="outlined" 
+                  color="success" 
+                  onClick={()=>navigate("/oder")}
+                >오더로 이동</Button>
+                <Button 
+                  sx={{fontSize: "23px", marginLeft: "15px"}} 
+                  variant="outlined" 
+                  color="success" 
+                  onClick={()=>navigate("/member/payments")}
+                >결제내역으로 이동</Button>
                 </div>
             </Box>
           </Container>

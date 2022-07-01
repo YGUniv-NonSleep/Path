@@ -86,11 +86,12 @@ function Fail() {
                     : "이런저런 모시깽이한 이유.." }
                 </Typography>
                 <Button 
-                    align="center" 
-                    variant="outlined" 
-                    onClick={()=>navigate("/oder")}
-                    sx={{ display: "flex", margin: "60px auto 0" }}
-                >오더로 되돌아가기</Button>
+                  align="center" 
+                  variant="outlined"
+                  color="error"
+                  onClick={()=>navigate("/oder")}
+                  sx={{ display: "flex", margin: "60px auto 0" }}
+                >오더로 이동</Button>
             </Box>
           </Container>
         </Box>
