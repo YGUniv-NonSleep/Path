@@ -22,14 +22,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CarsService {
     private final CarsRepository carsRepository;
     private final MemberRepository memberRepository;
 
 
-    //CRUD
-    @Transactional
     public Message<String> create(CarsDto carsDto) {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = principalDetails.getMember();
@@ -53,32 +51,60 @@ public class CarsService {
                 .body("").build();
     }
 
-    @Transactional
-    public Message<Object> update(CarsDto carsDto, String fileName) {
+//    public Message<Object> update(CarsDto carsDto, String fileName) {
+//        Optional<Cars> findCars = carsRepository.findById(carsDto.getId());
+//        Cars car = findCars.orElse(null);
+//        if (car == null) {
+//            return Message.builder()
+//                    .header(StatusEnum.BAD_REQUEST)
+//                    .message("차량이 존재하지 않습니다.")
+//                    .body("").build();
+//        }
+//        Optional<Member> findMember = memberRepository.findById(carsDto.getMemberDto().getId());
+//        Member member = findMember.orElse(null);
+//        if (member == null) {
+//            return Message.builder()
+//                    .header(StatusEnum.BAD_REQUEST)
+//                    .message("회원이 존재하지 않습니다.")
+//                    .body("").build();
+//        }
+//        car.updateMember(member);
+//        car.updateCarKind(carsDto.getCarKind());
+//        car.updateCarNum(carsDto.getCarNum());
+//        car.updatePhotoName(carsDto.getPhotoName());
+//        return Message.<Object>builder()
+//                .header(StatusEnum.OK)
+//                .message("업데이트 완료")
+//                .body(carsDto).build();
+//    }
+
+    public Message<String> update(CarsDto carsDto){
         Optional<Cars> findCars = carsRepository.findById(carsDto.getId());
-        Cars car = findCars.orElse(null);
-        if (car == null) {
-            return Message.builder()
+        Cars cars = findCars.orElse(null);
+
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+
+        if(cars == null){
+            return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("차량이 존재하지 않습니다.")
                     .body("").build();
         }
-        Optional<Member> findMember = memberRepository.findById(carsDto.getMemberDto().getId());
-        Member member = findMember.orElse(null);
-        if (member == null) {
-            return Message.builder()
-                    .header(StatusEnum.BAD_REQUEST)
-                    .message("회원이 존재하지 않습니다.")
-                    .body("").build();
-        }
-        car.updateMember(member);
-        car.updateCarKind(carsDto.getCarKind());
-        car.updateCarNum(carsDto.getCarNum());
-        car.updatePhotoName(carsDto.getPhotoName());
-        return Message.<Object>builder()
+
+        Cars updateCars = Cars.createCars()
+                .id(carsDto.getId())
+                .carNum(carsDto.getCarNum())
+                .carKind(carsDto.getCarKind())
+                .member(member)
+                .photoName(carsDto.getPhotoName())
+                .build();
+
+        carsRepository.save(updateCars);
+        return Message.<String>builder()
                 .header(StatusEnum.OK)
-                .message("업데이트 완료")
-                .body(carsDto).build();
+                .message("차량 수정완료")
+                .body("").build();
     }
 
     @Transactional

@@ -18,6 +18,7 @@ import { Oder } from '../pages/Oder';
 import { Bus, Subway, Scooter, Bike } from '../pages/Mobility';
 import { Community, CommunityContents, CommunityAdd } from '../pages/Community';
 import { CarPool, CarPoolContents, CarPoolAdd } from '../pages/CarPool';
+import CarPoolRequest from '../pages/CarPool/CarPoolRequest';
 import { Company, CompStore, CompCreate, ItemBasic } from '../pages/Company';
 import {
   CompManage,
@@ -168,6 +169,7 @@ function Router() {
         <Route path="/carpool" element={<CarPool />} />
         <Route path="/carpool/:postId" element={<CarPoolContents />} />
         <Route path="/carpool/add" element={<CarPoolAdd />} />
+        <Route path="/carpool/request/:postId" element={<CarPoolRequest />} />
         {/* <Route path="/carpool/:postId" element={<CarPoolContents />} /> */}
 
         <Route path="/pay/success" element={<Success />} />
