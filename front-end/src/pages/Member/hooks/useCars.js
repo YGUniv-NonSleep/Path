@@ -124,6 +124,56 @@ function useCars() {
 
   const carsUpdate = (e) =>{
     e.preventDefault();
+    const data = {
+      id : e.target.id.value,
+      carNum : e.target.carsNum.value,
+      carKind : e.target.carsKind.value
+    }
+    console.log(data);
+
+    let formData = new FormData();
+    const multipartFile = e.target.userfile.files[0];
+    formData.append('multipartFile',multipartFile);
+
+    axios.post(process.env.REACT_APP_SPRING_API + '/api/image',formData,{
+      withCredentials : true,
+      headers : {
+        'Content-Type' : 'multipart/form-data',
+      },
+    })
+    .then((res)=>{
+      console.log(res);
+      const imageName = res.data;
+      console.log(imageName);
+      return imageName;
+    })
+    .then(async (imageName) => {
+      const result = await UpdateCars(imageName,data);
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  };
+
+  const UpdateCars = async(imageName,data) => {
+    const UpdateData = {
+      id : data.id,
+      carNum : data.carNum,
+      carKind : data.carKind,
+      photoName : imageName
+    }
+    await axios.patch(process.env.REACT_APP_SPRING_API + '/api/cars/update',UpdateData,{
+      withCredentials : true,
+    })
+    .then((res)=>{
+      console.log(res.data);
+      alert(res.data.message);
+      window.location = '/member/cars'
+    })
+    .catch((err)=>{
+      console.log(err);
+      alert(err.data.message);
+    })
   }
 
  

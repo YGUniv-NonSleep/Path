@@ -78,6 +78,10 @@ function useCarPoolAdd() {
     setIsArrivedOpen(false);
   };
 
+  const closeStartCode = (e) => {
+    setIsStartOpen(false);
+  }
+
   const handleComplete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
@@ -104,6 +108,10 @@ function useCarPoolAdd() {
     setIsStartOpen(false);
     setIsArrivedOpen(true);
   };
+
+  const closeArriveCode = (e) => {
+    setIsArrivedOpen(false);
+  }
 
   const handleComplete2 = (data) => {
     let fullAddress = data.address;
@@ -154,6 +162,7 @@ function useCarPoolAdd() {
           title: e.target.title.value,
           content: e.target.content.value,
           recruit: e.target.recruit.value,
+          price : e.target.price.value,
           sdate: e.target.sdate.value,
           edate: e.target.edate.value,
           stime: e.target.stime.value + ":00",
@@ -201,6 +210,7 @@ function useCarPoolAdd() {
           title: data.title,
           content: data.content,
           recruit: data.recruit,
+          price : data.price,
           sdate: data.sdate,
           edate: data.edate,
           stime: data.stime,
@@ -225,7 +235,7 @@ function useCarPoolAdd() {
       console.log(res.data);
       setDataSet(res.data.body);
       alert(res.data.message);
-      navigate(-1);
+      window.location = '/carPool';
     })
     .catch((err)=>{
       console.log(err);
@@ -237,7 +247,7 @@ function useCarPoolAdd() {
   return { 
     isStartOpen, isArrivedOpen, dataset, startAddr, arriveAddr, memberCars,caropenModal,choiceCarKind,choiceCarNum,
     navigate, getCoords, getArrivedCoords, openStartCode, openArrivedCode, 
-    handleComplete, handleComplete2, createCarPost,findCarsModal,closeCarsModal,choiceMyCar
+    handleComplete, handleComplete2, createCarPost,findCarsModal,closeCarsModal,choiceMyCar,closeStartCode,closeArriveCode
   }
 }
 

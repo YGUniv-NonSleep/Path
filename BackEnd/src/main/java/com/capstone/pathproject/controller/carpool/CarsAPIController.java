@@ -27,8 +27,6 @@ public class CarsAPIController {
     private final CarsService carsService;
     private final ResponseUtil responseUtil;
 
-
-    //CRUD
     @PostMapping("")
     public ResponseEntity<Message<?>> create(@RequestBody CarsDto carsDto) {
         Message<?> message = carsService.create(carsDto);
@@ -36,24 +34,30 @@ public class CarsAPIController {
     }
 
 
+//    @PatchMapping("/update")
+//    public ResponseEntity<Message<Object>> update(@RequestPart(value = "key", required = false) CarsDto carsDTO,
+//                                                  @RequestPart(value = "userfile", required = false) MultipartFile file,
+//                                                  HttpServletRequest request) {
+//        String fileName;
+//        if (file == null) {
+//            fileName = "";
+//        } else {
+//            fileName = file.getOriginalFilename();
+//            String filePath = request.getSession().getServletContext().getRealPath("") + "cars\\";
+//            try {
+//                file.transferTo(new File(filePath + fileName));
+//            } catch (IllegalStateException | IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        Message<Object> message = carsService.update(carsDTO, fileName);
+//        return new ResponseEntity<>(message, HttpStatus.OK);
+//    }
+
     @PatchMapping("/update")
-    public ResponseEntity<Message<Object>> update(@RequestPart(value = "key", required = false) CarsDto carsDTO,
-                                                  @RequestPart(value = "userfile", required = false) MultipartFile file,
-                                                  HttpServletRequest request) {
-        String fileName;
-        if (file == null) {
-            fileName = "";
-        } else {
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "cars\\";
-            try {
-                file.transferTo(new File(filePath + fileName));
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Message<Object> message = carsService.update(carsDTO, fileName);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+    public ResponseEntity<Message<?>> update(@RequestBody CarsDto carsDto){
+        Message<String> message = carsService.update(carsDto);
+        return responseUtil.createResponseEntity(message);
     }
 
     @DeleteMapping("/{carsId}")

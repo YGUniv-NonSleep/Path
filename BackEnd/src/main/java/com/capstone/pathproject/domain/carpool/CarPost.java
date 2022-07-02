@@ -133,4 +133,17 @@ public class CarPost {
                 .build();
     }
 
+    public void updateTitle(String title){this.title = title;}
+    public void updateContent(String content){this.content = content;}
+    public void updateRecruit(int recruit){this.recruit = recruit;}
+    public void updateStime(Time stime){this.stime = stime;}
+    public void updatestartLocal1(String startLocal1){this.startLocal1 = startLocal1;}
+    public void updateStartLocal2(String startLocal2){this.startLocal2 = startLocal2;}
+    public void updateArriveLocal1(String arriveLocal1){this.arriveLocal1 = arriveLocal1;}
+    public void updateArriveLocal2(String arriveLocal2){this.arriveLocal2 = arriveLocal2;}
+    public void updateSdate(LocalDate sdate){this.sdate = sdate;}
+    public void updateEdate(LocalDate edate){this.edate =edate;}
+    public void updatePhotoName(String photoName){this.photoName = photoName;}
+    public void updatePrice(int price){this.price = price;}
+
 }

@@ -27,13 +27,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CarPostRequestService {
     private final CarPostRequestRepository carPostRequestRepository;
     private final MemberRepository memberRepository;
     private final CarPostRepository carPostRepository;
 
-    @Transactional
     public Message<String> create(CarPostRequestCreateDto carPostRequestCreateDto) {
 
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -47,7 +46,6 @@ public class CarPostRequestService {
                     .message("사용자 없음")
                     .body("").build();
         }
-
         CarPostRequest carPostRequest = CarPostRequest.createRequest()
                 .member(member)
                 .carPost(findPostId.get())
@@ -69,6 +67,59 @@ public class CarPostRequestService {
                 .body("").build();
     }
 
+    public Message<String> approval(CarPostRequestCreateDto carPostRequestCreateDto){
+        Optional<CarPostRequest> findRow = carPostRequestRepository.findById(carPostRequestCreateDto.getPostId());
+        CarPostRequest carPostRequest = findRow.orElse(null);
+
+        System.out.println(carPostRequestCreateDto.getApproval());
+
+        if(carPostRequest != null){
+            if(carPostRequestCreateDto.getApproval().equals("accept")){
+                CarPostRequest approval = CarPostRequest.createRequest()
+                        .id(carPostRequestCreateDto.getPostId())
+                        .approval(carPostRequestCreateDto.getApproval())
+                        .member(carPostRequest.getMember())
+                        .carPost(carPostRequest.getCarPost())
+                        .price(carPostRequest.getPrice())
+                        .content(carPostRequest.getContent())
+                        .startLatitude(carPostRequest.getStartLatitude())
+                        .startLongitude(carPostRequest.getStartLongitude())
+                        .arriveLatitude(carPostRequest.getArriveLatitude())
+                        .arriveLongitude(carPostRequest.getArriveLongitude())
+                        .passenger(carPostRequest.getPassenger())
+                        .build();
+                carPostRequestRepository.save(approval);
+                return  Message.<String>builder()
+                        .header(StatusEnum.OK)
+                        .message("승인")
+                        .body("").build();
+            }else {
+                CarPostRequest approval = CarPostRequest.createRequest()
+                        .id(carPostRequestCreateDto.getPostId())
+                        .approval(carPostRequestCreateDto.getApproval())
+                        .member(carPostRequest.getMember())
+                        .carPost(carPostRequest.getCarPost())
+                        .price(carPostRequest.getPrice())
+                        .content(carPostRequest.getContent())
+                        .startLatitude(carPostRequest.getStartLatitude())
+                        .startLongitude(carPostRequest.getStartLongitude())
+                        .arriveLatitude(carPostRequest.getArriveLatitude())
+                        .arriveLongitude(carPostRequest.getArriveLongitude())
+                        .passenger(carPostRequest.getPassenger())
+                        .build();
+                carPostRequestRepository.save(approval);
+                return  Message.<String>builder()
+                        .header(StatusEnum.OK)
+                        .message("거절")
+                        .body("").build();
+            }
+        }
+                return Message.<String>builder()
+                        .header(StatusEnum.BAD_REQUEST)
+                        .message("신청이 없습니다")
+                        .body("").build();
+    }
+
     public Message<List<CarPostRequestDTO>> requestFind(Long memberId) {
         //List<CarPostRequest> requests = carPostRequestRepository.findByCarPostId(postId);
         List<CarPostRequest> requests = carPostRequestRepository.findByCarPostMemberId(memberId);
@@ -83,7 +134,6 @@ public class CarPostRequestService {
 
     public Message<CarPostRequestDTO> findList(Long requestId) {
         Optional<CarPostRequest> findRequest = carPostRequestRepository.findById(requestId);
-
         CarPostRequest carPostRequest = findRequest.orElse(null);
 
         if(carPostRequest == null){
@@ -94,9 +144,17 @@ public class CarPostRequestService {
         }
 
         CarPostRequestDTO carPostRequestDTO = CarPostRequestDTO.createRequestDTO()
+                .id(carPostRequest.getId())
+                .approval(carPostRequest.getApproval())
                 .content(carPostRequest.getContent())
                 .passenger(carPostRequest.getPassenger())
                 .price(carPostRequest.getPrice())
+                .member(carPostRequest.getMember())
+                .startLongitude(carPostRequest.getStartLongitude())
+                .startLatitude(carPostRequest.getStartLatitude())
+                .arriveLatitude(carPostRequest.getArriveLatitude())
+                .arriveLongitude(carPostRequest.getArriveLongitude())
+                .carPost(carPostRequest.getCarPost())
                 .build();
         return Message.<CarPostRequestDTO>builder()
                 .header(StatusEnum.OK)
