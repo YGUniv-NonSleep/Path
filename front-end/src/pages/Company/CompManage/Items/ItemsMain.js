@@ -22,6 +22,8 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import * as React from "react";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const ItemCon = styled.div`
   width: 100%;
@@ -58,11 +60,12 @@ function ItemsMain() {
     myItems,
     detailForm,
     productDetail,
-    detailOptionVisible,
+    detailOptionVisible, optionList,
     productForm,
     openDetailForm,
     changeDetailForm,
     changeDetailOptionVisible,
+    addOption, addDetailOption
   } = useCompItems();
 
   const [open, setOpen] = React.useState(false);
@@ -211,6 +214,7 @@ function ItemsMain() {
 
                   <ListItemButton onClick={handleClick}>
                     <ListItemText primary="옵션" />
+
                     {open ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
 
@@ -231,7 +235,7 @@ function ItemsMain() {
                               }}
                             >
                               <ListItemText primary={option.name} />
-                              {open ? <ExpandLess /> : <ExpandMore />}
+                              {detailOptionVisible[index] ? <ExpandLess /> : <ExpandMore />}
                             </ListItemButton>
 
                             {option.detailOptionList.map((detailOption, i) => {
@@ -248,7 +252,7 @@ function ItemsMain() {
                                         primary={detailOption.name}
                                       />
                                       <ListItemText
-                                        primary={detailOption.price+"원"}
+                                        primary={detailOption.price + "원"}
                                       />
                                     </ListItemButton>
                                   </List>
@@ -308,22 +312,114 @@ function ItemsMain() {
                   </label>
                 </Stack> */}
 
-                
+
                 {/* <input type="file" name="image"/> */}
                 <TextField
-                      disabled
-                      id="product-picture"
-                      label="상품사진"
-                      defaultValue="파일 없음">                      
+                  disabled
+                  id="product-picture"
+                  label="상품사진"
+                  defaultValue="파일 없음">
                 </TextField>
                 <Button variant="contained">기본상품 찾기</Button>
-                    
-                
+
+                <input type="file"></input>
+
+
+                <List
+                  sx={{ width: "100%" }}
+                  component="nav"
+                  aria-labelledby="nested-list-subheader"
+                >
+
+                  <ListItemButton>
+                    <><ListItemText onClick={handleClick} primary="옵션" /></>
+                    {open ? <ExpandLess> </ExpandLess> : <ExpandMore />}
+                  </ListItemButton>
+                  {open ? <Button onClick={() => { addOption() }} variant="contained">옵션 추가</Button> : ""}
+
+
+
+                  {optionList.map((option, index) => {
+                    return (
+                      <div>
+                        <Collapse
+                          // id={"option" + option.id}
+                          in={open}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <List component="div" disablePadding>
+                            <ListItemButton
+                              sx={{ pl: 4 }}
+
+                            >
+                              <><ListItemText primary={option.name}
+                                onClick={() => {
+                                  changeDetailOptionVisible(index);
+                                }} /></>
+
+                              <IconButton aria-label="edit">
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton aria-label="delete">
+                                <DeleteIcon />
+                              </IconButton>
+                              {detailOptionVisible[index] ? <ExpandLess /> : <ExpandMore />}
+                            </ListItemButton>
+                            {detailOptionVisible[index] ? <Button variant="contained" onClick={() => { addDetailOption(index) }}>세부옵션 추가</Button> : <></>}
+
+
+                            {option.detailOptionList != null ? <>
+
+
+                              {option.detailOptionList.map((detailOption, i) => {
+                                // console.log(detailOptionVisible[index])
+                                return (
+                                  <Collapse
+                                    in={detailOptionVisible[index]}
+                                    timeout="auto"
+                                    unmountOnExit
+                                  >
+                                    <List component="div" disablePadding>
+                                      <ListItemButton sx={{ pl: 8 }}>
+                                        <ListItemText
+                                          primary={detailOption.name}
+                                        />
+                                        <ListItemText
+                                          primary={detailOption.price + "(원)"}
+                                        />
+                                        <IconButton aria-label="edit">
+                                          <EditIcon />
+                                        </IconButton>
+                                        <IconButton aria-label="delete">
+                                          <DeleteIcon />
+                                        </IconButton>
+
+                                      </ListItemButton>
+
+                                    </List>
+                                  </Collapse>
+                                );
+                              })}
+
+
+
+                            </> : <></>}
+
+
+                          </List>
+                        </Collapse>
+                      </div>
+                    );
+                  })}
+                </List>
+
+
               </Box>
-              
+
             </div>
           ) : (
-            <div>NULL</div>
+            <></>
           )}
         </DetailCon>
       </ItemSubCon>

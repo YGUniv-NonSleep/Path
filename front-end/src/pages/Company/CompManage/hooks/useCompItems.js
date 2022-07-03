@@ -9,6 +9,49 @@ function useCompItems() {
   const [productDetail, setProductDetail] = useState(null);
   const [detailOptionVisible, setDetailOptionVisible] = useState([])
   const companyId = useOutletContext();
+  const [optionList, setOptionList] = useState([]);
+  const [optionListCnt, setOptionListCnt] = useState(0);
+  const [detailOptionListCnt, setDetailOptionListCnt] = useState(0);
+
+  // class Option{
+  //   constructor(name, detailOptionList){
+  //     this.detailOptionList = detailOptionList;
+  //     this.name = name;
+  //   }
+
+  // }
+
+  // class DetailOption{
+  //   constructor(name, price){
+  //     this.name = name;
+  //     this.price = price;
+  //   }
+
+  // }
+
+  console.log(optionList);
+  
+  function addOption(){
+
+    let option = [...optionList]
+    console.log(option)
+
+    option.push({name: "옵션명", detailOptionList:[]  })
+
+    setOptionList(option);
+    console.log(optionListCnt);
+  }
+
+  function addDetailOption( index ){
+
+    let option = [...optionList]
+    console.log(option)
+
+    option[index].detailOptionList.push({name:"세부옵션명", price:"가격"})
+
+    setOptionList(option);
+    
+  }
 
   function changeDetailForm(form){
     setDetailForm(form);
@@ -163,13 +206,13 @@ function useCompItems() {
   }, []);
 
   return {
-    myItems,detailForm,productDetail,detailOptionVisible,
+    myItems,detailForm,productDetail,detailOptionVisible,optionList,
     productForm, 
     registProduct,
     getProduct,
     changeDetailForm,
     openDetailForm,
-    changeDetailOptionVisible
+    changeDetailOptionVisible,addOption,addDetailOption
   };
 }
 
