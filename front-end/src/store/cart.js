@@ -6,10 +6,6 @@ export let cart = createSlice({
         comId: 0,
         comName: "",
         totalAmount: 0,
-        // suppliedAmount: 0,
-        // paymentKey: "",
-        // tossOrderId: "",
-        // memberId: 0, // 비로그인 id 0
         orderCompositionList: []
     },
     reducers: {

@@ -5,12 +5,13 @@ import MapApi from "../../../api/MapApi";
 import TossPayments from "../../../api/TossPayments";
 import currentLoc from '../../../assets/images/placeholder.png';
 import { addCart, clearCart } from "../../../store/cart";
+import { drawWalkLine, drawMarker, drawPolyLine, moveToMap } from "./pathDrawing";
 
 function useOderMain() {
   // '업체' 회원만 오더에서 업체 조회가 되고 있다
   const cartState = useSelector((state) => state.cart); // 맴버의 아이디 0 아닌지 체크
-  const member = useSelector((state) => state.user)
-  
+  const member = useSelector((state) => state.user);
+  const path = useSelector((state) => state.path);
   const dispatch = useDispatch();
   const [toss, setToss] = useState(false);
 
@@ -42,12 +43,26 @@ function useOderMain() {
   const [optionPrice, setOptionPrice] = useState(0);
   const [optionCalcul, setOptionCalcul] = useState([]);
 
+  function reset() {
+    setPlaceList([]);
+    setPagiObj(null);
+    setSearchData('');
+  }
+
+  const [markers, setMarkers] = useState([]);
+  const [polyLines, setPolyLines] = useState([]);
+  const [firstWalkLine, setFirstWalkLine] = useState([]);
+  const [lastWalkLine, setLastWalkLine] = useState([]);
+  const [pathName, setPathName] = useState({
+    sName: "", eName: ""
+  });
+
   const openTossWindow = () => {
     setToss(true)
   }
 
   async function tossCreate() {
-    let rs = await TossPayments(member, cartState);
+    await TossPayments(member, cartState);
   }
 
   useEffect(()=>{
@@ -63,7 +78,7 @@ function useOderMain() {
   }, [toss])
 
   const calculOpt = (dOpid) => {
-    console.log(dOpid) // 카트에 옵션 정보 담을거임
+    // console.log(dOpid) // 카트에 옵션 정보 담을거임
     let data = dOpid;
     
     if (optionCalcul.length == 0) {
@@ -89,7 +104,7 @@ function useOderMain() {
   // console.log(optionCalcul)
 
   const putCart = (prodInfo, price, count) => {
-    console.log(prodInfo)
+    // console.log(prodInfo)
     let cartData = {
       comId: prodInfo.company.id,
       comName: prodInfo.company.name,
@@ -199,8 +214,7 @@ function useOderMain() {
       if(e.target.name == 'store') {
         console.log(e.target.value)
         setSearchData(e.target.value);
-      }
-      else if(e.target.name == 'category') {
+      } else if(e.target.name == 'category') {
         console.log(e.target.innerText)
         setCategory(e.target.innerText);
       }
@@ -208,6 +222,14 @@ function useOderMain() {
     } else {
       return;
     }
+  }
+
+  function clickCategory(e) { // 다른 state 만들자
+    // if(category != '') {
+    //   if (category == e.target.innerText) setCategory('')
+    //   else setCategory(e.target.innerText)
+
+    // } else setCategory(e.target.innerText)
   }
 
   useEffect(() => {
@@ -258,7 +280,7 @@ function useOderMain() {
     }
   }, [alignment])
 
-  function keywordSetting(e) {
+  function keywordSetting(e) { // 검색 옵션으로 상품, 장소 있어야댐
     e.preventDefault();
     setAlignment('right');
     keywordSubmit();
@@ -432,6 +454,88 @@ function useOderMain() {
     // 위치 정보 제거 기능 추가하기
   }, []);
 
+  async function pathDraw() {
+    console.log(path) 
+    if(path.pathData == null) return
+    else {
+      try {
+        if (markers.length != 0) removeMarkers();
+        if (polyLines.length != 0) removeGraphics();
+        if (firstWalkLine.length != 0) removeFirstWalkGraphics();
+        if (lastWalkLine.length != 0) removeLastWalkGraphics();
+        // if (pathName.sName != "" && pathName.eName != "") console.log(pathName)
+        setPathName({sName: path.sName, eName: path.eName})
+
+        const sp = await drawMarker(path.pathData.startPos)
+        sp.setMap(map)
+        setMarkers((current) => [...current, sp]);
+
+        const ep = await drawMarker(path.pathData.endPos)
+        ep.setMap(map)
+        setMarkers((current) => [...current, ep]);
+
+        const polyLine = await drawPolyLine(path.pathData)
+        polyLine.polyline.setMap(map);
+        setPolyLines([polyLine.polyline]);
+
+        const boundary = await moveToMap(path.pathData, polyLine)
+        console.log(boundary)
+        map.setBounds(boundary.bounds);
+
+        const firstWalk = await drawWalkLine(
+          path.pathData.startPos.x, path.pathData.startPos.y,
+          boundary.points[2].La, boundary.points[2].Ma
+        );
+        firstWalk.setMap(map);
+        setFirstWalkLine([firstWalk]);
+
+        const lastWalk = await drawWalkLine(
+          boundary.points[boundary.points.length - 1].La, boundary.points[boundary.points.length - 1].Ma,
+          path.pathData.endPos.x, path.pathData.endPos.y,
+        )
+        lastWalk.setMap(map);      
+        setLastWalkLine([lastWalk]);
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  function removeMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+    setMarkers([]);
+  }
+  
+  function removeGraphics() {
+    for (let i = 0; i < polyLines.length; i++) {
+      polyLines[i].setMap(null);
+    }
+    setPolyLines([]);
+  }
+  
+  function removeFirstWalkGraphics() {
+    for (let i = 0; i < firstWalkLine.length; i++) {
+      firstWalkLine[i].setMap(null);
+    }
+    setFirstWalkLine([]);
+  }
+  
+  function removeLastWalkGraphics() {
+    for (let i = 0; i < lastWalkLine.length; i++) {
+      lastWalkLine[i].setMap(null);
+    }
+    setLastWalkLine([]);
+  }
+
+  useEffect(()=>{
+    if (path.pathData != null) {
+      pathDraw()
+    }
+  }, [])
+
   async function getCurLocComp() {
     try {
       let data = {
@@ -504,9 +608,9 @@ function useOderMain() {
   }, [prodList])
 
   return {
-    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodInfo, optionPrice, 
+    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodInfo, optionPrice, pathName, 
     prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, cartState, cartOpen, 
-    handleCartOpen, handleCartClose, openTossWindow, 
+    handleCartOpen, handleCartClose, openTossWindow, clickCategory, reset, pathDraw, 
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
     sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, calculOpt, 
     handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, putCart, 

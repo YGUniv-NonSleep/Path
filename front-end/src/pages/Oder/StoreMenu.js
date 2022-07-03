@@ -50,13 +50,19 @@ import useOderMain from "./hooks/useOderMain";
 
 function StoreMenu({ place, prodList, compCateList, outStore }) {
   const { 
-    dialogOpen, count, prodInfo, optionPrice, setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart
+    category, dialogOpen, count, prodInfo, optionPrice, 
+    setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart, clickCategory
   } = useOderMain();
-
+  
   function sInfo() {
     let list = [];
 
-    let value = [`${place.name != '' ? place.name : '업체명'}`, `약 ${`${place.waitTime}`}분`, `${'나중에 받으려나?'}m`, '카드결제, 현장결제(카드/현금)'];
+    let value = [
+      `${place.name != '' ? place.name : '업체명'}`, 
+      `약 ${`${place.waitTime}`}분`, 
+      `${'나중에 받으려나?'}m`, 
+      '카드결제' // 현장결제(카드/현금)
+    ];
     const title = ['가게이름', '대기시간', '가게위치', '결제방법'];
 
     for (var i = 0; i < 4; i++) {
@@ -274,7 +280,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                 >
                   {place.name != '' ? place.name : '업체명'}
                 </Typography>
-                <IconButton
+                {/* <IconButton
                   aria-label="search"
                   size="small"
                   onClick={() => alert("search")}
@@ -282,10 +288,10 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                   <SearchIcon fontSize="medium">
                     <span>검색</span>
                   </SearchIcon>
-                </IconButton>
+                </IconButton> */}
               </StoreTabInfo>
               <Divider />
-              <FlickingViewport>
+              {/* <FlickingViewport>
                 <FlickingCamera>
                   <Tooltip
                     title={
@@ -303,18 +309,24 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                         overflowX: "auto",
                         "&::-webkit-scrollbar": { display: "none" }, // 스크롤바 가려줌
                       }}
-                    >
+                    > */}
                       {/* 카테고리 수 만큼 반복 */}
-                      { compCateList != null
+                      {/* { compCateList != null
                         ? compCateList.map((item)=>{
-                          //console.log(item) // // variant='outlined'
-                          return <Chip label={`${item}`} variant="filled" onClick={() => alert(`${item}`)} />
+                          // variant='outlined'
+                          return (
+                            <Chip 
+                              label={`${item}`}
+                              variant={ category == item ? 'filled' : 'outlined'}
+                              onClick={(e) => clickCategory(e)} 
+                            />
+                          )
                         }) 
                         : null }
                     </Stack>
                   </Tooltip>
                 </FlickingCamera>
-              </FlickingViewport>
+              </FlickingViewport> */}
               <Divider />
             </SortBoxSpace>
           </SortBoxInner>

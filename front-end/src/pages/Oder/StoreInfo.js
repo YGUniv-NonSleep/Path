@@ -89,15 +89,17 @@ function StoreInfo({ place, showStore }) {
                   </PlusSection>
                 </PlusSectionLi>
                 {/* 제휴 업체만 버튼 보이기 */}
-                <PlusSectionLi>
-                  <PlusSection>
-                    <PlusSectionContent onClick={showStore}>
-                      <Button variant="contained" component="span" color="info">
-                        주문 하기
-                      </Button>
-                    </PlusSectionContent>
-                  </PlusSection>
-                </PlusSectionLi>
+                { place.member != undefined ? (
+                  <PlusSectionLi>
+                    <PlusSection>
+                      <PlusSectionContent onClick={showStore}>
+                        <Button variant="contained" component="span" color="info">
+                          주문 하기
+                        </Button>
+                      </PlusSectionContent>
+                    </PlusSection>
+                  </PlusSectionLi>
+                ) : null }
               </PlusSectionUl>
             </PlaceDataPlusSection>
           </PlaceDataPlus>

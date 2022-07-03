@@ -200,7 +200,6 @@ function MapApi() {
     let markerImage = null;
 
     let ob = {
-      // data.posY, data.posX
       position: new kakao.maps.LatLng(data.posY, data.posX), // 마커 표시 위치
       clickable: true, // 마커 클릭 이벤트 설정 여부
       zIndex: 15,
