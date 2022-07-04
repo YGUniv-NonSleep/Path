@@ -27,62 +27,23 @@ import java.util.List;
 public class CarPoolPostApiController {
     private final CarPostService carPostService;
     private final ResponseUtil responseUtil;
-    //CRUD
-//    @PostMapping("/create")
-//    public ResponseEntity<Message<CarPostDTO>> create(@Valid @RequestPart(value="key",required = false)CarPostDTO carPostDTO,
-//                                                      @RequestPart(value="userfile",required = false) MultipartFile file,
-//                                                      HttpServletRequest request,
-//                                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
-//        String fileName;
-//        if(file == null){
-//            fileName = "";
-//        }else{
-//            fileName = file.getOriginalFilename();
-//            String filePath = request.getSession().getServletContext().getRealPath("") + "carpost\\";
-//
-//            try {
-//                file.transferTo(new File(filePath + fileName));
-//                System.out.println("업로드 완료");
-//            }catch (IllegalStateException | IOException e){
-//                System.out.println("업로드 실패");
-//                e.printStackTrace();
-//            }
-//        }
-//        Message<CarPostDTO> message = carPostService.create(carPostDTO, fileName,principalDetails);
-//        return new ResponseEntity<>(message, HttpStatus.OK);
-//    }
+
     @PostMapping("")
     public ResponseEntity<Message<?>> create(@Valid @RequestBody CarPostDTO carPostDTO){
         Message<String> message = carPostService.create(carPostDTO);
         return responseUtil.createResponseEntity(message);
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<Message<CarPostDTO>> update(@RequestPart(value = "key",required = false)CarPostDTO carPostDTO,
-                                                      @RequestPart(value = "userfile",required = false)MultipartFile file,
-                                                      HttpServletRequest request,
-                                                      @AuthenticationPrincipal PrincipalDetails principalDetails){
-        String fileName;
-        if(file == null){
-            fileName = "";
-        }else{
-            fileName = file.getOriginalFilename();
-            String filePath = request.getSession().getServletContext().getRealPath("") + "carpost\\";
 
-            try {
-                file.transferTo(new File(filePath + fileName));
-            }catch(IllegalStateException | IOException e){
-                e.printStackTrace();
-            }
-        }
-        Message<CarPostDTO> message = carPostService.update(carPostDTO,fileName,principalDetails);
-        return new ResponseEntity<>(message,HttpStatus.OK);
+    @PatchMapping("/{postId}")
+    public ResponseEntity<Message<?>> update(@PathVariable("postId")Long postId,@RequestBody CarPostDTO carPostDto){
+        Message<String> message = carPostService.update(postId,carPostDto);
+        return responseUtil.createResponseEntity(message);
     }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<Message<CarPostDTO>> delete(@RequestParam("postId")Long postId){
-        Message<CarPostDTO> message = carPostService.delete(postId);
-        return new ResponseEntity<>(message,HttpStatus.OK);
+    @DeleteMapping("/delete/{postId}")
+    public ResponseEntity<Message<?>> delete(@PathVariable("postId")Long postId){
+        Message<String> message = carPostService.delete(postId);
+        return responseUtil.createResponseEntity(message);
     }
 
 

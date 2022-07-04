@@ -19,12 +19,12 @@ public class InitDb {
 
     @PostConstruct
     public void init() {
-        initMemberService.dbInitMember();
-        initMobilityCompanyService.dbInitMobilityCompany();
-        initMobilityService.dbInitMobility();
-        initCompanyService.dbInitCompany();
-        initProductService.dbInitProduct();
-        initOrderService.dbInitOrder();
-        initCardService.dbInitCard();
+//        initMemberService.dbInitMember();
+//        initMobilityCompanyService.dbInitMobilityCompany();
+//        initMobilityService.dbInitMobility();
+//        initCompanyService.dbInitCompany();
+//        initProductService.dbInitProduct();
+//        initOrderService.dbInitOrder();
+//        initCardService.dbInitCard();
     }
 }

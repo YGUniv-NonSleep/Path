@@ -56,10 +56,13 @@ public class CarPostRequest {
     @Column(name = "REQ_APPROVAL")
     private String approval;
 
+    @Column(name = "REQ_STATE")
+    private String state;
+
     @Builder(builderMethodName = "createRequest")
     public CarPostRequest(Long id, Member member, CarPost carPost, String content, int price,
                           String startLongitude, String startLatitude, String arriveLongitude,
-                          String arriveLatitude, int passenger, String approval){
+                          String arriveLatitude, int passenger, String approval,String state){
         this.id = id;
         this.member = member;
         this.carPost = carPost;
@@ -71,6 +74,7 @@ public class CarPostRequest {
         this.arriveLatitude = arriveLatitude;
         this.passenger = passenger;
         this.approval = approval;
+        this.state = state;
 
     }
 
@@ -87,6 +91,7 @@ public class CarPostRequest {
                 .arriveLatitude(this.arriveLatitude)
                 .passenger(this.passenger)
                 .approval(this.approval)
+                .state(this.state)
                 .build();
     }
 }

@@ -21,12 +21,13 @@ public class CarPostRequestDTO {
     private String arriveLatitude;
     private int passenger;
     private String approval;
+    private String state;
 
 
     @Builder(builderMethodName = "createRequestDTO")
     public CarPostRequestDTO(Long id, Member member, CarPost carPost, String content, int price,
                              String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude,
-                             int passenger, String approval){
+                             int passenger, String approval, String state){
         this.id = id;
         this.member = member;
         this.carPost = carPost;
@@ -38,6 +39,7 @@ public class CarPostRequestDTO {
         this.arriveLatitude = arriveLatitude;
         this.passenger = passenger;
         this.approval = approval;
+        this.state = state;
     }
 
     public CarPostRequestDTO(CarPostRequest carPostRequest){
@@ -52,6 +54,7 @@ public class CarPostRequestDTO {
         this.arriveLatitude = carPostRequest.getArriveLatitude();
         this.passenger = carPostRequest.getPassenger();
         this.approval = carPostRequest.getApproval();
+        this.state = carPostRequest.getState();
     }
 
     public CarPostRequest toEntity(){
@@ -67,6 +70,7 @@ public class CarPostRequestDTO {
                 .arriveLatitude(arriveLatitude)
                 .passenger(passenger)
                 .approval(approval)
+                .state(state)
                 .build();
     }
 

@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import {loadTossPayments} from '@tosspayments/payment-sdk'
+import axios from "axios";
 
 
 
@@ -25,8 +26,8 @@ function PaymentsPresenter(props) {
             console.log(tossPayments)
 
             const rs = await tossPayments.requestPayment('카드', {            
-            amount: 30000,
-            orderId: 'tt9QU8awvTsGkTsn-Md0g1',
+            amount: 2,
+            orderId: 'ts9Qs2wvT2sGkTsn-Md0g1',
             orderName: '아메리카노 외 3개',
             customerName: '박토스',
 
@@ -34,13 +35,14 @@ function PaymentsPresenter(props) {
             failUrl: process.env.REACT_APP_SPRING_API + '/api/fail',
           }).catch((err)=>{
               console.log(err)
-          })
-
-          alert(rs)
+          })          
 
     }
 
+
     toss()
+
+    
 
     
 
