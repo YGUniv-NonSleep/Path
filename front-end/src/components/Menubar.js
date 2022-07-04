@@ -125,6 +125,7 @@ const Menubar = () => {
   const [compChk, setCompChk] = useState(false);
   const navigate = useNavigate();
   const { userLogOut, tokenReissue } = useTokenReissue();
+  const [approval, setApproval] = useState(null);
   let userState = useSelector((state) => state);
   // let dispatch = useDispatch();
 
@@ -149,6 +150,7 @@ const Menubar = () => {
     tokenReissue();
     console.log(userState);
   }, [userState]);
+
 
   return (
     <NavContainer>

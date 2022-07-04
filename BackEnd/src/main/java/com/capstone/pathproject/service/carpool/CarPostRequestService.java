@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +72,6 @@ public class CarPostRequestService {
         Optional<CarPostRequest> findRow = carPostRequestRepository.findById(carPostRequestCreateDto.getPostId());
         CarPostRequest carPostRequest = findRow.orElse(null);
 
-        System.out.println(carPostRequestCreateDto.getApproval());
 
         if(carPostRequest != null){
             if(carPostRequestCreateDto.getApproval().equals("accept")){
@@ -120,6 +120,38 @@ public class CarPostRequestService {
                         .body("").build();
     }
 
+    public Message<String> checkRequest(CarPostRequestCreateDto carPostRequestCreateDto){
+        Optional<CarPostRequest> findRow = carPostRequestRepository.findById(carPostRequestCreateDto.getPostId());
+        CarPostRequest carPostRequest = findRow.orElse(null);
+
+
+        if(carPostRequest != null){
+            CarPostRequest checkRequest = CarPostRequest.createRequest()
+                    .id(carPostRequestCreateDto.getPostId())
+                    .approval(carPostRequest.getApproval())
+                    .carPost(carPostRequest.getCarPost())
+                    .arriveLatitude(carPostRequest.getArriveLatitude())
+                    .arriveLongitude(carPostRequest.getArriveLongitude())
+                    .content(carPostRequest.getContent())
+                    .member(carPostRequest.getMember())
+                    .passenger(carPostRequest.getPassenger())
+                    .startLatitude(carPostRequest.getStartLatitude())
+                    .startLongitude(carPostRequest.getStartLongitude())
+                    .price(carPostRequest.getPrice())
+                    .state(carPostRequestCreateDto.getState())
+                    .build();
+                carPostRequestRepository.save(checkRequest);
+                return  Message.<String>builder()
+                        .header(StatusEnum.OK)
+                        .message("확인완료")
+                        .body("").build();
+        }
+        return  Message.<String>builder()
+                .header(StatusEnum.BAD_REQUEST)
+                .message("신청이 없습니다")
+                .body("").build();
+    }
+
     public Message<List<CarPostRequestDTO>> requestFind(Long memberId) {
         //List<CarPostRequest> requests = carPostRequestRepository.findByCarPostId(postId);
         List<CarPostRequest> requests = carPostRequestRepository.findByCarPostMemberId(memberId);
@@ -129,6 +161,16 @@ public class CarPostRequestService {
         return Message.<List<CarPostRequestDTO>>builder()
                 .header(StatusEnum.OK)
                 .message("신청서 확인")
+                .body(arrayList).build();
+    }
+
+    public Message<List<CarPostRequestDTO>> sendingFind(Long memberId){
+        List<CarPostRequest> list = carPostRequestRepository.findByMemberId(memberId);
+        ArrayList<CarPostRequestDTO> arrayList = new ArrayList<CarPostRequestDTO>();
+        list.stream().map(lists -> new CarPostRequestDTO(lists)).forEach(carPostRequestDTO -> arrayList.add(carPostRequestDTO));
+        return Message.<List<CarPostRequestDTO>>builder()
+                .header(StatusEnum.OK)
+                .message("확인")
                 .body(arrayList).build();
     }
 
@@ -155,6 +197,7 @@ public class CarPostRequestService {
                 .arriveLatitude(carPostRequest.getArriveLatitude())
                 .arriveLongitude(carPostRequest.getArriveLongitude())
                 .carPost(carPostRequest.getCarPost())
+                .state(carPostRequest.getState())
                 .build();
         return Message.<CarPostRequestDTO>builder()
                 .header(StatusEnum.OK)
