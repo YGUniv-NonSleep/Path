@@ -54,6 +54,7 @@ import PathList from './PathList';
 
 function PathMain() {
   const {
+    way,
     SPoint,
     APoint,
     jusoOption,
@@ -74,6 +75,7 @@ function PathMain() {
     firstPersonalMobility,
     lastPersonalMobility,
     setSearchType,
+    searchType,
   } = useInputForm();
   // console.log(pathList)
   // (int) 1-지하철, 2-버스, 3-도보, 4 퍼스널 모빌리티(예정)
@@ -134,7 +136,7 @@ function PathMain() {
       {loading ? null : <h2>로드 중...</h2>}
       <SideNav>
         <SearchArea>
-          <Icon setSearchType={setSearchType}></Icon>
+          <Icon setSearchType={setSearchType} searchType={searchType}></Icon>
           <Autocomplete
             value={SPoint}
             onInputChange={onchangeSP}
@@ -218,6 +220,7 @@ function PathMain() {
                     list={pathList}
                     click={pathDrawing}
                     handleMobilOpen={handleMobilOpen}
+                    way={way}
                   ></PathList>
                   <FirstSelectMobil></FirstSelectMobil>
                   <LastSelectMobil></LastSelectMobil>

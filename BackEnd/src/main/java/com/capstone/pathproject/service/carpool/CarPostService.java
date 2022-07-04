@@ -11,6 +11,7 @@ import com.capstone.pathproject.repository.carpool.CarPostRepository;
 import com.capstone.pathproject.repository.carpool.CarsRepository;
 import com.capstone.pathproject.repository.member.MemberRepository;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
+import com.capstone.pathproject.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,41 +25,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CarPostService {
     private final CarPostRepository carPostRepository;
     private final CarsRepository carsRepository;
     private final MemberRepository memberRepository;
-//CRUD
-//    @Transactional
-//    public Message<CarPostDTO> create(CarPostDTO carPostDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails){
-//        CarPostDTO result = CarPostDTO.createCarPostDTO()
-//                .id(carPostDTO.getId())
-//                .member(principalDetails.getMember())
-//                .cars(carPostDTO.getCars())
-//                .title(carPostDTO.getTitle())
-//                .content(carPostDTO.getContent())
-//                .photoName(fileName)
-//                .arriveLongitude(carPostDTO.getArriveLongitude())
-//                .arriveLatitude(carPostDTO.getArriveLatitude())
-//                .sdate(carPostDTO.getSdate())
-//                .edate(carPostDTO.getEdate())
-//                .recruit(carPostDTO.getRecruit())
-//                .stime(carPostDTO.getStime())
-//                .startLongitude(carPostDTO.getStartLongitude())
-//                .startLatitude(carPostDTO.getStartLatitude())
-//                .startLocal1(carPostDTO.getStartLocal1())
-//                .startLocal2(carPostDTO.getStartLocal2())
-//                .arriveLocal1(carPostDTO.getArriveLocal1())
-//                .arriveLocal2(carPostDTO.getArriveLocal2())
-//                .price(carPostDTO.getPrice())
-//                .build();
-//        carPostRepository.save(result.toEntity());
-//        return Message.<CarPostDTO>builder()
-//                .header(StatusEnum.OK)
-//                .message("등록완료")
-//                .body(result).build();
-//    }
+
     @Transactional
     public Message<String> create(CarPostDTO carPostDTO){
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -98,68 +70,89 @@ public class CarPostService {
                 .body("").build();
     }
 
-    @Transactional
-    public Message<CarPostDTO> update(CarPostDTO carPostDTO, String fileName, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        Optional<CarPost> result = carPostRepository.findById(carPostDTO.getId());
-        if(result.isPresent()){
-            if(carPostDTO.getMember().getLoginId().equals(principalDetails.getMember().getLoginId())){
-            CarPostDTO updateResult = CarPostDTO.createCarPostDTO()
-                    .id(carPostDTO.getId())
-                    .member(principalDetails.getMember())
-                    .cars(carPostDTO.getCars())
-                    .title(carPostDTO.getTitle())
-                    .content(carPostDTO.getContent())
-                    .startLatitude(carPostDTO.getStartLatitude())
-                    .startLongitude(carPostDTO.getStartLongitude())
-                    .arriveLongitude(carPostDTO.getArriveLongitude())
-                    .arriveLatitude(carPostDTO.getArriveLatitude())
-                    .sdate(carPostDTO.getSdate())
-                    .edate(carPostDTO.getEdate())
-                    .photoName(fileName)
-                    .recruit(carPostDTO.getRecruit())
-                    .stime(carPostDTO.getStime())
-                    .startLocal1(carPostDTO.getStartLocal1())
-                    .startLocal2(carPostDTO.getStartLocal2())
-                    .arriveLocal1(carPostDTO.getArriveLocal1())
-                    .arriveLocal2(carPostDTO.getArriveLocal2())
-                    .price(carPostDTO.getPrice())
-                    .build();
-                carPostRepository.save(updateResult.toEntity());
-            }else{
-                return Message.<CarPostDTO>builder()
-                        .header(StatusEnum.BAD_REQUEST)
-                        .message("작성자가 아닙니다!")
-                        .build();
-            }
-                return Message.<CarPostDTO>builder()
-                        .header(StatusEnum.OK)
-                        .message("업데이트 완료")
-                        .body(carPostDTO).build();
+    public Message<String> update(Long postId, CarPostDTO carPostDTO){
+        Optional<CarPost> findCarPost = carPostRepository.findById(postId);
+        CarPost carPost = findCarPost.orElse(null);
 
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+
+        if(carPost == null){
+            return Message.<String>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("수정할 게시글이 없습니다.")
+                    .body("").build();
         }
-        return Message.<CarPostDTO>builder()
-                .header(StatusEnum.BAD_REQUEST)
-                .message("작성자가 아닙니다")
+        if(!validatePostMember(carPost.getMember().getLoginId())){
+            return Message.<String>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("작성자가 아닙니다.")
+                    .body("").build();
+        }
+
+        CarPost carPost1 = CarPost.createCarPost()
+                .id(carPostDTO.getId())
+                .member(member)
+                .cars(carPostDTO.getCars())
+                .title(carPostDTO.getTitle())
+                .content(carPostDTO.getContent())
+                .recruit(carPostDTO.getRecruit())
+                .startLocal1(carPostDTO.getStartLocal1())
+                .startLocal2(carPostDTO.getStartLocal2())
+                .arriveLocal1(carPostDTO.getArriveLocal1())
+                .arriveLocal2(carPostDTO.getArriveLocal2())
+                .startLatitude(carPostDTO.getStartLatitude())
+                .startLongitude(carPostDTO.getStartLongitude())
+                .arriveLatitude(carPostDTO.getArriveLatitude())
+                .arriveLongitude(carPostDTO.getArriveLongitude())
+                .stime(carPostDTO.getStime())
+                .sdate(carPostDTO.getSdate())
+                .edate(carPostDTO.getEdate())
+                .photoName(carPostDTO.getPhotoName())
+                .price(carPostDTO.getPrice())
                 .build();
+
+        carPostRepository.save(carPost1);
+        return Message.<String>builder()
+                .header(StatusEnum.OK)
+                .message("업데이트 완료")
+                .body("").build();
+
     }
 
-    @Transactional
-    public Message<CarPostDTO> delete(Long postId){
-        Optional<CarPost> result = carPostRepository.findById(postId);
-        Long rs = result.get().getId();
-        if(result.isPresent()){
-            if(result.get().getMember().getId() == 1){
-                carPostRepository.deleteById(rs);
-                return Message.<CarPostDTO>builder()
-                        .header(StatusEnum.OK)
-                        .message("삭제완료")
-                        .build();
-            }
+
+    private boolean validatePostMember(String loginId) {
+        PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member member = principalDetails.getMember();
+
+        if (loginId.equals(member.getLoginId())) {
+            return true;
+        } else {
+            return false;
         }
-        return Message.<CarPostDTO>builder()
-                .header(StatusEnum.BAD_REQUEST)
-                .message("작성자가 아닙니다!")
-                .build();
+    }
+    @Transactional
+    public Message<String> delete(Long postId){
+        Optional<CarPost> result = carPostRepository.findById(postId);
+        CarPost carPost = result.orElse(null);
+
+        if(carPost == null){
+            return Message.<String>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("게시글이 존재하지 않습니다.")
+                    .build();
+        }
+        if(!validatePostMember(carPost.getMember().getLoginId())){
+            return Message.<String>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("현재 사용자가 게시글 작성자가 아닙니다.")
+                    .body("").build();
+        }
+        carPostRepository.deleteById(postId);
+        return Message.<String>builder()
+                .header(StatusEnum.OK)
+                .message("삭제완료")
+                .body("").build();
     }
 
     //조회

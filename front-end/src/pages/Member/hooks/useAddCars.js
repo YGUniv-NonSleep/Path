@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 
 
@@ -58,6 +59,8 @@ function useAddCars(){
           })
           .then((res) => {
             console.log(res);
+            alert(res.data.message)
+            window.location = '/member/cars';
             return res;
           })
           .catch((err) => {

@@ -29,5 +29,7 @@ public class CarPostRequestCreateDto {
     private String arriveLatitude;
     @NotNull
     private int passenger;
+    private String approval;
+    private String state;
 
 }

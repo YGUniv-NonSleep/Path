@@ -26,6 +26,8 @@ import busIcon from '../../assets/images/bus(16x16).png';
 import subwayIcon from '../../assets/images/train(16x16).png';
 import bicycleIcon from '../../assets/images/bicycle(16x16).png';
 import microScooterIcon from '../../assets/images/micro-scooter(16x16).png';
+import ElectricScooterIcon from '@mui/icons-material/ElectricScooter';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import circleIcon from '../../assets/images/radio-button.png';
 import {
   Dialog,
@@ -34,14 +36,15 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  SvgIcon,
 } from '@mui/material';
 
-function PathList({ list, click, handleMobilOpen }) {
+function PathList({ list, click, handleMobilOpen, way }) {
   const transitSection = (item, idx) => {
     let transit = [];
     let section = item.routeSection.length;
     let stationNames = undefined;
-    if (item.stationNames != undefined) stationNames = item.stationNames;
+    if (item.stationNames !== undefined) stationNames = item.stationNames;
     let count = 0; // 정류장, 지하철역 넣기 위한 count
 
     function isTrans(i) {
@@ -165,13 +168,82 @@ function PathList({ list, click, handleMobilOpen }) {
     return transit;
   };
 
+  const MobilityInfo = () => {
+    let placeName = new Array();
+    if (way.length > 0) {
+      for (let i = 0; i < way.length; i++) {
+        placeName.push(way[i].place_name);
+      }
+    } else {
+      placeName = [];
+    }
+    return (
+      <>
+        <StepInfoItem key="0">
+          <IconWrap>
+            <IconArea>
+              <DirectionsWalkIcon color="action"></DirectionsWalkIcon>
+            </IconArea>
+            <VehicleTypeArea>
+              <VehicleTypeLabel fontColor="#484848">도보</VehicleTypeLabel>
+            </VehicleTypeArea>
+          </IconWrap>
+          <StepInfoArea>
+            <StepTitleArea>
+              <StepTitle>{placeName[0]}</StepTitle>
+              <AppendixBtnArea>{/* 공간 채우기 */}</AppendixBtnArea>
+            </StepTitleArea>
+          </StepInfoArea>
+        </StepInfoItem>
+        {list[0].mobility !== undefined ? (
+          <StepInfoItem key="1">
+            <IconWrap>
+              <IconArea>
+                <ElectricScooterIcon color="primary"></ElectricScooterIcon>
+              </IconArea>
+              <VehicleTypeArea>
+                <VehicleTypeLabel fontColor="#356de9">
+                  {list[0].mobility.type === 'KICKBOARD' ? '킥보드' : '자전거'}
+                </VehicleTypeLabel>
+              </VehicleTypeArea>
+            </IconWrap>
+            <StepInfoArea>
+              <StepTitleArea>
+                <StepTitle>퍼스널 모빌리티 탑승</StepTitle>
+                <AppendixBtnArea>{/* 공간 채우기 */}</AppendixBtnArea>
+              </StepTitleArea>
+            </StepInfoArea>
+          </StepInfoItem>
+        ) : (
+          <></>
+        )}
+        <StepInfoItem key="2">
+          <IconWrap>
+            <IconArea>
+              <IconSpan img={circleIcon}>icon</IconSpan>
+            </IconArea>
+            <VehicleTypeArea>
+              <VehicleTypeLabel fontColor="#484848">도착</VehicleTypeLabel>
+            </VehicleTypeArea>
+          </IconWrap>
+          <StepInfoArea>
+            <StepTitleArea>
+              <StepTitle>&nbsp;&nbsp;{placeName[1]}</StepTitle>
+              <AppendixBtnArea>{/* 공간 채우기 */}</AppendixBtnArea>
+            </StepTitleArea>
+          </StepInfoArea>
+        </StepInfoItem>
+      </>
+    );
+  };
+
   return (
     <>
       {list.map((item, idx) => (
         <PathInserted key={`list${idx}`}>
           <DirectionSummaryItemTransit onClick={() => click(idx)}>
             <RouteSummaryBox>
-              {idx == 0 ? (
+              {idx === 0 ? (
                 <RouteType>
                   {/* 최적, 최소 시간, 환승, 도보 표시 컴포넌트 */}
                   최적
@@ -180,22 +252,36 @@ function PathList({ list, click, handleMobilOpen }) {
               <RouteSummaryInfoArea>
                 <DurationTime>
                   <ReadableDuration>
-                    <TimeValue>{item.totalTime}</TimeValue>
+                    <TimeValue>
+                      {item.totalTime === undefined
+                        ? parseInt(item.features[0].properties.totalTime / 60)
+                        : item.totalTime}
+                    </TimeValue>
                     <UnitValue>분</UnitValue>
                   </ReadableDuration>
-                  <SummaryInfo>{item.payment}원</SummaryInfo>
-                  <span style={{ marginLeft: '15px' }}>
-                    <Button onClick={() => handleMobilOpen('first')}>
-                      퍼스널 모빌리티 타기
-                    </Button>
-                  </span>
+                  <SummaryInfo>
+                    {item.payment === undefined ? 0 : item.payment}원
+                  </SummaryInfo>
+                  {item.mobility === undefined &&
+                  item.features === undefined ? (
+                    <span style={{ marginLeft: '15px' }}>
+                      <Button onClick={() => handleMobilOpen('first')}>
+                        퍼스널 모빌리티 타기
+                      </Button>
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                 </DurationTime>
               </RouteSummaryInfoArea>
             </RouteSummaryBox>
             <StepInfoWrap>
               <StepInfoList>
-                {/* 리스트 */}
-                {transitSection(item, idx)}
+                {item.mobility === undefined && item.features === undefined ? (
+                  <>{transitSection(item, idx)}</>
+                ) : (
+                  <MobilityInfo></MobilityInfo>
+                )}
               </StepInfoList>
             </StepInfoWrap>
 

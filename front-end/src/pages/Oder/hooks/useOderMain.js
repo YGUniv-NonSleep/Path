@@ -1,10 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import MapApi from "../../../api/MapApi";
+import TossPayments from "../../../api/TossPayments";
 import currentLoc from '../../../assets/images/placeholder.png';
+import { addCart, clearCart } from "../../../store/cart";
 
 function useOderMain() {
   // '업체' 회원만 오더에서 업체 조회가 되고 있다
+  const cartState = useSelector((state) => state.cart); // 맴버의 아이디 0 아닌지 체크
+  const member = useSelector((state) => state.user)
+  
+  const dispatch = useDispatch();
+  const [toss, setToss] = useState(false);
+
   const [closeToggle, setCloseToggle] = useState(true);
   const [subBarHide, setSubBarHide] = useState(false)
   const [animate, setAnimate] = useState(false);
@@ -17,6 +26,7 @@ function useOderMain() {
   const [placeList, setPlaceList] = useState([]);
   const [prodList, setProdList] = useState([]);
   const [compCateList, setCompCateList] = useState(null);
+  const [prodInfo, setProdInfo] = useState(null);
   const [place, setPlace] = useState(null);
   const [pagiObj, setPagiObj] = useState(null);
   const [page, setPage] = useState(0);
@@ -26,14 +36,128 @@ function useOderMain() {
 
   const [uLocMarker, setULocMarker] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const [count, setCount] = useState(1);
+
+  const [optionPrice, setOptionPrice] = useState(0);
+  const [optionCalcul, setOptionCalcul] = useState([]);
+
+  const openTossWindow = () => {
+    setToss(true)
+  }
+
+  async function tossCreate() {
+    let rs = await TossPayments(member, cartState);
+  }
+
+  useEffect(()=>{
+    try {
+      if(toss == true) {
+        tossCreate()
+      }
+      setToss(false)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }, [toss])
+
+  const calculOpt = (dOpid) => {
+    console.log(dOpid) // 카트에 옵션 정보 담을거임
+    let data = dOpid;
+    
+    if (optionCalcul.length == 0) {
+      setOptionCalcul([data]);
+      setOptionPrice((prev) => prev + parseInt(data.price))
+    }
+    else {
+      let op = optionCalcul; // 이전 데이터
+      let result = op.filter((v) => v.optionId != data.optionId) // 필터 후 데이터
+      result.push(data);
+      result.sort(function(a, b) { return a.optionId - b.optionId })
+      //console.log(result)
+
+      let sum = 0
+      result.map((item)=>{
+        sum += parseInt(item.price)
+      })
+
+      setOptionPrice(sum)
+      setOptionCalcul(result)
+    }
+  }
+  // console.log(optionCalcul)
+
+  const putCart = (prodInfo, price, count) => {
+    console.log(prodInfo)
+    let cartData = {
+      comId: prodInfo.company.id,
+      comName: prodInfo.company.name,
+      total: price * count,
+      orderCompositionList: {
+        productId: prodInfo.id,
+        quantity: count,
+        price: price * count, // 갯수 곱한건가?
+        name: prodInfo.prodBasic.name
+      }
+    }
+    
+    let optName = [];
+    let opList = []
+    optionCalcul.map((opt)=>{
+      optName.push(opt.name)
+      opList.push(opt.id)
+    })
+    cartData.orderCompositionList.OptName = optName
+    opList.sort((a, b)=>{return a-b})
+
+    let carts = cartState.orderCompositionList;
+    let chk = false; // duplicate check
+
+    carts.map((item)=>{
+      if (item.productId === prodInfo.id) {
+        if (item.detailOptionList.toString() === opList.toString()) {
+          chk = true
+          // alert("해당 상품과 같은 옵션의 상품이 장바구니에 이미 있습니다.")
+        }
+      }
+    })
+
+    if(chk) return alert("해당 상품과 같은 옵션의 상품이 장바구니에 이미 있습니다.")
+    if(cartState.comId != 0) {
+      if(cartState.comId != cartData.comId) {
+        alert("다른 업체 상품이 장바구니에 등록되어있습니다")
+        if(confirm("새 업체의 상품을 등록하시겠습니까?")) dispatch(clearCart())
+        else return 
+      }
+    }
+
+    cartData.orderCompositionList.detailOptionList = opList
+    console.log(cartData)
+    dispatch(addCart(cartData))
+    handleDialogClose()
+  }
+
+  const handleCartOpen = () => {
+    setCartOpen(true)
+  };
   
-  const handleDialogOpen = () => {
+  const handleCartClose = () => {
+    setCartOpen(false)
+  };
+
+  const handleDialogOpen = (pInfo) => {
+    // console.log(pInfo)
+    setProdInfo(pInfo)
     setDialogOpen(true);
+    setOptionCalcul([])
+    setCount(1)
   };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+    setOptionCalcul([])
+    setCount(1)
   };
 
   // 검색창 토글 버튼
@@ -380,11 +504,12 @@ function useOderMain() {
   }, [prodList])
 
   return {
-    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, 
-    prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, 
+    map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodInfo, optionPrice, 
+    prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, cartState, cartOpen, 
+    handleCartOpen, handleCartClose, openTossWindow, 
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
-    sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, 
-    handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, 
+    sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, calculOpt, 
+    handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, putCart, 
   };
 }
 

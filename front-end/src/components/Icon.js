@@ -26,47 +26,65 @@ const Li = styled.li`
   text-align: center;
 `;
 
-const Icon = ({ setSearchType }) => {
+const Icon = ({ setSearchType, searchType }) => {
   // 통합, 대중교통, 모빌리티, 도보, 자동차 하나씩만 선택하고, 결과에서 필터
   return (
     <Ul>
       <Li>
-        <IconButton color="primary" onClick={() => setSearchType(0)}>
+        <IconButton
+          color={searchType !== 0 ? 'primary' : 'secondary'}
+          onClick={() => setSearchType(0)}
+        >
           <JoinFull />
         </IconButton>
         <Typography variant="subtitle2">통합</Typography>
       </Li>
 
       <Li>
-        <IconButton color="primary" onClick={() => setSearchType(2)}>
+        <IconButton
+          color={searchType !== 2 ? 'primary' : 'secondary'}
+          onClick={() => setSearchType(2)}
+        >
           <DirectionsBus />
         </IconButton>
         <Typography variant="subtitle2">버스</Typography>
       </Li>
 
       <Li>
-        <IconButton color="primary" onClick={() => setSearchType(1)}>
+        <IconButton
+          color={searchType !== 1 ? 'primary' : 'secondary'}
+          onClick={() => setSearchType(1)}
+        >
           <DirectionsSubway />
         </IconButton>
         <Typography variant="subtitle2">지하철</Typography>
       </Li>
 
       <Li>
-        <IconButton color="primary" onClick={() => setSearchType(3)}>
+        <IconButton
+          color={searchType !== 3 ? 'primary' : 'secondary'}
+          onClick={() => setSearchType(3)}
+        >
           <ElectricScooter />
         </IconButton>
         <Typography variant="subtitle2">킥보드</Typography>
       </Li>
 
       <Li>
-        <IconButton color="primary" onClick={() => setSearchType(4)}>
+        <IconButton
+          color={searchType !== 4 ? 'primary' : 'secondary'}
+          onClick={() => setSearchType(4)}
+        >
           <PedalBike />
         </IconButton>
         <Typography variant="subtitle2">자전거</Typography>
       </Li>
 
       <Li>
-        <IconButton color="primary" onClick={() => setSearchType(5)}>
+        <IconButton
+          color={searchType !== 5 ? 'primary' : 'secondary'}
+          onClick={() => setSearchType(5)}
+        >
           <DirectionsWalk />
         </IconButton>
         <Typography variant="subtitle2">도보</Typography>

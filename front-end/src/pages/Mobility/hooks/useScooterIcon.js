@@ -6,11 +6,13 @@ import scooter from "../../../assets/images/electric-scooter.png";
 function useScooterIcon(){
   const [map, settingMap] = useState(null);
   const [modal, setModal] = useState(null);
-  // const [mobilities, setMobilities] = useState([]);
+  const [saveData, setSaveData] = useState('');
+  const [mobilData, setMobilData] = useState([]);
+  const [mobilMarker, setMobilMarker] = useState([]);
 
   async function mapLoad() {
     try {
-      let createMap = await MapApi().createMap();
+      let createMap = await MapApi().createMap(new kakao.maps.LatLng(35.8953251, 128.62155));
       let setController = await MapApi().setController(createMap);
       settingMap(setController);
     } catch (error) {
@@ -23,61 +25,95 @@ function useScooterIcon(){
   const handleOpen = (e) => {
     setOpen(true);
   };
+
   const handleClose = () => {
     if (open === true) return setOpen(false);
   };
 
-  function ScooterIcon() {
-    // // 임시 고정 좌표 37.5561146977415, 126.937382888804
-    // axios.get(process.env.REACT_APP_SPRING_API+"/api/mobilities",{
-    //   params :{
-    //     x: "128.62269785225394",
-    //     y: "35.89624784236353",
-    //    type: KICKBOARD, //KICKBOARD, BIKE
-    // }})
-    // .then((result)=>{
-    //   console.log(result);
-      
-    // })
-    // .catch((err)=>{
-    //   console.error(err);
-    // })
+  const getMobilities = async (type, x, y) => {
+    const data = {
+      x: x,
+      y: y,
+      type: type,
+    };
+    const response = await axios
+      .get(process.env.REACT_APP_SPRING_API + '/api/mobilities', {
+        params: data,
+        withCredentials: true,
+      })
+      .catch((err) => console.log(err));
+    return response;
+  };
 
-    var positions = [
-      { latlng: new kakao.maps.LatLng(37.5561146977415, 126.937382888804) },
-      { latlng: new kakao.maps.LatLng(37.5550163763589, 126.939094978874) },
-      { latlng: new kakao.maps.LatLng(37.5565588693504, 126.939066561479) },
-      { latlng: new kakao.maps.LatLng(37.5574054114823, 126.938305327396) },
-      { latlng: new kakao.maps.LatLng(37.5568915849224, 126.941334328122) },
-      { latlng: new kakao.maps.LatLng(37.5572093234013, 126.935548521559) },
-      { latlng: new kakao.maps.LatLng(37.5558469433118, 126.942380874348) },
-      { latlng: new kakao.maps.LatLng(37.5552621346521, 126.93368057964) },
-      { latlng: new kakao.maps.LatLng(37.5537013413484, 126.93817257614) },
-    ];
+  async function ScooterIcon() {
+    const responseMobil = await getMobilities('KICKBOARD', 128.621635, 35.89581752);
+    console.log(responseMobil);
+    
+    let imageSrc = scooter;
 
-    let imageSrc = scooter
-    let imageSize = new kakao.maps.Size(55, 55);
+    const normalImage = new kakao.maps.MarkerImage(
+      imageSrc,
+      new kakao.maps.Size(45,45)
+    );
 
-    for (var i = 0; i < positions.length; i++) {
-      var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
+    for (var i = 0; i < responseMobil.data.body.length; i++) {
       var marker = new kakao.maps.Marker({
-        map: map, // 마커를 표시할 지도
-        position: positions[i].latlng,
-        clickable: true, // 마커를 표시할 위치
-        image: markerImage,
+        map: map,
+        position: new kakao.maps.LatLng(
+          responseMobil.data.body[i].latitude,
+          responseMobil.data.body[i].longitude
+        ),
+        image: normalImage,
+        clickable: true,
       });
 
-      
+      var mobilData = responseMobil.data.body[i];
 
-      // 마커에 클릭이벤트를 등록합니다
-      kakao.maps.event.addListener(marker, "click", function () {
-        setModal("open");
-        console.log(modal);
+      var infowindow = new kakao.maps.InfoWindow({
+        content: `<br><div>모빌리티 : ${responseMobil.data.body[i].id}번</div>
+                  <div>타입 : ${responseMobil.data.body[i].type}</div><br> `,
       });
-    }
+
+      kakao.maps.event.addListener(
+        marker,
+        'mouseover',
+        makeOverListener(map, marker, infowindow, normalImage)
+      );
+
+      kakao.maps.event.addListener(
+        marker,
+        'mouseout',
+        makeOutListener(marker, infowindow, normalImage)
+      );
+
+    // 마커에 클릭이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, "click", makeClickListener(map, marker, mobilData));
+    setMobilMarker((prev) => [...prev, marker]);
+  }
+
     marker.setMap(map);
   }
+
+  const makeOverListener = (map, marker, infowindow, normalImage) => {
+    return () => {
+      infowindow.open(map, marker);
+      marker.setImage(normalImage);
+    };
+  };
+
+  const makeOutListener = (marker, infowindow, normalImage) => {
+    return () => {
+      infowindow.close();
+      marker.setImage(normalImage);
+    };
+  };
+
+  const makeClickListener = (map, marker, mobilData) => {
+    return () => {
+      setMobilData(mobilData)
+      setModal("open");
+    };
+  };
 
   useEffect(() => {
     mapLoad();
@@ -88,7 +124,7 @@ function useScooterIcon(){
   }, [map]);
 
   return {
-    mapLoad, ScooterIcon, handleOpen, handleClose, open, modal
+    mapLoad, ScooterIcon, handleOpen, handleClose, open, modal, mobilData
   }
 }
 

@@ -49,14 +49,14 @@ import { Fragment } from "react";
 import useOderMain from "./hooks/useOderMain";
 
 function StoreMenu({ place, prodList, compCateList, outStore }) {
-  // console.log(place);
   const { 
-    dialogOpen, count, setCount, handleDialogOpen, handleDialogClose, 
+    dialogOpen, count, prodInfo, optionPrice, setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart
   } = useOderMain();
 
   function sInfo() {
     let list = [];
-    let value = [`${place.name != '' ? place.name : '업체명'}`, `약 ${'나중에 받을거임'}분`, `${'나중에 받으려나?'}m`, '카드결제, 현장결제(카드/현금)'];
+
+    let value = [`${place.name != '' ? place.name : '업체명'}`, `약 ${`${place.waitTime}`}분`, `${'나중에 받으려나?'}m`, '카드결제, 현장결제(카드/현금)'];
     const title = ['가게이름', '대기시간', '가게위치', '결제방법'];
 
     for (var i = 0; i < 4; i++) {
@@ -71,7 +71,8 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
     return list
   }
 
-  function test(list, keyGetter) {
+  // 카테고리와 상품을 랜더하는 함수
+  function cateMenu(list, keyGetter) {
     let sameCateMenu = new Map();
 
     list.forEach((item) => {
@@ -79,149 +80,178 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
       const collection = sameCateMenu.get(key);
       if (!collection) {
         sameCateMenu.set(key, [item]);
+
       } else {
+        if(item.exposure != false)
           collection.push(item);
       }
     });
-    console.log(sameCateMenu.keys())
-    console.log(sameCateMenu.values())
-    // console.log(sameCateMenu.entries())
-    // return sameCateMenu;
-  }
-  test(prodList, prod => prod.prodBasic.category)
+    // console.log(sameCateMenu.keys())
+    // console.log(sameCateMenu.values())
 
-  function menu() {
-    let list = [];
+    let arr = [];
 
-    // 메뉴 수 만큼 반복
-    for (var i = 0; i < prodList.length; i++) {
-      // 카테고리 겹치는것끼리 합치고
-      // console.log(prodList[i].prodBasic.category)
-
-      // 노출여부 확인해서 break;
-      // console.log(prodList[i].exposure)
-      
-      list.push(
-        <>
-          <ListItemButton alignItems="flex-start" onClick={handleDialogOpen}>
-            <ListItemAvatar sx={{ margin: "auto 0" }}>
-              <Avatar
-                alt="item"
-                variant="rounded"
-                sx={{ height: "74px", width: "74px", marginRight: "10px" }}
-                src="/static/images/avatar/1.jpg"
-              />
-            </ListItemAvatar>
-            <ListItemText
-              primary={<Typography>메뉴명</Typography>}
-              sx={{
-                display: "block",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                margin: "auto 0",
-              }}
-              secondary={
-                <Fragment>
-                  <Typography
-                    sx={{ display: "inline" }}
-                    component="span"
-                    variant="body2"
-                    color="text.primary"
-                  >
-                    {` I'll be in your 설명 `}
-                  </Typography>
-                  <Typography
-                    sx={{ display: "block" }}
-                    component="span"
-                    variant="button"
-                  >
-                    {`1000원`}
-                  </Typography>
-                </Fragment>
-              }
-            />
-          </ListItemButton>
-          <Divider variant="inset" component="li" />
-        </>
-      );
+    for(var k of sameCateMenu.entries()) {
+      arr.push(
+        <Accordion defaultExpanded={true} disableGutters={true}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>{k[0]}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              {/* 메뉴 */}
+              <List
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
+                }}
+              >
+                { k[1].map((item) => 
+                <>
+                  <ListItemButton alignItems="flex-start" onClick={()=>handleDialogOpen(item)}>
+                    <ListItemAvatar sx={{ margin: "auto 0" }}>
+                      <Avatar
+                        alt="item"
+                        variant="rounded"
+                        sx={{ height: "74px", width: "74px", marginRight: "10px" }}
+                        src={ 
+                          item.prodBasic.image != "blankImage" && item.prodBasic.image != undefined 
+                          ? `${process.env.REACT_APP_SPRING_API}/api/image/${item.prodBasic.image}`
+                          : `${process.env.PUBLIC_URL}/noImage.png`
+                        }
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={<Typography>{item.prodBasic.name}</Typography>}
+                      sx={{
+                        display: "block",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        margin: "auto 0",
+                      }}
+                      secondary={
+                        <Fragment>
+                          <Typography
+                            sx={{ display: "inline" }}
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {` ${item.prodBasic.detail} `}
+                          </Typography>
+                          <Typography
+                            sx={{ display: "block" }}
+                            component="span"
+                            variant="button"
+                          >
+                            {`${item.price}원`}
+                          </Typography>
+                        </Fragment>
+                      }
+                    />
+                  </ListItemButton>
+                  <Divider variant="inset" component="li" />
+                </>
+                 ) }
+              </List>
+            </Typography>
+          </AccordionDetails>
+          <Divider />
+        </Accordion>
+      )
     }
-
-    return list;
+    
+    return arr
   }
 
   return (
     <EntryStoreWrap>
-      <Dialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-        // paperScrollPaper={true}
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-        sx={{ height: '550px', margin: 'auto auto' }}
-      >
-        <DialogTitle id="scroll-dialog-title">메뉴이름</DialogTitle>
-        <DialogContent dividers={true} sx={{ minWidth: '350px' }}>
-          <DialogContentText
-            id="scroll-dialog-description"
-            tabIndex={-1}
-          >
-            {/* {[...new Array(50)].map(() => 
-                `Cras mattis consectetur purus sit amet fermentum.
-                Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-                Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-            ).join("\n")} */}
+      { prodInfo != null && prodInfo != undefined ? (
+        <Dialog
+          open={dialogOpen}
+          onClose={handleDialogClose}
+          aria-labelledby="scroll-dialog-title"
+          aria-describedby="scroll-dialog-description"
+          sx={{ height: '550px', margin: 'auto auto' }}
+        >
+          <DialogTitle id="scroll-dialog-title">{prodInfo.prodBasic.name}</DialogTitle>
+          <DialogContent dividers={true} sx={{ minWidth: '350px' }}>
+            <DialogContentText
+              id="scroll-dialog-description"
+              tabIndex={-1}
+            >
+              {/* 상품 옵션 */}
+              { prodInfo.optionList.length != 0 ? (
+                prodInfo.optionList.map((option) => 
+                  <FormControl sx={{ display: 'block', marginBottom: '25px' }}>
+                    <FormLabel id="item-option-label">{option.name}</FormLabel>
+                    <RadioGroup
+                      aria-labelledby="item-detail-option-group-label"
+                      // defaultValue={`${option.detailOptionList[0].price}`}
+                      name="radio-buttons-group"
+                    >
+                      {/* 세부 옵션 */}
+                      { option.detailOptionList.map((od) => 
+                        <div style={{ display: 'flex' }}>
+                          <FormControlLabel 
+                            value={`${od.price}`}
+                            control={<Radio />} 
+                            label={`${od.name}`} // 화면에 보이는 값
+                            sx={{ display: 'inline-block' }} 
+                            onChange={()=>calculOpt(od)}
+                          />
+                          <Typography 
+                            sx={{ display: 'inline-flex', alignItems: 'center', marginLeft: 'auto' }}
+                          >
+                            +{od.price}원
+                          </Typography>
+                        </div>
+                      ) }
+                    </RadioGroup>
+                    <Divider sx={{ marginTop: '5px' }} />
+                </FormControl>  
+                )
+              ) : null }
 
-{/* 상품 옵션 반복 */}
-            {/* 옵션 */} {/* 데이터 받아오는거 보고 뿌릴건데 일단 map -> 함수로 세부 옵션까지 뿌려부자 */}
-            <FormControl sx={{ display: 'block', marginBottom: '25px' }}>
-                <FormLabel id="item-option-label">옵션이름</FormLabel>
-                <RadioGroup
-                    aria-labelledby="item-detail-option-group-label"
-                    defaultValue="opt1"
-                    name="radio-buttons-group"
-                >
-                    {/* 세부 옵션 */}
-                    <div style={{ display: 'flex' }}>
-                    <FormControlLabel value={`opt1`} control={<Radio />} label={`Opt1`} sx={{ display: 'inline-block',  }} />
-                    <Typography sx={{ display: 'inline-flex', alignItems: 'center', marginLeft: 'auto' }}>+{0}원</Typography>
-                    </div>
-                </RadioGroup>
-                <Divider sx={{ marginTop: '5px' }} />
-            </FormControl>
-
-            <ButtonGroup sx={{ display: 'flex', justifyContent: 'flex-end;', marginLeft: 'auto' }}> 
+              <ButtonGroup sx={{ display: 'flex', justifyContent: 'flex-end;', marginLeft: 'auto' }}> 
                 <Button
-                    aria-label="reduce"
-                    onClick={() => {
-                        setCount(Math.max(count - 1, 0));
-                    }}
+                  aria-label="reduce"
+                  onClick={() => {
+                    setCount(Math.max(count - 1, 1));
+                  }}
                 >
-                    <RemoveIcon fontSize="small" />
+                  <RemoveIcon fontSize="small" />
                 </Button>
                 <Button>{count}</Button>
                 <Button
                     aria-label="increase"
                     onClick={() => {
-                        setCount(count + 1);
+                      setCount(count + 1);
                     }}
                 >
                     <AddIcon fontSize="small" />
                 </Button>
-            </ButtonGroup>
-            <div style={{ display: 'flex', marginTop: '15px' }}>
-                <Typography sx={{ display: 'inline-block', marginRight: "auto" }}>총 주문금액</Typography>
-                <Typography sx={{ display: 'inline-flex', marginLeft: "auto" }}>{10000}원</Typography>
-            </div>
+              </ButtonGroup>
 
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>뒤로가기</Button>
-          <Button onClick={handleDialogClose}>장바구니 추가</Button>
-        </DialogActions>
-      </Dialog>
-      {/* 모달창 */}
+              <div style={{ display: 'flex', marginTop: '15px' }}>
+                <Typography sx={{ display: 'inline-block', marginRight: "auto" }}>총 주문금액</Typography>
+                <Typography sx={{ display: 'inline-flex', marginLeft: "auto" }}>{(prodInfo.price + optionPrice) * count}원</Typography>
+              </div>
+
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDialogClose}>뒤로가기</Button>
+            <Button onClick={()=>putCart(prodInfo, (prodInfo.price + optionPrice), count)}>장바구니 추가</Button>
+          </DialogActions>
+        </Dialog>
+      ) : null }
+      {/* 상품 옵션 선택 모달창 */}
 
       <StoreTab>
         <SortBoxWrap>
@@ -299,38 +329,12 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
           </StoreInfoTwo>
           <Divider />
         </StoreInfo>
+        {/* 상단 네비바 */}
 
+        { prodList != null && prodList.length != 0 ? 
+          cateMenu(prodList, prod => prod.prodBasic.category)
+         : null }  
         {/* 카테고리별 상품 */}
-        { compCateList != null ? 
-          compCateList.map((item)=>{
-            return (
-              <Accordion defaultExpanded={true} disableGutters={true}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>{item}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    {/* 메뉴 */}
-                    <List
-                      sx={{
-                        width: "100%",
-                        maxWidth: 360,
-                        bgcolor: "background.paper",
-                      }}
-                    >
-                      { menu() }
-                    </List>
-                  </Typography>
-                </AccordionDetails>
-                <Divider />
-              </Accordion>
-            )
-          })
-         : null }
 
         <Typography
           variant={"body2"}
