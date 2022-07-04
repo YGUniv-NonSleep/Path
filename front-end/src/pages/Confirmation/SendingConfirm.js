@@ -138,7 +138,7 @@ function SendingConfirm(){
                             <TableCell align="right">{count.carPost.arriveLocal1},{count.carPost.arriveLocal2}</TableCell>
                             <TableCell align="right">{count.carPost.price}원</TableCell>
                             <TableCell align="right">{count.carPost.member.loginId}</TableCell>
-                            <TableCell align="right">{count.state}</TableCell>
+                            <TableCell align="right">{count.approval}</TableCell>
                             {count.approval !=null ?(
                                  <TableCell align="right"><Button onClick={(e)=>checkRequest(count.id,e)} name="accept" value="accept">확인</Button></TableCell>
                             ):('')}
