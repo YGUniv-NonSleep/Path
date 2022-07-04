@@ -23,10 +23,13 @@ async function useSuccess() {
     async function paymentVerification() {
         if (cart.totalAmount !== parseInt(query.amount)) {
             alert("결제된 금액이 일치하지 않습니다.")
-            navigator("/pay/fail")
+            return navigator("/pay/fail")
         }
-        if(memberId == 0) return alert("회원 정보를 받아오지 못하였습니다.")
         console.log(memberId)
+        if(memberId == 0) {
+            alert("회원 정보를 받아오지 못하였습니다.")
+            return navigator("/pay/fail")
+        }
         let reqData = {
             totalAmount: cart.totalAmount,
             suppliedAmount: cart.totalAmount,
@@ -55,9 +58,9 @@ async function useSuccess() {
     
     useEffect(()=>{
         if (query != undefined && cart != undefined) {
-            paymentVerification()
+            if (memberId != 0) paymentVerification()
         } 
-    }, [])
+    }, [memberId])
 
     // const success = axios.create({
     //     baseURL: `${process.env.REACT_APP_SPRING_API}`

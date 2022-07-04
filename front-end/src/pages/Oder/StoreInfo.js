@@ -22,7 +22,6 @@ import MyLocationIcon from "@mui/icons-material/MyLocation";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 function StoreInfo({ place, showStore }) {
-  // console.log(place)
   return (
     <EntryPlaceBridge>
       {/* 이미지 받을 공간 */}

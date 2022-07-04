@@ -1,6 +1,4 @@
-import axios from 'axios';
 import { loadTossPayments } from '@tosspayments/payment-sdk'
-// import { useDispatch, useSelector } from 'react-redux';
 import RandomString from '../utils/RandomString';
 
 async function TossPayments(member, cart) {
