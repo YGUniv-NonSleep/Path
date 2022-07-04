@@ -12,12 +12,15 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   IconButton,
+  Typography,
 } from '@mui/material';
 import Badge from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import {
   SideNav,
   NavLayout,
@@ -69,7 +72,6 @@ function OderMain() {
     subBarHide,
     searchData,
     searchPath,
-    category,
     placeList,
     page,
     affiliate,
@@ -80,6 +82,10 @@ function OderMain() {
     prodList, 
     compCateList, 
     cartOpen, 
+    pathName, 
+    reset, 
+    products, 
+    // pathDraw, 
     handleCartOpen, 
     handleCartClose, 
     handleShowStore, 
@@ -113,7 +119,7 @@ function OderMain() {
                 >
                   <TextField
                     sx={{ width: '340px' }}
-                    placeholder="장소, 상품 검색"
+                    placeholder="상품 검색"
                     size="small"
                     id="store"
                     name="store"
@@ -126,6 +132,11 @@ function OderMain() {
                           <SearchIcon />{' '}
                         </InputAdornment>
                       ),
+                      endAdornment: (
+                        <IconButton size="small" onClick={()=>reset()}>
+                          <CloseIcon />
+                        </IconButton>
+                      )
                     }}
                   />
                 </Box>
@@ -148,8 +159,12 @@ function OderMain() {
                   {/* 찾은 경로 텍스트로 보여줌 */}
                   <SearchPathSpace>
                     <PathView>
-                      {searchPath != null ? (
-                        '여기에서 -> 저기로'
+                      {pathName.sName != "" ? (
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
+                          <Typography sx={{ fontWeight: 600 }}>{pathName.sName}</Typography>
+                          <ArrowRightAltIcon/>
+                          <Typography sx={{ fontWeight: 600 }}>{pathName.eName}</Typography>
+                        </div>
                       ) : (
                         <SearchItemSub>
                           검색된 경로가 있을 경우 여기에 표시 됩니다.
@@ -214,21 +229,35 @@ function OderMain() {
                                   {/* SearchBox 반복 */}
                                   {/* 검색된 후에는 api 데이터 보여주고 그전엔 업체데이터 보여주기 */}
                                   { placeList.length == 0 ? (
-                                    affiliate.map((item) => {
-                                      return (
-                                        <PlaceList 
-                                          key={item.id}
-                                          item={item}
-                                          target={()=>placeTarget(item)} 
-                                          clicked={()=>onSubBarClick(true)} 
-                                        />
-                                      );
-                                    })
+                                    // 제휴 업체 정보
+                                    affiliate.length != 0 ? (
+                                      affiliate.map((item) => {
+                                        return (
+                                          <PlaceList 
+                                            key={item.id}
+                                            item={item}
+                                            target={()=>placeTarget(item)} 
+                                            clicked={()=>onSubBarClick(true)} 
+                                          />
+                                        );
+                                      })
+                                    ) : products.length != 0 ? (
+                                      products.map((item) => {
+                                        return (
+                                          <PlaceList 
+                                            key={item.id}
+                                            item={item}
+                                            target={()=>placeTarget(item)} 
+                                            clicked={()=>onSubBarClick(true)} 
+                                          />
+                                        );
+                                      })
+                                    ) : null
                                   ) : (
-                                    placeList.map((item) => {
+                                    placeList.map((item, index) => {
                                       return (
                                         <PlaceList 
-                                          key={item.id}
+                                          key={index}
                                           item={item}
                                           target={()=>placeTarget(item)} 
                                           clicked={()=>onSubBarClick(true)} 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { addPath } from '../../../store/path';
 import { PathApi } from '../../../api/OdsayApi';
 import MapApi from '../../../api/MapApi';
 import { TmapApi } from '../../../api/TmapApi';
@@ -10,6 +11,7 @@ import bicycle from '../../../assets/images/bicycle2(64x64).png';
 
 function useInputForm() {
   const { loading } = useLoading();
+  const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user);
   const [map, settingMap] = useState(null);
 
@@ -504,7 +506,15 @@ function useInputForm() {
               bounds.extend(points[i]);
             }
             map.setBounds(bounds);
+            
+            let data = {
+              pathData: pathList[idx],
+              SPoint: SPoint,
+              APoint: APoint
+            }
+            dispatch(addPath(data))
           }
+          
         } else {
           // 기존 경로 값에 퍼스널모빌리티 가격 제거
           setPathList(
