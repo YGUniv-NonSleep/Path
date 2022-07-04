@@ -35,9 +35,21 @@ public class CarPostRequestApiController {
         return responseUtil.createResponseEntity(message);
     }
 
+    @PatchMapping("/checkRequest")
+    public ResponseEntity<Message<?>> checkRequest(@RequestBody CarPostRequestCreateDto carPostRequestCreateDto){
+        Message<String> message = carPostRequestService.checkRequest(carPostRequestCreateDto);
+        return responseUtil.createResponseEntity(message);
+    }
+
     @GetMapping("/{memberId}")
     public ResponseEntity<Message<?>> requestFind(@PathVariable("memberId")Long memberId){
         Message<List<CarPostRequestDTO>> message = carPostRequestService.requestFind(memberId);
+        return responseUtil.createResponseEntity(message);
+    }
+
+    @GetMapping("/sending/{memberId}")
+    public ResponseEntity<Message<?>> sendingFind(@PathVariable("memberId") Long memberId){
+        Message<List<CarPostRequestDTO>> message = carPostRequestService.sendingFind(memberId);
         return responseUtil.createResponseEntity(message);
     }
 

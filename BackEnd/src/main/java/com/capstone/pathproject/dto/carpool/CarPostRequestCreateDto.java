@@ -30,5 +30,6 @@ public class CarPostRequestCreateDto {
     @NotNull
     private int passenger;
     private String approval;
+    private String state;
 
 }

@@ -28,6 +28,7 @@ import {
   Resign,
 } from '../pages/Company/CompManage';
 import Confirmation from '../pages/Confirmation/Confirmation';
+import SendingConfirm from '../pages/Confirmation/SendingConfirm';
 import {
   Member,
   Card,
@@ -133,6 +134,7 @@ function Router() {
         <Route path="/searchPw" element={<SearchPw />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/member/confirmation" element={<Confirmation />} />
+        <Route path="/member/sendingConfirm" element={<SendingConfirm />} />
       </Routes>
 
       {/* <Routes>

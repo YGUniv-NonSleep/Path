@@ -62,7 +62,6 @@ function Confirmation(){
     const [count, setAlarmCount] = useState(null);
     const [open,setOpen] = useState(false);
     const [conts,setConts] = useState(null);
-    const [appr,setAPPR] = useState(null);
     const handleClose = () => setOpen(false);
 
     
