@@ -19,126 +19,66 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-const pages = ['상품 목록', '업체 수정', '업체 탈퇴'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ["상품 목록", "업체 수정", "업체 탈퇴"];
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function CompManageMain() {
   const { loading } = useLoading();
   const { comId } = useParams();
   const {} = useCompManageMain();
 
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
-    <AppBar position="static" style={
-        {marginLeft:'95px'}
-    }>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            회사이름
-          </Typography>
+    <div>
+      {loading ? (
+        <div>
+          <AppBar position="static" sx={{ marginLeft: "95px", backgroundColor: 'rgba(0,0,0,0.4)'  }}>
+            <Container maxWidth="xl" sx= {{marginLeft: "unset"}} >
+              <Toolbar disableGutters>
+                                
+                <Typography
+                  variant="h5"
+                  noWrap
+                  component="a"
+                  href=""
+                  sx={{
+                    mr: 2,
+                    display: { xs: "flex", md: "none" },
+                    flexGrow: 1,
+                    fontFamily: "monospace",
+                    fontWeight: 700,
+                    letterSpacing: ".3rem",
+                    color: "inherit",                
+                    textDecoration: "none",
+                    
+                  }}
+                ></Typography>
+                <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                  <Link to="items">
+                    <Button sx={{ my: 2, color: "white", display: "block" }}>
+                      상품 목록
+                    </Button>
+                  </Link>
+                  <Link to="compEdit">
+                    <Button sx={{ my: 2, color: "white", display: "block" }}>
+                      업체정보 수정
+                    </Button>
+                  </Link>
+                  <Link to="resign">
+                    <Button sx={{ my: 2, color: "white", display: "block" }}>
+                      업체 탈퇴
+                    </Button>
+                  </Link>
+                </Box>
+              </Toolbar>
+            </Container>
+          </AppBar>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-
-        </Toolbar>
-      </Container>
-    </AppBar>
+          <Outlet context={comId}></Outlet>
+        </div>
+      ) : (
+        <h2>로드 중...</h2>
+      )}
+    </div>
   );
 }
 
@@ -148,15 +88,3 @@ CompManageMain.propTypes = {
 };
 
 export default CompManageMain;
-
-
-        {/* <Link to="items">
-          <button>상품 목록</button>
-        </Link>
-        <Link to="compEdit">
-          <button>업체정보 수정</button>
-        </Link>
-        <Link to="resign">
-          <button>업체 탈퇴</button>
-        </Link>
-        <Outlet context={comId}></Outlet> */}
