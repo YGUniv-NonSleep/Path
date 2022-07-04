@@ -105,7 +105,16 @@ public class ProductService {
     }
 
     public Message deleteProduct(Long productId){
-        productRepository.deleteById(productId);
+
+        Product product = productRepository.findById(productId).get();
+
+        product.setCompany( null );
+
+        productRepository.save(product);
+
+
+
+//        productRepository.deleteById(productId);
 
         return Message.builder()
                 .header(StatusEnum.OK)

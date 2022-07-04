@@ -104,5 +104,9 @@ public class Product {
     public void addOptions(ArrayList<Option> options) {
         this.optionList = options;
     }
+
+    public void setCompany(Company company){
+        this.company = company;
+    }
 }
 
