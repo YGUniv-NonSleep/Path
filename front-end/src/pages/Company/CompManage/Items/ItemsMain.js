@@ -25,6 +25,12 @@ import * as React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modal from "@mui/material/Modal";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
 
 const ItemCon = styled.div`
   width: 100%;
@@ -73,8 +79,10 @@ function ItemsMain() {
     optionList,
     optionModalOpen,
     detailOptionModalOpen,
-    productBasic,clickedProductBasic,
-    productForm,
+    productBasic, clickedProductBasic,
+    editFormModal,
+    editFormClicked,clickedChange,
+
     openDetailForm,
     changeDetailForm,
     changeDetailOptionVisible,
@@ -89,7 +97,12 @@ function ItemsMain() {
     deleteDetailOption,
     changeThirdForm,
     findProductBasic,
-    clickProductBasic
+    clickProductBasic,
+    registProduct,
+    addOptionEditForm,
+    editFormModalHandle,
+    changeProductValue,
+    patchProduct
   } = useCompItems();
 
   const style = {
@@ -127,8 +140,8 @@ function ItemsMain() {
 
           <Link to={"/company/basic"}>
             <Button>기본 상품 등록</Button>
-            </Link>
-          
+          </Link>
+
           {myItems == null ? (
             console.log("데이터 잘못넘어옴")
           ) : myItems.length == 0 ? (
@@ -194,6 +207,7 @@ function ItemsMain() {
                               color="text.primary"
                             >
                               가격
+                              
                             </Typography>
                             <Typography
                               sx={{ display: "inline-flex", marginLeft: "9px" }}
@@ -216,7 +230,7 @@ function ItemsMain() {
                               variant="button"
                               component="span"
                             >
-                              {product.discount}
+                              {product.stock}
                             </Typography>
                           </div>
                         </Fragment>
@@ -240,14 +254,45 @@ function ItemsMain() {
                   subheader={
                     <ListSubheader component="div" id="nested-list-subheader">
                       {productDetail.id}
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => {
+                          deleteProduct(productDetail.id);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     </ListSubheader>
                   }
                 >
                   <ListItemButton>
                     <ListItemText primary={productDetail.prodBasic.name} />
+                    
                   </ListItemButton>
                   <ListItemButton>
+                  <ListItemText primary={"가격"} />
                     <ListItemText primary={productDetail.price} />
+                    <IconButton
+                                aria-label="edit"
+                                onClick={() => {
+                                  editFormClicked("price");
+                                }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                  </ListItemButton>
+                  <ListItemButton>
+                  <ListItemText primary={"재고"} />
+                    <ListItemText primary={productDetail.stock} />
+                    <IconButton
+                                aria-label="edit"
+                                onClick={() => {
+                                  editFormClicked("stock");
+                                }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                    
                   </ListItemButton>
 
                   <ListItemButton onClick={handleClick}>
@@ -255,8 +300,20 @@ function ItemsMain() {
 
                     {open ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
+                  {open ? (
+                    <ListItemButton
+                      onClick={() => {
+                        addOption();
+                      }}
+                      variant="contained"
+                    >
+                      옵션 추가
+                    </ListItemButton>
+                  ) : (
+                    ""
+                  )}
 
-                  {productDetail.optionList.map((option, index) => {
+                  {optionList.map((option, index) => {
                     return (
                       <div>
                         <Collapse
@@ -268,17 +325,49 @@ function ItemsMain() {
                           <List component="div" disablePadding>
                             <ListItemButton
                               sx={{ pl: 4 }}
-                              onClick={() => {
-                                changeDetailOptionVisible(index);
-                              }}
+
                             >
-                              <ListItemText primary={option.name} />
+                              <ListItemText onClick={() => {
+                                changeDetailOptionVisible(index);
+                              }} primary={option.name} ></ListItemText>
+
+                              <IconButton
+                                aria-label="edit"
+                                onClick={() => {
+                                  optionModalHandle(index);
+                                }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() => {
+                                  deleteOption(index);
+                                }}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+
                               {detailOptionVisible[index] ? (
                                 <ExpandLess />
                               ) : (
                                 <ExpandMore />
                               )}
                             </ListItemButton>
+                            {detailOptionVisible[index] ? (
+                              <ListItemButton
+                                variant="contained"
+                                onClick={() => {
+                                  addDetailOption(index);
+                                }}
+                              >
+                                세부옵션 추가
+                              </ListItemButton>
+                            ) : (
+                              <></>
+                            )}
+
 
                             {option.detailOptionList.map((detailOption, i) => {
                               // console.log(detailOptionVisible[index])
@@ -296,7 +385,31 @@ function ItemsMain() {
                                       <ListItemText
                                         primary={detailOption.price + "원"}
                                       />
+
+                                      <IconButton
+                                        aria-label="edit"
+                                        onClick={() => {
+                                          detailOptionModalHandle(
+                                            index,
+                                            i
+                                          );
+                                        }}
+                                      >
+                                        <EditIcon />
+                                      </IconButton>
+                                      <IconButton
+                                        aria-label="delete"
+                                        onClick={() => {
+                                          deleteDetailOption(index, i);
+                                        }}
+                                      >
+                                        <DeleteIcon />
+                                      </IconButton>
+
                                     </ListItemButton>
+
+
+
                                   </List>
                                 </Collapse>
                               );
@@ -305,7 +418,28 @@ function ItemsMain() {
                         </Collapse>
                       </div>
                     );
+
                   })}
+
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      patchProduct()
+                    }}
+                  >
+                    적용
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      // registProduct()
+                    }}
+                  >
+                    취소
+                  </Button>
+
+
                 </List>
               ) : (
                 <>dsad</>
@@ -321,89 +455,6 @@ function ItemsMain() {
                 noValidate
                 autoComplete="off"
               >
-                <TextField
-                  disabled
-                  id="product-name"
-                  label="상품번호"
-                  value = {clickedProductBasic.id}
-                  variant="outlined"
-                />
-
-                <TextField
-                  disabled
-                  id="product-name"
-                  label="상품명"
-                  value = {clickedProductBasic.name}
-                  variant="outlined"
-                />
-
-                <TextField
-                  disabled
-                  id="product-name"
-                  label="카테고리"
-                  value = {clickedProductBasic.category}
-                  variant="outlined"
-                />
-                                
-                <TextField
-                  disabled
-                  id="product-detail"
-                  label="설명"
-                  value = {clickedProductBasic.detail}
-                  variant="outlined"
-                />
-                <TextField
-                  disabled
-                  id="product-image"
-                  label="이미지명"
-                  value = {clickedProductBasic.image}
-                  variant="outlined"
-                />
-                
-                <TextField
-                  disabled
-                  id="product-brand"
-                  label="브랜드"
-                  value = {clickedProductBasic.brand}
-                  variant="outlined"
-                />
-
-
-                <TextField id="product-price" label="가격" variant="outlined" />
-                <TextField
-                  id="product-visible"
-                  label="노출여부"
-                  variant="outlined"
-                />
-                <TextField id="product-stock" label="재고" variant="outlined" />
-
-                {/* <Stack direction="row" alignItems="center" spacing={2}>
-                  <label htmlFor="contained-button-file">
-                    <TextField
-                      disabled
-                      id="product-picture"
-                      label="상품사진"
-                      defaultValue="파일 없음"                      
-                    />
-                    <Input
-                      accept="image/*"
-                      id="contained-button-file"
-                      multiple
-                      type="file"
-                    />
-                    <Button name="input-button" variant="contained" component="span">
-                      업로드
-                    </Button>
-                  </label>
-                </Stack> */}
-
-                {/* <input type="file" name="image"/> */}
-                <TextField
-                  disabled
-                  id="product-picture"
-                  label="상품사진"
-                  defaultValue="파일 없음"
-                ></TextField>
                 <Button
                   variant="contained"
                   onClick={() => {
@@ -413,7 +464,69 @@ function ItemsMain() {
                   기본상품 찾기
                 </Button>
 
-                <input type="file"></input>
+
+                <TextField
+                  disabled
+                  id="product-name"
+                  label="상품번호"
+                  value={clickedProductBasic.id}
+                  variant="outlined"
+                />
+
+                <TextField
+                  disabled
+                  id="product-name"
+                  label="상품명"
+                  value={clickedProductBasic.name}
+                  variant="outlined"
+                />
+
+                <TextField
+                  disabled
+                  id="product-name"
+                  label="카테고리"
+                  value={clickedProductBasic.category}
+                  variant="outlined"
+                />
+
+                <TextField
+                  disabled
+                  id="product-detail"
+                  label="설명"
+                  value={clickedProductBasic.detail}
+                  variant="outlined"
+                />
+                <TextField
+                  disabled
+                  id="product-image"
+                  label="이미지명"
+                  value={clickedProductBasic.image}
+                  variant="outlined"
+                />
+
+                <TextField
+                  disabled
+                  id="product-brand"
+                  label="브랜드"
+                  value={clickedProductBasic.brand}
+                  variant="outlined"
+                />
+
+                <TextField id="product-price" name="product-price" label="가격" variant="outlined" />
+
+                <TextField id="product-stock" name="product-stock" label="재고" variant="outlined" />
+
+                <FormControl>
+                  <FormLabel id="product-visible-radio">상품 노출 여부</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="product-visible-radio-group"
+                  >
+                    <FormControlLabel value="true" control={<Radio />} label="노출" />
+                    <FormControlLabel value="false" control={<Radio />} label="노출하지 않음" />
+                  </RadioGroup>
+                </FormControl>
 
                 <List
                   sx={{ width: "100%" }}
@@ -427,17 +540,18 @@ function ItemsMain() {
                     {open ? <ExpandLess> </ExpandLess> : <ExpandMore />}
                   </ListItemButton>
                   {open ? (
-                    <Button
+                    <ListItemButton
                       onClick={() => {
                         addOption();
                       }}
                       variant="contained"
                     >
                       옵션 추가
-                    </Button>
+                    </ListItemButton>
                   ) : (
                     ""
                   )}
+
 
                   {optionList.map((option, index) => {
                     return (
@@ -483,14 +597,14 @@ function ItemsMain() {
                               )}
                             </ListItemButton>
                             {detailOptionVisible[index] ? (
-                              <Button
+                              <ListItemButton
                                 variant="contained"
                                 onClick={() => {
                                   addDetailOption(index);
                                 }}
                               >
                                 세부옵션 추가
-                              </Button>
+                              </ListItemButton>
                             ) : (
                               <></>
                             )}
@@ -551,6 +665,14 @@ function ItemsMain() {
                     );
                   })}
                 </List>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    registProduct()
+                  }}
+                >
+                  등록
+                </Button>
               </Box>
             </div>
           ) : (
@@ -561,9 +683,9 @@ function ItemsMain() {
         <ThirdCon>
           {thirdForm == "basic" ? (
 
-                                                                            
+
             productBasic.map((basic, index) => {
-              
+
               // console.log(it);
               return (
                 <Fragment key={index}>
@@ -575,7 +697,7 @@ function ItemsMain() {
 
                   <ListItemButton
                     alignItems="flex-start"
-                     onClick={() => clickProductBasic(basic.id)}
+                    onClick={() => clickProductBasic(basic.id)}
                     sx={{ zIndex: "20" }}
                   >
                     <ListItemAvatar sx={{ margin: "auto 0" }}>
@@ -654,7 +776,7 @@ function ItemsMain() {
                 </Fragment>
               );
             })
-            
+
           ) : (
             <h2>Null</h2>
           )}
@@ -675,7 +797,7 @@ function ItemsMain() {
                 name="optionInput"
                 label="옵션명"
                 variant="outlined"
-                // value={optionName}
+              // value={optionName}
               />
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -702,14 +824,14 @@ function ItemsMain() {
                 name="detailOptionName"
                 label="세부옵션명"
                 variant="outlined"
-                // value={optionName}
+              // value={optionName}
               />
               <TextField
                 id="product-visible"
                 name="detailOptionPrice"
                 label="가격"
                 variant="outlined"
-                // value={optionName}
+              // value={optionName}
               />
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -722,6 +844,39 @@ function ItemsMain() {
             </Typography>
           </Box>
         </Modal>
+
+        <Button variant="contained" onClick={editFormModalHandle}>
+                취소
+              </Button>
+
+        <Modal
+          open={editFormModal}
+          onClose={editFormModalHandle}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              <TextField
+                id="change-product"
+                name="change-product"
+                label={clickedChange}
+                variant="outlined"
+
+              />
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <Button variant="contained" onClick={changeProductValue}>
+                확인
+              </Button>
+              <Button variant="contained" onClick={editFormModalHandle}>
+                취소
+              </Button>
+            </Typography>
+          </Box>
+        </Modal>
+
+
       </div>
     </ItemCon>
   );

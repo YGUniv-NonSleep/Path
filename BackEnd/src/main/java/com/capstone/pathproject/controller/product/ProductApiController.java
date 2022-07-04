@@ -68,6 +68,8 @@ public class ProductApiController {
 
     @DeleteMapping("/{prodId}")
     public ResponseEntity<Message> deleteProduct(@PathVariable("prodId")Long prodId){
+
+        System.out.println("prodId = " + prodId);
         Message message = productService.deleteProduct(prodId);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
