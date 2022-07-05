@@ -53,7 +53,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
     category, dialogOpen, count, prodInfo, optionPrice, 
     setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart, clickCategory
   } = useOderMain();
-  console.log(place)
+  
   function sInfo() {
     let list = [];
     
@@ -347,17 +347,24 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
 
         { prodList != null && prodList.length != 0 ? 
           cateMenu(prodList, prod => prod.prodBasic.category)
-         : null }  
+         : (
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "350px" }}>
+            <Typography>빠른 시일 이내로 준비 하겠습니다.</Typography>
+            <Typography>감사합니다.</Typography>
+          </div>
+         ) } 
         {/* 카테고리별 상품 */}
 
-        <Typography
-          variant={"body2"}
-          align={"center"}
-          gutterBottom={true}
-          sx={{ margin: "10px 0 30px 0" }}
-        >
-          메뉴의 사진은 연출된 사진으로, 실제와 다를 수 있습니다.
-        </Typography>
+        { prodList != null && prodList.length != 0 ? (
+          <Typography
+            variant={"body2"}
+            align={"center"}
+            gutterBottom={true}
+            sx={{ margin: "10px 0 30px 0" }}
+          >
+            메뉴의 사진은 연출된 사진으로, 실제와 다를 수 있습니다.
+          </Typography>
+        ) : null }
       </StoreInfoArea>
       {/* 가게 정보 */}
     

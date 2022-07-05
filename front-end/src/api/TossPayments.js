@@ -3,7 +3,7 @@ import RandomString from '../utils/RandomString';
 
 async function TossPayments(member, cart) {
     try {
-        console.log(member, cart)
+        console.log("toss")
 
         let orderName;
         if(cart.orderCompositionList.length == 1) {
@@ -15,8 +15,12 @@ async function TossPayments(member, cart) {
             orderName = `${cart.orderCompositionList[0].name} 외 ${cart.orderCompositionList.length - 1}건`
         }
 
-        if(member.id === 0) return
-        else if(cart.comId === 0) return
+        if(member.id === 0) {
+            return alert("회원 정보가 확인되지 않습니다.")
+        }
+        else if(cart.comId === 0) {
+            return alert("업체 정보가 확인되지 않습니다.")
+        }
         else {
             const clientKey = process.env.REACT_APP_TOSS_TEST_CLIENT_KEY;
 

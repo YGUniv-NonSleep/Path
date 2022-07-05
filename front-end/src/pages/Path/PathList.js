@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   PathInserted,
   DirectionSummaryItemTransit,
@@ -40,6 +41,7 @@ import {
 } from '@mui/material';
 
 function PathList({ list, click, handleMobilOpen, way }) {
+  const navigator = useNavigate();
   const transitSection = (item, idx) => {
     let transit = [];
     let section = item.routeSection.length;
@@ -265,9 +267,13 @@ function PathList({ list, click, handleMobilOpen, way }) {
                   {item.mobility === undefined &&
                   item.features === undefined ? (
                     <span style={{ marginLeft: '15px' }}>
+                    {/* <span style={{ display: "flex", marginTop: "6px" }}> */}
                       <Button onClick={() => handleMobilOpen('first')}>
                         퍼스널 모빌리티 타기
                       </Button>
+                      {/* <Button onClick={() => navigator('/oder')} disabled={true}>
+                        원클릭 오더 이용하기
+                      </Button> */}
                     </span>
                   ) : (
                     <></>
