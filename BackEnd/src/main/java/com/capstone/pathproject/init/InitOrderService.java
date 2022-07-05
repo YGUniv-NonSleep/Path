@@ -78,7 +78,7 @@ public class InitOrderService {
 
     public Order createOrder(long memberId, int a){
         return Order.createOrder()
-                .state(OrderState.ACCEPTED)
+                .state(OrderState.CHECKING)
                 .price((int) (3000 * a))
                 .member(memberRepository.findById(memberId).get())
                 .request("1회용 수저가 "+ a +"개 필요해요!")

@@ -26,6 +26,7 @@ import {
   ItemEdit,
   Items,
   Resign,
+  OrderCheck
 } from '../pages/Company/CompManage';
 import Confirmation from '../pages/Confirmation/Confirmation';
 import SendingConfirm from '../pages/Confirmation/SendingConfirm';
@@ -202,6 +203,7 @@ function Router() {
                   </Route>
                   <Route path="compEdit" element={<CompEdit />} />
                   <Route path="resign" element={<Resign />} />
+                  <Route path="order" element={<OrderCheck />} />
                 </Route>
               </>
             ) : null}

@@ -26,9 +26,9 @@ function PaymentsPresenter(props) {
             console.log(tossPayments)
 
             const rs = await tossPayments.requestPayment('카드', {            
-            amount: 2,
-            orderId: 'ts9Qs2wvT2sGkTsn-Md0g1',
-            orderName: '아메리카노 외 3개',
+            amount: 3000,
+            orderId: 'tsdsds9Qd32wvT2sGkTsn-dwdd22',
+            orderName: '아메리카s노 외 3개',
             customerName: '박토스',
 
             successUrl: process.env.REACT_APP_SPRING_API + '/api/pay',

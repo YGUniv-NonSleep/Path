@@ -2,10 +2,13 @@ package com.capstone.pathproject.domain.order;
 
 
 import com.capstone.pathproject.domain.BaseTimeEntity;
+import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -41,14 +44,18 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "MEM_ID")
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COM_ID")
+    private Company company;
 
     @Builder(builderMethodName = "createOrder")
-    public Order(Long id, int price, OrderState state, Member member, String request){
+    public Order(Long id, int price, OrderState state, Member member, String request, Company company){
         this.id = id;
         this.member = member;
         this.price = price;
         this.state = state;
         this.request = request;
+        this.company = company;
     }
 
     public void updateState(String state){
