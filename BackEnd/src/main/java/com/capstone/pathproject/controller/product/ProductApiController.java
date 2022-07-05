@@ -140,8 +140,9 @@ public class ProductApiController {
         return null;
     }
 
-    @GetMapping("/")
+    @PostMapping("/search")
     public ResponseEntity<?> findProduct(@RequestBody(required = false) FindProductDto findProductDto ) {
+        System.out.println("데이터: "+findProductDto);
         Message<?> message = productService.findProduct(findProductDto);
         return responseUtil.createResponseEntity(message);
     }

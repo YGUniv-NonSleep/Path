@@ -44,12 +44,6 @@ export const drawWalkLine = async (
 };
 
 export const drawMarker = async (coords, loc) => {
-  // const cp = await MapApi().drawKakaoMarker(
-  //   coords.x, coords.y
-  // )
-
-  // return cp
-
   let markerData = {
     posX: coords.x,
     posY: coords.y,

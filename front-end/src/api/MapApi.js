@@ -27,7 +27,6 @@ function MapApi() {
     moveLine.setPath(coords)
 
     let length = Math.round(moveLine.getLength())
-
     return length
   }
 

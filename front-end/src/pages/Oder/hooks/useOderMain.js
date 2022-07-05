@@ -43,6 +43,7 @@ function useOderMain() {
   const [userLocMarker, setUserLocMarker] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [storeMarkers, setStoreMarkers] = useState([]);
+  const [storeMarkerCoords, setStoreMarkerCoords] = useState([]);
   const [polyLines, setPolyLines] = useState([]);
   const [firstWalkLine, setFirstWalkLine] = useState([]);
   const [lastWalkLine, setLastWalkLine] = useState([]);
@@ -204,7 +205,6 @@ function useOderMain() {
   
   const handleShowStore = () => {
     setShowStore((prev) => !prev)
-    // console.log(showStore)
   }
 
   useEffect(() => {
@@ -400,7 +400,7 @@ function useOderMain() {
         // categorySubmit()
       }, 500)
     }
-    return setPlaceList([]);
+    // return setPlaceList([]);
   }, [category])
 
   // 업체 상세 정보
@@ -515,7 +515,7 @@ function useOderMain() {
         if (polyLines.length != 0) removeGraphics();
         if (firstWalkLine.length != 0) removeFirstWalkGraphics();
         if (lastWalkLine.length != 0) removeLastWalkGraphics();
-        // if (storeMarkers.length != 0) removeStoreMarkers();
+        if (storeMarkers.length != 0) removeStoreMarkers();
 
         const sp = await drawMarker(path.pathData.startPos, "start")
         const ep = await drawMarker(path.pathData.endPos, "end")
@@ -555,20 +555,6 @@ function useOderMain() {
     }
   }
 
-  // useEffect(()=>{
-  //   try {
-  //     if(pathName.eName == '') {
-  //       pathDraw()
-  //     } 
-  //     return () => {
-  //       setPathName({sName: '', eName: ''})
-  //     }
-
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }, [pathName])
-
   function removeMarkers() {
     for (var i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
@@ -577,10 +563,11 @@ function useOderMain() {
   }
 
   function removeStoreMarkers() {
-    for (var i = 0; i < storeMarkers.length; i++) {
-      storeMarkers[i].setMap(null);
+    for (var i = 0; i < storeMarkerCoords.length; i++) {
+      storeMarkerCoords[i].setMap(null);
     }
     setStoreMarkers([]);
+    setStoreMarkerCoords([]);
   }
   
   function removeGraphics() {
@@ -615,30 +602,30 @@ function useOderMain() {
         if (category == '병원') cate = 'HOSPITAL';
         if (category == '약국') cate = 'PHARMACY';
       }
-      console.log(cate)
 
       let markerList = [];
 
       if(path.pathData == null) {
         let data = {
-          locationList: {
+          locationList: [{
             x: userLocation.La,
             y: userLocation.Ma
-          },
+          }],
           category: cate
         }
-        let result = await axios.get(
-          `${process.env.REACT_APP_SPRING_API}/api/company/`, 
-          { params: data }
+        console.log(data)
+        let result = await axios.post(
+          `${process.env.REACT_APP_SPRING_API}/api/company/search/`, data,
+          {headers: { "Content-Type": "application/json" }}
         )
-
+          console.log(result)
         let list = []
         for(var i=0; i<result.data.body.length; i++){
           if(i>=10) break;
 
           let coordList = []
           coordList.push(new kakao.maps.LatLng(
-            data.locationList.y, data.locationList.x
+            data.locationList[0].y, data.locationList[0].x
           ))
 
           let storeMarkerPosition;
@@ -651,6 +638,8 @@ function useOderMain() {
           let length = await MapApi().getCoordLength(coordList);
 
           result.data.body[i].distance = length;
+          console.log(cate)
+          console.log(result.data.body)
           list.push(result.data.body[i])
         }
 
@@ -674,12 +663,14 @@ function useOderMain() {
           category: cate
         }
 
-        let sp = await axios.get(
-          `${process.env.REACT_APP_SPRING_API}/api/company/`, sData
+        let sp = await axios.post(
+          `${process.env.REACT_APP_SPRING_API}/api/company/search`, sData,
+          {headers: { "Content-Type": "application/json" }}
         );
   
-        let ep = await axios.get(
-          `${process.env.REACT_APP_SPRING_API}/api/company/`, eData
+        let ep = await axios.post(
+          `${process.env.REACT_APP_SPRING_API}/api/company/search`, eData,
+          {headers: { "Content-Type": "application/json" }}
         );
         
         let list = []
@@ -740,23 +731,30 @@ function useOderMain() {
 
   async function denoteStoreMarkers() {
     for (var i = 0; i < storeMarkers.length; i++) {
-      storeMarkers[i].setMap(map); 
+      let data = {
+        x: storeMarkers[i].La,  
+        y: storeMarkers[i].Ma,
+      }
+      let marker = await drawMarker(data, "")
+      marker.setMap(map);
+      setStoreMarkerCoords((cur) => [...cur, marker])
     }
   }
+  console.log(storeMarkers)
 
-  useEffect(async()=>{
+  useEffect(()=>{
     if(userLocation != null) {
       // 현재 위치 기반 기본 값
       if (storeMarkers.length != 0) removeStoreMarkers();
-      await getCurLocComp()
-      await denoteStoreMarkers()
+      getCurLocComp()
+      denoteStoreMarkers()
     }
   }, [userLocation]);
 
   async function getCompProd(comp) {
     try {
       // compId 파라미터로 업체 아이디 받기
-      let result = await axios.get(
+      let result = await axios.post(
         `${process.env.REACT_APP_SPRING_API}/api/product/comp/${comp.id}`
       );
       // console.log(result.data.body);
@@ -788,40 +786,42 @@ function useOderMain() {
       
       if (path.pathData == null) {
         let data = {
-          locationList: {
+          locationList: [{
             x: userLocation.La,
             y: userLocation.Ma
-          },
+          }],
           name: word,
-          category: null
+          // category: null
         }
-        let p = await axios.get(
-          `${process.env.REACT_APP_SPRING_API}/api/product/`, data
+        let p = await axios.post(
+          `${process.env.REACT_APP_SPRING_API}/api/product/search`, data,
+          {headers: { "Content-Type": "application/json" }}
         );
 
         let list = []
         for(var i=0; i<p.data.body.length; i++) {
           if(i>=10) break;
-
+          
           let coordList = []
           coordList.push(new kakao.maps.LatLng(
-            data.locationList.y, data.locationList.x
+            data.locationList[0].y, data.locationList[0].x
           ))
 
           let storeMarkerPosition;
+          
           storeMarkerPosition = new kakao.maps.LatLng(
-            p.data.body[i].longitude, p.data.body[i].latitude
+            p.data.body[i].company.longitude, p.data.body[i].company.latitude
           )
           coordList.push(storeMarkerPosition)
           markerList.push(storeMarkerPosition)
           
           let length = await MapApi().getCoordLength(coordList);
-
+          
           p.data.body[i].distance = length;
-          console.log(p.data.body[i])
           list.push(p.data.body[i])
         }
 
+        console.log(list)
         setStoreMarkers(markerList)
         setAffiliate([])
         setProducts(list)
@@ -844,12 +844,14 @@ function useOderMain() {
           category: null
         }
 
-        let sp = await axios.get(
-          `${process.env.REACT_APP_SPRING_API}/api/product/`, sData
+        let sp = await axios.post(
+          `${process.env.REACT_APP_SPRING_API}/api/product/search`, sData,
+          {headers: { "Content-Type": "application/json" }}
         );
   
-        let ep = await axios.get(
-          `${process.env.REACT_APP_SPRING_API}/api/product/`, eData
+        let ep = await axios.post(
+          `${process.env.REACT_APP_SPRING_API}/api/product/search`, eData,
+          {headers: { "Content-Type": "application/json" }}
         );
         
         let list = []
@@ -863,13 +865,13 @@ function useOderMain() {
 
           let storeMarkerPosition;
           storeMarkerPosition = new kakao.maps.LatLng(
-            sp.data.body[i].longitude, sp.data.body[i].latitude
+            sp.data.body[i].company.longitude, sp.data.body[i].company.latitude
           )
           coordList.push(storeMarkerPosition)
           markerList.push(storeMarkerPosition)
 
           let length = await MapApi().getCoordLength(coordList);
-
+          console.log(length)
           sp.data.body[i].loc = "start";
           sp.data.body[i].distance = length;
           list.push(sp.data.body[i])
@@ -885,13 +887,13 @@ function useOderMain() {
 
           let storeMarkerPosition;
           storeMarkerPosition = new kakao.maps.LatLng(
-            ep.data.body[i].longitude, ep.data.body[i].latitude
+            ep.data.body[i].company.longitude, ep.data.body[i].company.latitude
           )
           coordList.push(storeMarkerPosition)
           markerList.push(storeMarkerPosition)
 
           let length = await MapApi().getCoordLength(coordList);
-          
+          // console.log(length)
           ep.data.body[i].loc = "end";
           ep.data.body[i].distance = length;
           list.push(ep.data.body[i])
