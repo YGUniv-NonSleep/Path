@@ -77,7 +77,7 @@ function PlaceList({item, target, clicked}) {
                       variant="button"
                     >
                       <div style={{ display: "flex", justifyContent: "left", marginTop: "5px" }}>
-                        <Typography sx={{ fontWeight: 300 }}>{`${item.company.name}`}</Typography>
+                        <Typography sx={{ fontWeight: 300 }}>{`${item.company.name} (${item.company.category})`}</Typography>
                       </div>
                     </Typography>
                   </Fragment>
