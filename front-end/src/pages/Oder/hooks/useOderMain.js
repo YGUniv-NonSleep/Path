@@ -43,14 +43,12 @@ function useOderMain() {
   const [userLocMarker, setUserLocMarker] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [storeMarkers, setStoreMarkers] = useState([]);
-  const [storeMarkerCoords, setStoreMarkerCoords] = useState([]);
   const [polyLines, setPolyLines] = useState([]);
   const [firstWalkLine, setFirstWalkLine] = useState([]);
   const [lastWalkLine, setLastWalkLine] = useState([]);
   const [pathName, setPathName] = useState({
     sName: "", eName: ""
   });
-  const [curBoundary, setCurBoundary] = useState(null);
 
   const [optionPrice, setOptionPrice] = useState(0);
   const [optionCalcul, setOptionCalcul] = useState([]);
@@ -63,6 +61,7 @@ function useOderMain() {
     setPagiObj(null);
     setSearchData('');
     getCurLocComp();
+    removeMarkers();
   }
 
   const openTossWindow = () => {
@@ -78,7 +77,6 @@ function useOderMain() {
       if(toss == true) {
         tossCreate()
       }
-      setToss(false)
 
     } catch (error) {
       console.log(error)
@@ -156,7 +154,7 @@ function useOderMain() {
     }
 
     cartData.orderCompositionList.detailOptionList = opList
-    console.log(cartData)
+    // console.log(cartData)
     dispatch(addCart(cartData))
     handleDialogClose()
   }
@@ -231,14 +229,6 @@ function useOderMain() {
     }
   }
 
-  function clickCategory(e) { // 다른 state 만들자
-    // if(category != '') {
-    //   if (category == e.target.innerText) setCategory('')
-    //   else setCategory(e.target.innerText)
-
-    // } else setCategory(e.target.innerText)
-  }
-
   useEffect(() => {
     handleChange();
   }, [searchData, category]);
@@ -264,6 +254,7 @@ function useOderMain() {
       }
   
       if(userLocation != undefined && userLocation != null) data.userLoc = userLocation
+
       // await MapApi().keywordSearch(data, callback);
       // function callback(result, status, pagination) {
       //   if (status === kakao.maps.services.Status.OK) {
@@ -289,6 +280,7 @@ function useOderMain() {
 
   async function keywordSetting(e) { // 검색 옵션으로 상품, 장소 있어야댐
     e.preventDefault();
+
     setAlignment('right');
     if (storeMarkers.length != 0) removeStoreMarkers();
     await searchProduct(searchData)
@@ -363,7 +355,7 @@ function useOderMain() {
         `${process.env.REACT_APP_SPRING_API}/api/company/`, 
         { params: data }
       )
-      console.log(result)
+      // console.log(result)
       setProducts([])
       setAffiliate(result.data.body)
       
@@ -391,28 +383,28 @@ function useOderMain() {
 
   useEffect(()=>{
     if(category != '') {
-      // setSearchData(category);
       setAlignment('right');
       setPage(1);
       if(closeToggle == false) onCloseToggle()
       setTimeout(()=>{
         getCurLocComp()
-        // categorySubmit()
-      }, 500)
+        denoteStoreMarkers()
+      }, 300)
     }
-    // return setPlaceList([]);
   }, [category])
 
   // 업체 상세 정보
   function placeTarget(data) {
-    console.log(data)
+    // console.log(data)
     if(data.company == undefined) {
+      map.panTo(new kakao.maps.LatLng(data.longitude, data.latitude))
       setPlace(data)
-
+      
     } else {
       let ob = data.company
       ob.distance = data.distance
-      setPlace(ob) 
+      map.panTo(new kakao.maps.LatLng(ob.longitude, ob.latitude))
+      setPlace(ob)
     }
   }
 
@@ -536,6 +528,9 @@ function useOderMain() {
           path.pathData.endPos.x, path.pathData.endPos.y,
         )
 
+        // 마커 그리기
+        denoteStoreMarkers();
+
         sp.setMap(map)
         ep.setMap(map)
         polyLine.polyline.setMap(map);
@@ -563,11 +558,10 @@ function useOderMain() {
   }
 
   function removeStoreMarkers() {
-    for (var i = 0; i < storeMarkerCoords.length; i++) {
-      storeMarkerCoords[i].setMap(null);
+    for (var i = 0; i < storeMarkers.length; i++) {
+      storeMarkers[i].setMap(null);
     }
     setStoreMarkers([]);
-    setStoreMarkerCoords([]);
   }
   
   function removeGraphics() {
@@ -591,6 +585,18 @@ function useOderMain() {
     setLastWalkLine([]);
   }
 
+  const makeOverListener = (map, marker, infowindow) => {
+    return () => {
+      infowindow.open(map, marker);
+    };
+  };
+
+  const makeOutListener = (infowindow) => {
+    return () => {
+      infowindow.close();
+    };
+  };
+
   async function getCurLocComp() {
     try {
       let cate = null;
@@ -611,18 +617,20 @@ function useOderMain() {
             x: userLocation.La,
             y: userLocation.Ma
           }],
-          category: cate
+          category: null
         }
-        console.log(data)
-        let result = await axios.post(
-          `${process.env.REACT_APP_SPRING_API}/api/company/search/`, data,
+
+        let result = await axios.get(
+          `${process.env.REACT_APP_SPRING_API}/api/company/search`, data,
           {headers: { "Content-Type": "application/json" }}
         )
-          console.log(result)
+
         let list = []
         for(var i=0; i<result.data.body.length; i++){
-          if(i>=10) break;
-
+          if(i>=15) break;
+          if (cate != null) {
+            if(result.data.body[i].category !== cate) continue;
+          }
           let coordList = []
           coordList.push(new kakao.maps.LatLng(
             data.locationList[0].y, data.locationList[0].x
@@ -638,13 +646,30 @@ function useOderMain() {
           let length = await MapApi().getCoordLength(coordList);
 
           result.data.body[i].distance = length;
-          console.log(cate)
-          console.log(result.data.body)
           list.push(result.data.body[i])
         }
 
-        setStoreMarkers(markerList)
+        let ml = [];
+        for (var i = 0; i < markerList.length; i++) {
+          let data = {
+            x: markerList[i].La,  
+            y: markerList[i].Ma,
+          }
+          
+          let marker = await drawMarker(data, "")
+          let infowindow = new kakao.maps.InfoWindow({
+            content: `<div>&nbsp;${list[i].name}(${list[i].category})</div>`, // 인포윈도우에 표시할 내용
+          });
+
+          kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+          kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+          ml.push(marker)
+        }
+        setStoreMarkers(ml)
         setProducts([])
+        if(list.length == 0) {
+          return alert("검색 결과가 존재하지 않습니다.")
+        }
         setAffiliate(list)
 
       } else {
@@ -653,30 +678,32 @@ function useOderMain() {
             x: path.pathData.startPos.y,
             y: path.pathData.startPos.x
           }],
-          category: cate
+          category: null
         }
         let eData = {
           locationList: [{
             x: path.pathData.endPos.y,
             y: path.pathData.endPos.x
           }],
-          category: cate
+          category: null
         }
 
-        let sp = await axios.post(
+        let sp = await axios.get(
           `${process.env.REACT_APP_SPRING_API}/api/company/search`, sData,
           {headers: { "Content-Type": "application/json" }}
         );
   
-        let ep = await axios.post(
+        let ep = await axios.get(
           `${process.env.REACT_APP_SPRING_API}/api/company/search`, eData,
           {headers: { "Content-Type": "application/json" }}
         );
         
         let list = []
         for(var i=0; i<sp.data.body.length; i++){
-          if(i>=10) break;
-
+          if(i>=15) break;
+          if (cate != null) {
+            if(sp.data.body[i].category !== cate) continue;
+          }
           let coordList = []
           coordList.push(new kakao.maps.LatLng(
             sData.locationList[0].x, sData.locationList[0].y
@@ -687,18 +714,23 @@ function useOderMain() {
             sp.data.body[i].longitude, sp.data.body[i].latitude
           )
           coordList.push(storeMarkerPosition)
-          markerList.push(storeMarkerPosition)
-          
+
           let length = await MapApi().getCoordLength(coordList);
+          if(length >= 1500) continue;
+
+          markerList.push(storeMarkerPosition)
 
           sp.data.body[i].loc = "start";
           sp.data.body[i].distance = length;
+          // console.log(list[i])
           list.push(sp.data.body[i])
         }
   
         for(var i=0; i<ep.data.body.length; i++){
-          if(i>=10) break;
-
+          if(i>=15) break;
+          if (cate != null) {
+            if(ep.data.body[i].category !== cate) continue;
+          }
           let coordList = []
           coordList.push(new kakao.maps.LatLng(
             eData.locationList[0].x, eData.locationList[0].y
@@ -709,17 +741,39 @@ function useOderMain() {
             ep.data.body[i].longitude, ep.data.body[i].latitude
           )
           coordList.push(storeMarkerPosition)
-          markerList.push(storeMarkerPosition)
 
           let length = await MapApi().getCoordLength(coordList);
+          if(length >= 1500) continue;
+
+          markerList.push(storeMarkerPosition)
           
           ep.data.body[i].loc = "end";
           ep.data.body[i].distance = length;
           list.push(ep.data.body[i])
         }
 
-        setStoreMarkers(markerList)
+        let ml = [];
+        for (var i = 0; i < markerList.length; i++) {
+          let data = {
+            x: markerList[i].La,  
+            y: markerList[i].Ma,
+          }
+
+          let marker = await drawMarker(data, "")
+          let infowindow = new kakao.maps.InfoWindow({
+            content: `<div>&nbsp;${list[i].name}(${list[i].category})</div>`, // 인포윈도우에 표시할 내용
+          });
+
+          kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+          kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+          ml.push(marker)
+        }
+
+        setStoreMarkers(ml)
         setProducts([])
+        if(list.length == 0) {
+          return alert("검색 결과가 존재하지 않습니다.")
+        }
         setAffiliate(list)
 
       }
@@ -731,16 +785,13 @@ function useOderMain() {
 
   async function denoteStoreMarkers() {
     for (var i = 0; i < storeMarkers.length; i++) {
-      let data = {
-        x: storeMarkers[i].La,  
-        y: storeMarkers[i].Ma,
-      }
-      let marker = await drawMarker(data, "")
-      marker.setMap(map);
-      setStoreMarkerCoords((cur) => [...cur, marker])
+      storeMarkers[i].setMap(map);
     }
   }
-  console.log(storeMarkers)
+
+  useEffect(()=>{
+    denoteStoreMarkers()
+  }, [storeMarkers])
 
   useEffect(()=>{
     if(userLocation != null) {
@@ -754,7 +805,7 @@ function useOderMain() {
   async function getCompProd(comp) {
     try {
       // compId 파라미터로 업체 아이디 받기
-      let result = await axios.post(
+      let result = await axios.get(
         `${process.env.REACT_APP_SPRING_API}/api/product/comp/${comp.id}`
       );
       // console.log(result.data.body);
@@ -793,7 +844,7 @@ function useOderMain() {
           name: word,
           // category: null
         }
-        let p = await axios.post(
+        let p = await axios.get(
           `${process.env.REACT_APP_SPRING_API}/api/product/search`, data,
           {headers: { "Content-Type": "application/json" }}
         );
@@ -801,29 +852,52 @@ function useOderMain() {
         let list = []
         for(var i=0; i<p.data.body.length; i++) {
           if(i>=10) break;
-          
-          let coordList = []
-          coordList.push(new kakao.maps.LatLng(
-            data.locationList[0].y, data.locationList[0].x
-          ))
+          if(!p.data.body[i].prodBasic.name.includes(word)) continue;
+          else {
+            let coordList = []
+            coordList.push(new kakao.maps.LatLng(
+              data.locationList[0].y, data.locationList[0].x
+            ))
 
-          let storeMarkerPosition;
-          
-          storeMarkerPosition = new kakao.maps.LatLng(
-            p.data.body[i].company.longitude, p.data.body[i].company.latitude
-          )
-          coordList.push(storeMarkerPosition)
-          markerList.push(storeMarkerPosition)
-          
-          let length = await MapApi().getCoordLength(coordList);
-          
-          p.data.body[i].distance = length;
-          list.push(p.data.body[i])
+            let storeMarkerPosition;
+            storeMarkerPosition = new kakao.maps.LatLng(
+              p.data.body[i].company.longitude, p.data.body[i].company.latitude
+            )
+            coordList.push(storeMarkerPosition)
+
+            let length = await MapApi().getCoordLength(coordList);
+            if(length >= 1500) continue;
+
+            markerList.push(storeMarkerPosition)
+            
+            p.data.body[i].distance = length;
+            list.push(p.data.body[i])
+
+          }
         }
 
-        console.log(list)
-        setStoreMarkers(markerList)
+        let ml = [];
+        for (var i = 0; i < markerList.length; i++) {
+          let data = {
+            x: markerList[i].La,  
+            y: markerList[i].Ma,
+          }
+
+          let marker = await drawMarker(data, "")
+          let infowindow = new kakao.maps.InfoWindow({
+            content: `<div>&nbsp;업체명: ${list[i].name}</div>`, // 인포윈도우에 표시할 내용
+          });
+
+          kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+          kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+          ml.push(marker)
+        }
+        setStoreMarkers(ml)
         setAffiliate([])
+        if(list.length == 0) {
+          alert("검색 결과가 존재하지 않습니다.")
+          return reset()
+        }
         setProducts(list)
 
       } else {
@@ -844,12 +918,12 @@ function useOderMain() {
           category: null
         }
 
-        let sp = await axios.post(
+        let sp = await axios.get(
           `${process.env.REACT_APP_SPRING_API}/api/product/search`, sData,
           {headers: { "Content-Type": "application/json" }}
         );
   
-        let ep = await axios.post(
+        let ep = await axios.get(
           `${process.env.REACT_APP_SPRING_API}/api/product/search`, eData,
           {headers: { "Content-Type": "application/json" }}
         );
@@ -857,50 +931,78 @@ function useOderMain() {
         let list = []
         for(var i=0; i<sp.data.body.length; i++){
           if(i>=10) break;
+          if(!sp.data.body[i].prodBasic.name.includes(word)) continue;
+          else {
+            let coordList = []
+            coordList.push(new kakao.maps.LatLng(
+              sData.locationList[0].x, sData.locationList[0].y
+            ))
 
-          let coordList = []
-          coordList.push(new kakao.maps.LatLng(
-            sData.locationList[0].x, sData.locationList[0].y
-          ))
+            let storeMarkerPosition;
+            storeMarkerPosition = new kakao.maps.LatLng(
+              sp.data.body[i].company.longitude, sp.data.body[i].company.latitude
+            )
+            coordList.push(storeMarkerPosition)
 
-          let storeMarkerPosition;
-          storeMarkerPosition = new kakao.maps.LatLng(
-            sp.data.body[i].company.longitude, sp.data.body[i].company.latitude
-          )
-          coordList.push(storeMarkerPosition)
-          markerList.push(storeMarkerPosition)
+            let length = await MapApi().getCoordLength(coordList);
+            if(length >= 1500) continue;
 
-          let length = await MapApi().getCoordLength(coordList);
-          console.log(length)
-          sp.data.body[i].loc = "start";
-          sp.data.body[i].distance = length;
-          list.push(sp.data.body[i])
+            markerList.push(storeMarkerPosition)
+
+            sp.data.body[i].loc = "start";
+            sp.data.body[i].distance = length;
+            list.push(sp.data.body[i])
+
+          }
         }
   
         for(var i=0; i<ep.data.body.length; i++){
           if(i>=10) break;
+          if(!ep.data.body[i].prodBasic.name.includes(word)) continue;
+          else {
+            let coordList = []
+            coordList.push(new kakao.maps.LatLng(
+              eData.locationList[0].x, eData.locationList[0].y
+            ))
 
-          let coordList = []
-          coordList.push(new kakao.maps.LatLng(
-            eData.locationList[0].x, eData.locationList[0].y
-          ))
+            let storeMarkerPosition;
+            storeMarkerPosition = new kakao.maps.LatLng(
+              ep.data.body[i].company.longitude, ep.data.body[i].company.latitude
+            )
+            coordList.push(storeMarkerPosition)
+            markerList.push(storeMarkerPosition)
 
-          let storeMarkerPosition;
-          storeMarkerPosition = new kakao.maps.LatLng(
-            ep.data.body[i].company.longitude, ep.data.body[i].company.latitude
-          )
-          coordList.push(storeMarkerPosition)
-          markerList.push(storeMarkerPosition)
+            let length = await MapApi().getCoordLength(coordList);
+            // console.log(length)
+            ep.data.body[i].loc = "end";
+            ep.data.body[i].distance = length;
+            list.push(ep.data.body[i])
 
-          let length = await MapApi().getCoordLength(coordList);
-          // console.log(length)
-          ep.data.body[i].loc = "end";
-          ep.data.body[i].distance = length;
-          list.push(ep.data.body[i])
+          }
         }
         
-        setStoreMarkers(markerList)
+        let ml = [];
+        for (var i = 0; i < markerList.length; i++) {
+          let data = {
+            x: markerList[i].La,  
+            y: markerList[i].Ma,
+          }
+
+          let marker = await drawMarker(data, "")
+          let infowindow = new kakao.maps.InfoWindow({
+            content: `<div>&nbsp;업체명: ${list[i].name}</div>`, // 인포윈도우에 표시할 내용
+          });
+
+          kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+          kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+          ml.push(marker)
+        }
+        setStoreMarkers(ml)
         setAffiliate([])
+        if(list.length == 0) {
+          alert("검색 결과가 존재하지 않습니다.")
+          return reset()
+        }
         setProducts(list)
       }
 
@@ -934,7 +1036,7 @@ function useOderMain() {
   return {
     map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodInfo, optionPrice, pathName, products, 
     prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, cartState, cartOpen, 
-    handleCartOpen, handleCartClose, openTossWindow, clickCategory, reset, pathDraw, denoteStoreMarkers,
+    handleCartOpen, handleCartClose, openTossWindow, reset, pathDraw, denoteStoreMarkers,
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
     sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, calculOpt, 
     handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, putCart, 

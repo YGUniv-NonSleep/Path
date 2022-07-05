@@ -17,7 +17,10 @@ import {
 import { Fragment } from 'react';
 
 function PlaceList({item, target, clicked}) {
-  // 로딩 중 제휴업체 이름 보이는거 수정하기
+  const noResult = () => {
+    alert("검색된 결과가 없습니다.")
+  }
+
   return (
     <SearchItem
       onClick={() => {
@@ -44,7 +47,14 @@ function PlaceList({item, target, clicked}) {
                 />
               </ListItemAvatar>
               <ListItemText
-                primary={<Typography variant="h6" sx={{ fontWeight: 600 }}>{item.prodBasic.name}</Typography>}
+                primary={
+                  <Typography 
+                    variant="h6" 
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {item.prodBasic.name}
+                  </Typography>
+                }
                 sx={{
                   display: "block",
                   overflow: "hidden",
@@ -59,7 +69,7 @@ function PlaceList({item, target, clicked}) {
                       variant="body2"
                       color="text.primary"
                     >
-                      {` ${item.prodBasic.detail} `}
+                      {`${item.price}원`}
                     </Typography>
                     <Typography
                       sx={{ display: "block" }}
@@ -67,9 +77,7 @@ function PlaceList({item, target, clicked}) {
                       variant="button"
                     >
                       <div style={{ display: "flex", justifyContent: "left", marginTop: "5px" }}>
-                        <Typography sx={{ fontWeight: 300 }}>{`${item.price}원`}</Typography>
-                        {/* <ArrowRightAltSharpIcon />
-                        <Typography sx={{ fontWeight: 600 }}>{`${parseInt(item.price - (item.price * item.discount/100))}원`}</Typography> */}
+                        <Typography sx={{ fontWeight: 300 }}>{`${item.company.name}`}</Typography>
                       </div>
                     </Typography>
                   </Fragment>

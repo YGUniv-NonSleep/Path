@@ -140,7 +140,7 @@ public class ProductApiController {
         return null;
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     public ResponseEntity<?> findProduct(@RequestBody(required = false) FindProductDto findProductDto ) {
         System.out.println("데이터: "+findProductDto);
         Message<?> message = productService.findProduct(findProductDto);

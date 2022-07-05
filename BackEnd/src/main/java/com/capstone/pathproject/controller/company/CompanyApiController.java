@@ -84,7 +84,7 @@ public class CompanyApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     public ResponseEntity<?> findCompany(@RequestBody(required = false) FindCompanyDto findCompanyDto ){
         System.out.println("컴퍼니: "+findCompanyDto);
         Message<?> message =  companyService.findCompany(findCompanyDto);
