@@ -40,25 +40,29 @@ function useOderMain() {
   const [cartOpen, setCartOpen] = useState(false);
   const [count, setCount] = useState(1);
 
-  const [optionPrice, setOptionPrice] = useState(0);
-  const [optionCalcul, setOptionCalcul] = useState([]);
-
-  function reset() {
-    setSubBarHide(false);
-    setPlaceList([]);
-    setPagiObj(null);
-    setSearchData('');
-    setProducts([]);
-    getCurLocComp();
-  }
-
+  const [userLocMarker, setUserLocMarker] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [storeMarkers, setStoreMarkers] = useState([]);
   const [polyLines, setPolyLines] = useState([]);
   const [firstWalkLine, setFirstWalkLine] = useState([]);
   const [lastWalkLine, setLastWalkLine] = useState([]);
   const [pathName, setPathName] = useState({
     sName: "", eName: ""
   });
+  const [curBoundary, setCurBoundary] = useState(null);
+
+  const [optionPrice, setOptionPrice] = useState(0);
+  const [optionCalcul, setOptionCalcul] = useState([]);
+
+  function reset() {
+    setSubBarHide(false);
+    setCategory('');
+    setPlaceList([]);
+    setProducts([]);
+    setPagiObj(null);
+    setSearchData('');
+    getCurLocComp();
+  }
 
   const openTossWindow = () => {
     setToss(true)
@@ -283,10 +287,13 @@ function useOderMain() {
     }
   }, [alignment])
 
-  function keywordSetting(e) { // 검색 옵션으로 상품, 장소 있어야댐
+  async function keywordSetting(e) { // 검색 옵션으로 상품, 장소 있어야댐
     e.preventDefault();
     setAlignment('right');
-    searchProduct(searchData) // 서버 데이터 검색 -> 뭔가 이상함
+    if (storeMarkers.length != 0) removeStoreMarkers();
+    await searchProduct(searchData)
+    await denoteStoreMarkers()
+     // 서버 데이터 검색 -> 뭔가 이상함
     // keywordSubmit(); api 검색
     setSubBarHide(false)
     setPage(1);
@@ -387,8 +394,10 @@ function useOderMain() {
       // setSearchData(category);
       setAlignment('right');
       setPage(1);
+      if(closeToggle == false) onCloseToggle()
       setTimeout(()=>{
-        categorySubmit()
+        getCurLocComp()
+        // categorySubmit()
       }, 500)
     }
     return setPlaceList([]);
@@ -396,9 +405,15 @@ function useOderMain() {
 
   // 업체 상세 정보
   function placeTarget(data) {
+    console.log(data)
     if(data.company == undefined) {
       setPlace(data)
-    } else setPlace(data.company) 
+
+    } else {
+      let ob = data.company
+      ob.distance = data.distance
+      setPlace(ob) 
+    }
   }
 
   // 현재 위치정보
@@ -452,7 +467,6 @@ function useOderMain() {
 
   }
 
-  const [userLocMarker, setUserLocMarker] = useState(null);
   // 현재 위치 마커 찍기
   useEffect(()=>{
     if (uLocMarker != null) {
@@ -484,13 +498,10 @@ function useOderMain() {
   useEffect(() => {
     if(userLocation == null) {
       setUserLatLng();
+      setPathName({sName: path.sName, eName: path.eName})
     }
     // 위치 정보 제거 기능 추가하기
   }, []);
-
-  useEffect(()=>{
-    pathDraw();
-  }, [])
 
   async function pathDraw() {
     if(path.pathData == null) return
@@ -504,37 +515,38 @@ function useOderMain() {
         if (polyLines.length != 0) removeGraphics();
         if (firstWalkLine.length != 0) removeFirstWalkGraphics();
         if (lastWalkLine.length != 0) removeLastWalkGraphics();
-        
-        setPathName({sName: path.sName, eName: path.eName})
+        // if (storeMarkers.length != 0) removeStoreMarkers();
 
-        const sp = await drawMarker(path.pathData.startPos)
-        sp.setMap(map)
-        setMarkers((current) => [...current, sp]);
-
-        const ep = await drawMarker(path.pathData.endPos)
-        ep.setMap(map)
-        setMarkers((current) => [...current, ep]);
-
+        const sp = await drawMarker(path.pathData.startPos, "start")
+        const ep = await drawMarker(path.pathData.endPos, "end")
         const polyLine = await drawPolyLine(path.pathData)
-        polyLine.polyline.setMap(map);
-        setPolyLines([polyLine.polyline]);
-
         const boundary = await moveToMap(path.pathData, polyLine)
-        map.setBounds(boundary.bounds);
+        let bounds = new kakao.maps.LatLngBounds();
+        for (var i = 0; i < boundary.points.length; i++) {
+          bounds.extend(boundary.points[i]);
+        }
 
         const firstWalk = await drawWalkLine(
           path.pathData.startPos.x, path.pathData.startPos.y,
           boundary.points[2].La, boundary.points[2].Ma
         );
-        firstWalk.setMap(map);
-        setFirstWalkLine([firstWalk]);
-
         const lastWalk = await drawWalkLine(
           boundary.points[boundary.points.length - 1].La, 
           boundary.points[boundary.points.length - 1].Ma,
           path.pathData.endPos.x, path.pathData.endPos.y,
         )
-        lastWalk.setMap(map);      
+
+        sp.setMap(map)
+        ep.setMap(map)
+        polyLine.polyline.setMap(map);
+        firstWalk.setMap(map);
+        lastWalk.setMap(map);
+        map.setBounds(bounds);
+        
+        setMarkers((current) => [...current, sp]);
+        setMarkers((current) => [...current, ep]);
+        setPolyLines([polyLine.polyline]);
+        setFirstWalkLine([firstWalk]);
         setLastWalkLine([lastWalk]);
 
       } catch (error) {
@@ -543,11 +555,32 @@ function useOderMain() {
     }
   }
 
+  // useEffect(()=>{
+  //   try {
+  //     if(pathName.eName == '') {
+  //       pathDraw()
+  //     } 
+  //     return () => {
+  //       setPathName({sName: '', eName: ''})
+  //     }
+
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }, [pathName])
+
   function removeMarkers() {
     for (var i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
     }
     setMarkers([]);
+  }
+
+  function removeStoreMarkers() {
+    for (var i = 0; i < storeMarkers.length; i++) {
+      storeMarkers[i].setMap(null);
+    }
+    setStoreMarkers([]);
   }
   
   function removeGraphics() {
@@ -573,29 +606,150 @@ function useOderMain() {
 
   async function getCurLocComp() {
     try {
-      let data = {
-        locationList: {
-          x: userLocation.La,
-          y: userLocation.Ma
-        },
-        category: null
+      let cate = null;
+      if (category != '') {
+        if (category == '대형마트') cate = 'MART';
+        if (category == '편의점') cate = 'CONVENIENCESTORE';
+        if (category == '음식점') cate = 'RESTAURANT';
+        if (category == '카페') cate = 'CAFE';
+        if (category == '병원') cate = 'HOSPITAL';
+        if (category == '약국') cate = 'PHARMACY';
       }
-      let result = await axios.get(
-        `${process.env.REACT_APP_SPRING_API}/api/company/`, 
-        { params: data }
-      )
-      // console.log(result)
-      setAffiliate(result.data.body)
+      console.log(cate)
+
+      let markerList = [];
+
+      if(path.pathData == null) {
+        let data = {
+          locationList: {
+            x: userLocation.La,
+            y: userLocation.Ma
+          },
+          category: cate
+        }
+        let result = await axios.get(
+          `${process.env.REACT_APP_SPRING_API}/api/company/`, 
+          { params: data }
+        )
+
+        let list = []
+        for(var i=0; i<result.data.body.length; i++){
+          if(i>=10) break;
+
+          let coordList = []
+          coordList.push(new kakao.maps.LatLng(
+            data.locationList.y, data.locationList.x
+          ))
+
+          let storeMarkerPosition;
+          storeMarkerPosition = new kakao.maps.LatLng(
+            result.data.body[i].longitude, result.data.body[i].latitude
+          )
+          coordList.push(storeMarkerPosition)
+          markerList.push(storeMarkerPosition)
+          
+          let length = await MapApi().getCoordLength(coordList);
+
+          result.data.body[i].distance = length;
+          list.push(result.data.body[i])
+        }
+
+        setStoreMarkers(markerList)
+        setProducts([])
+        setAffiliate(list)
+
+      } else {
+        let sData = {
+          locationList: [{
+            x: path.pathData.startPos.y,
+            y: path.pathData.startPos.x
+          }],
+          category: cate
+        }
+        let eData = {
+          locationList: [{
+            x: path.pathData.endPos.y,
+            y: path.pathData.endPos.x
+          }],
+          category: cate
+        }
+
+        let sp = await axios.get(
+          `${process.env.REACT_APP_SPRING_API}/api/company/`, sData
+        );
+  
+        let ep = await axios.get(
+          `${process.env.REACT_APP_SPRING_API}/api/company/`, eData
+        );
+        
+        let list = []
+        for(var i=0; i<sp.data.body.length; i++){
+          if(i>=10) break;
+
+          let coordList = []
+          coordList.push(new kakao.maps.LatLng(
+            sData.locationList[0].x, sData.locationList[0].y
+          ))
+
+          let storeMarkerPosition;
+          storeMarkerPosition = new kakao.maps.LatLng(
+            sp.data.body[i].longitude, sp.data.body[i].latitude
+          )
+          coordList.push(storeMarkerPosition)
+          markerList.push(storeMarkerPosition)
+          
+          let length = await MapApi().getCoordLength(coordList);
+
+          sp.data.body[i].loc = "start";
+          sp.data.body[i].distance = length;
+          list.push(sp.data.body[i])
+        }
+  
+        for(var i=0; i<ep.data.body.length; i++){
+          if(i>=10) break;
+
+          let coordList = []
+          coordList.push(new kakao.maps.LatLng(
+            eData.locationList[0].x, eData.locationList[0].y
+          ))
+
+          let storeMarkerPosition;
+          storeMarkerPosition = new kakao.maps.LatLng(
+            ep.data.body[i].longitude, ep.data.body[i].latitude
+          )
+          coordList.push(storeMarkerPosition)
+          markerList.push(storeMarkerPosition)
+
+          let length = await MapApi().getCoordLength(coordList);
+          
+          ep.data.body[i].loc = "end";
+          ep.data.body[i].distance = length;
+          list.push(ep.data.body[i])
+        }
+
+        setStoreMarkers(markerList)
+        setProducts([])
+        setAffiliate(list)
+
+      }
 
     } catch (error) {
       console.log(error)
     }
   }
 
-  useEffect(()=>{
+  async function denoteStoreMarkers() {
+    for (var i = 0; i < storeMarkers.length; i++) {
+      storeMarkers[i].setMap(map); 
+    }
+  }
+
+  useEffect(async()=>{
     if(userLocation != null) {
       // 현재 위치 기반 기본 값
-      getCurLocComp()
+      if (storeMarkers.length != 0) removeStoreMarkers();
+      await getCurLocComp()
+      await denoteStoreMarkers()
     }
   }, [userLocation]);
 
@@ -625,6 +779,13 @@ function useOderMain() {
 
   async function searchProduct(word) {
     try {
+      if (!word.replace(/^\s+|\s+$/g, '')) {
+        alert('키워드를 입력해주세요!');
+        return;
+      }
+
+      let markerList = []
+      
       if (path.pathData == null) {
         let data = {
           locationList: {
@@ -640,8 +801,28 @@ function useOderMain() {
 
         let list = []
         for(var i=0; i<p.data.body.length; i++) {
+          if(i>=10) break;
+
+          let coordList = []
+          coordList.push(new kakao.maps.LatLng(
+            data.locationList.y, data.locationList.x
+          ))
+
+          let storeMarkerPosition;
+          storeMarkerPosition = new kakao.maps.LatLng(
+            p.data.body[i].longitude, p.data.body[i].latitude
+          )
+          coordList.push(storeMarkerPosition)
+          markerList.push(storeMarkerPosition)
+          
+          let length = await MapApi().getCoordLength(coordList);
+
+          p.data.body[i].distance = length;
+          console.log(p.data.body[i])
           list.push(p.data.body[i])
         }
+
+        setStoreMarkers(markerList)
         setAffiliate([])
         setProducts(list)
 
@@ -673,16 +854,50 @@ function useOderMain() {
         
         let list = []
         for(var i=0; i<sp.data.body.length; i++){
-          sp.data.body[i].loc = "start"
+          if(i>=10) break;
+
+          let coordList = []
+          coordList.push(new kakao.maps.LatLng(
+            sData.locationList[0].x, sData.locationList[0].y
+          ))
+
+          let storeMarkerPosition;
+          storeMarkerPosition = new kakao.maps.LatLng(
+            sp.data.body[i].longitude, sp.data.body[i].latitude
+          )
+          coordList.push(storeMarkerPosition)
+          markerList.push(storeMarkerPosition)
+
+          let length = await MapApi().getCoordLength(coordList);
+
+          sp.data.body[i].loc = "start";
+          sp.data.body[i].distance = length;
           list.push(sp.data.body[i])
         }
   
         for(var i=0; i<ep.data.body.length; i++){
-          ep.data.body[i].loc = "end"
+          if(i>=10) break;
+
+          let coordList = []
+          coordList.push(new kakao.maps.LatLng(
+            eData.locationList[0].x, eData.locationList[0].y
+          ))
+
+          let storeMarkerPosition;
+          storeMarkerPosition = new kakao.maps.LatLng(
+            ep.data.body[i].longitude, ep.data.body[i].latitude
+          )
+          coordList.push(storeMarkerPosition)
+          markerList.push(storeMarkerPosition)
+
+          let length = await MapApi().getCoordLength(coordList);
+          
+          ep.data.body[i].loc = "end";
+          ep.data.body[i].distance = length;
           list.push(ep.data.body[i])
         }
-  
-        console.log(list)
+        
+        setStoreMarkers(markerList)
         setAffiliate([])
         setProducts(list)
       }
@@ -717,7 +932,7 @@ function useOderMain() {
   return {
     map, closeToggle, subBarHide, animate, searchData, category, placeList, affiliate, prodInfo, optionPrice, pathName, products, 
     prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, cartState, cartOpen, 
-    handleCartOpen, handleCartClose, openTossWindow, clickCategory, reset, pathDraw, 
+    handleCartOpen, handleCartClose, openTossWindow, clickCategory, reset, pathDraw, denoteStoreMarkers,
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
     sortSearch, handleAlignment, keywordSetting, keywordSubmit, categorySubmit, calculOpt, 
     handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, putCart, 

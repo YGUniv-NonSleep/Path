@@ -12,8 +12,10 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   IconButton,
+  Button, 
   Typography,
 } from '@mui/material';
+import Chip from '@mui/material/Chip';
 import Badge from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
@@ -21,6 +23,7 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
   SideNav,
   NavLayout,
@@ -56,6 +59,8 @@ import {
   EntryCloseBtnSpan,
   WrapBarCloseBtn,
   BarCloseBtn,
+  LookDetail, 
+  ButtonDetail, 
 } from './styles/oderStyle';
 import CategoryList from './CategoryList';
 import StoreInfo from './StoreInfo';
@@ -85,7 +90,7 @@ function OderMain() {
     pathName, 
     reset, 
     products, 
-    // pathDraw, 
+    pathDraw, 
     handleCartOpen, 
     handleCartClose, 
     handleShowStore, 
@@ -160,10 +165,23 @@ function OderMain() {
                   <SearchPathSpace>
                     <PathView>
                       {pathName.sName != "" ? (
-                        <div style={{ display: "flex", justifyContent: "center", marginTop: "5px" }}>
-                          <Typography sx={{ fontWeight: 600 }}>{pathName.sName}</Typography>
-                          <ArrowRightAltIcon/>
-                          <Typography sx={{ fontWeight: 600 }}>{pathName.eName}</Typography>
+                        <div style={{ marginTop: "5px" }}>
+                          <div style={{ display: "flex", justifyContent: "center" }}>
+                            <Typography sx={{ fontWeight: 600 }}>{pathName.sName}</Typography>
+                            <ArrowRightAltIcon/>
+                            <Typography sx={{ fontWeight: 600 }}>{pathName.eName}</Typography>
+                          </div>
+                          {/* LookDetail, ButtonDetail,  */}
+                          <LookDetail>
+                            <ButtonDetail onClick={pathDraw}>
+                              <Typography
+                                sx={{ fontSize: 13.5, fontWeight: 700, display: "flex" }}
+                              >
+                                경로 확인
+                              </Typography>
+                              <ArrowForwardIosIcon sx={{ marginRight: -2, width: "14px", height: "18px", display: "flex" }} />
+                            </ButtonDetail>
+                          </LookDetail>
                         </div>
                       ) : (
                         <SearchItemSub>
