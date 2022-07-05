@@ -5,6 +5,7 @@ import com.capstone.pathproject.domain.company.DetailOption;
 import com.capstone.pathproject.domain.company.Product;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.domain.order.*;
+import com.capstone.pathproject.dto.order.OrderByCompanyDto;
 import com.capstone.pathproject.dto.order.SaveOrderCompositionDto;
 import com.capstone.pathproject.dto.order.SaveOrderDto;
 import com.capstone.pathproject.dto.response.Message;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,24 +124,41 @@ public class OrderService {
         System.out.println("memid = " + member.getId());
         System.out.println("companyId = " + companyId);
 
+        List<Order> orderList = orderRepository.findByCompany(company);
 
+        ArrayList<OrderByCompanyDto> orders = new ArrayList<>();
 
+        orderList.stream().map( order -> new OrderByCompanyDto(
+                order.getId(),
+                order.getCompany().getId(),
+                order.getMember().getId(),
+                order.getCompany().getName(),
+                order.getRequest(),
+                order.getState(),
+                order.getPrice()
+        ) ).forEach(orderByCompanyDto -> orders.add(orderByCompanyDto));
 
-//        List<Order> orderList = orderRepository.findByMemberIdAndCompanyId(member.getId(),companyId);
-//
-//        for (Order order:orderList) {
-//            System.out.println("order.getId() = " + order.getId() );
-//
+//        for (OrderByCompanyDto order:orders) {
+//            System.out.println( "orderString="+order.toString()  );
 //        }
-//        if (companyId != null) {
-//
-//        }else{
-//
-//        }
 
+        return Message.<  List<OrderByCompanyDto>>builder()
+                .message("OrderSuccess")
+                .header(StatusEnum.OK)
+                .body(orders)
+                .build();
+
+    }
+
+    public Message<?> getOrderDetail(Long orderId) {
+
+        Order order = orderRepository.findById(orderId).get();
+        OrderItem orderItem = orderItemRepository.findByOrder(order).get();
+
+
+        System.out.println("orderItem.toString() = " + orderItem.toString());
 
 
         return null;
     }
-
 }

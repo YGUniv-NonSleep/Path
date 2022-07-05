@@ -39,26 +39,191 @@ width:100%;
 margin-left: 130px;
 `;
 
+const OrderListCon = styled.div`
+width:30%;
+float: left;
+`
 
-function OrderMain(){
-    const {loading} = useLoading();
-    const{
-        
+const OrderDetailCon = styled.div`
+width:30%;
+float:left;
+`
+
+
+function OrderMain() {
+    const { loading } = useLoading();
+    const {
+        orderList, clickedOrderHandle,changeState
+        // openDetailForm
+
     } = useCompOrder();
 
-    return(
+
+
+    return (
         <OrderCon>
             <OrderSubCon>
-                <>ds</>
+                <OrderListCon>
+                    {orderList == null ? (
+                        console.log(orderList)
+                    ) : orderList.length == 0 ? (
+
+                        // console.log("조회된 데이터가 없음")
+                        <div>조회된 상품이 없습니다 상품을 추가해주세요</div>
+                    ) : (
+                        orderList.map((order, index) => {
+                            // console.log(it);
+                            return (
+                                <Fragment key={index}>
+                                    <br />
+
+                                    <ListItemButton
+                                        alignItems="flex-start"
+                                        // onClick={() => openDetailForm(order.orderId)}
+                                        sx={{ zIndex: "20" }}
+                                    >
+                                        <ListItemText
+                                            primary={
+                                                <>
+                                                    <Typography sx={{ display: "inline-block" }}>
+                                                        주문번호
+                                                    </Typography>
+                                                    <Typography
+                                                        sx={{ display: "inline-flex", marginLeft: "12px" }}
+                                                    >
+                                                        {order.orderId}
+                                                    </Typography>
+                                                </>
+                                            }
+                                            sx={{
+                                                display: "block",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                margin: "auto 0",
+                                            }}
+                                            secondary={
+                                                <Fragment sx={{ marginLeft: "9px" }}>
+                                                    <div>
+                                                        <Typography
+                                                            sx={{ display: "inline-block" }}
+                                                            variant="body2"
+                                                            color="text.primary"
+                                                        >
+                                                            가격
+
+                                                        </Typography>
+                                                        <Typography
+                                                            sx={{ display: "inline-flex", marginLeft: "9px" }}
+                                                            variant="button"
+                                                            component="span"
+                                                        >
+                                                            {order.price}원
+                                                        </Typography>
+                                                    </div>
+                                                    <div>
+                                                        <Typography
+                                                            sx={{ display: "inline-block" }}
+                                                            variant="body2"
+                                                            color="text.primary"
+                                                        >
+                                                            회원번호
+                                                        </Typography>
+                                                        <Typography
+                                                            sx={{ display: "inline-flex", marginLeft: "9px" }}
+                                                            variant="button"
+                                                            component="span"
+                                                        >
+                                                            {order.memberId}
+                                                        </Typography>
+                                                    </div>
+                                                    <div>
+                                                        <Typography
+                                                            sx={{ display: "inline-block" }}
+                                                            variant="body2"
+                                                            color="text.primary"
+                                                        >
+                                                            접수상태
+                                                        </Typography>
+                                                        <Typography
+                                                            sx={{ display: "inline-flex", marginLeft: "9px" }}
+                                                            variant="button"
+                                                            component="span"
+                                                        >
+                                                            {order.orderState}
+                                                        </Typography>
+                                                    </div>
+
+                                                    {order.orderState == "CHECKING" ?
+
+                                                        <><Button
+                                                            onClick={() => {
+                                                                changeState("ACCEPTED",order.orderId)
+                                                            }}
+                                                        >
+                                                            주문 접수
+                                                        </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    changeState("CANCELLED",order.orderId)
+                                                                }}
+                                                            >
+                                                                주문 거절
+                                                            </Button></>
+                                                        :
+                                                        <><Button>
+                                                        {order.orderState}
+                                                    </Button></>
+                                                    }
+
+
+
+
+
+                                                </Fragment>
+                                            }
+                                        />
+                                    </ListItemButton>
+                                </Fragment>
+                            );
+                        })
+                    )}
+
+
+
+                </OrderListCon>
+                <OrderDetailCon>
+
+                    {/* {clickedOrderHandle == true ? <>
+
+
+                        <Button
+                            onClick={() => {
+                                //   changeDetailForm("create");
+                            }}
+                        >
+                            주문 접수
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                //   changeDetailForm("create");
+                            }}
+                        >
+                            주문 거절
+                        </Button>
+
+
+                    </> : <>ss2</>} */}
+
+                </OrderDetailCon>
 
 
             </OrderSubCon>
         </OrderCon>
-        
+
     );
 }
 
-OrderMain.PropTypes={
-    loading:PropTypes.bool.isRequired,
+OrderMain.PropTypes = {
+    loading: PropTypes.bool.isRequired,
 };
 export default OrderMain;

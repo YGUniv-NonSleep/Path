@@ -24,7 +24,7 @@ public class OrderController {
     }
 
     @PatchMapping("/orderState")
-    public ResponseEntity<Message<?>> updateState(@RequestParam Long orderId, @RequestParam String state){
+    public ResponseEntity<Message<?>> updateState(@RequestParam(value = "orderId") Long orderId, @RequestParam(value = "state") String state){
         Message<?> message = orderService.updateState(orderId, state);
         return responseUtil.createResponseEntity(message);
     }
@@ -33,7 +33,18 @@ public class OrderController {
     public ResponseEntity<Message<?>> getOrderList(@RequestParam(value = "companyId" ,required = false) Long companyId){
 
         Message<?> message = orderService.getOrderList(companyId);
+        System.out.println("message = " + message);
+        return responseUtil.createResponseEntity(message);
+    }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<Message<?>> getOrderDetail(@PathVariable("orderId") Long id){
+
+        Message<?> message = orderService.getOrderDetail(id);
+
         return null;
+//        System.out.println("message = " + message);
+//        return responseUtil.createResponseEntity(message);
     }
 
 
