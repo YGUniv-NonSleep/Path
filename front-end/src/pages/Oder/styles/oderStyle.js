@@ -634,13 +634,34 @@ const EmphasizeRedText = styled.em`
   font-style: normal;
 `;
 
+const LookDetail = styled.div`
+  margin-top: 1px;
+  margin-left: 18px;
+`;
+
+const ButtonDetail = styled.button`
+  margin: 0;
+  border: 0;
+  padding: 0;
+  appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: 0;
+  font-family: notosanskr,Malgun Gothic,맑은 고딕,Dotum,돋움,sans-serif;
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 15px;
+  color: #8f8f8f;
+  display: flex;
+`;
+
 export { 
   SideNav, NavLayout, PanelWrap, PanelBase, SearchBarBox, EmphasizeRedText, 
   BubbleFilter, BubbleFilterListWrap, BubbleFilterArea, BubbleFilterList, BubbleFilterItem, BubbleFilterBtn, AppendixFilterListImg, 
   BaseCard, MainTopSpace, SearchPathSpace, PathView, CombinedSearchList, SaltSearchList, ExternalFrameBridge, SearchFrame, PlaceWrap, PlaceRoot, 
   SortBoxWrap, SortBoxInner, SortBoxSpace, FlickingViewport, FlickingCamera, FilterItem, SearchBoxWrap, SearchBox, 
   SearchList, SearchItem, SearchItemInfo, SearchItemTitle, ItemBlueText, ItemCategoryText, SearchItemSub, EntryStoreWrap, StoreTab, StoreTabInfo, StoreInfoArea, StoreInfo, 
-  StoreInfoTwo, StoreInfoItemKey, StoreInfoItemValue, 
+  StoreInfoTwo, StoreInfoItemKey, StoreInfoItemValue, LookDetail, ButtonDetail, 
   SearchBoxPagination, SubNav, EntryLayout,EntryPlaceBridge, EntryCloseBtn, EntryCloseBtnSpan, WrapBarCloseBtn, BarCloseBtn, 
   PlaceDataImageArea, ImageArea, PlaceDataArea, PlaceData, PlaceDataTitle, PlaceDataTitleName, PlaceDataTitleCate, 
   PlaceDataPlus, PlaceDataPlusSection, PlusSectionUl, PlusSectionLi, PlusSection, PlusSectionContent, 

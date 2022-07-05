@@ -1,5 +1,8 @@
 import { TmapApi } from "../../../api/TmapApi";
 import MapApi from '../../../api/MapApi';
+import startPin from '../../../assets/images/start_pin.png';
+import endPin from '../../../assets/images/end_pin.png';
+import storePin from '../../../assets/images/store_pin.png';
 
 // 보행자 경로 검색해서 지도에 그리기
 export const drawWalkLine = async (
@@ -40,12 +43,24 @@ export const drawWalkLine = async (
   return walkResult
 };
 
-export const drawMarker = async (coords) => {
-  const cp = await MapApi().drawKakaoMarker(
-    coords.x, coords.y
-  )
+export const drawMarker = async (coords, loc) => {
+  // const cp = await MapApi().drawKakaoMarker(
+  //   coords.x, coords.y
+  // )
 
-  return cp
+  // return cp
+
+  let markerData = {
+    posX: coords.x,
+    posY: coords.y,
+  }
+  if(loc == "start") markerData.image = startPin
+  else if(loc == "end") markerData.image = endPin
+  else markerData.image = storePin
+
+  let marker = await MapApi().currentLocMarker(markerData);
+
+  return marker
 }
 
 export const drawPolyLine = async (pathData) => {

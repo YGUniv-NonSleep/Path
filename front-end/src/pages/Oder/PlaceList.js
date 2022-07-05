@@ -68,8 +68,8 @@ function PlaceList({item, target, clicked}) {
                     >
                       <div style={{ display: "flex", justifyContent: "left", marginTop: "5px" }}>
                         <Typography sx={{ fontWeight: 300 }}>{`${item.price}원`}</Typography>
-                        <ArrowRightAltSharpIcon />
-                        <Typography sx={{ fontWeight: 600 }}>{`${parseInt(item.price - (item.price * item.discount/100))}원`}</Typography>
+                        {/* <ArrowRightAltSharpIcon />
+                        <Typography sx={{ fontWeight: 600 }}>{`${parseInt(item.price - (item.price * item.discount/100))}원`}</Typography> */}
                       </div>
                     </Typography>
                   </Fragment>
@@ -96,8 +96,20 @@ function PlaceList({item, target, clicked}) {
             </SearchItemSub>
             {item.distance != "" && item.distance != undefined ? (
               <SearchItemSub>
-                현재 위치로부터
-                <EmphasizeRedText>{item.distance}m</EmphasizeRedText>
+                { item.loc == "start" 
+                ? <>
+                    출발지로부터
+                    <EmphasizeRedText>{item.distance}m</EmphasizeRedText>
+                  </> 
+                : item.loc == "end" 
+                  ? <>
+                      도착지로부터
+                      <EmphasizeRedText>{item.distance}m</EmphasizeRedText>
+                    </>
+                  : <>
+                      현재 위치로부터
+                      <EmphasizeRedText>{item.distance}m</EmphasizeRedText>
+                    </> }
               </SearchItemSub>
             ) : (
               <SearchItemSub>위치 정보가 있어야 표시됩니다.</SearchItemSub>

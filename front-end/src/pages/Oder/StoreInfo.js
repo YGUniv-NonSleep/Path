@@ -69,8 +69,20 @@ function StoreInfo({ place, showStore }) {
                       />
                       { place.distance != "" && place.distance != undefined ? (
                         <Fragment>
-                          현재 위치로부터
-                          <EmphasizeRedText>{place.distance}m</EmphasizeRedText>
+                          { place.loc == "start" 
+                            ? <>
+                                출발지로부터
+                                <EmphasizeRedText>{place.distance}m</EmphasizeRedText>
+                              </> 
+                            : place.loc == "end" 
+                              ? <>
+                                  도착지로부터
+                                  <EmphasizeRedText>{place.distance}m</EmphasizeRedText>
+                                </>
+                              : <>
+                                  현재 위치로부터
+                                  <EmphasizeRedText>{place.distance}m</EmphasizeRedText>
+                                </> }
                         </Fragment>
                       ) : "현재 위치로 부터의 거리 정보 없음" }
                     </PlusSectionContent>

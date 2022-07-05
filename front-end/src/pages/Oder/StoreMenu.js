@@ -53,14 +53,16 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
     category, dialogOpen, count, prodInfo, optionPrice, 
     setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart, clickCategory
   } = useOderMain();
-  
+  console.log(place)
   function sInfo() {
     let list = [];
-
+    
     let value = [
       `${place.name != '' ? place.name : '업체명'}`, 
       `약 ${`${place.waitTime}`}분`, 
-      `${'나중에 받으려나?'}m`, 
+      `${place.distance != NaN || place.distance != undefined || place.distance != null
+        ? `${place.distance}m`
+        : '위치정보를 얻어오지 못했습니다.' }`, 
       '카드결제' // 현장결제(카드/현금)
     ];
     const title = ['가게이름', '대기시간', '가게위치', '결제방법'];
