@@ -11,7 +11,6 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
@@ -20,7 +19,6 @@ import List from "@mui/material/List";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import * as React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -450,7 +448,7 @@ function ItemsMain() {
               <Box
                 component="form"
                 sx={{
-                  "& > :not(style)": { m: 1, width: "100%" },
+                  "& > :not(style)": { m: 1, width: "100%" ,marginLeft:0 , marginRight:0},
                 }}
                 noValidate
                 autoComplete="off"
@@ -778,7 +776,7 @@ function ItemsMain() {
             })
 
           ) : (
-            <h2>Null</h2>
+            <></>
           )}
         </ThirdCon>
       </ItemSubCon>
@@ -844,11 +842,7 @@ function ItemsMain() {
             </Typography>
           </Box>
         </Modal>
-
-        <Button variant="contained" onClick={editFormModalHandle}>
-                취소
-              </Button>
-
+      
         <Modal
           open={editFormModal}
           onClose={editFormModalHandle}

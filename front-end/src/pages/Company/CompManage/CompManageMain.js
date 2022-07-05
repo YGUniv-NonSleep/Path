@@ -19,7 +19,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-const pages = ["상품 목록", "업체 수정", "업체 탈퇴"];
+const pages = ["상품 목록", "업체 수정", "업체 탈퇴","주문 확인"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function CompManageMain() {
@@ -68,6 +68,12 @@ function CompManageMain() {
                       업체 탈퇴
                     </Button>
                   </Link>
+                  <Link to="order">
+                    <Button sx={{ my: 2, color: "white", display: "block" }}>
+                      주문 확인
+                    </Button>
+                  </Link>
+                  
                 </Box>
               </Toolbar>
             </Container>

@@ -20,16 +20,20 @@ public class OrderController {
     @PostMapping("/product")
     public ResponseEntity<Message<?>> orderProduct(@RequestBody SaveOrderDto saveOrderDto){
         Message<SaveOrderDto> message = orderService.orderProduct(saveOrderDto);
-
         return responseUtil.createResponseEntity(message);
     }
 
     @PatchMapping("/orderState")
     public ResponseEntity<Message<?>> updateState(@RequestParam Long orderId, @RequestParam String state){
-
         Message<?> message = orderService.updateState(orderId, state);
-
         return responseUtil.createResponseEntity(message);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Message<?>> getOrderList(@RequestParam(value = "companyId" ,required = false) Long companyId){
+
+        Message<?> message = orderService.getOrderList(companyId);
+        return null;
     }
 
 

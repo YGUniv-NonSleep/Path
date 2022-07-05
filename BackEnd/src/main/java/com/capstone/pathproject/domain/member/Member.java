@@ -1,12 +1,16 @@
 package com.capstone.pathproject.domain.member;
 
 import com.capstone.pathproject.domain.BaseTimeEntity;
+import com.capstone.pathproject.domain.company.Company;
+import com.capstone.pathproject.domain.order.OrderItem;
 import com.capstone.pathproject.dto.member.SignupFormDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
