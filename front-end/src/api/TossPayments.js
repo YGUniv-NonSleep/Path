@@ -1,4 +1,4 @@
-import { loadTossPayments } from '@tosspayments/payment-sdk'
+import { loadTossPayments } from '@tosspayments/payment-sdk';
 import RandomString from '../utils/RandomString';
 
 async function TossPayments(member, cart) {
