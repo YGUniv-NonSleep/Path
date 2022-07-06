@@ -36,6 +36,7 @@ async function useSuccess() {
             paymentKey: query.paymentKey,
             tossOrderId: query.orderId,
             memberId: parseInt(memberId),
+            companyId: cart.comId
         }
 
         let products = [];
