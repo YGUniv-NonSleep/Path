@@ -46,6 +46,7 @@ public class OrderService {
         System.out.println(saveOrderDto.getMemberId().getClass());
 
         Optional<Member> member = memberRepository.findById(saveOrderDto.getMemberId());
+        Company company = companyRepository.findById(saveOrderDto.getCompanyId()).get();
 
         if (member.isPresent()){
             Order order = Order.createOrder()
@@ -53,6 +54,7 @@ public class OrderService {
                     .member(member.get())
                     .price(saveOrderDto.getTotalAmount())
                     .request(saveOrderDto.getRequest())
+                    .company(company)
                     .build();
             orderRepository.save(order);
 
