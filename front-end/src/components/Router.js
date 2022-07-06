@@ -30,6 +30,7 @@ import {
 } from '../pages/Company/CompManage';
 import Confirmation from '../pages/Confirmation/Confirmation';
 import SendingConfirm from '../pages/Confirmation/SendingConfirm';
+import CarPoolPay  from '../pages/Confirmation/Success';
 import {
   Member,
   Card,
@@ -136,6 +137,7 @@ function Router() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/member/confirmation" element={<Confirmation />} />
         <Route path="/member/sendingConfirm" element={<SendingConfirm />} />
+        <Route path="/carpool/pay" element={<CarPoolPay />} />
       </Routes>
 
       {/* <Routes>
