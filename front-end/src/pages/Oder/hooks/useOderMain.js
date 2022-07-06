@@ -622,8 +622,8 @@ function useOderMain() {
         }
 
         let result = await axios.get(
-          `${process.env.REACT_APP_SPRING_API}/api/company/search`, data,
-          {headers: { "Content-Type": "application/json" }}
+          `${process.env.REACT_APP_SPRING_API}/api/company/search`, {
+            params: data }, { withCredentials: true }
         )
 
         let list = []
