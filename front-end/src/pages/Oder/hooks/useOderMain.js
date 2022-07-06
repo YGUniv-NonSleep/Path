@@ -77,6 +77,7 @@ function useOderMain() {
       if(toss == true) {
         tossCreate()
       }
+      setToss(false)
 
     } catch (error) {
       console.log(error)
