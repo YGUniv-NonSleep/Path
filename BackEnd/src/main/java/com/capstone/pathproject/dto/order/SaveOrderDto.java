@@ -18,5 +18,6 @@ public class SaveOrderDto {
     private String method;
     private Long memberId;
     private String request;
+    private Long companyId;
     private List<SaveOrderCompositionDto> orderCompositionList;
 }

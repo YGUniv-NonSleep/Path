@@ -58,4 +58,5 @@ public class CarPostRequestApiController {
         Message<CarPostRequestDTO> message = carPostRequestService.findList(requestId);
         return responseUtil.createResponseEntity(message);
     }
+
 }
