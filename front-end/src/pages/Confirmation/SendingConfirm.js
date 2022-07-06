@@ -1,8 +1,11 @@
 import * as React from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import {
     Button,
     CssBaseline,
@@ -49,6 +52,14 @@ const style = {
 function SendingConfirm(){
     let state = useSelector((state)=>state);
     const [send, setSend] = useState(null);
+    const [alertState, setAlert] = useState(false);
+    const [arraySend, setArraySend] = useState(null);
+    const [operstate, setOperation] = useState(false);
+    const [operdata, setOperDate] = useState(null);
+    const nowTime = moment().format('YYYY-MM-DD-HH:mm:00');
+    console.log(nowTime)
+    
+     
 
     useEffect(()=>{
         axios.get(process.env.REACT_APP_SPRING_API + `/api/request/sending/${state.user.id}`)
@@ -78,11 +89,121 @@ function SendingConfirm(){
             console.log(err);
         })
     }
+    useEffect(()=>{
+        if(send !=null){
+            // console.log(send.carPost.sdate + send.carPost.stime);
+            for(var i=0; i < send.length; i++){
+                console.log(send[i].carPost.sdate + "-" + send[i].carPost.stime)
+                
+            if(nowTime == send[i].carPost.sdate + "-" + send[i].carPost.stime && send[i].approval =="accept"){
+                console.log("같음")
+                console.log(send[i])
+                setArraySend(send[i])
+                setAlert(true);
+            }
+            }
+        }
+     
+    },[send])
+
+    useEffect(()=>{
+        if(operstate ==true){
+            axios.get(process.env.REACT_APP_SPRING_API + `/api/operation/list/${arraySend.carPost.id}`)
+            .then((res)=>{
+                console.log(res.data.body);
+                setOperDate(res.data.body);
+                const oId = res.data.body[0].operationId
+                return oId;
+            })
+            .then(async (oId)=>{
+                const result = await BoardingDetail(oId);
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+        
+    },[operstate])
+
+    const BoardingCheck = (e) =>{
+        e.preventDefault();
+        setAlert(false)
+        var clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq'
+        var tossPayments = TossPayments(clientKey)
+        for(var i = 0; i<1; i++){
+            var key = 1;
+            key = key + i;
+        }
+        tossPayments.requestPayment('계좌이체',{
+            amount : arraySend.price,
+            orderId : 'gDkxH_280UUrcLyuPb5Rx' + key,
+            orderName : arraySend.carPost.title,
+            successUrl: 'https://localhost:3001/carpool/pay',
+            failUrl: 'http://localhost:8080/fail',
+        })
+        
+        const data = {
+            cost : arraySend.price,
+            status : "success",
+            carPost : {
+                id : arraySend.carPost.id
+            }, 
+            cars : {
+                id : arraySend.carPost.cars.id
+            }         
+        }
+        console.log(data);
+        axios.post(process.env.REACT_APP_SPRING_API + '/api/operation',data)
+        .then((res)=>{
+            console.log(res)
+            setOperation(true);
+
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    } 
+
+    const BoardingDetail = async(ndata) =>{
+            const data = {
+                operationDetail :{
+                    operationId : ndata
+                },
+                carPostRequest : {
+                    id : arraySend.id
+                },
+                cost : arraySend.price,
+                daccount : arraySend.carPost.member.account,
+                rname : arraySend.carPost.member.name,
+                status : "True",
+                sname : arraySend.member.name,
+                waccount : arraySend.member.account,
+                tradeNum : moment().format('YYYY-MM-DD-HH:mm:ss:SSS')
+        }    
+        console.log(data);
+       await axios.post(process.env.REACT_APP_SPRING_API + "/api/boarding",data)
+        .then((res)=>{
+            console.log(res)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })     
+    }
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <main>
+            {alertState ? (
+                    <Stack sx={{ width: '100%' }} spacing={2}>
+                    <Alert action={
+                        <Button color="inherit" size="small" onClick={BoardingCheck}>확인</Button>
+                    }sx={{width:'50%', marginLeft:"500px"}} severity="info">
+                        <AlertTitle>탑승 가능 알림</AlertTitle>
+                         탑승하여 주세요.
+                    </Alert>
+                    </Stack>
+                ):('')}
                 <Box
                     sx={{
                         bgcolor : 'background.paper',
