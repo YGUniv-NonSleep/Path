@@ -38,7 +38,7 @@ const CompRouteElement = () => {
     <Ul>
       <Li $current={currLocation === "/company" && true}>
         <ScLink to="/company" $current={currLocation === "/company" && true}>
-          어서와요 솨장님
+          메인 화면
         </ScLink>
       </Li>
       <Li $current={currLocation === "/company/store" && true}>
