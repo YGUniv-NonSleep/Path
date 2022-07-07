@@ -114,36 +114,47 @@ function SecondaryListItems(props) {
      {send ? (
       <ListItemButton component={Link} to="/member/SendingConfirm">
         <ListItemIcon>
-          <DirectionsCarIcon />
+        <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="보낸 신청서" /><FeedbackOutlinedIcon sx={{color : '#FF0000'}}></FeedbackOutlinedIcon>
       </ListItemButton>
      ):(
      <ListItemButton component={Link} to="/member/SendingConfirm">
      <ListItemIcon>
-       <DirectionsCarIcon />
+     <AssignmentIcon />
      </ListItemIcon>
      <ListItemText primary="보낸 신청서" />
    </ListItemButton>)} 
       
- 
-
       {feedBack ? (<>
         <ListItemButton component={Link} to="/member/Confirmation">
         <ListItemIcon>
-          <DirectionsCarIcon />
+        <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="받은 신청서" /><FeedbackOutlinedIcon sx={{color : '#FF0000'}}></FeedbackOutlinedIcon>
       </ListItemButton>
         </>):(
            <ListItemButton component={Link} to="/member/Confirmation">
            <ListItemIcon>
-             <DirectionsCarIcon />
+           <AssignmentIcon />
            </ListItemIcon>
            <ListItemText primary="받은 신청서" />
          </ListItemButton>
         )}
-     
+
+        <ListItemButton component={Link} to="/member/operation">
+        <ListItemIcon>
+          <DirectionsCarIcon />
+        </ListItemIcon>
+        <ListItemText primary="운행내역" />
+        </ListItemButton>
+
+        <ListItemButton component={Link} to="/member/boarding">
+        <ListItemIcon>
+          <DirectionsCarIcon />
+        </ListItemIcon>
+        <ListItemText primary="탑승내역" />
+        </ListItemButton>
 
       <ListSubheader component="div" inset>
         환경 설정
@@ -163,8 +174,6 @@ function SecondaryListItems(props) {
         <ListItemText primary="카드 관리" />
       </ListItemButton>
 
-     
-      
       <ListItemButton>
         <ListItemIcon>
           <DeleteForeverIcon />
