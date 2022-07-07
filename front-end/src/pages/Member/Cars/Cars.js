@@ -225,6 +225,18 @@ console.log(dataModal)
                               variant="standard"
                               defaultValue={dataModal.carKind}
                             /><br></br><br></br><br></br><br></br>
+
+                          <Button
+                            variant="contained"
+                            component="label">
+                          <Typography>
+                            파일등록
+                          </Typography>
+                          <input id={"file-input"} style={{ display: 'none' }} type="file" name="userfile" multiple="multiple"  />
+                         </Button>
+                         <br></br><br></br>
+                         
+                         <Button type="submit">수정하기</Button>
                         </form>
                         </Box>   
                       </Container> 

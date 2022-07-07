@@ -30,6 +30,8 @@ import {
 } from '../pages/Company/CompManage';
 import Confirmation from '../pages/Confirmation/Confirmation';
 import SendingConfirm from '../pages/Confirmation/SendingConfirm';
+import Opertaion from '../pages/History/Operation';
+import Boarding from '../pages/History/Boarding';
 import CarPoolPay  from '../pages/Confirmation/Success';
 import {
   Member,
@@ -137,6 +139,8 @@ function Router() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/member/confirmation" element={<Confirmation />} />
         <Route path="/member/sendingConfirm" element={<SendingConfirm />} />
+        <Route path="/member/operation" element={<Opertaion />} />
+        <Route path="member/boarding" element={<Boarding />} />
         <Route path="/carpool/pay" element={<CarPoolPay />} />
       </Routes>
 
