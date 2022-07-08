@@ -12,4 +12,14 @@ import lombok.ToString;
 public class LocationDto {
     private double x;
     private double y;
+
+
+
+
+
+
+    public LocationDto(Double x, Double y) {
+        this.x = x;
+        this.y = y;
+    }
 }

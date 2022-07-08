@@ -6,6 +6,7 @@ import TossPayments from "../../../api/TossPayments";
 import currentLoc from '../../../assets/images/placeholder.png';
 import { addCart, clearCart } from "../../../store/cart";
 import { drawWalkLine, drawMarker, drawPolyLine, moveToMap } from "./pathDrawing";
+import qs from "qs";
 
 function useOderMain() {
   // '업체' 회원만 오더에서 업체 조회가 되고 있다
@@ -613,18 +614,36 @@ function useOderMain() {
       let markerList = [];
 
       if(path.pathData == null) {
-        let data = {
+        axios.paramsSerializer = params => {
+          return qs.stringify(params, {arrayFormat: 'comma'});
+        }
+
+        let locationDto = {
           locationList: [{
             x: userLocation.La,
             y: userLocation.Ma
+          }, {
+            x: userLocation.La,
+            y: userLocation.Ma
           }],
-          category: null
-        }
+          // x:[userLocation.La],
+          // y:[userLocation.Ma],
+          category: "CAFE"
+        }    
+
+          
 
         let result = await axios.get(
           `${process.env.REACT_APP_SPRING_API}/api/company/search`, {
-            params: data }, { withCredentials: true }
+              params: locationDto
+              ,
+              paramsSerializer: locationDto =>{
+                return qs.stringify(locationDto, {arrayFormat: 'comma'})
+              }
+            }
         )
+
+        
 
         let list = []
         for(var i=0; i<result.data.body.length; i++){
@@ -675,11 +694,13 @@ function useOderMain() {
 
       } else {
         let sData = {
-          locationList: [{
-            x: path.pathData.startPos.y,
-            y: path.pathData.startPos.x
-          }],
-          category: null
+          // locationList: [{
+          //   x: path.pathData.startPos.y,
+          //   y: path.pathData.startPos.x
+          // }],
+          x:[path.pathData.startPos.x],
+          y:[path.pathData.startPos.y],      
+          category: "CAFE"
         }
         let eData = {
           locationList: [{

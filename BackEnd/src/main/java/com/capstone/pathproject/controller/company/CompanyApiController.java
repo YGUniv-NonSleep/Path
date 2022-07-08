@@ -4,6 +4,7 @@ import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.company.CompMemberDTO;
 import com.capstone.pathproject.dto.company.CompanyDTO;
 import com.capstone.pathproject.dto.company.FindCompanyDto;
+import com.capstone.pathproject.dto.company.LocationDto;
 import com.capstone.pathproject.dto.member.MemberDto;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.security.auth.PrincipalDetails;
@@ -85,10 +86,23 @@ public class CompanyApiController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> findCompany(@RequestBody(required = false) FindCompanyDto findCompanyDto ){
-        System.out.println("컴퍼니: "+findCompanyDto);
-        Message<?> message =  companyService.findCompany(findCompanyDto);
-        return responseUtil.createResponseEntity(message);
+    public ResponseEntity<?> findCompany(
+//            @ModelAttribute("locationDto") FindCompanyDto locationDto
+//            @RequestParam(value = "x") List<Double> x,
+//            @RequestParam(value = "y") List<Double> y,
+            @RequestParam(value = "location") List<LocationDto> locationDtos,
+            @RequestParam(value = "category", required = false) String category
+
+    ){
+
+//        FindCompanyDto findCompanyDto = new FindCompanyDto(x,y,category);
+
+//        System.out.println("컴퍼니: "+findCompanyDto.toString());
+//        Message<?> message =  companyService.findCompany(findCompanyDto);
+
+//        return responseUtil.createResponseEntity(message);
+
+        return null;
     }
 
 
