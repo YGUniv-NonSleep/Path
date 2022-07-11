@@ -87,14 +87,18 @@ public class CompanyApiController {
 
     @GetMapping("/search")
     public ResponseEntity<?> findCompany(
-//            @ModelAttribute("locationDto") FindCompanyDto locationDto
+//            @ModelAttribute("locationDto") FindCompanyDto locationDto,
 //            @RequestParam(value = "x") List<Double> x,
 //            @RequestParam(value = "y") List<Double> y,
-            @RequestParam(value = "location") List<LocationDto> locationDtos,
+//            @RequestParam(value = "location") List<LocationDto> locationDtos,
+            @RequestParam(value = "location", required = false) String location,
             @RequestParam(value = "category", required = false) String category
 
     ){
 
+//        System.out.println("xy:"+locationDtos);
+        System.out.println("loc:"+location);
+        System.out.println("cate:"+category);
 //        FindCompanyDto findCompanyDto = new FindCompanyDto(x,y,category);
 
 //        System.out.println("컴퍼니: "+findCompanyDto.toString());
