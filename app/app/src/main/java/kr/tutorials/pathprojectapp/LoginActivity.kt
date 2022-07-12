@@ -1,12 +1,18 @@
 package kr.tutorials.pathprojectapp
 
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import kr.tutorials.pathprojectapp.databinding.ActivityLoginBinding
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
@@ -21,6 +27,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         viewModel.memberInfo.observe(this) { // 로그인 정보가 들어왔을 때 실행
             moveMainPage() // 메인 페이지 이동
         }
+
+        // 키해시 등록
+//        getHashKey()
     }
 
     override fun onClick(v: View?) {
@@ -43,5 +52,23 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             putExtra("role", viewModel.memberInfo.value!!.role)
         }
         startActivity(intent)
+    }
+
+    fun getHashKey() {
+        var packageInfo: PackageInfo = PackageInfo()
+        try {
+            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        for (signature in packageInfo.signatures) {
+            try {
+                var md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.e("KEY_HASH", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            } catch (e: NoSuchAlgorithmException) {
+                Log.e("KEY_HASH", "Unable to get MessageDigest. signature = $signature", e)
+            }
+        }
     }
 }
