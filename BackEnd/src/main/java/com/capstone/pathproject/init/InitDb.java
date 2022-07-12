@@ -17,14 +17,14 @@ public class InitDb {
     private final InitOrderService initOrderService;
     private final InitCardService initCardService;
 
-    @PostConstruct
-    public void init() {
-        initMemberService.dbInitMember();
-        initMobilityCompanyService.dbInitMobilityCompany();
-        initMobilityService.dbInitMobility();
-        initCompanyService.dbInitCompany();
-        initProductService.dbInitProduct();
-        initOrderService.dbInitOrder();
-        initCardService.dbInitCard();
-    }
+//    @PostConstruct
+//    public void init() {
+//        initMemberService.dbInitMember();
+//        initMobilityCompanyService.dbInitMobilityCompany();
+//        initMobilityService.dbInitMobility();
+//        initCompanyService.dbInitCompany();
+//        initProductService.dbInitProduct();
+//        initOrderService.dbInitOrder();
+//        initCardService.dbInitCard();
+//    }
 }
