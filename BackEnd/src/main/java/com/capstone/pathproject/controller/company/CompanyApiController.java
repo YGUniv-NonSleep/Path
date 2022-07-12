@@ -96,14 +96,22 @@ public class CompanyApiController {
 
     ){
 
-        System.out.println("x: "+x);
-        System.out.println("y: "+y);
+//        for (double a:
+//             x) {
+//            System.out.println(a);
+//        }
+//
+//        System.out.println("x: "+x);
+//        System.out.println("y: "+y);
 //        System.out.println("loc:"+location);
-        System.out.println("cate:"+category);
-//        FindCompanyDto findCompanyDto = new FindCompanyDto(x,y,category);
+//        System.out.println("cate:"+category);
+        FindCompanyDto findCompanyDto = new FindCompanyDto(x,y,category);
+
+//        System.out.println("findCompanyDto.toString() = " + findCompanyDto.toString());
 
 //        System.out.println("컴퍼니: "+findCompanyDto.toString());
-//        Message<?> message =  companyService.findCompany(findCompanyDto);
+        Message<?> message =  companyService.findCompany(findCompanyDto);
+        System.out.println("message.getBody().toString() = " + message.getBody().toString());
 
 //        return responseUtil.createResponseEntity(message);
 

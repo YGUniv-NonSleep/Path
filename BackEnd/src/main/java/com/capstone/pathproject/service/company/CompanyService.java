@@ -144,6 +144,8 @@ public class CompanyService {
 
 
     public Message<?> findCompany(FindCompanyDto findCompanyDto) {
+
+        System.out.println("findCompanyDto.toString() = " + findCompanyDto.toString());
         ArrayList<CompanyDTO> companyDTOArrayList = new ArrayList<>();
         List<Company> companyList = new ArrayList<>();
         if (findCompanyDto != null){
@@ -172,6 +174,8 @@ public class CompanyService {
             companyList = companyRepository.findAll();
         }
         companyList.stream().map(CompanyDTO::new).forEach(companyDTOArrayList::add);
+
+
 
         return Message.<List<CompanyDTO>>builder()
                 .body(companyDTOArrayList)
