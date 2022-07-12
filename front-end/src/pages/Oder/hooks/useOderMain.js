@@ -397,7 +397,8 @@ function useOderMain() {
 
   // 업체 상세 정보
   function placeTarget(data) {
-    // console.log(data)
+    console.log(data)
+    // 여기서 눌렀을 때 마커가 화면에 안올라가 백색 화면
     if(data.company == undefined) {
       map.panTo(new kakao.maps.LatLng(data.longitude, data.latitude))
       setPlace(data)
@@ -638,19 +639,19 @@ function useOderMain() {
             if(result.data.body[i].category !== cate) continue;
           }
           let coordList = []
-          // coordList.push(new kakao.maps.LatLng(
-          //   data.locationList[0].y, data.locationList[0].x
-          // ))
+          coordList.push(new kakao.maps.LatLng(
+            locationDto.x[0], locationDto.y[0]
+          ))
 
           let storeMarkerPosition;
           storeMarkerPosition = new kakao.maps.LatLng(
             result.data.body[i].longitude, result.data.body[i].latitude
           )
           coordList.push(storeMarkerPosition)
-          
+          console.log(coordList)
           let length = await MapApi().getCoordLength(coordList);
           if(length >= 1500) continue;
-
+            console.log(length)
           markerList.push(storeMarkerPosition)
 
           result.data.body[i].distance = length;
@@ -703,10 +704,13 @@ function useOderMain() {
             if(result.data.body[i].category !== cate) continue;
           }
           let coordList = []
-          // 원래 시작 지점 좌표 저장
+          // 각 지점 좌표로 처리해야함
           // coordList.push(new kakao.maps.LatLng(
           //   sData.locationList[i].x, sData.locationList[i].y
           // ))
+          coordList.push(new kakao.maps.LatLng(
+            locationDto.x[0], locationDto.y[0]
+          ))
 
           let storeMarkerPosition; // 시작지점, 마지막 지점을 포함한 좌표들
           storeMarkerPosition = new kakao.maps.LatLng(
@@ -953,6 +957,9 @@ function useOderMain() {
             // coordList.push(new kakao.maps.LatLng(
             //   data.locationList[0].y, data.locationList[0].x
             // ))
+            coordList.push(new kakao.maps.LatLng(
+              data.x[0], data.y[0]
+            ))
 
             let storeMarkerPosition;
             storeMarkerPosition = new kakao.maps.LatLng(
@@ -1017,6 +1024,9 @@ function useOderMain() {
 	        // 이름에 word 입력값이 포함되어있는지 확인
           if(!result.data.body[i].prodBasic.name.includes(word)) continue;
           let coordList = []
+          coordList.push(new kakao.maps.LatLng(
+            locationDto.x[0], locationDto.y[0]
+          ))
 
           let storeMarkerPosition; // 시작지점, 마지막 지점을 포함한 좌표들
           storeMarkerPosition = new kakao.maps.LatLng(
