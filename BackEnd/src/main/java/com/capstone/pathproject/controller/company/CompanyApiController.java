@@ -109,9 +109,8 @@ public class CompanyApiController {
 
 //        System.out.println("findCompanyDto.toString() = " + findCompanyDto.toString());
 
-//        System.out.println("컴퍼니: "+findCompanyDto.toString());
         Message<?> message =  companyService.findCompany(findCompanyDto);
-        System.out.println("message.getBody().toString() = " + message.getBody().toString());
+        System.out.println("message.getBody().toString() = " + message.getBody());
 
         return responseUtil.createResponseEntity(message);
 
