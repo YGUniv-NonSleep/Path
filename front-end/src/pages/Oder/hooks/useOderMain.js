@@ -622,7 +622,7 @@ function useOderMain() {
           // 유저 위치
           x: [userLocation.La],
           y: [userLocation.Ma],
-          category: "CAFE"
+          category: cate
         }
 
         let result = await axios.get(
@@ -685,7 +685,7 @@ function useOderMain() {
           // 마커 x(126), y(37) 리스트
           x: [userLocation.La, userLocation.La+0.002],
           y: [userLocation.Ma, userLocation.Ma+0.002],
-          category: "CAFE"
+          category: cate
         }
 
         let result = await axios.get(
