@@ -161,6 +161,7 @@ public class CompanyService {
 
             }else{
                 for (LocationDto locationDto : findCompanyDto.getLocationList()) {
+                    System.out.println("locationDto.toString() = " + locationDto.toString());
                     List<Company> companies = companyRepository.findLocationCategoryCompanies(locationDto.getX(), locationDto.getY(), findCompanyDto.getCategory());
                     for (Company company: companies) {
                         companyList.add(company);

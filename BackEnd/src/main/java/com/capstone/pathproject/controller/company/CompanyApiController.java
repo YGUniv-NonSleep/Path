@@ -113,9 +113,9 @@ public class CompanyApiController {
         Message<?> message =  companyService.findCompany(findCompanyDto);
         System.out.println("message.getBody().toString() = " + message.getBody().toString());
 
-//        return responseUtil.createResponseEntity(message);
+        return responseUtil.createResponseEntity(message);
 
-        return null;
+//        return null;
     }
 
 
