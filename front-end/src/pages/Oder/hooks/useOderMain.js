@@ -6,7 +6,7 @@ import TossPayments from "../../../api/TossPayments";
 import currentLoc from '../../../assets/images/placeholder.png';
 import { addCart, clearCart } from "../../../store/cart";
 import { drawWalkLine, drawMarker, drawPolyLine, moveToMap } from "./pathDrawing";
-import locDtoConvertQs from './locDtoConvertQs';
+import qs from "qs";
 
 function useOderMain() {
   // '업체' 회원만 오더에서 업체 조회가 되고 있다
@@ -614,34 +614,20 @@ function useOderMain() {
       let markerList = [];
 
       if(path.pathData == null) {
-        // axios.defaults.paramsSerializer = params => {
-        //   return qs.stringify(params, {arrayFormat: 'comma'});
-        // }
+        axios.defaults.paramsSerializer = params => {
+          return qs.stringify(params, {arrayFormat: 'comma'});
+        }
 
         let locationDto = {
-          locationList: [{
-            x: userLocation.La,
-            y: userLocation.Ma
-          }, {
-            x: userLocation.La,
-            y: userLocation.Ma
-          }],
-          // x: [userLocation.La, userLocation.La],
-          // y: [userLocation.Ma, userLocation.Ma],
+          x: [userLocation.La, userLocation.La],
+          y: [userLocation.Ma, userLocation.Ma],
           category: "CAFE"
         }
 
         let result = await axios.get(
-          `${process.env.REACT_APP_SPRING_API}/api/company/search`, {
-              params: {
-                location: locDtoConvertQs(locationDto).loc,
-                category: locDtoConvertQs(locationDto).category
-              },
-              // paramsSerializer: (dto) => {
-              //   return qs.stringify(dto, {arrayFormat: 'comma'})
-              // },
-            }
-        )
+          `${process.env.REACT_APP_SPRING_API}/api/company/search`, 
+            { params: locationDto }
+          )
 
         let list = []
         for(var i=0; i<result.data.body.length; i++){
