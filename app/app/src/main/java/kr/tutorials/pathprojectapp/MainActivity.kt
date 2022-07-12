@@ -7,28 +7,24 @@ import androidx.activity.viewModels
 import kr.tutorials.pathprojectapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private val binding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModel by viewModels<MainViewModel>()
+    private var id: Long? = null
+    private var loginId: String? = null
+    private var name: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        // Retrofit2에 context 넘겨주기
-
-        viewModel.test.observe(this) {
-            Log.d("RESPONSE", "$it")
+        // 로그인 페이지에서 가져온 회원 정보들
+        with(intent) {
+            id = getLongExtra("id", 0)
+            loginId = getStringExtra("loginId")
+            name = getStringExtra("name")
         }
-
-        viewModel.error.observe(this) {
-            Log.d("ERROR", "$it")
-        }
-
-
-        binding.mainBtnAdd.setOnClickListener{
-            viewModel.getTodo(applicationContext)
-        }
+        println("id = ${id}")
+        println("loginId = $loginId")
+        println("name = $name")
     }
 }

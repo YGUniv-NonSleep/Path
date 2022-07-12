@@ -1,11 +1,16 @@
 package kr.tutorials.pathprojectapp.api
 
-import kr.tutorials.pathprojectapp.model.Test
+import kr.tutorials.pathprojectapp.dto.LoginRequest
+import kr.tutorials.pathprojectapp.dto.LoginResponse
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface SpringApi {
-    
-    @GET("/api/test")
-    fun getTest(): Call<Test>
+
+    @POST("/api/login")
+    fun login(
+        @Body loginRequest : LoginRequest
+    ): Call<LoginResponse>
 }
