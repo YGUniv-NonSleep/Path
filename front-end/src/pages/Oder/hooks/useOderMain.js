@@ -622,7 +622,7 @@ function useOderMain() {
           // 유저 위치
           x: [userLocation.La],
           y: [userLocation.Ma],
-          // category: "CAFE"
+          category: "CAFE"
         }
 
         let result = await axios.get(
