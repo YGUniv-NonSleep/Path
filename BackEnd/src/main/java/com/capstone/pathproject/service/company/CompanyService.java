@@ -144,6 +144,8 @@ public class CompanyService {
 
 
     public Message<?> findCompany(FindCompanyDto findCompanyDto) {
+
+        System.out.println("findCompanyDto.toString() = " + findCompanyDto.toString());
         ArrayList<CompanyDTO> companyDTOArrayList = new ArrayList<>();
         List<Company> companyList = new ArrayList<>();
         if (findCompanyDto != null){
@@ -159,6 +161,7 @@ public class CompanyService {
 
             }else{
                 for (LocationDto locationDto : findCompanyDto.getLocationList()) {
+                    System.out.println("locationDto.toString() = " + locationDto.toString());
                     List<Company> companies = companyRepository.findLocationCategoryCompanies(locationDto.getX(), locationDto.getY(), findCompanyDto.getCategory());
                     for (Company company: companies) {
                         companyList.add(company);
@@ -172,6 +175,8 @@ public class CompanyService {
             companyList = companyRepository.findAll();
         }
         companyList.stream().map(CompanyDTO::new).forEach(companyDTOArrayList::add);
+
+
 
         return Message.<List<CompanyDTO>>builder()
                 .body(companyDTOArrayList)

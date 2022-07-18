@@ -49,8 +49,8 @@ public class InitCompanyService {
         }
 
         return Company.createCompany()
-                .longitude(35.89910941386297 + 0.001*t++ )
-                .latitude(128.62159611841497 + 0.001*t++ )
+                .latitude(35.89910941386297 + 0.001*t++ )
+                .longitude(128.62159611841497 + 0.001*t++ )
                 .thumbnail("blankImage")
                 .phone("010-0000-0000")
                 .name(name)

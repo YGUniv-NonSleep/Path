@@ -141,8 +141,15 @@ public class ProductApiController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> findProduct(@RequestBody(required = false) FindProductDto findProductDto ) {
-        System.out.println("데이터: "+findProductDto);
+    public ResponseEntity<?> findProduct(
+            @RequestParam(value = "x") List<Double> x,
+            @RequestParam(value = "y") List<Double> y,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "name", required = false) String name
+    ) {
+
+        FindProductDto findProductDto = new FindProductDto(x,y,category,name);
+
         Message<?> message = productService.findProduct(findProductDto);
         return responseUtil.createResponseEntity(message);
     }
