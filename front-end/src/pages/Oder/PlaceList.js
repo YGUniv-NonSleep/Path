@@ -106,12 +106,14 @@ function PlaceList({item, target, clicked}) {
               <SearchItemSub>
                 { item.loc == "start" 
                 ? <>
-                    출발지로부터
+                    <div style={{ color: "#3d76ef", display: "inline-flex", position: "relative" }}>출발지</div>
+                    <div style={{ display: "inline-flex", position: "relative" }}>로 부터</div>
                     <EmphasizeRedText>{item.distance}m</EmphasizeRedText>
                   </> 
                 : item.loc == "end" 
                   ? <>
-                      도착지로부터
+                      <div style={{ color: "#3acd0b", display: "inline-flex", position: "relative" }}>도착지</div>
+                      <div style={{ display: "inline-flex", position: "relative" }}>로 부터</div>
                       <EmphasizeRedText>{item.distance}m</EmphasizeRedText>
                     </>
                   : <>

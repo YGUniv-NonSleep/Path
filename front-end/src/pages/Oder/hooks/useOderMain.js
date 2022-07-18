@@ -287,7 +287,7 @@ function useOderMain() {
     if (storeMarkers.length != 0) removeStoreMarkers();
     await searchProduct(searchData)
     await denoteStoreMarkers()
-     // 서버 데이터 검색 -> 뭔가 이상함
+    // 서버 데이터 검색 -> 뭔가 이상함
     // keywordSubmit(); api 검색
     setSubBarHide(false)
     setPage(1);
@@ -390,7 +390,7 @@ function useOderMain() {
       if(closeToggle == false) onCloseToggle()
       setTimeout(()=>{
         getCurLocComp()
-        denoteStoreMarkers()
+        // denoteStoreMarkers()
       }, 300)
     }
   }, [category])
@@ -400,13 +400,14 @@ function useOderMain() {
     console.log(data)
     // 여기서 눌렀을 때 마커가 화면에 안올라가 백색 화면
     if(data.company == undefined) {
-      map.panTo(new kakao.maps.LatLng(data.longitude, data.latitude))
+      // map.panTo(new kakao.maps.LatLng(data.longitude, data.latitude))
       setPlace(data)
       
     } else {
       let ob = data.company
+      console.log(ob)
       ob.distance = data.distance
-      map.panTo(new kakao.maps.LatLng(ob.longitude, ob.latitude))
+      // map.panTo(new kakao.maps.LatLng(ob.longitude, ob.latitude))
       setPlace(ob)
     }
   }
@@ -532,10 +533,10 @@ function useOderMain() {
         )
 
         // 마커 그리기
-        denoteStoreMarkers();
+        // await denoteStoreMarkers();
 
-        sp.setMap(map)
-        ep.setMap(map)
+        sp.setMap(map);
+        ep.setMap(map);
         polyLine.polyline.setMap(map);
         firstWalk.setMap(map);
         lastWalk.setMap(map);
@@ -648,14 +649,17 @@ function useOderMain() {
             result.data.body[i].longitude, result.data.body[i].latitude
           )
           coordList.push(storeMarkerPosition)
-          console.log(coordList)
+
           let length = await MapApi().getCoordLength(coordList);
           if(length >= 1500) continue;
-            console.log(length)
           markerList.push(storeMarkerPosition)
 
           result.data.body[i].distance = length;
           list.push(result.data.body[i])
+        }
+
+        if(list.length == 0) {
+          return alert("검색 결과가 존재하지 않습니다.")
         }
 
         let ml = [];
@@ -664,7 +668,7 @@ function useOderMain() {
             x: markerList[i].La,  
             y: markerList[i].Ma,
           }
-          
+
           let marker = await drawMarker(data, "")
           let infowindow = new kakao.maps.InfoWindow({
             content: `<div>&nbsp;${list[i].name}(${list[i].category})</div>`, // 인포윈도우에 표시할 내용
@@ -674,10 +678,11 @@ function useOderMain() {
           kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
           ml.push(marker)
         }
+
         setStoreMarkers(ml)
         setProducts([])
-        if(list.length == 0) {
-          return alert("검색 결과가 존재하지 않습니다.")
+        if(affiliate.length != 0) {
+          setAffiliate([])
         }
         setAffiliate(list)
 
@@ -735,6 +740,10 @@ function useOderMain() {
           list.push(result.data.body[i])
         }
 
+        if(list.length == 0) {
+          return alert("검색 결과가 존재하지 않습니다.")
+        }
+
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
           let data = {
@@ -754,8 +763,8 @@ function useOderMain() {
 
         setStoreMarkers(ml)
         setProducts([])
-        if(list.length == 0) {
-          return alert("검색 결과가 존재하지 않습니다.")
+        if(affiliate.length != 0) {
+          setAffiliate([])
         }
         setAffiliate(list)
 
@@ -871,6 +880,7 @@ function useOderMain() {
 
   async function denoteStoreMarkers() {
     for (var i = 0; i < storeMarkers.length; i++) {
+      console.log(storeMarkers[i])
       storeMarkers[i].setMap(map);
     }
   }
@@ -978,6 +988,11 @@ function useOderMain() {
           }
         }
 
+        if(list.length == 0) {
+          alert("검색 결과가 존재하지 않습니다.")
+          return reset()
+        }
+
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
           let data = {
@@ -994,11 +1009,11 @@ function useOderMain() {
           kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
           ml.push(marker)
         }
+
         setStoreMarkers(ml)
         setAffiliate([])
-        if(list.length == 0) {
-          alert("검색 결과가 존재하지 않습니다.")
-          return reset()
+        if(products.length != 0) {
+          setProducts([])
         }
         setProducts(list)
 
@@ -1051,6 +1066,11 @@ function useOderMain() {
           list.push(result.data.body[i])
         }
 
+        if(list.length == 0) {
+	        alert("검색 결과가 존재하지 않습니다.")
+          return reset()
+        }
+
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
           let data = {
@@ -1070,9 +1090,8 @@ function useOderMain() {
 
         setStoreMarkers(ml)
         setProducts([])
-        if(list.length == 0) {
-	        alert("검색 결과가 존재하지 않습니다.")
-          return reset()
+        if(products.length != 0) {
+          setProducts([])
         }
         setAffiliate(list)
 
