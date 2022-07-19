@@ -150,6 +150,9 @@ function SendingConfirm(){
         e.preventDefault();
         setAlert(false)  
         const data = {
+            member : {
+                id : arraySend.carPost.member.id
+            },
             cost : arraySend.price,
             status : "success",
             carPost : {

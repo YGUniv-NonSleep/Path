@@ -6,6 +6,7 @@ import com.capstone.pathproject.domain.carpool.CarPost;
 import com.capstone.pathproject.domain.carpool.CarPostRequest;
 import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.carpool.BoardingDetailDto;
+import com.capstone.pathproject.dto.carpool.CarPostRequestDTO;
 import com.capstone.pathproject.dto.response.Message;
 import com.capstone.pathproject.dto.response.StatusEnum;
 import com.capstone.pathproject.repository.carpool.BoardingRepository;
@@ -18,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,12 +65,14 @@ public class BoardingService {
 
     }
 
-    public Message<List<BoardingDetail>> getList(){
-        List<BoardingDetail> boardingDetails = boardingRepository.findAll();
-        return Message.<List<BoardingDetail>>builder()
+    public Message<List<BoardingDetailDto>> getList(Long memberId){
+        List<BoardingDetail> boardingDetails = boardingRepository.findByMemberId(memberId);
+        ArrayList<BoardingDetailDto> arrayList = new ArrayList<BoardingDetailDto>();
+        boardingDetails.stream().map(list -> new BoardingDetailDto(list)).forEach(boardingDetailDto -> arrayList.add(boardingDetailDto));
+        return Message.<List<BoardingDetailDto>>builder()
                 .header(StatusEnum.OK)
                 .message("탑승내역 리스트")
-                .body(boardingDetails).build();
+                .body(arrayList).build();
     }
 
     public Message<BoardingDetail> getListDetail(Long boardId){

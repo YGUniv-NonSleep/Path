@@ -25,15 +25,21 @@ public class OperationApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/list/{operationId}")
-    public ResponseEntity<Message<?>> getListDetail(@PathVariable("operationId") Long operationId){
-        Message<OperationDetailDto> message = operationService.getListDetail(operationId);
+    @GetMapping("/list/{carPostId}")
+    public ResponseEntity<Message<?>> carPostIdFinding(@PathVariable("carPostId") Long carPostId){
+        Message<OperationDetailDto> message = operationService.getListDetail(carPostId);
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<Message<?>> getList(){
-        Message<List<OperationDetail>> message = operationService.getList();
+    @GetMapping("/{operId}")
+    public ResponseEntity<Message<?>> getListDetail(@PathVariable("operId") Long operId){
+        Message<OperationDetailDto> message = operationService.listDetail(operId);
+        return responseUtil.createResponseEntity(message);
+    }
+
+    @GetMapping("/myoperation/{memberId}")
+    public ResponseEntity<Message<?>> getList(@PathVariable("memberId") Long memberId){
+        Message<List<OperationDetailDto>> message = operationService.getList(memberId);
         return responseUtil.createResponseEntity(message);
     }
 }
