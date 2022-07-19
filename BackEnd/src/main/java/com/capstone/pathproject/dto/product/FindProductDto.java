@@ -19,7 +19,7 @@ public class FindProductDto {
     private CompCategory category;
     private String name;
 
-    public FindProductDto(List<Double> xList, List<Double> yList , String category, String name) {
+    public FindProductDto(List<Double> xList, List<Double> yList, String name) {
 
         ArrayList<LocationDto> arrayList = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class FindProductDto {
         }
 
         this.locationList = arrayList;
-        this.category = CompCategory.valueOf(category);
+        this.category = null; // CompCategory.valueOf(category);
         this.name = name;
 
     }
