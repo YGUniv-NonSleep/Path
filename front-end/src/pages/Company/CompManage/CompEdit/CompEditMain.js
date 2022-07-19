@@ -65,8 +65,8 @@ function CompEditMain() {
                       fullWidth
                       value={updateForm.name}
                       onChange={handleInput}
-                      id="compName"
-                      name="compName"
+                      id="name"
+                      name="name"
                       label="업체명"
                     />
                   </Grid>
@@ -80,6 +80,7 @@ function CompEditMain() {
                         id="category"
                         label="카테고리"
                         value={updateForm.category}
+                        onChange={handleInput}
                         name="category"
                       >
                         <MenuItem value={"CONVENIENCESTORE"}>편의점</MenuItem>
@@ -96,9 +97,10 @@ function CompEditMain() {
                       required
                       fullWidth
                       value={updateForm.mail}
+                      onChange={handleInput}
                       type="email"
-                      id="email"
-                      name="email"
+                      id="mail"
+                      name="mail"
                       label="이메일 주소"
                     />
                   </Grid>
@@ -107,6 +109,7 @@ function CompEditMain() {
                       required
                       fullWidth
                       value={updateForm.phone}
+                      onChange={handleInput}
                       id="phone"
                       name="phone"
                       label="전화번호 (010-XXXX-XXXX)"
@@ -117,6 +120,7 @@ function CompEditMain() {
                       required
                       fullWidth
                       value={updateForm.companyNumber}
+                      onChange={handleInput}
                       id="companyNumber"
                       name="companyNumber"
                       label="사업자등록번호"
@@ -126,16 +130,18 @@ function CompEditMain() {
                   <Grid item xs={12}>
                     <TimePicker
                     label="Open Time"
+                    name="open"
                     value={updateForm.open}
-                    // onChange={handleChange}
+                    onChange={handleInput}
                     renderInput={(params) => <TextField {...params} />}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TimePicker
                     label="Close Time"
-                    value={updateForm.close}
-                    // onChange={handleChange}
+                    name="close"
+                    value={1}
+                    onChange={handleInput}
                     renderInput={(params) => <TextField {...params} />}
                     />
                   </Grid>
@@ -145,6 +151,7 @@ function CompEditMain() {
                       required
                       fullWidth
                       value={updateForm.waitTime}
+                      onChange={handleInput}
                       type="number"
                       id="waitTime"
                       name="waitTime"
@@ -171,6 +178,7 @@ function CompEditMain() {
                       label="주소"
                       disabled
                       value={updateForm.addr}
+                      onChange={handleInput}
                       defaultValue=" "
                     />
                   </Grid>
@@ -180,19 +188,8 @@ function CompEditMain() {
                       id="addrDetail"
                       name="addrDetail"
                       value={updateForm.addrDetail}
+                      onChange={handleInput}
                       label="상세주소"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      required
-                      id="addrExtra"
-                      name="addrExtra"
-                      label="참고항목"
-                      // onChange={handleInput}
-                      disabled
-                      defaultValue=" "
                     />
                   </Grid>
                 </Grid>

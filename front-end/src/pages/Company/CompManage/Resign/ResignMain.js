@@ -33,16 +33,17 @@ const theme = createTheme();
 
 function ResignMain() {
   const { loading } = useLoading();
-  const {} = useCompResign();
+  const navigate = useNavigate();
+  const { comId, chkChange } = useCompResign();
 
   return loading ? (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       <main>
         <Box
           sx={{
-            bgcolor: "background.paper",
-            pt: 8,
+            // bgcolor: "background.paper",
+            pt: 3,
             pb: 1,
           }}
         >
@@ -76,40 +77,31 @@ function ResignMain() {
             </Typography>
             <Box
               sx={{
-                bgcolor: "background.paper",
+                // bgcolor: "background.paper",
                 pt: 4,
                 pb: 6,
               }}
             >
-              <Button
-                align="center"
-                variant="outlined"
-                color="error"
-                onClick={() => navigate("/oder")}
-                sx={{ display: "flex", margin: "60px auto 0" }}
-              >
-                오더로 이동
-              </Button>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <Button 
                   sx={{fontSize: "23px", width: "225px"}} 
                   variant="outlined" 
-                  color="success" 
-                  onClick={()=>navigate("/oder")}
-                >오더로 이동</Button>
+                  color="inherit" 
+                  onClick={()=>navigate(`/company/manage/${comId}`)}
+                >업체 정보로 이동</Button>
                 <Button 
-                  sx={{fontSize: "23px", marginLeft: "15px"}} 
+                  sx={{fontSize: "23px",  width: "225px", marginLeft: "15px"}} 
                   variant="outlined" 
-                  color="success" 
-                  onClick={()=>navigate("/member/payments")}
-                >결제내역으로 이동</Button>
+                  color="error" 
+                  onClick={chkChange}
+                >업체탈퇴</Button>
                </div>
             </Box>
           </Container>
         </Box>
       </main>
       {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 1 }} component="footer">
+      <Box sx={{ p: 1 }} component="footer">
         <Typography
           variant="subtitle1"
           align="center"
