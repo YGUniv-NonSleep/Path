@@ -144,11 +144,13 @@ public class ProductApiController {
     public ResponseEntity<?> findProduct(
             @RequestParam(value = "x") List<Double> x,
             @RequestParam(value = "y") List<Double> y,
-            @RequestParam(value = "category", required = false) String category,
+//            @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "name", required = false) String name
     ) {
-
-        FindProductDto findProductDto = new FindProductDto(x,y,category,name);
+        System.out.println("X"+x);
+        System.out.println("X"+y);
+//        FindProductDto findProductDto = new FindProductDto(x,y,category,name);
+        FindProductDto findProductDto = new FindProductDto(x,y,name);
 
         Message<?> message = productService.findProduct(findProductDto);
         return responseUtil.createResponseEntity(message);

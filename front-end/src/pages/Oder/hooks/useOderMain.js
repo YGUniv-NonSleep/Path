@@ -58,11 +58,13 @@ function useOderMain() {
     setSubBarHide(false);
     setCategory('');
     setPlaceList([]);
+    setAffiliate([]);
     setProducts([]);
     setPagiObj(null);
     setSearchData('');
-    getCurLocComp();
+    // getCurLocComp();
     removeMarkers();
+    removeStoreMarkers();
   }
 
   const openTossWindow = () => {
@@ -286,8 +288,6 @@ function useOderMain() {
     setAlignment('right');
     if (storeMarkers.length != 0) removeStoreMarkers();
     await searchProduct(searchData)
-    await denoteStoreMarkers()
-    // 서버 데이터 검색 -> 뭔가 이상함
     // keywordSubmit(); api 검색
     setSubBarHide(false)
     setPage(1);
@@ -390,7 +390,6 @@ function useOderMain() {
       if(closeToggle == false) onCloseToggle()
       setTimeout(()=>{
         getCurLocComp()
-        // denoteStoreMarkers()
       }, 300)
     }
   }, [category])
@@ -442,6 +441,8 @@ function useOderMain() {
       let marker = await MapApi().currentLocMarker(markerData);
       setULocMarker(marker)
     }
+
+    // 여기까지 작동
     
     let data = {
       keyword: "카페",
@@ -533,7 +534,7 @@ function useOderMain() {
         )
 
         // 마커 그리기
-        // await denoteStoreMarkers();
+        // 시작점 도착점 근처 업체 조회
 
         sp.setMap(map);
         ep.setMap(map);
@@ -556,12 +557,14 @@ function useOderMain() {
 
   function removeMarkers() {
     for (var i = 0; i < markers.length; i++) {
+      console.log(markers)
       markers[i].setMap(null);
     }
     setMarkers([]);
   }
 
   function removeStoreMarkers() {
+    console.log("remove storeMarker")
     for (var i = 0; i < storeMarkers.length; i++) {
       storeMarkers[i].setMap(null);
     }
@@ -670,6 +673,7 @@ function useOderMain() {
           }
 
           let marker = await drawMarker(data, "")
+          console.log(marker)
           let infowindow = new kakao.maps.InfoWindow({
             content: `<div>&nbsp;${list[i].name}(${list[i].category})</div>`, // 인포윈도우에 표시할 내용
           });
@@ -679,6 +683,7 @@ function useOderMain() {
           ml.push(marker)
         }
 
+        removeStoreMarkers();
         setStoreMarkers(ml)
         setProducts([])
         if(affiliate.length != 0) {
@@ -761,6 +766,7 @@ function useOderMain() {
           ml.push(marker)
         }
 
+        removeStoreMarkers();
         setStoreMarkers(ml)
         setProducts([])
         if(affiliate.length != 0) {
@@ -882,11 +888,14 @@ function useOderMain() {
     for (var i = 0; i < storeMarkers.length; i++) {
       console.log(storeMarkers[i])
       storeMarkers[i].setMap(map);
+      console.log(map)
     }
   }
 
   useEffect(()=>{
-    denoteStoreMarkers()
+    if (storeMarkers.length != 0) {
+      denoteStoreMarkers()
+    }
   }, [storeMarkers])
 
   useEffect(()=>{
@@ -894,7 +903,6 @@ function useOderMain() {
       // 현재 위치 기반 기본 값
       if (storeMarkers.length != 0) removeStoreMarkers();
       getCurLocComp()
-      denoteStoreMarkers()
     }
   }, [userLocation]);
 
@@ -1010,6 +1018,7 @@ function useOderMain() {
           ml.push(marker)
         }
 
+        removeStoreMarkers();
         setStoreMarkers(ml)
         setAffiliate([])
         if(products.length != 0) {
@@ -1023,7 +1032,7 @@ function useOderMain() {
           x: [userLocation.La, userLocation.La+0.002],
           y: [userLocation.Ma, userLocation.Ma+0.002],
           name: word,
-          category: null
+          // category: null
         }
 
         let result = await axios.get(
@@ -1088,12 +1097,13 @@ function useOderMain() {
           ml.push(marker)
         }
 
+        removeStoreMarkers();
         setStoreMarkers(ml)
-        setProducts([])
+        setAffiliate([])
         if(products.length != 0) {
           setProducts([])
         }
-        setAffiliate(list)
+        setProducts(list)
 
         // == 정리되면 위에걸로 바꿀 준비 ==
 
