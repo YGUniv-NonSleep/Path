@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,5 +60,43 @@ public class BoardingService {
                 .message("탑승내역 저장")
                 .body("").build();
 
+    }
+
+    public Message<List<BoardingDetail>> getList(){
+        List<BoardingDetail> boardingDetails = boardingRepository.findAll();
+        return Message.<List<BoardingDetail>>builder()
+                .header(StatusEnum.OK)
+                .message("탑승내역 리스트")
+                .body(boardingDetails).build();
+    }
+
+    public Message<BoardingDetail> getListDetail(Long boardId){
+        Optional<BoardingDetail> findBoarding = boardingRepository.findById(boardId);
+        BoardingDetail boardingDetail = findBoarding.orElse(null);
+
+        if(boardingDetail == null){
+            return Message.<BoardingDetail>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("탑승내역이 없습니다.")
+                    .build();
+        }
+        BoardingDetail listBoarding = BoardingDetail.createBoardingDetail()
+                .boardingId(boardingDetail.getBoardingId())
+                .cost(boardingDetail.getCost())
+                .carPostRequest(boardingDetail.getCarPostRequest())
+                .member(boardingDetail.getMember())
+                .operationDetail(boardingDetail.getOperationDetail())
+                .status(boardingDetail.getStatus())
+                .rname(boardingDetail.getRname())
+                .sname(boardingDetail.getSname())
+                .tradeNum(boardingDetail.getTradeNum())
+                .waccount(boardingDetail.getWaccount())
+                .daccount(boardingDetail.getDaccount())
+                .build();
+
+        return Message.<BoardingDetail>builder()
+                .header(StatusEnum.OK)
+                .message("탑승내역")
+                .body(listBoarding).build();
     }
 }

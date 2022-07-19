@@ -51,7 +51,7 @@ public class CarPoolPostApiController {
     @GetMapping("/view")
     public ResponseEntity getPostList(@PageableDefault(size = 10,sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         Message<List<CarPostDTO>> message = carPostService.getPostList(pageable);
-        return new ResponseEntity<>(message,HttpStatus.OK);
+        return responseUtil.createResponseEntity(message);
 
     }
 

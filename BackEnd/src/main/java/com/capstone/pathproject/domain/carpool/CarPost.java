@@ -63,7 +63,7 @@ public class CarPost {
     private String arriveLatitude;
 
     @Column(name = "CARPOST_STIME")
-    private Time stime;
+    private String stime;
 
     @Column(name = "CARPOST_PHOTO_NAME")
     private String photoName;
@@ -85,7 +85,7 @@ public class CarPost {
 
     @Builder(builderMethodName = "createCarPost")
     public CarPost(Long id, Member member,Cars cars ,String title, String content, LocalDate sdate, LocalDate edate,
-                   int recruit, String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, Time stime, String photoName,
+                   int recruit, String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, String stime, String photoName,
                    String startLocal1,String startLocal2,String arriveLocal1,String arriveLocal2, int price){
 
         this.id = id;
@@ -136,7 +136,7 @@ public class CarPost {
     public void updateTitle(String title){this.title = title;}
     public void updateContent(String content){this.content = content;}
     public void updateRecruit(int recruit){this.recruit = recruit;}
-    public void updateStime(Time stime){this.stime = stime;}
+    public void updateStime(String stime){this.stime = stime;}
     public void updatestartLocal1(String startLocal1){this.startLocal1 = startLocal1;}
     public void updateStartLocal2(String startLocal2){this.startLocal2 = startLocal2;}
     public void updateArriveLocal1(String arriveLocal1){this.arriveLocal1 = arriveLocal1;}
