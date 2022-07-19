@@ -5,21 +5,27 @@ import { useParams, useNavigate } from "react-router-dom"
 function CompEdit(){
     const { comId } = useParams();
     const [comInfo, setComInfo] = useState([]);
+    const [updateForm, setUpdateForm] = useState([]);
 
     async function getCompInfo() {
         try {
             let info = await axios.get(`${process.env.REACT_APP_SPRING_API}/api/company/${comId}`)
+            console.log(info)
             setComInfo(info.data.body)
+            setUpdateForm(info.data.body)
 
         } catch (error) {
             console.log(error)
         }
     }
 
-    async function updateCompInfo() {
+    async function updateCompInfo(e) {
         try {
-            let result = await axios.patch(`${process.env.REACT_APP_SPRING_API}/api/company/`, comInfo)
-            console.log(result)
+            e.preventDefault();
+
+            console.log(updateForm)
+            // let result = await axios.patch(`${process.env.REACT_APP_SPRING_API}/api/company/`, comInfo)
+            // console.log(result)
 
         } catch (error) {
             console.log(error)
@@ -28,8 +34,9 @@ function CompEdit(){
 
     const handleInput = (e) => {
         const { name, value } = e.target;
-        setComInfo({
-            ...comInfo,
+        console.log(name, value)
+        setUpdateForm({
+            ...updateForm,
             [name]: value,
         });
     };
@@ -38,11 +45,12 @@ function CompEdit(){
         getCompInfo()
         return () => {
             setComInfo([])
+            setUpdateForm([])
         }
     }, [])
 
     return {
-        comInfo, handleInput
+        updateForm, handleInput, updateCompInfo
     }
 }
 
