@@ -43,6 +43,7 @@ public class CarPostService {
                     .message("사용자 없음")
                     .body("").build();
         }
+        System.out.println(carPostDTO);
         CarPost carPost = CarPost.createCarPost()
                 .member(member)
                 .cars(carPostDTO.getCars())
@@ -161,6 +162,7 @@ public class CarPostService {
         List<CarPost> result = carPostRepository.findAll(pageable).getContent();
         ArrayList<CarPostDTO> listPDT = new ArrayList<CarPostDTO>();
         result.stream().map(carPost -> carPost.toDTO()).forEach(carPostDTO -> listPDT.add(carPostDTO));
+        System.out.println(listPDT.toString());
         return Message.<List<CarPostDTO>>builder()
                 .header(StatusEnum.OK)
                 .message("조회완료")

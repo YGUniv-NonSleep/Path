@@ -2,9 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { loadTossPayments } from "@tosspayments/payment-sdk";
 
 function useCarPoolRequest() {
-
+    let state = useSelector((state)=>state);
     const [requestOpen, setRequestOpen] = useState(false);
     const [arriveOpen, setArriveOpen] = useState(false);
     const [effectState, setEffectState] = useState(null);
@@ -84,11 +85,14 @@ function useCarPoolRequest() {
         axios.post(process.env.REACT_APP_SPRING_API + '/api/request',data)
         .then((res)=>{
           console.log(res)
+          alert("신청이 완료되었습니다.");
+          window.location = '/carPool';
         })
         .catch((err)=>{
           console.log(err)
         })
     }
+
     const requestComplete = (data) =>{
         let fullAddress = data.address;
         let extraAddress = "";

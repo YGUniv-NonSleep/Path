@@ -50,13 +50,34 @@ public class OperationService {
                 .body("").build();
     }
 
-    public Message<List<OperationDetailDto>> getList(Long postId){
-        List<OperationDetail> operationDetailList = operationRepository.findByCarPostId(postId);
-        ArrayList<OperationDetailDto> listDto = new ArrayList<OperationDetailDto>();
-        operationDetailList.stream().map(operation -> operation.toDto()).forEach(operationDto -> listDto.add(operationDto));
-        return Message.<List<OperationDetailDto>>builder()
+    public Message<OperationDetailDto> getListDetail(Long operationId){
+       Optional<OperationDetail> findOperation = operationRepository.findById(operationId);
+       OperationDetail operationDetail = findOperation.orElse(null);
+
+       if(operationDetail == null){
+           return Message.<OperationDetailDto>builder()
+                   .header(StatusEnum.BAD_REQUEST)
+                   .message("운행내역이 없습니다.")
+                   .build();
+       }
+       OperationDetailDto operationDetailDto = OperationDetailDto.createOperationDto()
+               .operationId(operationDetail.getOperationId())
+               .carPost(operationDetail.getCarPost())
+               .cars(operationDetail.getCars())
+               .cost(operationDetail.getCost())
+               .status(operationDetail.getStatus())
+               .build();
+       return Message.<OperationDetailDto>builder()
+               .header(StatusEnum.OK)
+               .message("운행내역")
+               .body(operationDetailDto).build();
+    }
+
+    public Message<List<OperationDetail>> getList(){
+        List<OperationDetail> operationDetails = operationRepository.findAll();
+        return Message.<List<OperationDetail>>builder()
                 .header(StatusEnum.OK)
                 .message("운행내역 리스트")
-                .body(listDto).build();
+                .body(operationDetails).build();
     }
 }

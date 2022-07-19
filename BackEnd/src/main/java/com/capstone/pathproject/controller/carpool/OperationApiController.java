@@ -25,9 +25,15 @@ public class OperationApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/list/{postId}")
-    public ResponseEntity<Message<?>> getList(@PathVariable("postId") Long postId){
-        Message<List<OperationDetailDto>> message = operationService.getList(postId);
+    @GetMapping("/list/{operationId}")
+    public ResponseEntity<Message<?>> getListDetail(@PathVariable("operationId") Long operationId){
+        Message<OperationDetailDto> message = operationService.getListDetail(operationId);
+        return responseUtil.createResponseEntity(message);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<Message<?>> getList(){
+        Message<List<OperationDetail>> message = operationService.getList();
         return responseUtil.createResponseEntity(message);
     }
 }

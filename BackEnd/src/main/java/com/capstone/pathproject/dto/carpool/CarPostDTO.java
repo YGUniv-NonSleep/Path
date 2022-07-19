@@ -25,7 +25,7 @@ public class CarPostDTO{
     private String startLatitude;
     private String arriveLongitude;
     private String arriveLatitude;
-    private Time stime;
+    private String stime;
     private String photoName;
     private String startLocal1;
     private String startLocal2;
@@ -35,7 +35,7 @@ public class CarPostDTO{
 
     @Builder(builderMethodName = "createCarPostDTO")
     public CarPostDTO(Long id, Member member, Cars cars ,String title, String content, LocalDate sdate, LocalDate edate, int recruit,
-                      String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, Time stime, String photoName,
+                      String startLongitude, String startLatitude, String arriveLongitude, String arriveLatitude, String stime, String photoName,
                       String startLocal1,String startLocal2,String arriveLocal1, String arriveLocal2, int price){
 
         this.id = id;

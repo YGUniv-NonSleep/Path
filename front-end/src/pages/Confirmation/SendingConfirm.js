@@ -72,23 +72,44 @@ function SendingConfirm(){
         })
     },[state])
 
-    const checkRequest = (id,e) =>{
+    const checkRequest = (count,e) =>{
         e.preventDefault();
         const data = {
-            postId : id,
+            postId : count.id,
             state : document.getElementsByName("accept")[0].value
         }
         console.log(data);
-
-
         axios.patch(process.env.REACT_APP_SPRING_API + '/api/request/checkRequest',data)
         .then((res)=>{
             console.log(res);
+            TossPay(count);
         })
         .catch((err)=>{
             console.log(err);
         })
     }
+
+    const TossPay = (data) =>{
+        console.log(data)
+        if(data.approval == "accept"){
+            for(var i = 0; i < 1; i++){
+                var key = 1;
+                key = key + 1;
+              }   
+              var clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq'
+              var tossPayments = TossPayments(clientKey)
+              tossPayments.requestPayment('카드',{
+                amount : data.price,
+                orderId : 'kxx4ZQqj922aHikc2dyct' + key,
+                orderName : data.id,
+                customerName : state.loginId,
+                successUrl : 'https://localhost:3001/member/sendingConfirm',
+                failUrl: 'http://localhost:8080/fail',
+              })
+        }
+
+      }
+
     useEffect(()=>{
         if(send !=null){
             // console.log(send.carPost.sdate + send.carPost.stime);
@@ -112,7 +133,7 @@ function SendingConfirm(){
             .then((res)=>{
                 console.log(res.data.body);
                 setOperDate(res.data.body);
-                const oId = res.data.body[0].operationId
+                const oId = res.data.body.operationId
                 return oId;
             })
             .then(async (oId)=>{
@@ -127,21 +148,7 @@ function SendingConfirm(){
 
     const BoardingCheck = (e) =>{
         e.preventDefault();
-        setAlert(false)
-        var clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq'
-        var tossPayments = TossPayments(clientKey)
-        for(var i = 0; i<1; i++){
-            var key = 1;
-            key = key + i;
-        }
-        tossPayments.requestPayment('계좌이체',{
-            amount : arraySend.price,
-            orderId : 'gDkxH_280UUrcLyuPb5Rx' + key,
-            orderName : arraySend.carPost.title,
-            successUrl: 'https://localhost:3001/carpool/pay',
-            failUrl: 'http://localhost:8080/fail',
-        })
-        
+        setAlert(false)  
         const data = {
             cost : arraySend.price,
             status : "success",
@@ -163,6 +170,7 @@ function SendingConfirm(){
             console.log(err)
         })
     } 
+    
 
     const BoardingDetail = async(ndata) =>{
             const data = {
@@ -195,14 +203,20 @@ function SendingConfirm(){
             <CssBaseline />
             <main>
             {alertState ? (
+                <>
                     <Stack sx={{ width: '100%' }} spacing={2}>
-                    <Alert action={
-                        <Button color="inherit" size="small" onClick={BoardingCheck}>확인</Button>
-                    }sx={{width:'50%', marginLeft:"500px"}} severity="info">
+                    <Alert 
+                    action=
+                    {
+                        <Button color="inherit" size="small" onClick={BoardingCheck}>탑승</Button>
+                        
+                    }
+                    sx={{width:'50%', marginLeft:"500px"}} severity="info">
                         <AlertTitle>탑승 가능 알림</AlertTitle>
-                         탑승하여 주세요.
+                        탑승하실 시 탑승 버튼을 눌러주세요.
                     </Alert>
                     </Stack>
+                </>
                 ):('')}
                 <Box
                     sx={{
@@ -261,7 +275,7 @@ function SendingConfirm(){
                             <TableCell align="right">{count.carPost.member.loginId}</TableCell>
                             <TableCell align="right">{count.approval}</TableCell>
                             {count.approval !=null ?(
-                                 <TableCell align="right"><Button onClick={(e)=>checkRequest(count.id,e)} name="accept" value="accept">확인</Button></TableCell>
+                                 <TableCell align="right"><Button onClick={(e)=>checkRequest(count,e)} name="accept" value="accept">확인</Button></TableCell>
                             ):('')}
                             {/* <TableCell align="center"><Button  onClick={(e)=>{handleOpen(count,e)}}>상세내역</Button></TableCell> */}
                             </TableRow>

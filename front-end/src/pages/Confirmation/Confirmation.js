@@ -71,7 +71,6 @@ useEffect(()=>{
     }
 },[conts])
 
-
 useEffect(()=>{
     axios.get(process.env.REACT_APP_SPRING_API + `/api/request/${state.user.id}`)
     .then((res)=>{
@@ -95,12 +94,14 @@ const Accept = (e) => {
     axios.patch(process.env.REACT_APP_SPRING_API + '/api/request/approval',data)
     .then((res)=>{
         console.log(res)
-
+        alert("승인되었습니다.");
+        window.location = '/member/Confirmation';
     })
     .catch((err)=>{
         console.log(err)
     })
 }
+
 
 const Reject = (e) => {
     e.preventDefault();
@@ -113,6 +114,8 @@ const Reject = (e) => {
     axios.patch(process.env.REACT_APP_SPRING_API + '/api/request/approval',data)
     .then((res)=>{
         console.log(res)
+        alert("거절되었습니다.");
+        window.location = '/member/Confirmation';
     })
     .catch((err)=>{
         console.log(err)
