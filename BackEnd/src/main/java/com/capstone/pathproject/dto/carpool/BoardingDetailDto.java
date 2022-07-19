@@ -1,6 +1,7 @@
 package com.capstone.pathproject.dto.carpool;
 
 
+import com.capstone.pathproject.domain.carpool.BoardingDetail;
 import com.capstone.pathproject.domain.carpool.CarPostRequest;
 import com.capstone.pathproject.domain.carpool.OperationDetail;
 import com.capstone.pathproject.domain.member.Member;
@@ -39,5 +40,19 @@ public class BoardingDetailDto {
         this.waccount = waccount;
         this.sname = sname;
 
+    }
+
+    public BoardingDetailDto(BoardingDetail boardingDetail){
+        this.boardingId = boardingDetail.getBoardingId();
+        this.operationDetail = boardingDetail.getOperationDetail();
+        this.member = boardingDetail.getMember();
+        this.carPostRequest = boardingDetail.getCarPostRequest();
+        this.status = boardingDetail.getStatus();
+        this.cost = boardingDetail.getCost();
+        this.tradeNum = boardingDetail.getTradeNum();
+        this.daccount =boardingDetail.getDaccount();
+        this.rname = boardingDetail.getRname();
+        this.waccount = boardingDetail.getWaccount();
+        this.sname = boardingDetail.getSname();
     }
 }

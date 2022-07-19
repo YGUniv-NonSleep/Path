@@ -37,12 +37,14 @@ const style = {
 const theme = createTheme();
 
 function Boarding(){
+let state = useSelector((state)=>state);
 const [board, setBoard] = useState(null);
 const [boardModal, setBoardModal] = useState(false);
 const [boardDetail,setBoardDetail] = useState(null);
 const closeBoard = () => setBoardModal(false);
     useEffect(()=>{
-        axios.get(process.env.REACT_APP_SPRING_API + '/api/boarding/list')
+        console.log(state.user.id)
+        axios.get(process.env.REACT_APP_SPRING_API + `/api/boarding/${state.user.id}`)
         .then((res)=>{
             console.log(res.data.body)
             setBoard(res.data.body)

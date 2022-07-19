@@ -25,9 +25,9 @@ public class BoardingApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<Message<?>> getList(){
-        Message<List<BoardingDetail>> message = boardingService.getList();
+    @GetMapping("/{memberId}")
+    public ResponseEntity<Message<?>> getList(@PathVariable("memberId") Long memberId){
+        Message<List<BoardingDetailDto>> message = boardingService.getList(memberId);
         return responseUtil.createResponseEntity(message);
     }
 

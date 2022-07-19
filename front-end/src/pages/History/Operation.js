@@ -36,13 +36,14 @@ const style = {
   };
 const theme = createTheme();
 function Opertaion(){
+    let state = useSelector((state)=>state);
     const [oper, setOper] = useState(null); 
     const [openModal, setOpenModal] = useState(false);
     const [opderDetail, setOperDetail] = useState(null);
     const closeModal = () => setOpenModal(false);
 
     useEffect(()=>{
-        axios.get(process.env.REACT_APP_SPRING_API + '/api/operation/list')
+        axios.get(process.env.REACT_APP_SPRING_API + `/api/operation/myoperation/${state.user.id}`)
         .then((res)=>{
             console.log(res)
             setOper(res.data.body)
@@ -55,7 +56,7 @@ function Opertaion(){
     const OperDetail = (oper,e) => {
         e.preventDefault();
         setOpenModal(true)
-        axios.get(process.env.REACT_APP_SPRING_API + `/api/operation/list/${oper.operationId}`)
+        axios.get(process.env.REACT_APP_SPRING_API + `/api/operation/${oper.operationId}`)
         .then((res)=>{
             console.log(res);
             setOperDetail(res.data.body);

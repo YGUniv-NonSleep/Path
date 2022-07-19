@@ -42,6 +42,7 @@ public class OperationService {
                 .cars(operationDetailDto.getCars())
                 .cost(operationDetailDto.getCost())
                 .status(operationDetailDto.getStatus())
+                .member(operationDetailDto.getMember())
                 .build();
         operationRepository.save(operationDetail);
         return Message.<String>builder()
@@ -50,8 +51,32 @@ public class OperationService {
                 .body("").build();
     }
 
-    public Message<OperationDetailDto> getListDetail(Long operationId){
-       Optional<OperationDetail> findOperation = operationRepository.findById(operationId);
+    public Message<OperationDetailDto> listDetail(Long operId){
+        Optional<OperationDetail> findOperation = operationRepository.findById(operId);
+        OperationDetail operationDetail = findOperation.orElse(null);
+
+        if(operationDetail == null){
+            return Message.<OperationDetailDto>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("운행내역이 없습니다.")
+                    .build();
+        }
+
+        OperationDetailDto operationDetailDto = OperationDetailDto.createOperationDto()
+                .operationId(operationDetail.getOperationId())
+                .carPost(operationDetail.getCarPost())
+                .cars(operationDetail.getCars())
+                .cost(operationDetail.getCost())
+                .status(operationDetail.getStatus())
+                .member(operationDetail.getMember())
+                .build();
+        return Message.<OperationDetailDto>builder()
+                .header(StatusEnum.OK)
+                .message("운행내역")
+                .body(operationDetailDto).build();
+    }
+    public Message<OperationDetailDto> getListDetail(Long carPostId){
+       Optional<OperationDetail> findOperation = operationRepository.findByCarPostId(carPostId);
        OperationDetail operationDetail = findOperation.orElse(null);
 
        if(operationDetail == null){
@@ -66,6 +91,7 @@ public class OperationService {
                .cars(operationDetail.getCars())
                .cost(operationDetail.getCost())
                .status(operationDetail.getStatus())
+               .member(operationDetail.getMember())
                .build();
        return Message.<OperationDetailDto>builder()
                .header(StatusEnum.OK)
@@ -73,11 +99,13 @@ public class OperationService {
                .body(operationDetailDto).build();
     }
 
-    public Message<List<OperationDetail>> getList(){
-        List<OperationDetail> operationDetails = operationRepository.findAll();
-        return Message.<List<OperationDetail>>builder()
+    public Message<List<OperationDetailDto>> getList(Long memberId){
+        List<OperationDetail> operationDetails = operationRepository.findByMemberId(memberId);
+        ArrayList<OperationDetailDto> arrayList = new ArrayList<OperationDetailDto>();
+        operationDetails.stream().map(list -> new OperationDetailDto(list)).forEach(operationDetailDto -> arrayList.add(operationDetailDto));
+        return Message.<List<OperationDetailDto>>builder()
                 .header(StatusEnum.OK)
                 .message("운행내역 리스트")
-                .body(operationDetails).build();
+                .body(arrayList).build();
     }
 }
