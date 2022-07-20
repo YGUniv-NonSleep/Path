@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -7,7 +7,6 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import useLoading from "../../../../hooks/useLoading";
 import useCompEdit from "../hooks/useCompEdit";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import {
   Avatar,
   Button,
@@ -30,8 +29,12 @@ import {
 const theme = createTheme();
 
 function CompEditMain() {
+  const navigate = useNavigate();
   const { loading } = useLoading();
-  const { updateForm, handleInput, updateCompInfo } = useCompEdit();
+  const { 
+    updateForm, openTime, closeTime,
+    handleInput, updateCompInfo, handleOpenTime, handleCloseTime 
+  } = useCompEdit();
   console.log(updateForm);
   return (
     <>
@@ -40,7 +43,7 @@ function CompEditMain() {
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
-              padding: "100px 0 0 0",
+              padding: "20px 0 0 0",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -131,8 +134,8 @@ function CompEditMain() {
                     <TimePicker
                     label="Open Time"
                     name="open"
-                    value={updateForm.open}
-                    onChange={handleInput}
+                    value={openTime}
+                    onChange={(newValue) => handleOpenTime(newValue)}
                     renderInput={(params) => <TextField {...params} />}
                     />
                   </Grid>
@@ -140,8 +143,8 @@ function CompEditMain() {
                     <TimePicker
                     label="Close Time"
                     name="close"
-                    value={1}
-                    onChange={handleInput}
+                    value={closeTime}
+                    onChange={(newValue) => handleCloseTime(newValue)}
                     renderInput={(params) => <TextField {...params} />}
                     />
                   </Grid>
@@ -207,6 +210,7 @@ function CompEditMain() {
                   variant="outlined"
                   sx={{ mb: 10 }}
                   size="large"
+                  onClick={()=>navigate(-1)}
                 >
                   돌아가기
                 </Button>

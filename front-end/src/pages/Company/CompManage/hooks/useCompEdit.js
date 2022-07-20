@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom";
 
 function CompEdit(){
     const { comId } = useParams();
     const [comInfo, setComInfo] = useState([]);
+    const [openTime, setOpenTime] = useState(null);
+    const [closeTime, setCloseTime] = useState(null);
     const [updateForm, setUpdateForm] = useState([]);
 
     async function getCompInfo() {
@@ -23,6 +25,7 @@ function CompEdit(){
         try {
             e.preventDefault();
 
+            // console.log(comInfo)
             console.log(updateForm)
             // let result = await axios.patch(`${process.env.REACT_APP_SPRING_API}/api/company/`, comInfo)
             // console.log(result)
@@ -41,6 +44,18 @@ function CompEdit(){
         });
     };
 
+    const handleOpenTime = (newValue) => {
+        console.log(newValue)
+        setOpenTime(newValue)
+    }
+
+    const handleCloseTime = (newValue) => {
+        console.log(newValue)
+        setCloseTime(newValue)
+    }
+    // https://mui.com/material-ui/react-button/
+    // loading button
+
     useEffect(()=>{
         getCompInfo()
         return () => {
@@ -50,7 +65,8 @@ function CompEdit(){
     }, [])
 
     return {
-        updateForm, handleInput, updateCompInfo
+        updateForm, openTime, closeTime, 
+        handleInput, updateCompInfo, handleOpenTime, handleCloseTime
     }
 }
 
