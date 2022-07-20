@@ -24,6 +24,7 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Switch
 } from "@mui/material";
 
 const theme = createTheme();
@@ -32,10 +33,12 @@ function CompEditMain() {
   const navigate = useNavigate();
   const { loading } = useLoading();
   const { 
-    updateForm, openTime, closeTime,
-    handleInput, updateCompInfo, handleOpenTime, handleCloseTime 
+    updateForm, openTime, closeTime, toggle, comInfo,
+    handleToggle, handleInput, updateCompInfo, handleOpenTime, handleCloseTime, 
+    daumAddrApi
   } = useCompEdit();
   console.log(updateForm);
+
   return (
     <>
       {loading ? null : <h2>로드 중...</h2>}
@@ -130,24 +133,46 @@ function CompEditMain() {
                     />
                   </Grid>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <Grid item xs={12}>
-                    <TimePicker
-                    label="Open Time"
-                    name="open"
-                    value={openTime}
-                    onChange={(newValue) => handleOpenTime(newValue)}
-                    renderInput={(params) => <TextField {...params} />}
+                    <FormControlLabel
+                      sx={{
+                        display: 'block',
+                        paddingLeft: "20px",
+                        paddingTop: "15px"
+                      }}
+                      control={
+                        <Switch
+                          checked={toggle}
+                          onChange={() => handleToggle()}
+                          name="toggle"
+                          color="primary"
+                        />
+                      }
+                      label="가게 영업시간 (off시 미적용)"
                     />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TimePicker
-                    label="Close Time"
-                    name="close"
-                    value={closeTime}
-                    onChange={(newValue) => handleCloseTime(newValue)}
-                    renderInput={(params) => <TextField {...params} />}
-                    />
-                  </Grid>
+                    <Grid item xs={12}>
+                      <div>기존 오픈 시간: {comInfo.open}</div>
+                      <div>기존 종료 시간: {comInfo.close}</div>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TimePicker
+                      label="Open Time"
+                      name="open"
+                      value={openTime}
+                      onChange={(newValue) => handleOpenTime(newValue)}
+                      renderInput={(params) => <TextField {...params} />}
+                      disabled={!toggle}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TimePicker
+                      label="Close Time"
+                      name="close"
+                      value={closeTime}
+                      onChange={(newValue) => handleCloseTime(newValue)}
+                      renderInput={(params) => <TextField {...params} />}
+                      disabled={!toggle}
+                      />
+                    </Grid>
                   </LocalizationProvider>
                   <Grid item xs={12}>
                     <TextField
@@ -168,7 +193,11 @@ function CompEditMain() {
                     </Button>
                   </Grid>
                   <Grid item xs={12}>
-                    <Button type="button" variant="contained">
+                    <Button 
+                      type="button" 
+                      variant="contained"
+                      onClick={daumAddrApi}
+                    >
                       주소찾기
                     </Button>
                   </Grid>
