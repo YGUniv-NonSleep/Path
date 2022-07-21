@@ -764,10 +764,10 @@ function useOderMain() {
             x: markerList[i].Ma,
             y: markerList[i].La,
           }
-
+          
           let marker = await drawMarker(data, "")
           let infowindow = new kakao.maps.InfoWindow({
-            content: `<div>&nbsp;업체명: ${list[i].name}</div>`, // 인포윈도우에 표시할 내용
+            content: `<div>&nbsp;${list[i].company.name}(${list[i].company.category})</div>`, // 인포윈도우에 표시할 내용
           });
 
           kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
@@ -854,7 +854,7 @@ function useOderMain() {
           //let marker = await drawMarker(data, list[i].loc)
           let marker = await drawMarker(data, "")
           let infowindow = new kakao.maps.InfoWindow({
-            content: `<div>&nbsp;업체명: ${list[i].name}</div>`, // 인포윈도우에 표시할 내용
+            content: `<div>&nbsp;${list[i].company.name}(${list[i].company.category})</div>`, // 인포윈도우에 표시할 내용
           });
 
           kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
