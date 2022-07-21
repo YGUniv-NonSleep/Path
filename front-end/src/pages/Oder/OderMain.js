@@ -312,7 +312,7 @@ function OderMain() {
                   <EntryLayout>
                     {/* 서브바 컨텐츠 */}
                     {place != null ? (
-                      // 나중에 가게 상품 정보도 넘겨줌
+                      // 현재 메뉴판 열 때, 장바구니 열 때 Map이 재랜더링 되어버림
                       showStore ? (
                         <>
                           <StoreMenu place={place} prodList={prodList} compCateList={compCateList} outStore={handleShowStore} />
@@ -328,9 +328,7 @@ function OderMain() {
                             onClick={handleCartOpen}
                           >
                             <Badge badgeContent={cartState.orderCompositionList.length} color="warning">
-                              <ShoppingCartIcon
-                                sx={{ width: '42px', height: '42px' }}
-                              />
+                              <ShoppingCartIcon sx={{ width: '42px', height: '42px' }} />
                             </Badge>
                           </IconButton>
                           
