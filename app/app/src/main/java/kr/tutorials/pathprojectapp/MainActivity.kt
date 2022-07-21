@@ -1,55 +1,40 @@
 package kr.tutorials.pathprojectapp
 
-import android.Manifest
-import android.R
-import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
+import androidx.recyclerview.widget.LinearLayoutManager
 import kr.tutorials.pathprojectapp.databinding.ActivityMainBinding
+import kr.tutorials.pathprojectapp.dto.CompanyResponse
 import net.daum.mf.map.api.*
 
 
 class MainActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val viewModel by viewModels<MainViewModel>()
-    private var id: Long? = null
+    private var userId: Long? = null
     private var loginId: String? = null
-    private var name: String? = null
-    val PERMISSIONS_REQUEST_CODE = 100
-    var REQUIRED_PERMISSIONS = arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION)
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var userName: String? = null
     private var mapView: MapView? = null
+    private var adapter = MainRvAdapter()
+    private val viewModel by viewModels<MainViewModel>()
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        // 위치 서비스 클라이언트 생성
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // 로그인 페이지에서 가져온 회원 정보들
         with(intent) {
-            id = getLongExtra("id", 0)
+            userId = getLongExtra("id", 0)
             loginId = getStringExtra("loginId")
-            name = getStringExtra("name")
+            userName = getStringExtra("name")
         }
-        println("id = ${id}")
+        println("id = ${userId}")
         println("loginId = $loginId")
-        println("name = $name")
+        println("name = $userName")
 
         // 카카오 지도 띄우기
         mapView = MapView(this)
@@ -59,6 +44,27 @@ class MainActivity : AppCompatActivity() {
         mapView?.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(35.8953251, 128.62155), true)
         // 경로 그리기
         getPathList()
+
+        // 리사이클러뷰 초기화
+        initRecyclerView()
+        // 가게 데이터 넣기
+        adapter.setData(companys)
+    }
+
+    private fun initRecyclerView() {
+        val manager = LinearLayoutManager(this)
+        binding.mainRecyclerView.layoutManager = manager
+        binding.mainRecyclerView.setHasFixedSize(true)
+        binding.mainRecyclerView.adapter = adapter
+        adapter.setListener { _, position ->
+            val data = adapter.getItem(position)
+            changeViewCompanyDetail(data.id)
+        }
+    }
+
+    // 가게 상세 페이지 이동
+    private fun changeViewCompanyDetail(id: Long) {
+        Toast.makeText(this, "가게 상세페이지 이동 $id", Toast.LENGTH_SHORT).show()
     }
 
     // 경로 그리기
@@ -122,4 +128,17 @@ class MainActivity : AppCompatActivity() {
         val padding = 100;
         mapView?.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding))
     }
+
+    private var companys = arrayListOf<CompanyResponse>(
+        CompanyResponse(1, 1.1, 1.1, "가게이름1", "카테고리"),
+        CompanyResponse(2, 1.1, 1.1, "가게이름2", "카테고리"),
+        CompanyResponse(3, 1.1, 1.1, "가게이름3", "카테고리"),
+        CompanyResponse(4, 1.1, 1.1, "가게이름4", "카테고리"),
+        CompanyResponse(5, 1.1, 1.1, "가게이름5", "카테고리"),
+        CompanyResponse(6, 1.1, 1.1, "가게이름6", "카테고리"),
+        CompanyResponse(7, 1.1, 1.1, "가게이름7", "카테고리"),
+        CompanyResponse(8, 1.1, 1.1, "가게이름8", "카테고리"),
+        CompanyResponse(9, 1.1, 1.1, "가게이름9", "카테고리"),
+        CompanyResponse(10, 1.1, 1.1, "가게이름10", "카테고리"),
+    )
 }

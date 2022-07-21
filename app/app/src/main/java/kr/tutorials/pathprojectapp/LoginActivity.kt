@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import kr.tutorials.pathprojectapp.databinding.ActivityLoginBinding
+import kr.tutorials.pathprojectapp.dto.LoginResponse
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -36,9 +37,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         when (v?.id) {
             // 로그인 버튼일 때 작동
             binding.loginBtnLogin.id -> {
-                val username = binding.loginEtLoginId.text.toString()
-                val password = binding.loginEtPassword.text.toString()
-                viewModel.login(applicationContext, username, password)
+//                val username = binding.loginEtLoginId.text.toString()
+//                val password = binding.loginEtPassword.text.toString()
+//                viewModel.login(applicationContext, username, password)
+                viewModel.memberInfo.value = LoginResponse(7L, "member", "김멤버", "ROLE_MEMBER")
             }
         }
     }
