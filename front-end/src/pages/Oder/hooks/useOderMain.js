@@ -301,7 +301,7 @@ function useOderMain() {
     // console.log(data)
     // 여기서 눌렀을 때 마커가 화면에 안올라가 백색 화면
     if(data.company == undefined) {
-      // map.panTo(new kakao.maps.LatLng(data.longitude, data.latitude))
+      map.panTo(new kakao.maps.LatLng(data.latitude, data.longitude))
       setPlace(data)
       
     } else {
@@ -309,7 +309,7 @@ function useOderMain() {
       // console.log(ob)
       ob.distance = data.distance
       ob.loc = data.loc
-      // map.panTo(new kakao.maps.LatLng(ob.longitude, ob.latitude))
+      map.panTo(new kakao.maps.LatLng(ob.latitude, ob.longitude))
       setPlace(ob)
     }
   }
@@ -441,7 +441,6 @@ function useOderMain() {
 
   function removeMarkers() {
     for (var i = 0; i < markers.length; i++) {
-      console.log(markers)
       markers[i].setMap(null);
     }
     setMarkers([]);
@@ -551,8 +550,8 @@ function useOderMain() {
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
           let data = {
-            x: markerList[i].La,  
-            y: markerList[i].Ma,
+            x: markerList[i].Ma,
+            y: markerList[i].La,
           }
 
           let marker = await drawMarker(data, "")
@@ -562,15 +561,17 @@ function useOderMain() {
 
           kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
           kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+          kakao.maps.event.addListener(marker, 'click', ()=>console.log(result.data.body[i])); // placeTarget(data)
+
           ml.push(marker)
         }
 
-        setStoreMarkers(ml)
         setProducts([])
-        if(affiliate.length != 0) {
-          setAffiliate([])
-        }
+        // if(affiliate.length != 0) {
+        //   setAffiliate([])
+        // }
         setAffiliate(list)
+        setStoreMarkers(ml)
 
       } else {
         let locationDto = {
@@ -639,11 +640,12 @@ function useOderMain() {
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
           let data = {
-            x: markerList[i].La,  
-            y: markerList[i].Ma,
+            x: markerList[i].Ma,
+            y: markerList[i].La,
           }
 
-          let marker = await drawMarker(data, list[i].loc)
+          // let marker = await drawMarker(data, list[i].loc)
+          let marker = await drawMarker(data, "")
           let infowindow = new kakao.maps.InfoWindow({
             content: `<div>&nbsp;${list[i].name}(${list[i].category})</div>`, // 인포윈도우에 표시할 내용
           });
@@ -653,12 +655,12 @@ function useOderMain() {
           ml.push(marker)
         }
 
-        setStoreMarkers(ml)
         setProducts([])
-        if(affiliate.length != 0) {
-          setAffiliate([])
-        }
+        // if(affiliate.length != 0) {
+        //   setAffiliate([])
+        // }
         setAffiliate(list)
+        setStoreMarkers(ml)
 
       }
 
@@ -761,8 +763,8 @@ function useOderMain() {
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
           let data = {
-            x: markerList[i].La,  
-            y: markerList[i].Ma,
+            x: markerList[i].Ma,
+            y: markerList[i].La,
           }
 
           let marker = await drawMarker(data, "")
@@ -777,9 +779,9 @@ function useOderMain() {
 
         setStoreMarkers(ml)
         setAffiliate([])
-        if(products.length != 0) {
-          setProducts([])
-        }
+        // if(products.length != 0) {
+        //   setProducts([])
+        // }
         setProducts(list)
 
       } else {
@@ -795,9 +797,7 @@ function useOderMain() {
         let result = await axios.get(
           `${process.env.REACT_APP_SPRING_API}/api/product/search`, {
             params: locationDto
-          }
-        );
-        console.log(result)
+          });
 
         let list = []
         for(var i=0; i<result.data.body.length; i++){
@@ -849,25 +849,28 @@ function useOderMain() {
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
           let data = {
-            x: markerList[i].La,  
-            y: markerList[i].Ma,
+            x: markerList[i].Ma,
+            y: markerList[i].La,
           }
 
-          let marker = await drawMarker(data, list[i].loc)
+          //let marker = await drawMarker(data, list[i].loc)
+          let marker = await drawMarker(data, "")
           let infowindow = new kakao.maps.InfoWindow({
             content: `<div>&nbsp;업체명: ${list[i].name}</div>`, // 인포윈도우에 표시할 내용
           });
 
           kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
           kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+
+          marker.setMap(map)
           ml.push(marker)
         }
 
         setStoreMarkers(ml)
         setAffiliate([])
-        if(products.length != 0) {
-          setProducts([])
-        }
+        // if(products.length != 0) {
+        //   setProducts([])
+        // }
         setProducts(list)
 
       }
@@ -877,16 +880,17 @@ function useOderMain() {
     }
   }
 
-  function denoteStoreMarkers() {
-    for (var i = 0; i < storeMarkers.length; i++) {
-      console.log(storeMarkers[i])
-      storeMarkers[i].setMap(map);
+  function denoteStoreMarkers(markers) {
+    console.log(markers)
+    for (var i = 0; i < markers.length; i++) {
+      console.log(markers[i])
+      markers[i].setMap(map);
     }
   }
 
   useEffect(()=>{
     if (storeMarkers.length != 0) {
-      denoteStoreMarkers()
+      denoteStoreMarkers(storeMarkers)
     }
   }, [storeMarkers])
 
