@@ -561,8 +561,6 @@ function useOderMain() {
 
           kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
           kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-          kakao.maps.event.addListener(marker, 'click', ()=>console.log(result.data.body[i])); // placeTarget(data)
-
           ml.push(marker)
         }
 
@@ -881,9 +879,7 @@ function useOderMain() {
   }
 
   function denoteStoreMarkers(markers) {
-    console.log(markers)
     for (var i = 0; i < markers.length; i++) {
-      console.log(markers[i])
       markers[i].setMap(map);
     }
   }
