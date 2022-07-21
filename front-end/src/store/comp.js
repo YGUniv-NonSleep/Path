@@ -9,11 +9,17 @@ export let comp = createSlice({
     storeInfo(state, action){
       state.compList = action.payload.state
     },
+    updateStore(state, action){
+      let result = state.compList.filter((comp)=> {
+        return comp != parseInt(action.payload.state)
+      })
+      state.compList = result
+    }
   },
 });
 
 // 실행할 행동을 반환
-export const { storeInfo } = comp.actions;
+export const { storeInfo, updateStore } = comp.actions;
 
 // reducer 반환
 export default comp.reducer;

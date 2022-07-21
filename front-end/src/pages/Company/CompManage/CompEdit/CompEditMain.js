@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -7,7 +7,6 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import useLoading from "../../../../hooks/useLoading";
 import useCompEdit from "../hooks/useCompEdit";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import {
   Avatar,
   Button,
@@ -25,14 +24,21 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Switch
 } from "@mui/material";
 
 const theme = createTheme();
 
 function CompEditMain() {
+  const navigate = useNavigate();
   const { loading } = useLoading();
-  const { updateForm, handleInput, updateCompInfo } = useCompEdit();
+  const { 
+    updateForm, openTime, closeTime, toggle, comInfo,
+    handleToggle, handleInput, updateCompInfo, handleOpenTime, handleCloseTime, 
+    daumAddrApi
+  } = useCompEdit();
   console.log(updateForm);
+
   return (
     <>
       {loading ? null : <h2>로드 중...</h2>}
@@ -40,7 +46,7 @@ function CompEditMain() {
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
-              padding: "100px 0 0 0",
+              padding: "20px 0 0 0",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -65,8 +71,8 @@ function CompEditMain() {
                       fullWidth
                       value={updateForm.name}
                       onChange={handleInput}
-                      id="compName"
-                      name="compName"
+                      id="name"
+                      name="name"
                       label="업체명"
                     />
                   </Grid>
@@ -80,6 +86,7 @@ function CompEditMain() {
                         id="category"
                         label="카테고리"
                         value={updateForm.category}
+                        onChange={handleInput}
                         name="category"
                       >
                         <MenuItem value={"CONVENIENCESTORE"}>편의점</MenuItem>
@@ -96,9 +103,10 @@ function CompEditMain() {
                       required
                       fullWidth
                       value={updateForm.mail}
+                      onChange={handleInput}
                       type="email"
-                      id="email"
-                      name="email"
+                      id="mail"
+                      name="mail"
                       label="이메일 주소"
                     />
                   </Grid>
@@ -107,6 +115,7 @@ function CompEditMain() {
                       required
                       fullWidth
                       value={updateForm.phone}
+                      onChange={handleInput}
                       id="phone"
                       name="phone"
                       label="전화번호 (010-XXXX-XXXX)"
@@ -117,34 +126,60 @@ function CompEditMain() {
                       required
                       fullWidth
                       value={updateForm.companyNumber}
+                      onChange={handleInput}
                       id="companyNumber"
                       name="companyNumber"
                       label="사업자등록번호"
                     />
                   </Grid>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <Grid item xs={12}>
-                    <TimePicker
-                    label="Open Time"
-                    value={updateForm.open}
-                    // onChange={handleChange}
-                    renderInput={(params) => <TextField {...params} />}
+                    <FormControlLabel
+                      sx={{
+                        display: 'block',
+                        paddingLeft: "20px",
+                        paddingTop: "15px"
+                      }}
+                      control={
+                        <Switch
+                          checked={toggle}
+                          onChange={() => handleToggle()}
+                          name="toggle"
+                          color="primary"
+                        />
+                      }
+                      label="가게 영업시간 (off시 미적용)"
                     />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TimePicker
-                    label="Close Time"
-                    value={updateForm.close}
-                    // onChange={handleChange}
-                    renderInput={(params) => <TextField {...params} />}
-                    />
-                  </Grid>
+                    <Grid item xs={12}>
+                      <div>기존 오픈 시간: {comInfo.open}</div>
+                      <div>기존 종료 시간: {comInfo.close}</div>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TimePicker
+                      label="Open Time"
+                      name="open"
+                      value={openTime}
+                      onChange={(newValue) => handleOpenTime(newValue)}
+                      renderInput={(params) => <TextField {...params} />}
+                      disabled={!toggle}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TimePicker
+                      label="Close Time"
+                      name="close"
+                      value={closeTime}
+                      onChange={(newValue) => handleCloseTime(newValue)}
+                      renderInput={(params) => <TextField {...params} />}
+                      disabled={!toggle}
+                      />
+                    </Grid>
                   </LocalizationProvider>
                   <Grid item xs={12}>
                     <TextField
                       required
                       fullWidth
                       value={updateForm.waitTime}
+                      onChange={handleInput}
                       type="number"
                       id="waitTime"
                       name="waitTime"
@@ -154,11 +189,15 @@ function CompEditMain() {
                   <Grid item xs={12}>
                     <Button variant="contained" component="label">
                       Image Upload
-                      <input multiple type="file" />
+                      <input multiple name="updateImg" type="file" />
                     </Button>
                   </Grid>
                   <Grid item xs={12}>
-                    <Button type="button" variant="contained">
+                    <Button 
+                      type="button" 
+                      variant="contained"
+                      onClick={daumAddrApi}
+                    >
                       주소찾기
                     </Button>
                   </Grid>
@@ -171,6 +210,7 @@ function CompEditMain() {
                       label="주소"
                       disabled
                       value={updateForm.addr}
+                      onChange={handleInput}
                       defaultValue=" "
                     />
                   </Grid>
@@ -180,19 +220,8 @@ function CompEditMain() {
                       id="addrDetail"
                       name="addrDetail"
                       value={updateForm.addrDetail}
+                      onChange={handleInput}
                       label="상세주소"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      required
-                      id="addrExtra"
-                      name="addrExtra"
-                      label="참고항목"
-                      // onChange={handleInput}
-                      disabled
-                      defaultValue=" "
                     />
                   </Grid>
                 </Grid>
@@ -210,6 +239,7 @@ function CompEditMain() {
                   variant="outlined"
                   sx={{ mb: 10 }}
                   size="large"
+                  onClick={()=>navigate(-1)}
                 >
                   돌아가기
                 </Button>
