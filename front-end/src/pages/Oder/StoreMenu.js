@@ -51,7 +51,7 @@ import useOderMain from "./hooks/useOderMain";
 function StoreMenu({ place, prodList, compCateList, outStore }) {
   const { 
     category, dialogOpen, count, prodInfo, optionPrice, 
-    setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart, clickCategory
+    setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart
   } = useOderMain();
   
   function sInfo() {
