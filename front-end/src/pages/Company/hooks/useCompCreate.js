@@ -70,7 +70,7 @@ function useCompCreate() {
 
     if (inputImageFiles.length == 0) {
       imageData = {
-        data: "blankCompImage",
+        data: "blankImage",
       };
     } else {
       // FormData에 Key:Value 넣기

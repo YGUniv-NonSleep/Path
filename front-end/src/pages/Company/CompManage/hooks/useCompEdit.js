@@ -29,8 +29,35 @@ function CompEdit() {
     try {
       e.preventDefault();
 
-      // console.log(comInfo)
-      // console.log(updateForm);
+      let inputImageFiles = e.target.updateImg.files;
+      console.log(inputImageFiles)
+
+      const imageFormData = new FormData();
+      let imageData = null;
+
+      if (inputImageFiles.length == 0) {
+        imageData = {
+          data: "blankImage",
+        };
+
+      } else {
+        // FormData에 Key:Value 넣기
+        for (var i = 0; i < inputImageFiles.length; i++) {
+          imageFormData.append("multipartFile", inputImageFiles[i]);
+        }
+        console.log(imageFormData)
+
+        imageData = await axios
+          .post(process.env.REACT_APP_SPRING_API + `/api/image`, imageFormData, {
+            headers: {
+              "Content-Type": `multipart/form-data`,
+            },
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      console.log(imageData)
 
       var data = {
         addr: updateForm.addr,
@@ -47,10 +74,10 @@ function CompEdit() {
         open: updateForm.open,
         openDate: null,
         phone: updateForm.phone,
-        thumbnail: updateForm.thumbnail,
+        thumbnail: imageData.data,
         waitTime: updateForm.waitTime,
       }
-
+      
       if(toggle != true) {
         data.open = comInfo.open
         data.close = comInfo.close
@@ -60,7 +87,7 @@ function CompEdit() {
       let result = await axios.patch(`${process.env.REACT_APP_SPRING_API}/api/company/`, data)
       if(result)
       console.log(result)
-
+      
     } catch (error) {
       console.log(error);
     }

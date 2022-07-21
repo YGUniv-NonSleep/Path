@@ -189,7 +189,7 @@ function CompEditMain() {
                   <Grid item xs={12}>
                     <Button variant="contained" component="label">
                       Image Upload
-                      <input multiple type="file" />
+                      <input multiple name="updateImg" type="file" />
                     </Button>
                   </Grid>
                   <Grid item xs={12}>
