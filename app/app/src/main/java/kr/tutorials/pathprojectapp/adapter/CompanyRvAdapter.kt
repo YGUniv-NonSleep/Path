@@ -1,4 +1,4 @@
-package kr.tutorials.pathprojectapp
+package kr.tutorials.pathprojectapp.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kr.tutorials.pathprojectapp.R
 import kr.tutorials.pathprojectapp.dto.ProductDto
 
 class CompanyRvAdapter : RecyclerView.Adapter<CompanyRvAdapter.Holder>() {
@@ -30,12 +31,12 @@ class CompanyRvAdapter : RecyclerView.Adapter<CompanyRvAdapter.Holder>() {
         return data[position]
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyRvAdapter.Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.company_rv_item, parent, false)
         return Holder(view, listener)
     }
 
-    override fun onBindViewHolder(holder: CompanyRvAdapter.Holder, position: Int) {
+    override fun onBindViewHolder(holder: Holder, position: Int) {
         val item = data[position]
         holder.id = item.id
         holder.menuName.text = item.menuName

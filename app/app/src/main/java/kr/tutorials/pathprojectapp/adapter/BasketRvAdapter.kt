@@ -1,4 +1,4 @@
-package kr.tutorials.pathprojectapp
+package kr.tutorials.pathprojectapp.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kr.tutorials.pathprojectapp.R
 import kr.tutorials.pathprojectapp.dto.BasketDto
-import kr.tutorials.pathprojectapp.dto.ProductDto
 
 class BasketRvAdapter : RecyclerView.Adapter<BasketRvAdapter.Holder>() {
 
@@ -40,13 +40,13 @@ class BasketRvAdapter : RecyclerView.Adapter<BasketRvAdapter.Holder>() {
         return null
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasketRvAdapter.Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.basket_rv_item, parent, false)
         return Holder(view, listener)
     }
 
-    override fun onBindViewHolder(holder: BasketRvAdapter.Holder, position: Int) {
+    override fun onBindViewHolder(holder: Holder, position: Int) {
         val item = data[position]
         holder.menuName.text = item.menuName
         holder.price.text = (item.price * item.quantity).toString()
