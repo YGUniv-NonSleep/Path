@@ -1,10 +1,11 @@
-package kr.tutorials.pathprojectapp
+package kr.tutorials.pathprojectapp.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kr.tutorials.pathprojectapp.R
 import kr.tutorials.pathprojectapp.dto.CompanyResponse
 
 class MainRvAdapter : RecyclerView.Adapter<MainRvAdapter.Holder>() {

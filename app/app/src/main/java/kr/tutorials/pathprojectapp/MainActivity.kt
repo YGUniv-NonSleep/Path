@@ -4,10 +4,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import kr.tutorials.pathprojectapp.adapter.MainRvAdapter
 import kr.tutorials.pathprojectapp.databinding.ActivityMainBinding
 import kr.tutorials.pathprojectapp.dto.CompanyResponse
 import net.daum.mf.map.api.*

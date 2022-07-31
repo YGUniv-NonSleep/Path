@@ -1,10 +1,13 @@
 package kr.tutorials.pathprojectapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import kr.tutorials.pathprojectapp.adapter.BasketRvAdapter
+import kr.tutorials.pathprojectapp.adapter.CompanyRvAdapter
 import kr.tutorials.pathprojectapp.databinding.ActivityCompanyBinding
 import kr.tutorials.pathprojectapp.dto.BasketDto
 import kr.tutorials.pathprojectapp.dto.ProductDto
@@ -30,6 +33,7 @@ class CompanyActivity : AppCompatActivity(), View.OnClickListener {
         binding.companyTvTitle.text = "투썸플레이스"
         binding.companyTvCategory.text = "카페"
         binding.companyBtnBackPage.setOnClickListener(this)
+        binding.companyBtnOrder.setOnClickListener(this)
 
         // 기본 데이터 초기화
         initData()
@@ -43,8 +47,12 @@ class CompanyActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.companyBtnBackPage.id -> finish()
-            binding.companyBtnOrder.id -> Toast.makeText(this, "주문하기 페이지 이동", Toast.LENGTH_SHORT)
-                .show()
+            binding.companyBtnOrder.id -> {
+                val intent = Intent(this, OrderActivity::class.java).apply {
+                    putExtra("baskets", baskets)
+                }
+                startActivity(intent)
+            }
         }
     }
 
@@ -81,7 +89,6 @@ class CompanyActivity : AppCompatActivity(), View.OnClickListener {
                 baskets = filter
                 basketAdapter.setData(baskets)
             } else basketAdapter.setData(baskets)
-
         }
     }
 

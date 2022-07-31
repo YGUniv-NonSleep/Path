@@ -17,6 +17,9 @@
         android:theme="@style/Theme.PathProjectApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".OrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".CompanyActivity"
             android:exported="false" />
 
