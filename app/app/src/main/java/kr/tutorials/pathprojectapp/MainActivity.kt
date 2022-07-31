@@ -1,5 +1,6 @@
 package kr.tutorials.pathprojectapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup
@@ -17,10 +18,12 @@ class MainActivity : AppCompatActivity() {
     private var loginId: String? = null
     private var userName: String? = null
     private var mapView: MapView? = null
+    private var polyline: MapPolyline = MapPolyline()
+    private var companysMarker: ArrayList<MapPOIItem> = ArrayList();
+
     private var adapter = MainRvAdapter()
     private val viewModel by viewModels<MainViewModel>()
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +35,6 @@ class MainActivity : AppCompatActivity() {
             loginId = getStringExtra("loginId")
             userName = getStringExtra("name")
         }
-        println("id = ${userId}")
-        println("loginId = $loginId")
-        println("name = $userName")
 
         // 카카오 지도 띄우기
         mapView = MapView(this)
@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         initRecyclerView()
         // 가게 데이터 넣기
         adapter.setData(companys)
+        // 가게 위치 띄우기
+        initCompanyMarker(companys, mapView!!)
     }
 
     private fun initRecyclerView() {
@@ -64,12 +66,14 @@ class MainActivity : AppCompatActivity() {
 
     // 가게 상세 페이지 이동
     private fun changeViewCompanyDetail(id: Long) {
-        Toast.makeText(this, "가게 상세페이지 이동 $id", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, CompanyActivity::class.java).apply {
+            putExtra("id", id)
+        }
+        startActivity(intent)
     }
 
     // 경로 그리기
     fun getPathList() {
-        var polyline: MapPolyline = MapPolyline();
         polyline.tag = 1000
         polyline.lineColor = Color.argb(128, 255, 51, 0)
         polyline.addPoint(MapPoint.mapPointWithGeoCoord(35.89343576601386, 128.61997709431037));
@@ -129,16 +133,30 @@ class MainActivity : AppCompatActivity() {
         mapView?.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding))
     }
 
+    // 가게 정보
     private var companys = arrayListOf<CompanyResponse>(
-        CompanyResponse(1, 1.1, 1.1, "가게이름1", "카테고리"),
-        CompanyResponse(2, 1.1, 1.1, "가게이름2", "카테고리"),
-        CompanyResponse(3, 1.1, 1.1, "가게이름3", "카테고리"),
-        CompanyResponse(4, 1.1, 1.1, "가게이름4", "카테고리"),
-        CompanyResponse(5, 1.1, 1.1, "가게이름5", "카테고리"),
-        CompanyResponse(6, 1.1, 1.1, "가게이름6", "카테고리"),
-        CompanyResponse(7, 1.1, 1.1, "가게이름7", "카테고리"),
-        CompanyResponse(8, 1.1, 1.1, "가게이름8", "카테고리"),
-        CompanyResponse(9, 1.1, 1.1, "가게이름9", "카테고리"),
-        CompanyResponse(10, 1.1, 1.1, "가게이름10", "카테고리"),
+        CompanyResponse(1, 35.8923941, 128.6215739, "투썸플레이스", "카페"),
+        CompanyResponse(2, 35.8912555, 128.6239987, "가게이름2", "카테고리"),
+        CompanyResponse(3, 35.8874919, 128.6248248, "가게이름3", "카테고리"),
+        CompanyResponse(4, 35.887179, 128.6254256, "가게이름4", "카테고리"),
+        CompanyResponse(5, 35.8851102, 128.6266272, "가게이름5", "카테고리"),
+        CompanyResponse(6, 35.8830066, 128.6250715, "가게이름6", "카테고리"),
+        CompanyResponse(7, 35.8818418, 128.6239343, "가게이름7", "카테고리"),
+        CompanyResponse(8, 35.880929, 128.6255543, "가게이름8", "카테고리"),
+        CompanyResponse(9, 35.8809986, 128.6285584, "가게이름9", "카테고리"),
+        CompanyResponse(10, 35.8838585, 128.6261122, "가게이름10", "카테고리"),
     )
+
+    private fun initCompanyMarker(companys: ArrayList<CompanyResponse>, mapView: MapView) {
+        for (c in companys) {
+            var marker: MapPOIItem = MapPOIItem();
+            marker.itemName = c.name
+            marker.tag = c.id.toInt()
+            marker.mapPoint = MapPoint.mapPointWithGeoCoord(c.latitude, c.longitude)
+            marker.markerType = MapPOIItem.MarkerType.BluePin // 마커 모양
+            marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin // 클릭했을 때 마커 모양
+            mapView.addPOIItem(marker)
+            companysMarker.add(marker)
+        }
+    }
 }
