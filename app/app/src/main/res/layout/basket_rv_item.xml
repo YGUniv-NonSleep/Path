@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@drawable/item_border"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/basket_item_tvMenuName"
+        android:layout_width="136dp"
+        android:layout_height="28dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="메뉴이름"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/basket_item_tvQuantity"
+        android:layout_width="55dp"
+        android:layout_height="23dp"
+        android:text="수량"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/basket_item_tvMenuName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/basket_item_tvMenuName"
+        app:layout_constraintTop_toTopOf="@+id/basket_item_tvMenuName" />
+
+    <TextView
+        android:id="@+id/basket_item_tvPrice"
+        android:layout_width="97dp"
+        android:layout_height="24dp"
+        android:text="가격"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/basket_item_tvMenuName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.131"
+        app:layout_constraintStart_toEndOf="@+id/basket_item_tvQuantity"
+        app:layout_constraintTop_toTopOf="@+id/basket_item_tvMenuName" />
+
+    <Button
+        android:id="@+id/basket_item_btnDelete"
+        android:layout_width="55dp"
+        android:layout_height="40dp"
+        android:text="삭제"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/basket_item_tvQuantity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/basket_item_tvPrice"
+        app:layout_constraintTop_toTopOf="@+id/basket_item_tvQuantity" />
+</androidx.constraintlayout.widget.ConstraintLayout>

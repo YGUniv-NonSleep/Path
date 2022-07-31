@@ -53,8 +53,8 @@ class MainRvAdapter : RecyclerView.Adapter<MainRvAdapter.Holder>() {
     // RecyclerView.ViewHolder를 상속받는 클래스로 커스텀 ViewHolder이다.
     class Holder(view: View, listener: OnItemClickListener?) : RecyclerView.ViewHolder(view) {
         var id: Long = 0L
-        val title: TextView = view.findViewById(R.id.item_tvTitle)
-        val category: TextView = view.findViewById(R.id.item_tvCategory)
+        val title: TextView = view.findViewById(R.id.main_item_tvTitle)
+        val category: TextView = view.findViewById(R.id.main_item_tvCategory)
         var latitude: Double = 0.0
         var longitude: Double = 0.0
 

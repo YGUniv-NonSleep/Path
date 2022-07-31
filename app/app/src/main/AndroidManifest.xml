@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PathProjectApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".CompanyActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="8e1699df4a5a611dbf03caa60cdaed4f" />

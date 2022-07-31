@@ -9,7 +9,7 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/item_tvTitle"
+        android:id="@+id/main_item_tvTitle"
         android:layout_width="231dp"
         android:layout_height="25dp"
         android:layout_marginStart="16dp"
@@ -19,21 +19,21 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/item_tvCategory"
+        app:layout_constraintBottom_toTopOf="@+id/main_item_tvCategory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/item_tvCategory"
+        android:id="@+id/main_item_tvCategory"
         android:layout_width="167dp"
         android:layout_height="24dp"
         android:layout_marginTop="4dp"
         android:text="카테고리"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/item_tvTitle"
-        app:layout_constraintStart_toStartOf="@+id/item_tvTitle"
-        app:layout_constraintTop_toBottomOf="@+id/item_tvTitle" />
+        app:layout_constraintEnd_toEndOf="@+id/main_item_tvTitle"
+        app:layout_constraintStart_toStartOf="@+id/main_item_tvTitle"
+        app:layout_constraintTop_toBottomOf="@+id/main_item_tvTitle" />
 </androidx.constraintlayout.widget.ConstraintLayout>
