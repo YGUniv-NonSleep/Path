@@ -37,4 +37,5 @@ public class OperationDetailDto {
         this.cost = operationDetail.getCost();
         this.member = operationDetail.getMember();
     }
+
 }

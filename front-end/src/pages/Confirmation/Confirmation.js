@@ -329,13 +329,13 @@ const Map = () => {
                         <TableBody>
                             {count != null ? 
                              <>
-                            {count.map((count) => (
+                            {count.map((count,index) => (
                             <TableRow
-                            key={count.id}
+                            key={index}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                             <TableCell component="th" scope="row">
-                                {count.id}
+                                {index+1}
                             </TableCell>
                             <TableCell align="right">{count.carPost.startLocal1},{count.carPost.startLocal2}</TableCell>
                             <TableCell align="right">{count.carPost.arriveLocal1},{count.carPost.arriveLocal2}</TableCell>

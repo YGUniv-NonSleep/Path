@@ -35,7 +35,7 @@ public class OperationService {
             return Message.<String>builder()
                     .header(StatusEnum.BAD_REQUEST)
                     .message("사용자 없음")
-                    .body("").build();
+                    .build();
         }
         OperationDetail operationDetail = OperationDetail.createOperation()
                 .carPost(operationDetailDto.getCarPost())
