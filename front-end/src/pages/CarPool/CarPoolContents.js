@@ -80,7 +80,7 @@ const CarPoolContents = () => {
   const { loading } = useLoading();
   const { 
     effectState, tDistance, tTime, taxiFare, showPtag, showModal, 
-    isStartOpen, isArrivedOpen, startAddr, arriveAddr,request,alarmCount,requestOpen,
+    isStartOpen, isArrivedOpen, startAddr, arriveAddr,request,alarmCount,requestOpen,blockRequest,
     Close, PatchModal, Patch, FindWay,requestCarpool,DeleteCarCont,requestComplete,
     openStartCode, handleComplete, openArriveCode, handleComplete2,RequestCreate,closeStartCode,RequestOpen,RequestClose
   } = useCarPoolContents();
@@ -148,7 +148,10 @@ const CarPoolContents = () => {
                   {effectState.cars.carKind}<br></br>
                   <Button onClick={FindWay}>경로 및 정보보기</Button>
                   {/* <Button onClick={requestCarpool}>신청하기</Button> */}
-                  <Button><Link to={{pathname : `/carpool/request/${effectState.id}`}}>신청하기</Link></Button>
+                  {blockRequest ? (
+                   <Button>신청이 마감되었습니다.</Button>
+                  ):(<Button><Link to={{pathname : `/carpool/request/${effectState.id}`}}>신청하기</Link></Button>)}
+                  
                   {showPtag ? (
                     <div>
                       <p style={{ color: "#61AB25" }}>원활</p>
@@ -168,38 +171,6 @@ const CarPoolContents = () => {
                 <div id="map_div"></div>
                 </>
               ):('')}
- 
-    {/* {request ? (
-              <>
-                    <Background>
-                      <ModalContainer>
-                        <MousePointer
-                          style={{ color: "white", float: "right" }}
-                          onClick={Close}>
-                          X
-                        </MousePointer>
-                        <div style={{ color: "white", float: "center" }}>신청하기</div>
-                        <div style={{ color: "white", float : "center" }}><br></br>
-                          희망 가격 <br></br> 
-                          <input type="number" name="price" /><br></br>
-                          탑승 인원 <br></br> 
-                          <input type="number" name="passenger" /><br></br>
-                          상세 내용  <br></br>
-                          <textarea  style={{width : "300px",height : "200px"}} name="content"/><br></br>
-                          <button type="button" onClick={RequestOpen}>출발지 선택</button>
-                          <button>도착지 선택</button>
-                          <div  style={{ float : "center" }} id="request_map"></div>
-                          <Button onClick={RequestCreate}>신청하기</Button>
-                        </div>
-                      </ModalContainer>
-                    </Background>   
-                    
-              </>
-                ) : ("")}
-
-                {requestOpen ? (
-                    <DaumPostcode className="post-code" onComplete={requestComplete}/>
-                    ) :('')}        */}
 
         {showModal ? (
           <Modal

@@ -53,7 +53,7 @@ function CarPoolMain() {
           <TableCell align="right">제목</TableCell>
           <TableCell align="right">출발지역</TableCell>
           <TableCell align="right">도착지역</TableCell>
-          <TableCell align="right">탑승인원</TableCell>
+          <TableCell align="right">희망 탑승인원</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -62,10 +62,10 @@ function CarPoolMain() {
               <NullCommuBoard colSpan={6}>게시글 없음</NullCommuBoard>
             </TableRow>
           ) : (
-            viewset.map((result) => {
+            viewset.map((result,index) => {
               return (
-                <TableRow key={result.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell component="th" scope="row">{result.id}</TableCell>
+                <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row">{index+1}</TableCell>
                   <TableCell align="right">
                     <Link to={{ pathname: `/carpool/${result.id}` }}>
                       {result.title}

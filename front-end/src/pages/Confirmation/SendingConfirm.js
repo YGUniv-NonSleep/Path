@@ -133,7 +133,7 @@ function SendingConfirm(){
             .then((res)=>{
                 console.log(res.data.body);
                 setOperDate(res.data.body);
-                const oId = res.data.body.operationId
+                const oId = res.data.body.operationId;
                 return oId;
             })
             .then(async (oId)=>{
@@ -264,13 +264,13 @@ function SendingConfirm(){
                         <TableBody>
                             {send != null ? 
                              <>
-                            {send.map((count) => (
+                            {send.map((count,index) => (
                             <TableRow
-                            key={count.id}
+                            key={index}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                             <TableCell component="th" scope="row" name="id">
-                                {count.id}
+                                {index+1}
                             </TableCell>
                             <TableCell align="right">{count.carPost.startLocal1},{count.carPost.startLocal2}</TableCell>
                             <TableCell align="right">{count.carPost.arriveLocal1},{count.carPost.arriveLocal2}</TableCell>

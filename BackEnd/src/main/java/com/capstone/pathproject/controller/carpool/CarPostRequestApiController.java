@@ -1,6 +1,7 @@
 package com.capstone.pathproject.controller.carpool;
 
 
+import com.capstone.pathproject.domain.carpool.CarPostRequest;
 import com.capstone.pathproject.dto.carpool.CarPostDTO;
 import com.capstone.pathproject.dto.carpool.CarPostRequestCreateDto;
 import com.capstone.pathproject.dto.carpool.CarPostRequestDTO;
@@ -50,6 +51,12 @@ public class CarPostRequestApiController {
     @GetMapping("/sending/{memberId}")
     public ResponseEntity<Message<?>> sendingFind(@PathVariable("memberId") Long memberId){
         Message<List<CarPostRequestDTO>> message = carPostRequestService.sendingFind(memberId);
+        return responseUtil.createResponseEntity(message);
+    }
+
+    @GetMapping("/confirm/{postId}")
+    public ResponseEntity<Message<?>> confirmRequest(@PathVariable("postId") Long postId){
+        Message<CarPostRequest> message = carPostRequestService.confirm(postId);
         return responseUtil.createResponseEntity(message);
     }
 

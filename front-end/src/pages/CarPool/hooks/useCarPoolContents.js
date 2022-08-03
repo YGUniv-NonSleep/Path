@@ -42,6 +42,7 @@ function useCarPoolContents(){
   const [request, setRequestCarpool] = useState(false);
   const [reqstart, setReqStart] = useState(false);
   const [alarmCount,setAlarmCount] = useState(null);
+  const [blockRequest,setBlock] = useState(false);
 
   const UpdateStartLocal1 = () =>{
     if(startLocal1 == null){
@@ -124,6 +125,21 @@ function useCarPoolContents(){
   var resultMarkerArr = [];
   var trafficInfochk = "Y";
   var searchOption = 0;
+
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_SPRING_API + `/api/request/confirm/${postId}`)
+    .then((res) => { 
+      console.log(res);
+      if(res.data.body.approval == "accept"){
+        setBlock(true);
+      }else{
+        setBlock(false);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  },[])
 
   useEffect(() => {
     axios
@@ -785,7 +801,7 @@ function useCarPoolContents(){
   return {
     effectState, drawLineState, tDistance, tTime, taxiFare, showPtag, showModal, 
     isStartOpen, startX, startY, startLocal1,startLocal2, isArrivedOpen, arriveX, arriveY, 
-    arriveLocal1,arriveLocal2, startAddr, arriveAddr,request,alarmCount,requestOpen,requestStartX,requestStartY,
+    arriveLocal1,arriveLocal2, startAddr, arriveAddr,request,alarmCount,requestOpen,requestStartX,requestStartY,blockRequest,
     getCoords, getArrivedCoords, Close, PatchModal, Patch, requestComplete,
     openStartCode, handleComplete, openArriveCode, handleComplete2,requestCoord,
     FindWay, addMarkers, drawLine, Map, resettingMap,requestCarpool,RequestCreate,DeleteCarCont,RequestOpen,RequestClose,

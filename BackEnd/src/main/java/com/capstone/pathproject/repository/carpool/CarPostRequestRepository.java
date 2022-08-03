@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CarPostRequestRepository extends JpaRepository<CarPostRequest,Long> {
-    List<CarPostRequest> findByCarPostId(Long Id);
+    Optional<CarPostRequest> findByCarPostId(Long Id);
     List<CarPostRequest> findByCarPostMemberId(Long memberId);
     List<CarPostRequest> findByMemberId(Long memberId);
 

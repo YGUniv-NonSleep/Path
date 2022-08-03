@@ -153,7 +153,6 @@ public class CarPostRequestService {
     }
 
     public Message<List<CarPostRequestDTO>> requestFind(Long memberId) {
-        //List<CarPostRequest> requests = carPostRequestRepository.findByCarPostId(postId);
         List<CarPostRequest> requests = carPostRequestRepository.findByCarPostMemberId(memberId);
         ArrayList<CarPostRequestDTO> arrayList = new ArrayList<CarPostRequestDTO>();
         requests.stream().map(request -> new CarPostRequestDTO(request)).forEach(carPostRequestDTO -> arrayList.add(carPostRequestDTO));
@@ -172,6 +171,26 @@ public class CarPostRequestService {
                 .header(StatusEnum.OK)
                 .message("확인")
                 .body(arrayList).build();
+    }
+
+    public Message<CarPostRequest> confirm(Long postId){
+        Optional<CarPostRequest> findRequest = carPostRequestRepository.findByCarPostId(postId);
+        CarPostRequest carPostRequest = findRequest.orElse(null);
+
+        if(carPostRequest == null){
+            return Message.<CarPostRequest>builder()
+                    .header(StatusEnum.BAD_REQUEST)
+                    .message("신청이 없습니다.")
+                    .build();
+        }
+
+        CarPostRequest carPostRequest1 = CarPostRequest.createRequest()
+                .approval(carPostRequest.getApproval())
+                .build();
+        return Message.<CarPostRequest>builder()
+                .header(StatusEnum.OK)
+                .message("확인")
+                .body(carPostRequest1).build();
     }
 
     public Message<CarPostRequestDTO> findList(Long requestId) {
