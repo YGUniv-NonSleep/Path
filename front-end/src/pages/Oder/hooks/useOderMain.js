@@ -292,7 +292,9 @@ function useOderMain() {
       setPage(1);
       if(closeToggle == false) onCloseToggle()
       if (storeMarkers.length != 0) removeStoreMarkers();
-      getCurLocComp()
+      setTimeout(()=>{
+        getCurLocComp()
+      }, 300)
     }
   }, [category])
 
@@ -671,7 +673,9 @@ function useOderMain() {
     if(userLocation != null && userLocMarker != null) {
       // 현재 위치 기반 기본 값
       if (storeMarkers.length != 0) removeStoreMarkers();
-      getCurLocComp()
+      setTimeout(()=>{
+        getCurLocComp()
+      }, 300)
     }
   }, [userLocation]);
 
