@@ -76,6 +76,7 @@ public class CardService {
         return mapper;
     }
 
+    @Transactional(readOnly = true)
     public Message<List<CardDto>> getMemberCards(Long memberId) {
         List<CardDto> cardDtos = cardQueryRepository.findMemberCardDtos(memberId);
         return Message.<List<CardDto>>builder()
@@ -98,7 +99,8 @@ public class CardService {
                 .body("").build();
     }
 
-    private boolean validateMemberAndCard(Long cardId) {
+    @Transactional(readOnly = true)
+    public boolean validateMemberAndCard(Long cardId) {
         Optional<Card> findCard = cardRepository.findById(cardId);
         Card card = findCard.orElse(null);
         if (card == null) return false;

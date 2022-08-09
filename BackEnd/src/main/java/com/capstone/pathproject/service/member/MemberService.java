@@ -143,12 +143,14 @@ public class MemberService {
 
 
     // 아이디 찾기
+    @Transactional(readOnly = true)
     public Message<Object> forgotLoginId(ForgotLoginIdDto forgotLoginIdDto) {
         Optional<Member> findMember = memberRepository.findByNameAndMail(forgotLoginIdDto.getName(), forgotLoginIdDto.getMail());
         return forgotIdAndPwValidateOptionalMember(findMember);
     }
 
     // 비밀번호 찾기
+    @Transactional(readOnly = true)
     public Message<Object> forgotPassword(ForgotPwDto forgotPwDto) {
         Optional<Member> findMember = memberRepository.findByLoginIdAndPhone(forgotPwDto.getLoginId(), forgotPwDto.getPhone());
         return forgotIdAndPwValidateOptionalMember(findMember);
@@ -192,6 +194,8 @@ public class MemberService {
                 .message("비밀번호 재설정되었습니다.").build();
     }
 
+    // 회원 결제내역 조회
+    @Transactional(readOnly = true)
     public Slice<MemberPaymentDto> getMemberPayments(Long memberId, Pageable pageable) {
         Slice<MemberPaymentDto> memberPaymentDtos = paymentQueryRepository.findMemberPayments(memberId, pageable);
         Map<Long, List<OrderItemQueryDto>> orderItemMap = getOrderItemMap(toOrderIds(memberPaymentDtos));
@@ -199,6 +203,8 @@ public class MemberService {
         return memberPaymentDtos;
     }
 
+    // 회원 결제내역 기간 조회
+    @Transactional(readOnly = true)
     public Slice<MemberPaymentDto> getMemberPaymentsBetweenDate(Long memberId, String startDate, String endDate, Pageable pageable) {
         LocalDate startLocalDate = LocalDate.parse(startDate);
         LocalDateTime startLocalDateTime = startLocalDate.atTime(0, 0);
@@ -210,7 +216,9 @@ public class MemberService {
         return memberPaymentDtos;
     }
 
-    private Map<Long, List<OrderItemQueryDto>> getOrderItemMap(List<Long> orderIds) {
+    // 상품 정보 조회
+    @Transactional(readOnly = true)
+    public Map<Long, List<OrderItemQueryDto>> getOrderItemMap(List<Long> orderIds) {
         List<OrderItemQueryDto> orderItems = orderItemQueryRepository.findOrderItems(orderIds);
         return orderItems.stream()
                 .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
@@ -222,6 +230,8 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
+    // 이번달 하루당 결제금액 조회
+    @Transactional(readOnly = true)
     public Message<Object> getMemberTotalPaymentsMonth(Long memberId) {
         int year = LocalDate.now().getYear();
         String month = LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));

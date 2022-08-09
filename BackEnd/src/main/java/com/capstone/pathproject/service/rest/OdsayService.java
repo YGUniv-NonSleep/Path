@@ -2,7 +2,6 @@ package com.capstone.pathproject.service.rest;
 
 import com.capstone.pathproject.dto.rest.odsay.graph.RouteGraphicDTO;
 import com.capstone.pathproject.dto.rest.odsay.path.*;
-import com.capstone.pathproject.repository.mobility.MobilityRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,8 +20,6 @@ import java.util.*;
 public class OdsayService {
 
     private final WebClient odsayWebClient;
-    private final TmapService tmapService;
-    private final MobilityRepository mobilityRepository;
 
     @Value("${api.odsay}")
     private String apiKey;

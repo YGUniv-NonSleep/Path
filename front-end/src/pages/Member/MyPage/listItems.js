@@ -18,19 +18,17 @@ import { useSelector } from 'react-redux';
 import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
 import axios from 'axios';
 
-
 function MainListItems(props) {
- 
   return (
     <React.Fragment>
-      <ListItemButton>
+      <ListItemButton component={Link} to="/member">
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="마이페이지" />
       </ListItemButton>
 
-      <ListItemButton>
+      <ListItemButton component={Link} to="/member/payments">
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
@@ -59,48 +57,50 @@ function MainListItems(props) {
 }
 
 function SecondaryListItems(props) {
-  let state = useSelector((state)=>state);
+  let state = useSelector((state) => state);
   const [feedBack, setFeedBack] = useState(false);
   const [send, setSend] = useState(false);
 
-
-  useEffect(()=>{
-    axios.get(process.env.REACT_APP_SPRING_API + `/api/request/${state.user.id}`)
-    .then((res)=>{
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_SPRING_API + `/api/request/${state.user.id}`)
+      .then((res) => {
         const result = res.data.body;
-        for(var i = 0; i < result.length; i++){
-          if(result[i].approval==null){
-            setFeedBack(true)
+        for (var i = 0; i < result.length; i++) {
+          if (result[i].approval == null) {
+            setFeedBack(true);
           }
         }
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
-},[state])
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [state]);
 
-
- useEffect(()=>{
-  axios.get(process.env.REACT_APP_SPRING_API + `/api/request/sending/${state.user.id}`)
-  .then((res)=>{
-      console.log(res.data.body)
-      const result = res.data.body;
-      for(var i = 0; i < result.length; i++){
-        if(result[i].state != 'accept'){
-          setSend(true);
-        }else{
-          setSend(false);
+  useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_SPRING_API +
+          `/api/request/sending/${state.user.id}`
+      )
+      .then((res) => {
+        const result = res.data.body;
+        for (var i = 0; i < result.length; i++) {
+          if (result[i].state != 'accept') {
+            setSend(true);
+          } else {
+            setSend(false);
+          }
         }
-      }
-  })
-  .catch((err)=>{
-      console.log(err)
-  })
- },[])
- 
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <React.Fragment>
-    <ListSubheader component="div" inset>
+      <ListSubheader component="div" inset>
         카풀
       </ListSubheader>
 
@@ -111,50 +111,59 @@ function SecondaryListItems(props) {
         <ListItemText primary="차량 관리" />
       </ListItemButton>
 
-     {send ? (
-      <ListItemButton component={Link} to="/member/SendingConfirm">
-        <ListItemIcon>
-        <AssignmentIcon />
-        </ListItemIcon>
-        <ListItemText primary="보낸 신청서" /><FeedbackOutlinedIcon sx={{color : '#FF0000'}}></FeedbackOutlinedIcon>
-      </ListItemButton>
-     ):(
-     <ListItemButton component={Link} to="/member/SendingConfirm">
-     <ListItemIcon>
-     <AssignmentIcon />
-     </ListItemIcon>
-     <ListItemText primary="보낸 신청서" />
-   </ListItemButton>)} 
-      
-      {feedBack ? (<>
-        <ListItemButton component={Link} to="/member/Confirmation">
-        <ListItemIcon>
-        <AssignmentIcon />
-        </ListItemIcon>
-        <ListItemText primary="받은 신청서" /><FeedbackOutlinedIcon sx={{color : '#FF0000'}}></FeedbackOutlinedIcon>
-      </ListItemButton>
-        </>):(
-           <ListItemButton component={Link} to="/member/Confirmation">
-           <ListItemIcon>
-           <AssignmentIcon />
-           </ListItemIcon>
-           <ListItemText primary="받은 신청서" />
-         </ListItemButton>
-        )}
+      {send ? (
+        <ListItemButton component={Link} to="/member/SendingConfirm">
+          <ListItemIcon>
+            <AssignmentIcon />
+          </ListItemIcon>
+          <ListItemText primary="보낸 신청서" />
+          <FeedbackOutlinedIcon
+            sx={{ color: '#FF0000' }}
+          ></FeedbackOutlinedIcon>
+        </ListItemButton>
+      ) : (
+        <ListItemButton component={Link} to="/member/SendingConfirm">
+          <ListItemIcon>
+            <AssignmentIcon />
+          </ListItemIcon>
+          <ListItemText primary="보낸 신청서" />
+        </ListItemButton>
+      )}
 
-        <ListItemButton component={Link} to="/member/operation">
+      {feedBack ? (
+        <>
+          <ListItemButton component={Link} to="/member/Confirmation">
+            <ListItemIcon>
+              <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="받은 신청서" />
+            <FeedbackOutlinedIcon
+              sx={{ color: '#FF0000' }}
+            ></FeedbackOutlinedIcon>
+          </ListItemButton>
+        </>
+      ) : (
+        <ListItemButton component={Link} to="/member/Confirmation">
+          <ListItemIcon>
+            <AssignmentIcon />
+          </ListItemIcon>
+          <ListItemText primary="받은 신청서" />
+        </ListItemButton>
+      )}
+
+      <ListItemButton component={Link} to="/member/operation">
         <ListItemIcon>
           <DirectionsCarIcon />
         </ListItemIcon>
         <ListItemText primary="운행내역" />
-        </ListItemButton>
+      </ListItemButton>
 
-        <ListItemButton component={Link} to="/member/boarding">
+      <ListItemButton component={Link} to="/member/boarding">
         <ListItemIcon>
           <DirectionsCarIcon />
         </ListItemIcon>
         <ListItemText primary="탑승내역" />
-        </ListItemButton>
+      </ListItemButton>
 
       <ListSubheader component="div" inset>
         환경 설정
