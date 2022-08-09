@@ -46,13 +46,8 @@ import {
   StoreInfoItemValue,
 } from "./styles/oderStyle";
 import { Fragment } from "react";
-import useOderMain from "./hooks/useOderMain";
 
-function StoreMenu({ place, prodList, compCateList, outStore }) {
-  const { 
-    category, dialogOpen, count, prodInfo, optionPrice, 
-    setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart
-  } = useOderMain();
+function StoreMenu({ place, prodList, dialogOpen, count, prodInfo, optionPrice, func }) {
   
   function sInfo() {
     let list = [];
@@ -121,7 +116,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
               >
                 { k[1].map((item) => 
                 <>
-                  <ListItemButton alignItems="flex-start" onClick={()=>handleDialogOpen(item)}>
+                  <ListItemButton alignItems="flex-start" onClick={()=>func.handleDialogOpen(item)}>
                     <ListItemAvatar sx={{ margin: "auto 0" }}>
                       <Avatar
                         alt="item"
@@ -182,7 +177,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
       { prodInfo != null && prodInfo != undefined ? (
         <Dialog
           open={dialogOpen}
-          onClose={handleDialogClose}
+          onClose={func.handleDialogClose}
           aria-labelledby="scroll-dialog-title"
           aria-describedby="scroll-dialog-description"
           sx={{ height: '550px', margin: 'auto auto' }}
@@ -211,7 +206,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                             control={<Radio />} 
                             label={`${od.name}`} // 화면에 보이는 값
                             sx={{ display: 'inline-block' }} 
-                            onChange={()=>calculOpt(od)}
+                            onChange={()=>func.calculOpt(od)}
                           />
                           <Typography 
                             sx={{ display: 'inline-flex', alignItems: 'center', marginLeft: 'auto' }}
@@ -230,7 +225,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                 <Button
                   aria-label="reduce"
                   onClick={() => {
-                    setCount(Math.max(count - 1, 1));
+                    func.setCount(Math.max(count - 1, 1));
                   }}
                 >
                   <RemoveIcon fontSize="small" />
@@ -239,7 +234,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
                 <Button
                     aria-label="increase"
                     onClick={() => {
-                      setCount(count + 1);
+                      func.setCount(count + 1);
                     }}
                 >
                     <AddIcon fontSize="small" />
@@ -254,8 +249,8 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleDialogClose}>뒤로가기</Button>
-            <Button onClick={()=>putCart(prodInfo, (prodInfo.price + optionPrice), count)}>장바구니 추가</Button>
+            <Button onClick={func.handleDialogClose}>뒤로가기</Button>
+            <Button onClick={()=>func.putCart(prodInfo, (prodInfo.price + optionPrice), count)}>장바구니 추가</Button>
           </DialogActions>
         </Dialog>
       ) : null }
@@ -266,7 +261,7 @@ function StoreMenu({ place, prodList, compCateList, outStore }) {
           <SortBoxInner>
             <SortBoxSpace>
               <StoreTabInfo>
-                <IconButton aria-label="back" size="small" onClick={outStore}>
+                <IconButton aria-label="back" size="small" onClick={func.handleShowStore}>
                   <KeyboardArrowLeftIcon fontSize="medium">
                     <span>돌아가기</span>
                   </KeyboardArrowLeftIcon>

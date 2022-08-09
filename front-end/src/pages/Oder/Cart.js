@@ -14,12 +14,10 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { Fragment } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCart, clearCart } from '../../store/cart';
-import useOderMain from "./hooks/useOderMain";
 
-function Cart({ openChk, handleClose }) {
+function Cart({ openChk, handleClose, openToss }) {
   const cart = useSelector((state) => state.cart); // 맴버의 아이디 0 아닌지 체크
   const dispatch = useDispatch();
-  const { openTossWindow } = useOderMain();
 
   return (
       <Dialog
@@ -102,7 +100,7 @@ function Cart({ openChk, handleClose }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ display: 'flex', flexDirection: 'column;' }}>
-          <Button onClick={openTossWindow} disabled={cart.orderCompositionList.length != 0 ? false : true}>
+          <Button onClick={openToss} disabled={cart.orderCompositionList.length != 0 ? false : true}>
             {` 총 ${cart.orderCompositionList.length}개 `} 
             <Divider orientation="vertical" variant="5px" flexItem={false} sx={{ margin: "0 3px" }} />
             {` ${cart.totalAmount}원 결제하기 `} 

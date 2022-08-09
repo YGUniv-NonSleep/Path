@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import MapApi from "../../../api/MapApi";
 import TossPayments from "../../../api/TossPayments";
@@ -63,7 +63,7 @@ function useOderMain() {
     setPagiObj(null);
     setSearchData('');
     // getCurLocComp();
-    removeMarkers();
+    // removeMarkers();
     removeStoreMarkers();
   }
 
@@ -374,20 +374,25 @@ function useOderMain() {
     }
   }
 
-  // 처음 접속시 세팅 Effect Hook
+  // 처음 접속시 세팅 Effect Hook  
   useEffect(() => {
     if (map == null) {
       mapLoad();
     }
-  }, []);
-
-  useEffect(() => {
-    if(userLocation == null) {
+    if (userLocation == null) {
       setUserLatLng();
       setPathName({sName: path.sName, eName: path.eName})
     }
-    // 위치 정보 제거 기능 추가하기
   }, []);
+
+  // useEffect(() => {
+  //   console.log("update2")
+  //   if(userLocation == null) {
+  //     setUserLatLng();
+  //     setPathName({sName: path.sName, eName: path.eName})
+  //   }
+  //   // 위치 정보 제거 기능 추가하기
+  // }, []);
 
   async function pathDraw() {
     if(path.pathData == null) return
@@ -929,7 +934,7 @@ function useOderMain() {
     prodList, compCateList, pagiObj, page, searchPath, alignment, place, showStore, dialogOpen, count, cartState, cartOpen, 
     handleCartOpen, handleCartClose, openTossWindow, reset, pathDraw, denoteStoreMarkers,
     setCount, handleShowStore, handleDialogOpen, handleDialogClose, pageSetting, placeTarget, 
-    sortSearch, handleAlignment, keywordSetting, calculOpt, 
+    sortSearch, handleAlignment, keywordSetting, calculOpt, setCount,
     handleChange, mapLoad, onCloseToggle, onSubBarClick, getCurLocComp, getCompProd, putCart, 
   };
 }
