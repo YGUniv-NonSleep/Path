@@ -17,9 +17,6 @@ import {
 import { Fragment } from 'react';
 
 function PlaceList({item, target, clicked}) {
-  const noResult = () => {
-    alert("검색된 결과가 없습니다.")
-  }
 
   return (
     <SearchItem

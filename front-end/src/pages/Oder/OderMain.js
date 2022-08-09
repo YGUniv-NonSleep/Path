@@ -87,9 +87,11 @@ function OderMain() {
     prodList, 
     compCateList, 
     cartOpen, 
-    pathName, 
-    reset, 
-    products, 
+    pathName, count, 
+    products, prodInfo,
+    dialogOpen, optionPrice,
+    calculOpt,
+    reset, putCart, setCount,
     pathDraw, 
     handleCartOpen, 
     handleCartClose, 
@@ -101,7 +103,14 @@ function OderMain() {
     handleChange,
     onCloseToggle,
     onSubBarClick,
+    openTossWindow,
+    handleDialogOpen,
+    handleDialogClose,
   } = useOderMain();
+
+  let storeMenuFunc = {
+    handleShowStore, setCount, handleDialogOpen, handleDialogClose, calculOpt, putCart
+  }
 
   return (
     <div className="Oder">
@@ -312,10 +321,11 @@ function OderMain() {
                   <EntryLayout>
                     {/* 서브바 컨텐츠 */}
                     {place != null ? (
-                      // 현재 메뉴판 열 때, 장바구니 열 때 Map이 재랜더링 되어버림
                       showStore ? (
                         <>
-                          <StoreMenu place={place} prodList={prodList} compCateList={compCateList} outStore={handleShowStore} />
+                          <StoreMenu 
+                            place={place} prodList={prodList} dialogOpen={dialogOpen} count={count} 
+                            prodInfo={prodInfo} optionPrice={optionPrice} func={storeMenuFunc} />
                           {/* 메뉴 */}
                           <IconButton
                             aria-label="cart"
@@ -332,7 +342,7 @@ function OderMain() {
                             </Badge>
                           </IconButton>
                           
-                          { cartOpen ? <Cart openChk={cartOpen} handleClose={handleCartClose} /> : null }
+                          { cartOpen ? <Cart openChk={cartOpen} handleClose={handleCartClose} openToss={openTossWindow} /> : null }
                           {/* 장바구니 */}
                         </>
                       ) : (
