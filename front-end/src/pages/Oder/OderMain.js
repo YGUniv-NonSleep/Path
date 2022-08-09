@@ -313,7 +313,6 @@ function OderMain() {
                     {/* 서브바 컨텐츠 */}
                     {place != null ? (
                       // 현재 메뉴판 열 때, 장바구니 열 때 Map이 재랜더링 되어버림
-                      // https://velog.io/@shin6403/React-%EB%A0%8C%EB%8D%94%EB%A7%81-%EC%84%B1%EB%8A%A5-%EC%B5%9C%EC%A0%81%ED%99%94%ED%95%98%EB%8A%94-7%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95-Hooks-%EA%B8%B0%EC%A4%80
                       showStore ? (
                         <>
                           <StoreMenu place={place} prodList={prodList} compCateList={compCateList} outStore={handleShowStore} />

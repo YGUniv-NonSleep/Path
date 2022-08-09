@@ -393,10 +393,10 @@ function useOderMain() {
     if(path.pathData == null) return
     else {
       try {
-        if(userLocMarker != null) {
-          userLocMarker.setMap(null)
-          setUserLocMarker(null) 
-        }
+        // if(userLocMarker != null) {
+        //   userLocMarker.setMap(null)
+        //   setUserLocMarker(null) 
+        // }
         if (markers.length != 0) removeMarkers();
         if (polyLines.length != 0) removeGraphics();
         if (firstWalkLine.length != 0) removeFirstWalkGraphics();
@@ -576,8 +576,8 @@ function useOderMain() {
       } else {
         let locationDto = {
           // 마커 x(126), y(37) 리스트
-          x: [path.pathData.startPos.x, path.pathData.endPos.x],
-          y: [path.pathData.startPos.y, path.pathData.endPos.y],
+          x: [path.pathData.startPos.x],
+          y: [path.pathData.startPos.y],
           category: cate
         }
 
@@ -586,7 +586,7 @@ function useOderMain() {
             params: locationDto
           }
         );
-
+          console.log(userLocation)
         let list = []
         for(var i=0; i<result.data.body.length; i++){
           if(i>=15) break;
@@ -598,18 +598,22 @@ function useOderMain() {
           // 얻어온 출발지 도착지 x, y 좌표 값 넣기
           
           let se = "";
-          if(i < result.data.body.length/2) {
-            coordList.push(new kakao.maps.LatLng(
-              locationDto.x[0], locationDto.y[0]
-            ))
-            se = "start";
+          coordList.push(new kakao.maps.LatLng(
+            userLocation.La, userLocation.Ma
+          ))
+          se = "store";
+          // if(i < result.data.body.length/2) {
+          //   coordList.push(new kakao.maps.LatLng(
+          //     locationDto.x[0], locationDto.y[0]
+          //   ))
+          //   se = "start";
 
-          } else {
-            coordList.push(new kakao.maps.LatLng(
-              locationDto.x[1], locationDto.y[1]
-            ))
-            se = "end";
-          }
+          // } else {
+          //   coordList.push(new kakao.maps.LatLng(
+          //     locationDto.x[1], locationDto.y[1]
+          //   ))
+          //   se = "end";
+          // }
 
           let storeMarkerPosition; // 시작지점, 마지막 지점을 포함한 좌표들
           storeMarkerPosition = new kakao.maps.LatLng(
@@ -809,18 +813,22 @@ function useOderMain() {
           let coordList = []
           
           let se = "";
-          if(i < result.data.body.length/2) {
-            coordList.push(new kakao.maps.LatLng(
-              locationDto.x[0], locationDto.y[0]
-            ))
-            se = "start";
+          coordList.push(new kakao.maps.LatLng(
+            userLocation.La, userLocation.Ma
+          ))
+          se = "store";
+          // if(i < result.data.body.length/2) {
+          //   coordList.push(new kakao.maps.LatLng(
+          //     locationDto.x[0], locationDto.y[0]
+          //   ))
+          //   se = "start";
 
-          } else {
-            coordList.push(new kakao.maps.LatLng(
-              locationDto.x[1], locationDto.y[1]
-            ))
-            se = "end";
-          }
+          // } else {
+          //   coordList.push(new kakao.maps.LatLng(
+          //     locationDto.x[1], locationDto.y[1]
+          //   ))
+          //   se = "end";
+          // }
 
           let storeMarkerPosition; // 시작지점, 마지막 지점을 포함한 좌표들
           storeMarkerPosition = new kakao.maps.LatLng(
