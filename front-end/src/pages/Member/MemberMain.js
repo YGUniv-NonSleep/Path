@@ -94,7 +94,7 @@ function MemberMain() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            <MainListItems></MainListItems>
+            <MainListItems />
             <Divider sx={{ my: 1 }} />
             <SecondaryListItems
               deleteMember={deleteMember}

@@ -23,7 +23,6 @@ function useInputForm() {
   const [insertPoint, setInsertPoint] = useState(''); // 입력에 반응하는 창 state
 
   const [pathList, setPathList] = useState([]); // 검색된 경로 정보들
-  console.log(pathList);
   const [isUpdatePathList, setIsUpdatePathList] = useState(false); // 경로 수정 여부
   const [mobilityPrice, setMobilityPrice] = useState(0); // 퍼스널 모빌리티를 탄 가격
   const [pathWalkTime, setPathWalkTime] = useState(0); // 현재 경로 도보 시간
