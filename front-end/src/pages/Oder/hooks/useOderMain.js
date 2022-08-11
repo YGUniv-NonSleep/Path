@@ -559,10 +559,10 @@ function useOderMain() {
           list.push(result.data.body[i])
         }
 
-        if(list.length == 0) {
-          reset();
-          return alert("검색 결과가 존재하지 않습니다.")
-        }
+        // if(list.length == 0) {
+        //   alert("검색 결과가 존재하지 않습니다.")
+        //   return reset();
+        // }
 
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
@@ -640,9 +640,9 @@ function useOderMain() {
           list.push(result.data.body[i])
         }
 
-        if(list.length == 0) {
-          return alert("검색 결과가 존재하지 않습니다.")
-        }
+        // if(list.length == 0) {
+        //   return alert("검색 결과가 존재하지 않습니다.")
+        // }
         
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
@@ -770,10 +770,10 @@ function useOderMain() {
           }
         }
 
-        if(list.length == 0) {
-          alert("검색 결과가 존재하지 않습니다.")
-          return reset()
-        }
+        // if(list.length == 0) {
+        //   alert("검색 결과가 존재하지 않습니다.")
+        //   return reset()
+        // }
 
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {

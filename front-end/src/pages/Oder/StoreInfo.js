@@ -28,7 +28,7 @@ function StoreInfo({ place, showStore }) {
       <PlaceDataImageArea>
         <ImageArea>
           { place.thumbnail != "blankImage" && place.thumbnail != undefined
-            ? `${process.env.REACT_APP_SPRING_API}/api/image/${place.thumbnail}`
+            ? <img src={`${process.env.REACT_APP_SPRING_API}/api/image/${place.thumbnail}`} />
             : <img src={process.env.PUBLIC_URL + "/noImage.png"} /> }
         </ImageArea>
       </PlaceDataImageArea>
