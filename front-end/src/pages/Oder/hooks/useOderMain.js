@@ -62,8 +62,6 @@ function useOderMain() {
     setProducts([]);
     setPagiObj(null);
     setSearchData('');
-    // getCurLocComp();
-    // removeMarkers();
     removeStoreMarkers();
   }
 
@@ -269,7 +267,13 @@ function useOderMain() {
 
     setAlignment('right');
     if (storeMarkers.length != 0) removeStoreMarkers();
-    await searchProduct(searchData)
+    setTimeout(async() => {
+      if(path.pathData != null) {
+        await searchProduct(searchData, path.pathData.startPos.x, path.pathData.startPos.y, "start")
+        await searchProduct(searchData, path.pathData.endPos.x, path.pathData.endPos.y, "end")
+
+      } else await searchProduct(searchData, userLocation.La, userLocation.Ma, "userLoc")
+    }, 300)
     setSubBarHide(false)
     setPage(1);
   }
@@ -292,8 +296,12 @@ function useOderMain() {
       setPage(1);
       if(closeToggle == false) onCloseToggle()
       if (storeMarkers.length != 0) removeStoreMarkers();
-      setTimeout(()=>{
-        getCurLocComp()
+      setTimeout(async()=>{
+        if(path.pathData != null) {
+          await getCurLocComp(path.pathData.startPos.x, path.pathData.startPos.y, "start")
+          await getCurLocComp(path.pathData.endPos.x, path.pathData.endPos.y, "end")
+
+        } else await getCurLocComp(userLocation.La, userLocation.Ma, "userLoc")
       }, 300)
     }
   }, [category])
@@ -440,6 +448,8 @@ function useOderMain() {
         setFirstWalkLine([firstWalk]);
         setLastWalkLine([lastWalk]);
 
+        reset();
+
       } catch (error) {
         console.log(error)
       }
@@ -494,7 +504,7 @@ function useOderMain() {
     };
   };
 
-  async function getCurLocComp() {
+  async function getCurLocComp(x, y, stat) {
     try {
       let cate = null;
       if (category != '') {
@@ -515,8 +525,7 @@ function useOderMain() {
       if(path.pathData == null) {
         let locationDto = {
           // 유저 위치
-          x: [userLocation.La],
-          y: [userLocation.Ma], 
+          x: [x], y: [y], 
           category: cate
         }
 
@@ -550,9 +559,10 @@ function useOderMain() {
           list.push(result.data.body[i])
         }
 
-        if(list.length == 0) {
-          return alert("검색 결과가 존재하지 않습니다.")
-        }
+        // if(list.length == 0) {
+        //   alert("검색 결과가 존재하지 않습니다.")
+        //   return reset();
+        // }
 
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
@@ -572,17 +582,13 @@ function useOderMain() {
         }
 
         setProducts([])
-        // if(affiliate.length != 0) {
-        //   setAffiliate([])
-        // }
         setAffiliate(list)
         setStoreMarkers(ml)
 
       } else {
         let locationDto = {
           // 마커 x(126), y(37) 리스트
-          x: [path.pathData.startPos.x],
-          y: [path.pathData.startPos.y],
+          x: [x], y: [y],
           category: cate
         }
 
@@ -591,7 +597,7 @@ function useOderMain() {
             params: locationDto
           }
         );
-          console.log(userLocation)
+
         let list = []
         for(var i=0; i<result.data.body.length; i++){
           if(i>=15) break;
@@ -601,24 +607,16 @@ function useOderMain() {
           }
           let coordList = []
           // 얻어온 출발지 도착지 x, y 좌표 값 넣기
-          
-          let se = "";
-          coordList.push(new kakao.maps.LatLng(
-            userLocation.La, userLocation.Ma
-          ))
-          se = "store";
-          // if(i < result.data.body.length/2) {
-          //   coordList.push(new kakao.maps.LatLng(
-          //     locationDto.x[0], locationDto.y[0]
-          //   ))
-          //   se = "start";
 
-          // } else {
-          //   coordList.push(new kakao.maps.LatLng(
-          //     locationDto.x[1], locationDto.y[1]
-          //   ))
-          //   se = "end";
-          // }
+          let se = "";
+          
+          if (stat == "start") {
+            coordList.push(new kakao.maps.LatLng(x, y))
+            se = stat
+          } else if(stat == "end") {
+            coordList.push(new kakao.maps.LatLng(x, y))
+            se = stat
+          }
 
           let storeMarkerPosition; // 시작지점, 마지막 지점을 포함한 좌표들
           storeMarkerPosition = new kakao.maps.LatLng(
@@ -642,10 +640,10 @@ function useOderMain() {
           list.push(result.data.body[i])
         }
 
-        if(list.length == 0) {
-          return alert("검색 결과가 존재하지 않습니다.")
-        }
-
+        // if(list.length == 0) {
+        //   return alert("검색 결과가 존재하지 않습니다.")
+        // }
+        
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
           let data = {
@@ -653,7 +651,6 @@ function useOderMain() {
             y: markerList[i].La,
           }
 
-          // let marker = await drawMarker(data, list[i].loc)
           let marker = await drawMarker(data, "")
           let infowindow = new kakao.maps.InfoWindow({
             content: `<div>&nbsp;${list[i].name}(${list[i].category})</div>`, // 인포윈도우에 표시할 내용
@@ -665,11 +662,18 @@ function useOderMain() {
         }
 
         setProducts([])
-        // if(affiliate.length != 0) {
-        //   setAffiliate([])
-        // }
-        setAffiliate(list)
-        setStoreMarkers(ml)
+
+        if(stat == "start") {
+          setAffiliate(list)
+          setStoreMarkers(ml)
+        } else if(stat == "end") {
+          for(var i=0; i<list.length; i++) {
+            setAffiliate((prev) => [...prev, list[i]])
+          }
+          for(var i=0; i<ml.length; i++) {
+            setStoreMarkers((prev) => [...prev, ml[i]])
+          }
+        }
 
       }
 
@@ -683,7 +687,8 @@ function useOderMain() {
       // 현재 위치 기반 기본 값
       if (storeMarkers.length != 0) removeStoreMarkers();
       setTimeout(()=>{
-        getCurLocComp()
+        console.log("userloc")
+        getCurLocComp(userLocation.La, userLocation.Ma, "userLoc")
       }, 300)
     }
   }, [userLocation]);
@@ -711,7 +716,7 @@ function useOderMain() {
 
   const [products, setProducts] = useState([]);
 
-  async function searchProduct(word) {
+  async function searchProduct(word, x, y, stat) {
     try {
       if (!word.replace(/^\s+|\s+$/g, '')) {
         alert('키워드를 입력해주세요!');
@@ -727,8 +732,7 @@ function useOderMain() {
       if (path.pathData == null) {
         let data = {
           // 유저 위치
-          x: [userLocation.La],
-          y: [userLocation.Ma],
+          x: [x], y: [y],
           name: word
         }
 
@@ -766,10 +770,10 @@ function useOderMain() {
           }
         }
 
-        if(list.length == 0) {
-          alert("검색 결과가 존재하지 않습니다.")
-          return reset()
-        }
+        // if(list.length == 0) {
+        //   alert("검색 결과가 존재하지 않습니다.")
+        //   return reset()
+        // }
 
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
@@ -790,19 +794,14 @@ function useOderMain() {
 
         setStoreMarkers(ml)
         setAffiliate([])
-        // if(products.length != 0) {
-        //   setProducts([])
-        // }
         setProducts(list)
 
       } else {
         let locationDto = {
           // 마커 x(126), y(37) 리스트
-          // 얻어온 출발지 도착지 x, y 좌표 값 넣기
-          x: [path.pathData.startPos.x, path.pathData.endPos.x],
-          y: [path.pathData.startPos.y, path.pathData.endPos.y],
+          // 가져온 x, y 좌표 값 넣기
+          x: [x], y: [y],
           name: word,
-          // category: null
         }
 
         let result = await axios.get(
@@ -818,22 +817,13 @@ function useOderMain() {
           let coordList = []
           
           let se = "";
-          coordList.push(new kakao.maps.LatLng(
-            userLocation.La, userLocation.Ma
-          ))
-          se = "store";
-          // if(i < result.data.body.length/2) {
-          //   coordList.push(new kakao.maps.LatLng(
-          //     locationDto.x[0], locationDto.y[0]
-          //   ))
-          //   se = "start";
-
-          // } else {
-          //   coordList.push(new kakao.maps.LatLng(
-          //     locationDto.x[1], locationDto.y[1]
-          //   ))
-          //   se = "end";
-          // }
+          if (stat == "start") {
+            coordList.push(new kakao.maps.LatLng(x, y))
+            se = stat
+          } else if(stat == "end") {
+            coordList.push(new kakao.maps.LatLng(x, y))
+            se = stat
+          }
 
           let storeMarkerPosition; // 시작지점, 마지막 지점을 포함한 좌표들
           storeMarkerPosition = new kakao.maps.LatLng(
@@ -856,10 +846,10 @@ function useOderMain() {
           list.push(result.data.body[i])
         }
 
-        if(list.length == 0) {
-	        alert("검색 결과가 존재하지 않습니다.")
-          return reset()
-        }
+        // if(list.length == 0) {
+	      //   alert("검색 결과가 존재하지 않습니다.")
+        //   return reset()
+        // }
 
         let ml = [];
         for (var i = 0; i < markerList.length; i++) {
@@ -868,7 +858,6 @@ function useOderMain() {
             y: markerList[i].La,
           }
 
-          //let marker = await drawMarker(data, list[i].loc)
           let marker = await drawMarker(data, "")
           let infowindow = new kakao.maps.InfoWindow({
             content: `<div>&nbsp;${list[i].company.name}(${list[i].company.category})</div>`, // 인포윈도우에 표시할 내용
@@ -881,12 +870,20 @@ function useOderMain() {
           ml.push(marker)
         }
 
-        setStoreMarkers(ml)
         setAffiliate([])
-        // if(products.length != 0) {
-        //   setProducts([])
-        // }
-        setProducts(list)
+
+        if(stat == "start") {
+          setProducts(list)
+          setStoreMarkers(ml)
+        } else if(stat == "end") {
+          for(var i=0; i<list.length; i++) {
+            setProducts((prev) => [...prev, list[i]])
+            
+          }
+          for(var i=0; i<ml.length; i++) {
+            setStoreMarkers((prev) => [...prev, ml[i]])
+          }
+        }
 
       }
 
