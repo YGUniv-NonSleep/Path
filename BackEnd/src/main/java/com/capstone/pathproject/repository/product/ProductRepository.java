@@ -3,9 +3,10 @@ package com.capstone.pathproject.repository.product;
 import com.capstone.pathproject.domain.company.CompCategory;
 import com.capstone.pathproject.domain.company.Company;
 import com.capstone.pathproject.domain.company.Product;
-import io.lettuce.core.dynamic.annotation.Param;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
