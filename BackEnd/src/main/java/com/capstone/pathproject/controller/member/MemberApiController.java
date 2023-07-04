@@ -1,6 +1,5 @@
 package com.capstone.pathproject.controller.member;
 
-import com.capstone.pathproject.domain.member.Member;
 import com.capstone.pathproject.dto.member.*;
 import com.capstone.pathproject.dto.order.MemberPaymentDto;
 import com.capstone.pathproject.dto.response.Message;
@@ -16,9 +15,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,17 +31,12 @@ public class MemberApiController {
     private final ResponseUtil responseUtil;
     private final CookieUtil cookieUtil;
 
-
     @PostMapping("/token")
     public ResponseEntity<Message<Object>> tokenReissue(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Member member = principalDetails.getMember();
-        System.out.println("member = " + member.toString());
-        String username = member.getName();
-        System.out.println("username = " + username);
         Message<Object> message = Message.builder()
                 .header(StatusEnum.OK)
                 .message("회원이 존재함")
-                .body(username).build();
+                .body(principalDetails.getMember().getName()).build();
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -58,25 +50,25 @@ public class MemberApiController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @PostMapping("/member")
+    @PostMapping("/members")
     public ResponseEntity<Message<?>> signup(@Valid @RequestBody SignupFormDto signupFormDto) {
         Message<String> message = memberService.signup(signupFormDto);
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/member/{memberId}")
+    @GetMapping("/members/{memberId}")
     public ResponseEntity<Message<?>> getMember(@PathVariable("memberId") Long memberId) {
         Message<MemberDto> message = memberService.getMemberInfo(memberId);
         return responseUtil.createResponseEntity(message);
     }
 
-    @PatchMapping("/member/{memberId}")
+    @PatchMapping("/members/{memberId}")
     public ResponseEntity<Message<?>> updateMember(@PathVariable("memberId") Long id, @RequestBody UpdateMemberDto updateMemberDto) {
         Message<String> message = memberService.updateMember(id, updateMemberDto);
         return responseUtil.createResponseEntity(message);
     }
 
-    @DeleteMapping("/member/{memberId}")
+    @DeleteMapping("/members/{memberId}")
     public ResponseEntity<Message<?>> deleteMember(@PathVariable("memberId") Long id) {
         Message<String> message = memberService.deleteMember(id);
         return responseUtil.createResponseEntity(message);
@@ -100,13 +92,13 @@ public class MemberApiController {
         return responseUtil.createResponseEntity(message);
     }
 
-    @GetMapping("/member/{memberId}/payments")
+    @GetMapping("/members/{memberId}/payments")
     public Slice<MemberPaymentDto> getMemberPayments(@PathVariable Long memberId,
                                                      @PageableDefault(size = 5) Pageable pageable) {
         return memberService.getMemberPayments(memberId, pageable);
     }
 
-    @GetMapping("/member/{memberId}/payments/date")
+    @GetMapping("/members/{memberId}/payments/date")
     public Slice<MemberPaymentDto> getMemberPaymentsBetweenDate(@PathVariable Long memberId,
                                                                 @RequestParam String startDate, // yyyy-MM-dd
                                                                 @RequestParam String endDate,
@@ -114,7 +106,7 @@ public class MemberApiController {
         return memberService.getMemberPaymentsBetweenDate(memberId, startDate, endDate, pageable);
     }
 
-    @GetMapping("/member/{memberId}/payments/all")
+    @GetMapping("/members/{memberId}/payments/all")
     public ResponseEntity<Message<?>> getTotalPayments(@PathVariable Long memberId) {
         Message<Object> message = memberService.getMemberTotalPaymentsMonth(memberId);
         return responseUtil.createResponseEntity(message);

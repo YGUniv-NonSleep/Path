@@ -30,14 +30,12 @@ public class CardApiController {
     private final CardService cardService;
     private final ResponseUtil responseUtil;
 
-    // 카드 조회
     @GetMapping("/cards")
     public ResponseEntity<Message<?>> getMemberCards(@RequestParam Long memberId) {
         Message<List<CardDto>> message = cardService.getMemberCards(memberId);
         return responseUtil.createResponseEntity(message);
     }
 
-    // 카드 삭제
     @DeleteMapping("/card/{cardId}")
     public ResponseEntity<Message<?>> deleteCard(@PathVariable Long cardId) {
         Message<String> message = cardService.deleteCard(cardId);
@@ -50,7 +48,6 @@ public class CardApiController {
                                                               @RequestParam String authKey
     ) throws JsonProcessingException, URISyntaxException {
         PrincipalDetails principalDetails = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("toss card success : {}", principalDetails.getMember().getLoginId());
         Message<Object> message = cardService.addCard(customerKey, authKey);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(new URI("https://localhost:3000/"));
@@ -62,8 +59,6 @@ public class CardApiController {
     @GetMapping("/card/fail")
     public ResponseEntity<Message<Object>> failBillingAuth(@RequestParam String code,
                                                            @RequestParam String message) throws URISyntaxException {
-        log.error("toss card fail code : {}", code);
-        log.error("toss card fail message : {}", message);
         Map<String, String> body = new HashMap<>();
         body.put("code", code);
         body.put("message", message);
